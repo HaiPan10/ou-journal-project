@@ -13,27 +13,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "role")
-public class Role implements Serializable {
+@Table(name = "author_type")
+public class AuthorType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "{role.roleName.notBlank}")
-    @NotNull
-    @Size(min = 1, max = 45, message = "{role.roleName.invalidSize}")
-    @Column(name = "role_name")
-    private String roleName;
+    @Column(name = "type")
+    private String type;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
-    private List<UserRole> userRoles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorType")
+    private List<AuthorRole> authorRoles;
 }

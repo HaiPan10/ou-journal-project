@@ -11,29 +11,29 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "role")
-public class Role implements Serializable {
+@Table(name = "author_article")
+public class AuthorArticle implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "{role.roleName.notBlank}")
-    @NotNull
-    @Size(min = 1, max = 45, message = "{role.roleName.invalidSize}")
-    @Column(name = "role_name")
-    private String roleName;
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @ManyToOne
+    private User user;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
-    private List<UserRole> userRoles;
+    @JoinColumn(name = "article_id", referencedColumnName = "id")
+    @ManyToOne
+    private Article article;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorArticle")
+    private List<AuthorRole> authorRoles;
 }
