@@ -650,6 +650,10 @@ video {
   margin-left: 1.25rem;
 }
 
+.ml-auto {
+  margin-left: auto;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -924,11 +928,6 @@ video {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-.bg-indigo-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(79 70 229 / var(--tw-bg-opacity));
-}
-
 .bg-main {
   --tw-bg-opacity: 1;
   background-color: rgb(8 74 196 / var(--tw-bg-opacity));
@@ -957,6 +956,11 @@ video {
 
 .p-3 {
   padding: 0.75rem;
+}
+
+.px-10 {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
 }
 
 .px-3 {
@@ -1039,6 +1043,10 @@ video {
 
 .pl-1 {
   padding-left: 0.25rem;
+}
+
+.pt-10 {
+  padding-top: 2.5rem;
 }
 
 .pt-3 {
@@ -1124,11 +1132,6 @@ video {
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
-}
-
-.text-indigo-600 {
-  --tw-text-opacity: 1;
-  color: rgb(79 70 229 / var(--tw-text-opacity));
 }
 
 .text-main {
@@ -1270,9 +1273,8 @@ video {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
-.focus-within\:ring-indigo-600:focus-within {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(79 70 229 / var(--tw-ring-opacity));
+.focus-within\:ring-main\/50:focus-within {
+  --tw-ring-color: rgb(8 74 196 / 0.5);
 }
 
 .focus-within\:ring-offset-2:focus-within {
@@ -1288,14 +1290,13 @@ video {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 
-.hover\:bg-indigo-500:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 102 241 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-main:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(8 74 196 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-main\/50:hover {
+  background-color: rgb(8 74 196 / 0.5);
 }
 
 .hover\:bg-main\/75:hover {
@@ -1311,9 +1312,8 @@ video {
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
-.hover\:text-indigo-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(99 102 241 / var(--tw-text-opacity));
+.hover\:text-main\/50:hover {
+  color: rgb(8 74 196 / 0.5);
 }
 
 .hover\:text-white:hover {
@@ -1388,8 +1388,8 @@ video {
   outline-offset: 2px;
 }
 
-.focus-visible\:outline-indigo-600:focus-visible {
-  outline-color: #4f46e5;
+.focus-visible\:outline-main\/25:focus-visible {
+  outline-color: rgb(8 74 196 / 0.25);
 }
 
 @media (min-width: 768px) {
@@ -1428,6 +1428,10 @@ video {
 
   .md\:max-w-2xl {
     max-width: 42rem;
+  }
+
+  .md\:max-w-7xl {
+    max-width: 80rem;
   }
 
   .md\:grid-cols-3 {

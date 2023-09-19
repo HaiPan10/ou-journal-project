@@ -31,12 +31,12 @@
                             class="font-normal">PGS.TS. Nguyễn Thuấn</a></p>
                     <div class="py-1">
                         <p>Thư ký tòa soạn:
-                            <ul class="list-disc">
-                                <li class="ml-5 py-0.5" th:each="name, stat : ${editorialSecretary}">
-                                    <a class="font-normal" th:href="'mailto:' + ${emailEditorialSecretary[stat.index]}"
-                                        th:text="${name}"></a>
-                                </li>
-                            </ul>
+                        <ul class="list-disc">
+                            <li class="ml-5 py-0.5" th:each="name, stat : ${editorialSecretary}">
+                                <a class="font-normal" th:href="'mailto:' + ${emailEditorialSecretary[stat.index]}"
+                                    th:text="${name}"></a>
+                            </li>
+                        </ul>
                         </p>
                     </div>
                     <p class="py-1">Website: <a href="http://journalofscience.ou.edu.vn" target="_blank"
@@ -44,8 +44,10 @@
                     <p class="py-1">Email: <a href="mailto:journalofscience@ou.edu.vn"
                             class="font-normal">journalofscience@ou.edu.vn</a></p>
                     <p class="py-1">Điện thoại/Fax: <a class="font-normal">(+84)28 39 333 688</a></p>
-                    <p class="py-1" style="ml-auto"><img class="img-fluid issue_cover_img"
-                            src="https://journalofscience.ou.edu.vn/plugins/themes/ou/assets/img/cc-by-nc.png" /></p>
+                    <p class="py-1 ml-auto">
+                        <img class="img-fluid issue_cover_img"
+                            src="https://journalofscience.ou.edu.vn/plugins/themes/ou/assets/img/cc-by-nc.png" />
+                    </p>
                 </aside>
             </div>
         </div>

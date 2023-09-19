@@ -50,14 +50,12 @@
                     <p class="text-sm font-bold text-black-900">Nhập tệp</p>
                 </div>
             </li>
-            <li class="relative flex w-full items-center ml-3 after:ml-3">
+            
+          
+            <li class="relative flex w-fit items-center ml-3 after:ml-3">
                 <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
 
                 </span>
-                <div class="absolute top-full mt-3 w-fit">
-                    <p class="text-xs uppercase font-medium text-gray-500">Bước 5:</p>
-                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
-                </div>
             </li>
         </ol>
 
@@ -65,7 +63,7 @@
 
     <form>
         <div class="space-y-6 flex flex-col justify-center">
-            <div class="border-b border-gray-900/10 pb-12">
+            <div class="px-10 pt-10 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 pb-12">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
                     <div class="col-span-full">
                         <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
@@ -92,7 +90,7 @@
                                 </svg>
                                 <div class="mt-4 flex text-sm leading-6 text-gray-600">
                                     <label for="file-upload"
-                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-main focus-within:outline-none focus-within:ring-2 focus-within:ring-main/50 focus-within:ring-offset-2 hover:text-main/50">
                                         <span>Tải lên</span>
                                         <input id="file-upload" name="file-upload" type="file" class="sr-only">
                                     </label>
@@ -103,14 +101,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button>
+                    <button type="submit"
+                        class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
+                        tục</button>
+                </div>
             </div>
 
-            <div class="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button>
-                <button type="submit"
-                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tiếp
-                    tục</button>
-            </div>
+            
     </form>
 </section>
 
