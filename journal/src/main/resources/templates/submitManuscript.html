@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+
+<section layout:fragment="content">
+    <div class="flex justify-center mb-5">
+        <ol class="px-6 max-w-7xl flex items-center w-full h-full">
+            <li
+                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-emerald-500 after:border-4 after:inline-block">
+                <span class="flex items-center justify-center w-8 h-8 bg-emerald-500 rounded-full shrink-0">
+                    <span class="material-symbols-rounded text-white">
+                        done
+                    </span>
+
+                </span>
+                <div class="absolute top-full mt-3 w-fit">
+                    <p class="text-xs uppercase font-medium text-gray-500">Bước 1:</p>
+                    <p class="text-sm font-bold text-black-900">Thông tin bài báo</p>
+                </div>
+            </li>
+            <li
+                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main after:border-4 after:inline-block">
+                <span
+                    class="flex items-center justify-center w-8 h-8 ring-4 border-4 border-gray-100 ring-main/25 bg-main rounded-full shrink-0">
+
+                </span>
+                <div class="absolute top-full mt-3 w-fit">
+                    <p class="text-xs uppercase font-medium text-gray-500">Bước 2:</p>
+                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+                </div>
+            </li>
+            <li
+                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main/25 after:border-4 after:inline-block">
+                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
+
+                </span>
+                <div class="absolute top-full mt-3 w-fit">
+                    <p class="text-xs uppercase font-medium text-gray-500">Bước 3:</p>
+                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+                </div>
+            </li>
+            <li
+                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main/25 after:border-4 after:inline-block">
+                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
+
+                </span>
+                <div class="absolute top-full mt-3 w-fit">
+                    <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
+                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+                </div>
+            </li>
+            <li class="relative flex w-full items-center ml-3 after:ml-3">
+                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
+
+                </span>
+                <div class="absolute top-full mt-3 w-fit">
+                    <p class="text-xs uppercase font-medium text-gray-500">Bước 5:</p>
+                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+                </div>
+            </li>
+        </ol>
+
+    </div>
+
+    <form>
+        <div class="space-y-6 flex flex-col justify-center">
+            <div class="border-b border-gray-900/10 pb-12">
+                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
+                    <div class="col-span-full">
+                        <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
+                        <input id="title" name="title" type="text"
+                            class="border focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
+                        <textarea id="description" name="description" rows="3"
+                        class="border focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full"></textarea>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Tài liệu</label>
+                        <div
+                            class="mt-2 flex bg-white justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                            <div class="text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
+                                    aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                                    <label for="file-upload"
+                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                        <span>Tải lên</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                    </label>
+                                    <p class="pl-1">hoặc kéo thả vào đây</p>
+                                </div>
+                                <p class="text-xs leading-5 text-gray-600">PDF, DOCX</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-x-6">
+                <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button>
+                <button type="submit"
+                    class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Tiếp
+                    tục</button>
+            </div>
+    </form>
+</section>
+
+</html>
