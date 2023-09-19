@@ -1,0 +1,46 @@
+# ConfigurationDB
+spring:
+  servlet:
+        multipart:
+          max-file-size: 10MB
+          max-request-size: 10MB
+  main:
+    allow-circular-references: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ou-journey
+    username: root
+    # password: mai2604
+    password: IamPhong89
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+  # mail:
+  #   host: cp03hn.emailserver.net.vn
+  #   port: 465
+  #   username: admin@ousocialnetwork.id.vn
+  #   password: Vo2Z%)nF_+,{
+  #   properties:
+  #     mail:
+  #       smtp:
+  #         auth: true
+  #         ssl:
+  #           enable: true
+  #           protocols: TLSv1.2
+  #           trust: "*"
+  #       debug: true
+
+#JPA/Hibernate
+server:
+  error:
+    include-message: always
+  # servlet:
+  #   context-path: /social_network
+
+
+#Logging
+logging:
+  level:
+    root: info
