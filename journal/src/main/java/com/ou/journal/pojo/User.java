@@ -59,9 +59,13 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "created_date")
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 
     @JsonIgnore
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "user")
