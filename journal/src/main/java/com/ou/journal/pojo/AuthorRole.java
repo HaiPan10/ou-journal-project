@@ -1,6 +1,7 @@
 package com.ou.journal.pojo;
 
 import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,18 +14,18 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user_role")
-public class UserRole implements Serializable {
+@Table(name = "author_role")
+public class AuthorRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     @ManyToOne
-    private User user;
+    private AuthorArticle authorArticle;
 
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JoinColumn(name = "author_type_id", referencedColumnName = "id")
     @ManyToOne
-    private Role role;
+    private AuthorType authorType;
 }
