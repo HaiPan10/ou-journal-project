@@ -1,6 +1,6 @@
 package com.ou.journal.enums;
 
-public enum ArticleStatusEnum {
+public enum ArticleStatus {
     PENDING,
 	SECRETARY_REJECT, 
 	IN_REVIEW,

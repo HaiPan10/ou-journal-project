@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -26,7 +27,7 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "{user.firstName.notBlank}")
+    @NotBlank(message = "{account.userName.notBlank}")
     @NotNull
     @Size(min = 1, max = 45, message = "{account.userName.invalidSize}")
     @Column(name = "user_name")
@@ -55,6 +56,7 @@ public class Account implements Serializable {
     private Date updatedAt;
 
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
+    @MapsId
     @OneToOne(optional = false)
     private User user;
 }

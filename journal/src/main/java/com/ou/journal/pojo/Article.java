@@ -26,7 +26,7 @@ import lombok.Data;
 @Table(name = "article")
 public class Article implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
