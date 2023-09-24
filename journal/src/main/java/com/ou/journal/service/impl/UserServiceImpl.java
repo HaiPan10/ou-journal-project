@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ou.journal.enums.RoleName;
-import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Role;
 import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
