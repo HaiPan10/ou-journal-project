@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
+
+    <script defer th:src="@{/js/header.js}"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" /> 
+
+</head>
+
+<body class="bg-gray-100">
+    <header th:replace="~{fragments/header :: header}"></header>
+    <section layout:fragment="content">
+        <p>This is filled by the content template.</p>
+    </section>
+
+    <!-- Optional Section -->
+    <th:block layout:fragment="optional" />
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+
+</html>

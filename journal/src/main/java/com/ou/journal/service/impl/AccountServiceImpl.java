@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ou.journal.pojo.Account;
-import com.ou.journal.pojo.User;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.repository.UserRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;

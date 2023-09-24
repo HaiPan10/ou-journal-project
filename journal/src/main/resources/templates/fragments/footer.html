@@ -1,0 +1,55 @@
+<footer class="bg-main mt-5 px-6 py-6 md:px-12">
+    <div class="w-full text-white text-sm font-medium">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div class="col-span-2">
+                <aside class="">
+                    <div class="mb-3 w-full">
+                        <img th:src="@{/images/logo.png}" class="w-full max-w-sm" />
+                    </div>
+                    <p class="py-1">Cơ quan chủ quản: <a href="#" target="_blank" class="font-normal"
+                            th:text="${schoolName}"></a></p>
+                    <p class="py-1">Cơ quan xuất bản: <a href="#" target="_blank" class="font-normal"
+                            th:text="${publishingAgency}"></a></p>
+                    <p class="py-1">Địa chỉ: <a class="font-normal"><em th:text="${address}"></em></a></p>
+                    <p th:text="${address}"></p>
+                    <p class="py-1">Giấy phép trang thông tin điện tử tổng hợp số: <a
+                            class="font-normal"><em>03/GP-TTĐT</em> <br>Do Cục Phát thanh, Truyền hình và Thông tin điện
+                            tử cấp ngày 07-01-2021</a></p>
+                    <p class="py-1">Giấy phép Hoạt động Tạp chí in và Tạp chí điện tử số: <a
+                            class="font-normal"><em>559/GP-BTTTT</em> <br>Do Bộ Thông tin và Truyền thông cấp ngày
+                            30-08-2021</a>s</p>
+                </aside>
+            </div>
+
+
+            <div class="col-span-1">
+                <aside>
+                    <div class="w-full py-1">
+                        <h4 class="font-bold text-lg">THÔNG TIN LIÊN HỆ</h4>
+                    </div>
+                    <p class="py-1">Tổng biên tập: <a href="mailto:journalofscience@ou.edu.vn"
+                            class="font-normal">PGS.TS. Nguyễn Thuấn</a></p>
+                    <div class="py-1">
+                        <p>Thư ký tòa soạn:
+                        <ul class="list-disc">
+                            <li class="ml-5 py-0.5" th:each="name, stat : ${editorialSecretary}">
+                                <a class="font-normal" th:href="'mailto:' + ${emailEditorialSecretary[stat.index]}"
+                                    th:text="${name}"></a>
+                            </li>
+                        </ul>
+                        </p>
+                    </div>
+                    <p class="py-1">Website: <a href="http://journalofscience.ou.edu.vn" target="_blank"
+                            class="font-normal">http://journalofscience.ou.edu.vn/</a></p>
+                    <p class="py-1">Email: <a href="mailto:journalofscience@ou.edu.vn"
+                            class="font-normal">journalofscience@ou.edu.vn</a></p>
+                    <p class="py-1">Điện thoại/Fax: <a class="font-normal">(+84)28 39 333 688</a></p>
+                    <p class="py-1 ml-auto">
+                        <img class="img-fluid issue_cover_img"
+                            src="https://journalofscience.ou.edu.vn/plugins/themes/ou/assets/img/cc-by-nc.png" />
+                    </p>
+                </aside>
+            </div>
+        </div>
+    </div>
+</footer>
