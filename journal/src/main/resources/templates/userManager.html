@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/adminLayout}">
+
+<section layout:fragment="content">
+    <!-- BREADCRUMB -->
+    <nav class="flex" aria-label="Breadcrumb">
+        <ol class="breadcum">
+            <li class="breadcum-item">
+                <a href="#" class="breadcum-item-link">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    <span class="breadcum-item-text ml-0">Bảng điều khiển</span>
+                </a>
+            </li>
+            <li class="breadcum-item">
+                <a href="#" class="breadcum-item-link">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span class="breadcum-item-text">Example</span>
+                </a>
+            </li>
+            <li class="breadcum-item" aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span class="breadcum-item-text current">Quản lý người dùng</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- FILTER -->
+    <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+        <!-- EXTRA FILTER -->
+        <div class="w-fit">
+            <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
+                Bộ lọc
+                <i class="bi bi-sliders2 text-lg"></i>
+            </button>
+
+            <div id="dropdownBgHover" class="dropdown">
+                <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownBgHoverButton">
+                    <li>
+                        <h3>Tình trạng</h3>
+                        <div class="filter-container">
+                            <input name="status" type="checkbox" class="filter-input">
+                            <label class="filter-label">Đã duyệt</label>
+                        </div>
+                        <div class="filter-container">
+                            <input name="status" type="checkbox" class="filter-input">
+                            <label class="filter-label">Chưa duyệt</label>
+                        </div>
+                    </li>
+                    <li>
+                        <hr>
+                        </hr>
+                    </li>
+                    <li>
+                        <h3>Loại tài khoản</h3>
+                        <div class="filter-container">
+                            <input name="userRole" type="checkbox" class="filter-input">
+                            <label class="filter-label">Tác giả</label>
+                        </div>
+                        <div class="filter-container">
+                            <input name="userRole" type="checkbox" class="filter-input">
+                            <label class="filter-label">Reviewer</label>
+                        </div>
+                    </li>
+                    <li>
+                        <hr>
+                        </hr>
+                    </li>
+                    <li class="flex justify-end gap-2 pt-3">
+                        <button type="button" class="btn-secondary-small">Làm
+                            mới</button>
+                        <button type="submit" class="btn-main-small">Áp
+                            dụng</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- INPUT FILTER -->
+        <div class="grow relative flex items-center md:mt-0">
+            <span class="absolute pl-3 py-2">
+                <i class="bi bi-search text-gray-400"></i>
+            </span>
+            <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
+        </div>
+    </form>
+
+
+    <div class="table-container">
+        <table class="table">
+            <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                Danh sách tài khoản
+            </h3>
+            <thead class="table-header">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        #
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tên người dùng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Họ
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tên
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tình trạng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row">
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        1
+                    </td>
+                    <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                        <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/1326/1326415.png" alt="avatar">
+                        user_1
+                    </th>
+                    <td class="px-6 py-4">
+                        user1231@gmail.com
+                    </td>
+                    <td class="px-6 py-4">
+                        Nguyễn Thị
+                    </td>
+                    <td class="px-6 py-4">
+                        User
+                    </td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="badge-success">Đã duyệt</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="#" class="table-action">Xem chi tiết</a>
+                    </td>
+                </tr>
+
+                <tr class="table-row">
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        1
+                    </td>
+                    <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                        <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4322/4322991.png" alt="avatar">
+                        user_2
+                    </th>
+                    <td class="px-6 py-4">
+                        abc@gmail.com
+                    </td>
+                    <td class="px-6 py-4">
+                        Trần Thị
+                    </td>
+                    <td class="px-6 py-4">
+                        A
+                    </td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="badge-warning">Chờ duyệt</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="#" class="table-action">Xem chi tiết</a>
+                    </td>
+                </tr>
+
+                <tr class="table-row">
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        1
+                    </td>
+                    <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                        <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/1326/1326401.png" alt="avatar">
+                        user_3
+                    </th>
+                    <td class="px-6 py-4">
+                        123@gmail.com
+                    </td>
+                    <td class="px-6 py-4">
+                        Trần Thị
+                    </td>
+                    <td class="px-6 py-4">
+                        B
+                    </td>
+                    <td class="px-6 py-4">
+                        <span
+                            class="badge-danger">Không duyệt</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <a href="#" class="table-action">Xem chi tiết</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+</html>

@@ -1,0 +1,44 @@
+<header class="w-full bg-main text-white shadow-sm body-font mb-5">
+   <div class="flex h-fit flex-col items-center py-3 px-6 justify-between mx-auto md:flex-row">
+      <a class="h-16 w-16 flex items-center font-medium text-gray-900 title-font md:mb-0 mr-4">
+         <img class="w-100" th:src="@{/images/logoSimple.png}" />
+      </a>
+      <div
+         class="w-fit text-lg min-h-11 text-center md:text-start flex-wrap items-center justify-center border-0 border-white md:mr-auto md:pl-4 md:border-l">
+         <h1 class="font-bold uppercase" th:text="${webName}"></h1>
+         <h1 class="uppercase" th:text="${schoolName}"></h1>
+      </div>
+      <div class="items-center h-full mt-5 md:mt-0">
+         <a href="#" class="mr-5 font-medium hover:border-b">Đăng nhập</a>
+         <a href="#"
+            class="px-4 py-2 text-xs font-bold text-black uppercase transition-all duration-150 bg-white rounded shadow outline-none hover:bg-white/50 hover:shadow-lg focus:outline-none ease">
+            Đăng ký
+         </a>
+      </div>
+   </div>
+   <nav id="header" class="w-full bg-white shadow-sm">
+      <div class="w-full flex flex-col md:flex-row items-start md:items-center justify-between px-6">
+         <label for="menu-toggle" class="cursor-pointer text-main md:hidden block m-0 py-2 px-4">
+            <span id="menu-icon" class="material-symbols-rounded flex justify-center">
+               menu
+           </span>
+         </label>
+         <input class="hidden" type="checkbox" id="menu-toggle">
+
+         <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
+            <nav>
+               <ul class="md:flex items-center justify-between text-base text-main lg:pt-0">
+                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                        href="#">Trang chủ</a></li>
+                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                        href="#">Gửi bài</a></li>
+                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                        href="#">Giới thiệu</a></li>
+                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                        href="#">Hỗ trợ</a></li>
+               </ul>
+            </nav>
+         </div>
+      </div>
+   </nav>
+</header>

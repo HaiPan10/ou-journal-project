@@ -20,3 +20,7 @@ body {
 option {
   padding: 10px;
 }
+
+.bi{
+  display: flex;
+}
