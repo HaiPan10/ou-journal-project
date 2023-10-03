@@ -5,9 +5,14 @@ module.exports = {
     extend: {
       colors: {
         main: "#084ac4",
+        'main-action': "#063793",
       }
     },
     
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')({
+      charts: true,
+    }),
+  ]
 }

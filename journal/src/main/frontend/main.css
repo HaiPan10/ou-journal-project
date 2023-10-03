@@ -2,6 +2,129 @@
 @tailwind components;
 @tailwind utilities;
 
-.completed {
-    @apply text-2xl my-4 mx-4
+
+@layer components {
+    .avatar {
+        @apply w-9 h-9 rounded-full object-cover
+    }
+
+    .menu-item {
+        @apply pr-4 pl-3 relative hover:after:content-[''] hover:after:w-1 hover:after:h-full hover:after:absolute hover:after:top-0 hover:after:right-0 hover:after:bg-main hover:after:rounded-l
+    }
+
+    .menu-item-child {
+        @apply flex text-lg items-center p-2 text-gray-600 hover:text-main hover:bg-main/10 rounded
+    }
+
+    .menu-item.active {
+        @apply font-bold after:content-[''] after:w-1 after:h-full after:absolute after:top-0 after:right-0 after:bg-main after:rounded-l
+    }
+
+    .menu-item.active>.menu-item-child {
+        @apply text-main bg-main/10
+    }
+
+    .menu-item.active .menu-item-child-icon {
+        @apply text-main/75
+    }
+
+    .btn-main {
+        @apply border w-full flex items-center justify-center gap-2 text-white bg-main hover:bg-main-action focus:ring-4 focus:ring-main/25 font-medium rounded-lg text-sm px-5 py-3
+    }
+
+    .btn-secondary {
+        @apply border w-full flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-100/25 font-medium rounded-lg text-sm px-5 py-3
+    }
+
+    .btn-main-small {
+        @apply border w-full flex items-center justify-center gap-2 text-white bg-main hover:bg-main-action focus:ring-4 focus:ring-main/25 font-medium rounded-md text-sm px-2 py-1.5
+    }
+
+    .btn-secondary-small {
+        @apply border w-full flex items-center justify-center gap-2 text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-100/25 font-medium rounded-md text-sm px-2 py-1.5
+    }
+
+    .menu-item-child-icon {
+        @apply w-5 h-5 text-gray-500 group-hover:text-main/75
+    }
+
+    .menu-item-child-text {
+        @apply ml-3 group-hover:font-bold
+    }
+
+    .breadcum {
+        @apply inline-flex items-center space-x-1 md:space-x-3
+    }
+
+    .breadcum-item {
+        @apply inline-flex items-center
+    }
+
+    .breadcum-item-link {
+        @apply inline-flex items-center text-gray-700 hover:text-main
+    }
+
+    .breadcum-item-text {
+        @apply ml-1 text-sm font-medium md:ml-2
+    }
+
+    .breadcum-item-text.current {
+        @apply text-gray-500
+    }
+
+    .dropdown {
+        @apply hidden w-full md:w-52 bg-white rounded-lg shadow-xl z-50
+    }
+
+    .dropdown > ul {
+        @apply p-3 space-y-1 text-sm text-gray-700
+    }
+
+    .filter-container {
+        @apply flex items-center p-2 rounded hover:bg-gray-100
+    }
+
+    .filter-input {
+        @apply w-4 h-4 text-main bg-gray-100 border-gray-300 rounded focus:ring-main-action focus:ring-2
+    }
+
+    .filter-label {
+        @apply w-full ml-2 text-sm font-medium text-gray-900 rounded
+    }
+
+    .input-icon-left {
+        @apply shadow-sm block w-full py-2.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 focus:border-main/50 focus:ring-main/10 focus:outline-none focus:ring-4
+    }
+
+    .table-container {
+        @apply relative overflow-x-auto shadow-md sm:rounded-lg
+    }
+
+    .table {
+        @apply w-full text-sm text-left text-gray-500
+    }
+
+    .table-header {
+        @apply text-xs text-gray-700 uppercase bg-main/10
+    }
+
+    .table-row {
+        @apply bg-white border-b hover:bg-main/10
+    }
+
+    .table-action {
+        @apply font-medium text-main hover:underline hover:text-main-action
+    }
+
+    .badge-success{
+        @apply bg-green-100 border border-green-500 text-green-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-lg
+    }
+
+    .badge-warning{
+        @apply bg-yellow-100 text-yellow-800 border border-yellow-500 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-lg
+    }
+
+    .badge-danger{
+        @apply bg-red-100 text-red-800 border border-red-500 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-lg
+    }
 }
