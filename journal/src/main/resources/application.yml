@@ -49,4 +49,4 @@ logging:
     root: info
     org:
       springframework:
-        security: INFO
+        security: TRACE
