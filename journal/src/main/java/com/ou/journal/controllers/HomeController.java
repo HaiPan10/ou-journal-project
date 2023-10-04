@@ -6,23 +6,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class HomeController {
-    @ModelAttribute("webName")
-    public String getWebName() {
-        return "test";
-    }
+    // @ModelAttribute("webName")
+    // public String getWebName() {
+    //     return "test";
+    // }
 
     @GetMapping("/")
     public String homePage() {
-        return "userManager";
+        return "login_client";
     }
 
-    @GetMapping("/submit")
-    public String submitPage() {
-        return "submitManuscript";
-    }
+    // @GetMapping("/submit")
+    // public String submitPage() {
+    //     return "submitManuscript";
+    // }
 
-    @GetMapping("/register")
-    public String registerPage() {
-        return "register";
-    }
+    // @GetMapping("/register")
+    // public String registerPage() {
+    //     return "register";
+    // }
 }

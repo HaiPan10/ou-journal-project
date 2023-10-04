@@ -35,7 +35,7 @@ public class JwtService {
             try {
                 JWSSigner signer = new MACSigner(BYTES);
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-                builder.claim("email", account.getEmail());
+                builder.claim("userName", account.getUserName());
                 builder.claim("id", account.getId());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
@@ -79,25 +79,25 @@ public class JwtService {
         }
 
         Date expirationDate = getExpirationDate(token);
-        String email = getEmailFromToken(token);
+        String userName = getUserNameFromToken(token);
         Long id = getIdFromToken(token);
-        // System.out.println("[DEBUG] - " + email);
+        // System.out.println("[DEBUG] - " + userName);
         // System.out.println("[DEBUG] - " + id);
         // System.out.println("[DEBUG] - " + expirationDate);
-        // System.out.println("[DEBUG] - " + !(email == null || email.isEmpty() || id == null || expirationDate.before(new Date())));
-        return !(email == null || email.isEmpty() || id == null || expirationDate.before(new Date()));
+        // System.out.println("[DEBUG] - " + !(userName == null || userName.isEmpty() || id == null || expirationDate.before(new Date())));
+        return !(userName == null || userName.isEmpty() || id == null || expirationDate.before(new Date()));
     }
 
     /**
      * 
      * @param token
-     * @return a string with format [id,email]
+     * @return a string with format [id,userName]
      */
-    public String getEmailFromToken(String token){
+    public String getUserNameFromToken(String token){
         JWTClaimsSet claimsSet = getClaimsSet(token);
         String value = null;
         try {
-            value = claimsSet.getStringClaim("email");
+            value = claimsSet.getStringClaim("userName");
         } catch (ParseException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }

@@ -37,7 +37,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.journal.components.DateFormatter;
 import com.ou.journal.pojo.Account;
-import com.ou.journal.repository.AccountRepository;
+import com.ou.journal.repository.AccountRepositoryJPA;
 
 @Configuration
 @EnableTransactionManagement
@@ -45,7 +45,7 @@ import com.ou.journal.repository.AccountRepository;
 public class ApplicationContextConfig implements WebMvcConfigurer{
 
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountRepositoryJPA accountRepository;
 
     @Autowired
     private Environment environment;
@@ -57,13 +57,13 @@ public class ApplicationContextConfig implements WebMvcConfigurer{
     public UserDetailsService getUserDetail(){
         return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-                Account account = accountRepository.findByEmail(email)
+            public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+                Account account = accountRepository.findByUserName(userName)
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 
                 Set<GrantedAuthority> authorities = new HashSet<>();
                 authorities.add(new SimpleGrantedAuthority(account.getUser().getUserRoles().get(0).getRole().getRoleName()));
-                return new User(account.getEmail(), account.getPassword(), authorities);
+                return new User(account.getUserName(), account.getPassword(), authorities);
             }
             
         };

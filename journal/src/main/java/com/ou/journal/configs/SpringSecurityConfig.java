@@ -109,7 +109,7 @@ public class SpringSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authenticationProvider(authenticationProvider)
                 .formLogin(login -> login.loginPage("/")
-                        .usernameParameter("email")
+                        .usernameParameter("username")
                         .passwordParameter("password")
                         // .defaultSuccessUrl("/admin/dashboard", true)
                         .failureUrl("/?error"))

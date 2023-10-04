@@ -38,15 +38,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // Re-create the user with given token
     private UserDetails getAccount(String token) {
-        String email = jwtService.getEmailFromToken(token);
+        String userName = jwtService.getUserNameFromToken(token);
         Long id = jwtService.getIdFromToken(token);
         // Account account = new Account();
         System.out.println("[User ID] - " + id);
-        System.out.println("[Email] - " + email);
+        System.out.println("[userName] - " + userName);
         System.out.println("[INFO] - Load the user detail");
         // account.setId(Integer.parseInt(claims[0]));
-        // account.setEmail(claims[1]);
-        return userDetailsService.loadUserByUsername(email);
+        // account.setuserName(claims[1]);
+        return userDetailsService.loadUserByUsername(userName);
     }
 
     @Override
