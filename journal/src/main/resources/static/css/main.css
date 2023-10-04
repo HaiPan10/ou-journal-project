@@ -1464,8 +1464,6 @@ input[type="range"]::-ms-fill-lower {
 
 .table-header {
   background-color: rgb(8 74 196 / 0.1);
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
   font-size: 0.75rem;
   line-height: 1rem;
   text-transform: uppercase;

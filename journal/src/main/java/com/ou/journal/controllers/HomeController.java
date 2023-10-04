@@ -13,7 +13,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage() {
-        return "login_client";
+        return "login";
     }
 
     // @GetMapping("/submit")
