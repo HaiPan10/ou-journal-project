@@ -75,28 +75,6 @@ public class SpringSecurityConfig {
         return dao;
     }
 
-    // @Bean
-    // @Order(1)
-    // public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
-    //     http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**").disable())
-    //             .securityMatcher("/api/**")
-    //             .httpBasic(basic -> basic.authenticationEntryPoint(restAuthenticationEntryPoint))
-    //             .cors(cors -> cors.configurationSource(corsConfigurationSource))
-    //             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //             .authorizeHttpRequests((requests) -> requests.requestMatchers("/api/accounts/login",
-    //                     "/api/accounts/register",
-    //                     // "/api/email/verify/**",
-    //                     "/api/ws/**",
-    //                     "/api/accounts/verify/**")
-    //                     .permitAll()
-    //                     .requestMatchers("/admin/**").hasRole("ADMIN")
-    //                     .anyRequest()
-    //                     .authenticated())
-    //             .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler()))
-    //             .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    //     return http.build();
-    // }
-
     @Bean
     // @Order(2)
     public SecurityFilterChain getSpringSecurityChain(HttpSecurity http) throws Exception {

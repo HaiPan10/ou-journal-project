@@ -1,4 +1,4 @@
-use `ou-journal`;
+use `ou-journal-db`;
 
 -- INSERT ROLE NAME INTO ROLE TABLE
 insert into `role`(role_name)
