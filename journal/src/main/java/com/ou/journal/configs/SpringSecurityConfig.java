@@ -114,20 +114,21 @@ public class SpringSecurityConfig {
                         // .defaultSuccessUrl("/admin/dashboard", true)
                         .failureUrl("/?error"))
                 .logout(logout -> logout.logoutSuccessUrl("/"))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(
-                                "/resources/**",
-                                "/css/**",
-                                "/img/**",
-                                "/js/**",
-                                "/styles/**",
-                                "/vendor/**",
-                                "/pages/index",
-                                "/")
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
+                // .authorizeHttpRequests(requests -> requests
+                //         .requestMatchers(
+                //                 "/resources/**",
+                //                 "/css/**",
+                //                 "/img/**",
+                //                 "/js/**",
+                //                 "/styles/**",
+                //                 "/vendor/**",
+                //                 "/pages/index",
+                //                 "/")
+                //         .permitAll()
+                //         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                //         .anyRequest()
+                //         .authenticated())
+                .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
                 .exceptionHandling(handling -> handling.accessDeniedHandler((requests, reponse, ex) -> {
                     System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
                     reponse.sendError(HttpServletResponse.SC_FORBIDDEN);

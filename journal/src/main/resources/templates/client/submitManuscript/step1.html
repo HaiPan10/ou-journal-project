@@ -4,63 +4,7 @@
 
 
 <section layout:fragment="content">
-    <div class="flex justify-center mb-5">
-        <ol class="px-6 max-w-7xl flex items-center w-full h-full">
-            <li
-                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-emerald-500 after:border-4 after:inline-block">
-                <span class="flex items-center justify-center w-8 h-8 bg-emerald-500 rounded-full shrink-0">
-                    <span class="material-symbols-rounded text-white">
-                        done
-                    </span>
-
-                </span>
-                <div class="absolute top-full mt-3 w-fit">
-                    <p class="text-xs uppercase font-medium text-gray-500">Bước 1:</p>
-                    <p class="text-sm font-bold text-black-900">Thông tin bài báo</p>
-                </div>
-            </li>
-            <li
-                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main after:border-4 after:inline-block">
-                <span
-                    class="flex items-center justify-center w-8 h-8 ring-4 border-4 border-gray-100 ring-main/25 bg-main rounded-full shrink-0">
-
-                </span>
-                <div class="absolute top-full mt-3 w-fit">
-                    <p class="text-xs uppercase font-medium text-gray-500">Bước 2:</p>
-                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
-                </div>
-            </li>
-            <li
-                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main/25 after:border-4 after:inline-block">
-                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
-
-                </span>
-                <div class="absolute top-full mt-3 w-fit">
-                    <p class="text-xs uppercase font-medium text-gray-500">Bước 3:</p>
-                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
-                </div>
-            </li>
-            <li
-                class="relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-main/25 after:border-4 after:inline-block">
-                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
-
-                </span>
-                <div class="absolute top-full mt-3 w-fit">
-                    <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
-                    <p class="text-sm font-bold text-black-900">Nhập tệp</p>
-                </div>
-            </li>
-            
-          
-            <li class="relative flex w-fit items-center ml-3 after:ml-3">
-                <span class="flex items-center justify-center w-8 h-8 bg-main/25 rounded-full shrink-0">
-
-                </span>
-            </li>
-        </ol>
-
-    </div>
-
+    <div th:replace="~{fragments/stepper :: stepper (step=1)}"></div>
     <form>
         <div class="space-y-6 flex flex-col justify-center">
             <div class="px-10 pt-10 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 pb-12">

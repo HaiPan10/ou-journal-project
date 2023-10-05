@@ -16,13 +16,13 @@ public class HomeController {
         return "login";
     }
 
-    // @GetMapping("/submit")
-    // public String submitPage() {
-    //     return "submitManuscript";
-    // }
+    @GetMapping("/submit")
+    public String submitPage() {
+        return "client/submitManuscript/step1";
+    }
 
-    // @GetMapping("/register")
-    // public String registerPage() {
-    //     return "register";
-    // }
+    @GetMapping("/register")
+    public String registerPage() {
+        return "client/register";
+    }
 }
