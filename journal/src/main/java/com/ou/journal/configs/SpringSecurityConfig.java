@@ -3,26 +3,20 @@ package com.ou.journal.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.CustomAccessDeniedHandler;
-import com.ou.journal.filter.JwtTokenFilter;
-import com.ou.journal.filter.RestAuthenticationEntryPoint;
-
 import jakarta.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
@@ -40,28 +34,28 @@ public class SpringSecurityConfig {
     @Autowired
     private CharacterEncodingFilter filter;
 
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
+    // @Autowired
+    // private CorsConfigurationSource corsConfigurationSource;
 
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    // @Autowired
+    // private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public JwtTokenFilter jwtTokenFilter() throws Exception {
-        JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
-        // jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager(config));
-        return jwtAuthenticationTokenFilter;
-    }
+    // @Bean
+    // public JwtTokenFilter jwtTokenFilter() throws Exception {
+    //     JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
+    //     // jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager(config));
+    //     return jwtAuthenticationTokenFilter;
+    // }
 
-    @Bean
-    public RestAuthenticationEntryPoint restServicesEntryPoint() {
-        return new RestAuthenticationEntryPoint();
-    }
+    // @Bean
+    // public RestAuthenticationEntryPoint restServicesEntryPoint() {
+    //     return new RestAuthenticationEntryPoint();
+    // }
 
     @Bean
     public CustomAccessDeniedHandler customAccessDeniedHandler() {
@@ -82,38 +76,17 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    @Order(1)
-    public SecurityFilterChain jwtSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/api/**").disable())
-                .securityMatcher("/api/**")
-                .httpBasic(basic -> basic.authenticationEntryPoint(restAuthenticationEntryPoint))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/api/accounts/login",
-                        "/api/accounts/register",
-                        // "/api/email/verify/**",
-                        "/api/ws/**",
-                        "/api/accounts/verify/**")
-                        .permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
-                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler()))
-                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    @Bean
-    @Order(2)
+    // @Order(2)
     public SecurityFilterChain getSpringSecurityChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authenticationProvider(authenticationProvider)
-                .formLogin(login -> login.loginPage("/")
+                .formLogin(login -> login.loginPage("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         // .defaultSuccessUrl("/admin/dashboard", true)
                         .failureUrl("/?error"))
                 .logout(logout -> logout.logoutSuccessUrl("/"))
+<<<<<<< HEAD
                 // .authorizeHttpRequests(requests -> requests
                 //         .requestMatchers(
                 //                 "/resources/**",
@@ -129,6 +102,22 @@ public class SpringSecurityConfig {
                 //         .anyRequest()
                 //         .authenticated())
                 .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
+=======
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(
+                                "/resources/**",
+                                "/css/**",
+                                "/img/**",
+                                "/js/**",
+                                "/styles/**",
+                                "/vendor/**",
+                                "/pages/index",
+                                "/login")
+                        .permitAll()
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .anyRequest()
+                        .authenticated())
+>>>>>>> 5827452e2b424d4e5fa731c3a925beefc0a36c9c
                 .exceptionHandling(handling -> handling.accessDeniedHandler((requests, reponse, ex) -> {
                     System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
                     reponse.sendError(HttpServletResponse.SC_FORBIDDEN);
