@@ -3,6 +3,8 @@ package com.ou.journal.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,8 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepositoryJPA accountRepositoryJPA;
 
-    @Autowired UserRepositoryJPA userRepositoryJPA;
+    @Autowired
+    UserRepositoryJPA userRepositoryJPA;
 
     @Autowired
     private UserService userService;
@@ -44,5 +47,31 @@ public class AccountServiceImpl implements AccountService {
             throw new Exception(e.getMessage());
         }
     }
-    
+
+    @Override
+    public boolean changeAccountStatus(Long accountId, String status) throws Exception {
+        try {
+            Account account = retrieve(accountId);
+            account.setStatus(status);
+            accountRepositoryJPA.save(account);
+            return true;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Account> findAll() {
+        return accountRepositoryJPA.findAll();
+    }
+
+    @Override
+    public Account retrieve(Long accountId) throws Exception {
+        Optional<Account> accountOptional = accountRepositoryJPA.findById(accountId);
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new Exception("Tài khoản không tồn tại!");
+        }
+    }
 }
