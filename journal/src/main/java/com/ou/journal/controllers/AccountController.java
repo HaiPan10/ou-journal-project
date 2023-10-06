@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.pojo.Account;
-import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 
 
