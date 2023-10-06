@@ -1,7 +1,7 @@
 # ou-journal-project
 
 ## Before you running
-Run the query from query.sql to add some nesscessary data.
+Run the query from script.sql to add some nesscessary data.
 
 ## Register API
 ```
@@ -26,5 +26,5 @@ Test endpoint: localhost:8080/api/tests/verify/2?status=REJECTED
 
 ## Endpoints
 ```
-Accounts page: http://localhost:8080/accounts
+Accounts page: http://localhost:8080/admin/accounts
 ```

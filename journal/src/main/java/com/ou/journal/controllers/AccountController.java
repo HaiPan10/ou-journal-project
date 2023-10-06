@@ -18,7 +18,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/accounts")
+    @GetMapping("/admin/accounts")
     public String list(Model model) {
         List<Account> accounts = accountService.findAll();
         model.addAttribute("accounts", accounts);
@@ -26,8 +26,8 @@ public class AccountController {
     }
 
     // Dẫn ra trang account, nếu account id không tồn tại hiện lỗi (đã đc throw sẵn từ api) ra ngoài front end
-    @GetMapping("/accounts/{accountId}")
-    public String retrive(Model model, @PathVariable Long accountId) throws Exception {
+    @GetMapping("/admin/accounts/{accountId}")
+    public String retrieve(Model model, @PathVariable Long accountId) throws Exception {
         try {
             Account account = accountService.retrieve(accountId);
             model.addAttribute("account", account);
@@ -38,8 +38,8 @@ public class AccountController {
         return "emDungemMaiemTcuaHai";
     }
 
-    // Gọi th:href phía front end qua thẻ <a></a>
-    @GetMapping("/accounts/verify/{accountId}")
+    // Gọi thông qua th:href="@{/accounts/verify/{id}(id=${p.id},status='REJECT')}" phía front end qua thẻ <a></a>
+    @GetMapping("/admin/accounts/verify/{accountId}")
     public String verify(@PathVariable Long accountId, @RequestParam String status) throws Exception {
         if (accountService.changeAccountStatus(accountId, status)) {
             return "redirect:/accounts/{accountId}?status=success";

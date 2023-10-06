@@ -118,7 +118,8 @@ public class SpringSecurityConfig {
                                 "/js/**",
                                 "/styles/**",
                                 "/vendor/**",
-                                "/pages/index")
+                                "/pages/index",
+                                "/api/tests/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
