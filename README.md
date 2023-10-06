@@ -1,4 +1,4 @@
-## ou-journal-project
+# ou-journal-project
 
 ## Before you running
 Run the query from query.sql to add some nesscessary data.

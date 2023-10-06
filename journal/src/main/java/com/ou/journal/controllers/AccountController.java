@@ -25,7 +25,7 @@ public class AccountController {
         return "userManager";
     }
 
-    // Dẫn ra trang account (nếu không tồn tại hiện lỗi ở front end)
+    // Dẫn ra trang account, nếu account id không tồn tại hiện lỗi (đã đc throw sẵn từ api) ra ngoài front end
     @GetMapping("/accounts/{accountId}")
     public String retrive(Model model, @PathVariable Long accountId) throws Exception {
         try {
@@ -35,7 +35,7 @@ public class AccountController {
             model.addAttribute("error", e.getMessage());
         }
         // Front end chưa có !!!
-        return "emDungcuaHai";
+        return "emDungemMaiemTcuaHai";
     }
 
     // Gọi th:href phía front end qua thẻ <a></a>
