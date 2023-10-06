@@ -1,10 +1,9 @@
 package com.ou.journal.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.ou.journal.pojo.Account;
+
 import java.util.Optional;
-import java.util.List;
 
 
 

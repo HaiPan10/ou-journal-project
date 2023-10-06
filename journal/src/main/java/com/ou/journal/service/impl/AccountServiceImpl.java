@@ -7,6 +7,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.repository.UserRepositoryJPA;
@@ -36,6 +37,7 @@ public class AccountServiceImpl implements AccountService {
             userService.createAuthorUser(account.getUser());
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+            account.setStatus(AccountStatus.PENDING.toString());
             accountRepositoryJPA.save(account);
             return account;
         } catch (Exception e) {

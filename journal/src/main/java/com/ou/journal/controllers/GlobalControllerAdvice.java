@@ -19,7 +19,7 @@ public class GlobalControllerAdvice {
     @Value("${webName}")
     private String webName;
 
-     @Value("${address}")
+    @Value("${address}")
     private String address;
 
     @Value("${publishingAgency}")
@@ -31,7 +31,7 @@ public class GlobalControllerAdvice {
     @Value("${editorialSecretary}")
     private String editorialSecretary;
 
-     @Value("${emailEditorialSecretary}")
+    @Value("${emailEditorialSecretary}")
     private String emailEditorialSecretary;
 
     @ModelAttribute("schoolName")

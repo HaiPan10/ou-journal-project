@@ -1,7 +1,12 @@
-# ou-journal-project
-> Register API JSON
-Endpoint: localhost:8080/api/tests/register
-Json:
+## ou-journal-project
+
+## Before you running
+Run the query from query.sql to add some nesscessary data.
+
+## Register API
+Test endpoint: localhost:8080/api/tests/register
+The json: 
+```json
 {
     "email": "testgmail@gmail.com",
     "password": "123456",
@@ -12,3 +17,7 @@ Json:
         "email": "testgmail@gmail.com"
     }
 }
+```
+
+## Endpoints
+Accounts page: http://localhost:8080/accounts
