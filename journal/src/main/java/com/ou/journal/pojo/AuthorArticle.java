@@ -14,10 +14,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "author_article")
+@NoArgsConstructor
 public class AuthorArticle implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

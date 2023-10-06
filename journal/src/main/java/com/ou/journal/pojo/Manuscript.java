@@ -20,10 +20,12 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "manuscript")
+@NoArgsConstructor
 public class Manuscript implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

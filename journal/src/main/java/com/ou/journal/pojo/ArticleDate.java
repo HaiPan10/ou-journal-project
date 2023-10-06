@@ -16,10 +16,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "article_date")
+@NoArgsConstructor
 public class ArticleDate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

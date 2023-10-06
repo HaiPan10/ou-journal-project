@@ -11,14 +11,24 @@ public class HomeController {
     // }
 
     @GetMapping("/login")
-    public String homePage() {
+    public String userLoginPage() {
         return "login";
     }
 
-    // @GetMapping("/submit")
-    // public String submitPage() {
-    //     return "submitManuscript";
-    // }
+    @GetMapping("/admin/login")
+    public String adminLoginPage() {
+        return "admin_login";
+    }
+
+    @GetMapping("/admin/dashboard")
+    public String homepage() {
+        return "userManager";
+    }
+
+    @GetMapping("/submit")
+    public String submitPage() {
+        return "submitManuscript_client";
+    }
 
     // @GetMapping("/register")
     // public String registerPage() {

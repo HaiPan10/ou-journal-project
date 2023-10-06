@@ -3,6 +3,7 @@ package com.ou.journal.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.CustomAccessDeniedHandler;
-import jakarta.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
@@ -34,37 +34,22 @@ public class SpringSecurityConfig {
     @Autowired
     private CharacterEncodingFilter filter;
 
-    // @Autowired
-    // private CorsConfigurationSource corsConfigurationSource;
+    @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    // @Autowired
-    // private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // @Bean
-    // public JwtTokenFilter jwtTokenFilter() throws Exception {
-    //     JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
-    //     // jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager(config));
-    //     return jwtAuthenticationTokenFilter;
-    // }
-
-    // @Bean
-    // public RestAuthenticationEntryPoint restServicesEntryPoint() {
-    //     return new RestAuthenticationEntryPoint();
-    // }
-
     @Bean
     public CustomAccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
-    }
-
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -76,16 +61,21 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    // @Order(2)
-    public SecurityFilterChain getSpringSecurityChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
+                .securityMatcher("/admin/**")
                 .authenticationProvider(authenticationProvider)
-                .formLogin(login -> login.loginPage("/login")
+                .formLogin(login -> login.loginPage("/admin/login").permitAll()
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        // .defaultSuccessUrl("/admin/dashboard", true)
-                        .failureUrl("/?error"))
-                .logout(logout -> logout.logoutSuccessUrl("/"))
+                        .defaultSuccessUrl("/admin/dashboard", true)
+                        .failureUrl("/admin/login?error"))
+                .logout(logout -> logout
+                        .logoutUrl("/admin/logout")
+                        .logoutSuccessUrl("/admin/login")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
                                 "/resources/**",
@@ -94,17 +84,45 @@ public class SpringSecurityConfig {
                                 "/js/**",
                                 "/styles/**",
                                 "/vendor/**",
-                                "/pages/index",
-                                "/login")
+                                "/pages/index")
                         .permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest()
                         .authenticated())
-                .exceptionHandling(handling -> handling.accessDeniedHandler((requests, reponse, ex) -> {
-                    System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
-                    reponse.sendError(HttpServletResponse.SC_FORBIDDEN);
-                    reponse.getWriter().write("Forbidden!!!");
-                }))
+                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .securityMatcher("/**")
+                .authenticationProvider(authenticationProvider)
+                .formLogin(login -> login.loginPage("/login").permitAll()
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/submit", true)
+                        .failureUrl("/login?error"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(
+                                "/resources/**",
+                                "/css/**",
+                                "/img/**",
+                                "/js/**",
+                                "/styles/**",
+                                "/vendor/**",
+                                "/pages/index")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

@@ -36,7 +36,8 @@
                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Cài đặt</a>
                   </li>
                   <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Đăng xuất</a>
+                    <a th:href="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? '/admin/logout' : '/logout'}" 
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Đăng xuất</a>
                   </li>
                 </ul>
               </div>
