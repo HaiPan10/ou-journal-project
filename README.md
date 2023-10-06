@@ -21,8 +21,6 @@ The json:
 ## Verify API
 Test endpoint: localhost:8080/api/tests/verify/2?status=ACCEPTED
 Test endpoint: localhost:8080/api/tests/verify/2?status=REJECTED
-```
-
 
 ## Endpoints
 Accounts page: http://localhost:8080/accounts
