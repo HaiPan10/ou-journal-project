@@ -1,4 +1,4 @@
-USE `ou-journal`;
+USE `ou-journal-db`;
 
 INSERT INTO role(role_name) VALUES("ROLE_EDITOR");
 INSERT INTO role(role_name) VALUES("ROLE_REVIERWER");

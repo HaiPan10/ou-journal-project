@@ -27,11 +27,11 @@ public class HomeController {
 
     @GetMapping("/submit")
     public String submitPage() {
-        return "submitManuscript_client";
+        return "client/submitManuscript/step1";
     }
 
-    // @GetMapping("/register")
-    // public String registerPage() {
-    //     return "register";
-    // }
+    @GetMapping("/register")
+    public String registerPage() {
+        return "client/register";
+    }
 }

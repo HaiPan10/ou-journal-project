@@ -46,6 +46,9 @@ public class Account implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "status")
+    private String status;
+
     @Transient
     private String confirmPassword;
 

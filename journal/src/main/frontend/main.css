@@ -127,4 +127,41 @@
     .badge-danger{
         @apply bg-red-100 text-red-800 border border-red-500 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-lg
     }
+
+    .step {
+        @apply relative flex w-full items-center ml-3 after:ml-3 inline-block after:content-[''] after:w-full after:h-1 after:border-b after:border-4 after:inline-block
+    }
+
+    .step-end {
+        @apply relative flex w-fit items-center ml-3 after:ml-3
+    }
+
+
+    .step-complete{
+        @apply after:border-emerald-500
+    }
+
+    .step-in-progress{
+        @apply after:border-main
+    }
+
+    .step-pending {
+        @apply after:border-main/25
+    }
+
+    .step-child {
+        @apply flex items-center justify-center w-8 h-8 rounded-full shrink-0
+    }
+
+    .step-complete .step-child{
+        @apply bg-emerald-500 text-white 
+    }
+
+    .step-in-progress .step-child {
+        @apply ring-4 border-4 border-gray-100 ring-main/25 bg-main
+    }
+
+    .step-pending .step-child {
+        @apply bg-main/25
+    }
 }
