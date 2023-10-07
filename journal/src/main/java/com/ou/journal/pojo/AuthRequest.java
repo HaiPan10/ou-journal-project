@@ -18,7 +18,7 @@ public class AuthRequest implements Serializable{
     @NotBlank(message = "{account.email.notBlank}")
     @Email(message = "{account.email.invalid}")
     @Size(min = 1, message = "{account.email.invalidSize}")
-    private String email;
+    private String username;
     @NotBlank(message = "{account.password.notBlank}")
     @Size(min = 1, message = "{account.password.invalidSize}")
     private String password;

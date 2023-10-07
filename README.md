@@ -37,3 +37,15 @@ Key: title -> Value: test
 ```
 Accounts page: http://localhost:8080/admin/accounts
 ```
+
+## Generate Token for Postman Testing
+```
+Test endpoint: localhost:8080/api/tests/generate-token
+The json:
+{
+    "username": "admin",
+    "password": "123456"
+}
+The header of each request testing by postman should have:
+Authorization: Bearer <Token>
+```

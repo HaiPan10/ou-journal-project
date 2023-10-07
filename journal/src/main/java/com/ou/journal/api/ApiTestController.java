@@ -1,13 +1,8 @@
 package com.ou.journal.api;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ou.journal.enums.AuthorType;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.AuthorArticle;
-import com.ou.journal.pojo.AuthorRole;
+import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.AuthorTypeService;
@@ -65,6 +58,24 @@ public class ApiTestController {
     public ResponseEntity<?> uploadArticle (@RequestPart("file") MultipartFile file, @RequestPart("article") Article article) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(articleService.create(article, file));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/generate-token")
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+        try {
+            return ResponseEntity.ok().body(accountService.login(authRequest));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> test() {
+        try {
+            return ResponseEntity.ok().body("hehe");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
