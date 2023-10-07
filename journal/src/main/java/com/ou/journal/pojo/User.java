@@ -3,6 +3,7 @@ package com.ou.journal.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -74,7 +75,7 @@ public class User implements Serializable {
     private Account account;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-    private List<UserRole> userRoles;
+    private Set<UserRole> userRoles;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorUser")

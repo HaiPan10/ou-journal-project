@@ -32,6 +32,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.journal.components.DateFormatter;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
 
 @Configuration
@@ -57,8 +58,11 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                authorities.add(
-                        new SimpleGrantedAuthority(account.getUser().getUserRoles().get(0).getRole().getRoleName()));
+                Set<UserRole> userRoles = account.getUser().getUserRoles();
+                userRoles.forEach(ur -> {
+                    authorities.add(new SimpleGrantedAuthority(ur.getRole().getRoleName()));
+                });
+              
                 return new User(account.getUserName(), account.getPassword(), authorities);
             }
 
