@@ -26,14 +26,72 @@ Test endpoint: localhost:8080/api/tests/verify/2?status=REJECTED
 
 ## Upload API
 ```
-Before testing: create an account and verify it
+Before testing: create 4 accounts and verify it
 Test endpoint: localhost:8080/api/tests/upload
 Body: form-data
-Key: file -> Value: (choose any docx pdf)
-Key: title -> Value: test
+Key: file 
+Value: (choose any docx pdf)
+
+Key: article
+Value:
+{
+    "title": "my title", 
+    "abstracts":"my abstract",
+    "authorArticles": [
+        {
+            "user": {
+                "id": 2
+            },
+            "authorRoles": [
+                {
+                    "authorType": {
+                        "id": 1
+                    }
+                }
+            ]
+        },
+        {
+            "user": {
+                "id": 4
+            },
+            "authorRoles": [
+                {
+                    "authorType": {
+                        "id": 2
+                    }
+                }
+            ]
+        },
+        {
+            "user": {
+                "id": 5
+            },
+            "authorRoles": [
+                {
+                    "authorType": {
+                        "id": 3
+                    }
+                }
+            ]
+        }
+    ]
+}
+Content type: application/json
 ```
 
 ## Endpoints
 ```
 Accounts page: http://localhost:8080/admin/accounts
+```
+
+## Generate Token for Postman Testing
+```
+Test endpoint: localhost:8080/api/tests/generate-token
+The json:
+{
+    "username": "admin",
+    "password": "123456"
+}
+The header of each request testing by postman should have:
+Authorization: Bearer <Token>
 ```

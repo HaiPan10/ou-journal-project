@@ -19,6 +19,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.CustomAccessDeniedHandler;
 import com.ou.journal.filter.CustomAuthenticationEntryPoint;
+import com.ou.journal.filter.JwtTokenFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -41,10 +42,28 @@ public class SpringSecurityConfig {
         @Autowired
         private CustomAuthenticationEntryPoint authenticationEntryPoint;
 
+<<<<<<< HEAD
         @Bean
         public PasswordEncoder getPasswordEncoder() {
                 return new BCryptPasswordEncoder();
         }
+=======
+//     @Autowired
+//     private JwtTokenFilter jwtTokenFilter;
+
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() throws Exception {
+        JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
+        // jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager(config));
+        return jwtAuthenticationTokenFilter;
+    }
+
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+>>>>>>> 961894e881d994c832e770e06af75aba72d6c55a
 
         @Bean
         public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -95,40 +114,40 @@ public class SpringSecurityConfig {
                 return http.build();
         }
 
-        @Bean
-        @Order(2)
-        public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
-                http.csrf(csrf -> csrf.disable())
-                                .securityMatcher("/**")
-                                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
-                                .authenticationProvider(authenticationProvider)
-                                .formLogin(login -> login.loginPage("/login").permitAll()
-                                                .usernameParameter("username")
-                                                .passwordParameter("password")
-                                                .defaultSuccessUrl("/submit", true)
-                                                .failureUrl("/login?error"))
-                                .logout(logout -> logout
-                                                .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/login")
-                                                .deleteCookies("JSESSIONID")
-                                                .invalidateHttpSession(true))
-                                .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
-
-                                // .authorizeHttpRequests(requests -> requests
-                                // .requestMatchers(
-                                // "/resources/**",
-                                // "/css/**",
-                                // "/img/**",
-                                // "/js/**",
-                                // "/styles/**",
-                                // "/vendor/**",
-                                // "/pages/index",
-                                // "/api/tests/**")
-                                // .permitAll()
-                                // .anyRequest()
-                                // .authenticated())
-                                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
-                                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-                return http.build();
-        }
+    @Bean
+    @Order(2)
+    public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .securityMatcher("/**")
+                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
+                .authenticationProvider(authenticationProvider)
+                .formLogin(login -> login.loginPage("/login").permitAll()
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/submit", true)
+                        .failureUrl("/login?error"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
+                                                        .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
+                // .authorizeHttpRequests(requests -> requests
+                //         .requestMatchers(
+                //                 "/resources/**",
+                //                 "/css/**",
+                //                 "/img/**",
+                //                 "/js/**",
+                //                 "/styles/**",
+                //                 "/vendor/**",
+                //                 "/pages/index",
+                //                 "/api/tests/**")
+                //         .permitAll()
+                //         .anyRequest()
+                //         .authenticated())
+                // .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                // .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                // .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 }

@@ -10,9 +10,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ou-journal-db
     username: root
+<<<<<<< HEAD
     # password: mai2604
     # password: IamPhong89
     password: Admin@123
+=======
+    password: mai2604
+    # password: IamPhong89
+    # password: Admin@123
+>>>>>>> 961894e881d994c832e770e06af75aba72d6c55a
   jpa:
     show-sql: true
     hibernate:
@@ -47,4 +53,4 @@ logging:
     root: info
     org:
       springframework:
-        security: INFO
+        security: TRACE
