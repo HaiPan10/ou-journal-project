@@ -3,6 +3,8 @@ package com.ou.journal.pojo;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +34,7 @@ public class AuthorArticle implements Serializable {
     @ManyToOne
     private User user;
 
+    @JsonIgnore
     @JoinColumn(name = "article_id", referencedColumnName = "id")
     @ManyToOne
     private Article article;
