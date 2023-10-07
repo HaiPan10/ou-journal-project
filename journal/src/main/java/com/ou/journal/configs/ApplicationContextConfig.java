@@ -48,7 +48,7 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
     @Autowired
     private DateFormatter dateFormatter;
 
-    @Bean()
+    @Bean
     public UserDetailsService getUserDetail() {
         return new UserDetailsService() {
             @Override

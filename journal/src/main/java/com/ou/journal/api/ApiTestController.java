@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 
@@ -56,6 +57,24 @@ public class ApiTestController {
             Article article = new Article();
             article.setTitle(title);
             return ResponseEntity.status(HttpStatus.CREATED).body(articleService.create(article, file, Long.valueOf(2)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/generate-token")
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+        try {
+            return ResponseEntity.ok().body(accountService.login(authRequest));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> test() {
+        try {
+            return ResponseEntity.ok().body("hehe");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

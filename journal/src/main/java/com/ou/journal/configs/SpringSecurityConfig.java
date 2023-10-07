@@ -19,6 +19,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.CustomAccessDeniedHandler;
 import com.ou.journal.filter.CustomAuthenticationEntryPoint;
+import com.ou.journal.filter.JwtTokenFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -40,6 +41,17 @@ public class SpringSecurityConfig {
 
     @Autowired
     private CustomAuthenticationEntryPoint authenticationEntryPoint;
+
+//     @Autowired
+//     private JwtTokenFilter jwtTokenFilter;
+
+    @Bean
+    public JwtTokenFilter jwtTokenFilter() throws Exception {
+        JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
+        // jwtAuthenticationTokenFilter.setAuthenticationManager(authenticationManager(config));
+        return jwtAuthenticationTokenFilter;
+    }
+
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -126,7 +138,8 @@ public class SpringSecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
