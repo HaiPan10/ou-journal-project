@@ -84,11 +84,6 @@ Value:
 Content type: application/json
 ```
 
-## Endpoints
-```
-Accounts page: http://localhost:8080/admin/accounts
-```
-
 ## Generate Token for Postman Testing
 ```
 Test endpoint: localhost:8080/api/tests/generate-token
@@ -99,4 +94,10 @@ The json:
 }
 The header of each request testing by postman should have:
 Authorization: Bearer <Token>
+```
+
+## Endpoints
+```
+Accounts page: http://localhost:8080/admin/accounts
+Articles page: http://localhost:8080/admin/articles
 ```

@@ -3,6 +3,7 @@ package com.ou.journal.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +74,10 @@ public class ArticleServiceImpl implements ArticleService {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Article> listPendingArticles() {
+        return articleRepositoryJPA.listPendingArticles();
     }
 }
