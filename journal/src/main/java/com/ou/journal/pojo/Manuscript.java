@@ -57,6 +57,7 @@ public class Manuscript implements Serializable {
     @Column(name = "type")
     private String type;
 
+    @JsonIgnore
     @JoinColumn(name = "article_id", referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Article article;
