@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.CustomAccessDeniedHandler;
+import com.ou.journal.filter.CustomAuthenticationEntryPoint;
 
 @EnableWebSecurity
 @Configuration
@@ -37,6 +38,9 @@ public class SpringSecurityConfig {
     @Autowired
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -53,6 +57,11 @@ public class SpringSecurityConfig {
     }
 
     @Bean
+    public CustomAuthenticationEntryPoint restServicesEntryPoint() {
+        return new CustomAuthenticationEntryPoint();
+    }
+
+    @Bean
     public AuthenticationProvider getAuthenticationProvider() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
         dao.setPasswordEncoder(passwordEncoder);
@@ -65,6 +74,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .securityMatcher("/admin/**")
+                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
                 .formLogin(login -> login.loginPage("/admin/login").permitAll()
                         .usernameParameter("username")
@@ -99,7 +109,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .securityMatcher("/**")
-                .httpBasic(basic -> basic.init(http))
+                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
                 .formLogin(login -> login.loginPage("/login").permitAll()
                         .usernameParameter("username")
