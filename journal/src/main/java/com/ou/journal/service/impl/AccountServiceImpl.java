@@ -124,4 +124,14 @@ public class AccountServiceImpl implements AccountService {
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }
     }
+    
+    @Override
+    public Account findByUserName(String userName) throws Exception {
+        Optional<Account> accountOptional = accountRepositoryJPA.findByUserName(userName);
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new Exception("Tài khoản không tồn tại!");
+        }
+    }
 }

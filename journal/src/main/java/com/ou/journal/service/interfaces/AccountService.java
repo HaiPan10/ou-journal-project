@@ -14,4 +14,5 @@ public interface AccountService {
     List<Account> findAll();
     Account retrieve(Long accountId) throws Exception;
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
+    Account findByUserName(String userName) throws Exception;
 }
