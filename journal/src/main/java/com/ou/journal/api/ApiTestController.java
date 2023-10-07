@@ -43,4 +43,13 @@ public class ApiTestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping()
+    public ResponseEntity<?> test () throws Exception {
+        try {
+            return ResponseEntity.ok("hehe");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
