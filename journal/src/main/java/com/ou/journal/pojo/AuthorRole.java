@@ -23,7 +23,7 @@ public class AuthorRole implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @JoinColumn(name = "author_article_id", referencedColumnName = "id")
     @ManyToOne
     private AuthorArticle authorArticle;
 

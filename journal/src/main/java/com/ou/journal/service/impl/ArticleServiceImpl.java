@@ -58,12 +58,9 @@ public class ArticleServiceImpl implements ArticleService {
                                     new AuthorArticle(
                                             userService.retrieve(userId),
                                             article))));
-            articleRepositoryJPA.save(article);
-
-            return article;
+            return articleRepositoryJPA.save(article);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
-
 }

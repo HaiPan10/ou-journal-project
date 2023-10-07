@@ -99,6 +99,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .securityMatcher("/**")
+                .httpBasic(basic -> basic.init(http))
                 .authenticationProvider(authenticationProvider)
                 .formLogin(login -> login.loginPage("/login").permitAll()
                         .usernameParameter("username")

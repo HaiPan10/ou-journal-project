@@ -24,6 +24,15 @@ Test endpoint: localhost:8080/api/tests/verify/2?status=ACCEPTED
 Test endpoint: localhost:8080/api/tests/verify/2?status=REJECTED
 ```
 
+## Upload API
+```
+Before testing: create an account and verify it
+Test endpoint: localhost:8080/api/tests/upload
+Body: form-data
+Key: file -> Value: (choose any docx pdf)
+Key: title -> Value: test
+```
+
 ## Endpoints
 ```
 Accounts page: http://localhost:8080/admin/accounts
