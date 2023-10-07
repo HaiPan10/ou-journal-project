@@ -87,15 +87,6 @@ public class SpringSecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(
-                                "/resources/**",
-                                "/css/**",
-                                "/img/**",
-                                "/js/**",
-                                "/styles/**",
-                                "/vendor/**",
-                                "/pages/index")
-                        .permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest()
                         .authenticated())
