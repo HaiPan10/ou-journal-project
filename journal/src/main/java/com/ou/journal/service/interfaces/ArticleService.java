@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.pojo.Article;
 
 public interface ArticleService {
-    Article create(Article article, MultipartFile file, Long userId) throws Exception;
+    Article create(Article article, MultipartFile file) throws Exception;
 }

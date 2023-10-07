@@ -74,4 +74,14 @@ public class AccountServiceImpl implements AccountService {
             throw new Exception("Tài khoản không tồn tại!");
         }
     }
+
+    @Override
+    public Account findByUserName(String userName) throws Exception {
+        Optional<Account> accountOptional = accountRepositoryJPA.findByUserName(userName);
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new Exception("Tài khoản không tồn tại!");
+        }
+    }
 }

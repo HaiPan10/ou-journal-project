@@ -9,4 +9,5 @@ public interface AccountService {
     boolean changeAccountStatus(Long accountId, String status) throws Exception;
     List<Account> findAll();
     Account retrieve(Long accountId) throws Exception;
+    Account findByUserName(String userName) throws Exception;
 }
