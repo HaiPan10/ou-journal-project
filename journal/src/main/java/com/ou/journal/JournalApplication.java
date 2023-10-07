@@ -12,5 +12,4 @@ public class JournalApplication {
 		// PasswordEncoder passwordEncoder = context.getBean(PasswordEncoder.class);
 		// System.out.println("[DEBUG] - " + passwordEncoder.encode("123456"));
 	}
-
 }

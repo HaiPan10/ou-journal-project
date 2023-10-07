@@ -19,11 +19,15 @@ import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "article")
+@NoArgsConstructor
 public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,16 +51,16 @@ public class Article implements Serializable {
 
     @JoinColumn(name = "editor_id", referencedColumnName = "id")
     @ManyToOne
-    private User user;
+    private User editorUser;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<Manuscript> manuscripts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<ArticleDate> articleDates;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<AuthorArticle> authorArticles;
 
     @Transient

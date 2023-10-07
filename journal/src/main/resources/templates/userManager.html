@@ -130,7 +130,37 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="table-row">
+                <th:block th:each="account : ${accounts}">
+                    <tr class="table-row">
+                        <td class="px-6 py-4 font-medium text-gray-900" th:text="${account.id}">
+                        </td>
+                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                            <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/1326/1326415.png" alt="avatar">
+                            <span th:text="${account.userName}"></span>
+                        </th>
+                        <td class="px-6 py-4" th:text="${account.email}">
+                        </td>
+                        <td class="px-6 py-4" th:text="${account.user.lastName}">
+                        </td>
+                        <td class="px-6 py-4" th:text="${account.user.firstName}">
+                        </td>
+                        <td class="px-6 py-4">
+                            <div th:if="${account.status eq 'PENDING'}">
+                                <span class="badge-warning">Chờ duyệt</span>
+                            </div>
+                            <div th:if="${account.status eq 'ACCEPTED'}">
+                                <span class="badge-success">Đã duyệt</span>
+                            </div>
+                            <div th:if="${account.status eq 'REJECTED'}">
+                                <span class="badge-danger">Không duyệt</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="#" class="table-action" th:href="@{/accounts/{id}(id=${account.id})}">Xem chi tiết</a>
+                        </td>
+                    </tr>
+                </th:block>
+                <!-- <tr class="table-row">
                     <td class="px-6 py-4 font-medium text-gray-900">
                         1
                     </td>
@@ -148,8 +178,7 @@
                         User
                     </td>
                     <td class="px-6 py-4">
-                        <span
-                            class="badge-success">Đã duyệt</span>
+                        <span class="badge-success">Đã duyệt</span>
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="table-action">Xem chi tiết</a>
@@ -174,8 +203,7 @@
                         A
                     </td>
                     <td class="px-6 py-4">
-                        <span
-                            class="badge-warning">Chờ duyệt</span>
+                        <span class="badge-warning">Chờ duyệt</span>
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="table-action">Xem chi tiết</a>
@@ -200,13 +228,12 @@
                         B
                     </td>
                     <td class="px-6 py-4">
-                        <span
-                            class="badge-danger">Không duyệt</span>
+                        <span class="badge-danger">Không duyệt</span>
                     </td>
                     <td class="px-6 py-4">
                         <a href="#" class="table-action">Xem chi tiết</a>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
     </div>

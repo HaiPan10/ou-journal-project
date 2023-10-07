@@ -1,8 +1,6 @@
 package com.ou.journal.configs;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -26,9 +24,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -42,7 +37,7 @@ import com.ou.journal.repository.AccountRepositoryJPA;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:configs.properties")
-public class ApplicationContextConfig implements WebMvcConfigurer{
+public class ApplicationContextConfig implements WebMvcConfigurer {
 
     @Autowired
     private AccountRepositoryJPA accountRepository;
@@ -53,38 +48,21 @@ public class ApplicationContextConfig implements WebMvcConfigurer{
     @Autowired
     private DateFormatter dateFormatter;
 
-    @Bean
-    public UserDetailsService getUserDetail(){
+    @Bean()
+    public UserDetailsService getUserDetail() {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
                 Account account = accountRepository.findByUserName(userName)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-                
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                authorities.add(new SimpleGrantedAuthority(account.getUser().getUserRoles().get(0).getRole().getRoleName()));
+                authorities.add(
+                        new SimpleGrantedAuthority(account.getUser().getUserRoles().get(0).getRole().getRoleName()));
                 return new User(account.getUserName(), account.getPassword(), authorities);
             }
-            
-        };
-    }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        String clientHostname = environment.getProperty("CLIENT_HOSTNAME");
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList(clientHostname));
-        // configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
-        // configuration.setAllowedOrigins(Arrays.asList("http://ousocialnetwork.id.vn"));
-        // configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        // configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        // configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+        };
     }
 
     @Bean
@@ -96,9 +74,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer{
                 "secure", true));
     }
 
-
     @Bean
-    public SimpleDateFormat getSimpleDate(){
+    public SimpleDateFormat getSimpleDate() {
         return new SimpleDateFormat("yyyy-MM-dd");
     }
 
@@ -123,9 +100,10 @@ public class ApplicationContextConfig implements WebMvcConfigurer{
         return new ObjectMapper();
     }
 
-    @Bean(name="executorService")
+    @Bean(name = "executorService")
     public ExecutorService getThreadPool() {
-        // int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
+        // int threadNumber =
+        // Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
         int threadNumber = 10;
         ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
         return executor;
