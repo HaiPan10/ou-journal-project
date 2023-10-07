@@ -22,8 +22,12 @@
                 <div class="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
                     <form method="post" th:action="@{/admin/login}">
                         <div class="px-5 py-7">
-                            <div th:if="${param.error != null}" class="badge-danger">
-                                Đăng nhập thất bại
+                            <div th:if="${param.error != null}">
+                                <div id="alert-error" class="alert-danger" role="alert">
+                                    <div class="ml-3 text-sm font-medium">
+                                      Đăng nhập thất bại
+                                    </div>
+                                </div>
                             </div>
                             <label class="font-medium pb-1 block">Tên đăng nhập</label>
                             <input name="username" type="text"

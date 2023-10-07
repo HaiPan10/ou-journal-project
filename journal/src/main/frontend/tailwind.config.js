@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         main: "#084ac4",
         'main-action': "#063793",
+        transparent: "transparent"
       }
     },
     

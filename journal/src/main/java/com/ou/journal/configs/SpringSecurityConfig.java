@@ -24,23 +24,23 @@ import com.ou.journal.filter.JwtTokenFilter;
 @EnableWebSecurity
 @Configuration
 public class SpringSecurityConfig {
-    @Autowired
-    private UserDetailsService userDetailsService;
+        @Autowired
+        private UserDetailsService userDetailsService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+        @Autowired
+        private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
+        @Autowired
+        private AuthenticationProvider authenticationProvider;
 
-    @Autowired
-    private CharacterEncodingFilter filter;
+        @Autowired
+        private CharacterEncodingFilter filter;
 
-    @Autowired
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
+        @Autowired
+        private CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    @Autowired
-    private CustomAuthenticationEntryPoint authenticationEntryPoint;
+        @Autowired
+        private CustomAuthenticationEntryPoint authenticationEntryPoint;
 
 //     @Autowired
 //     private JwtTokenFilter jwtTokenFilter;
@@ -58,54 +58,54 @@ public class SpringSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+                return config.getAuthenticationManager();
+        }
 
-    @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
+        @Bean
+        public CustomAccessDeniedHandler customAccessDeniedHandler() {
+                return new CustomAccessDeniedHandler();
+        }
 
-    @Bean
-    public CustomAuthenticationEntryPoint restServicesEntryPoint() {
-        return new CustomAuthenticationEntryPoint();
-    }
+        @Bean
+        public CustomAuthenticationEntryPoint restServicesEntryPoint() {
+                return new CustomAuthenticationEntryPoint();
+        }
 
-    @Bean
-    public AuthenticationProvider getAuthenticationProvider() {
-        DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setPasswordEncoder(passwordEncoder);
-        dao.setUserDetailsService(userDetailsService);
-        return dao;
-    }
+        @Bean
+        public AuthenticationProvider getAuthenticationProvider() {
+                DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
+                dao.setPasswordEncoder(passwordEncoder);
+                dao.setUserDetailsService(userDetailsService);
+                return dao;
+        }
 
-    @Bean
-    @Order(1)
-    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .securityMatcher("/admin/**")
-                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
-                .authenticationProvider(authenticationProvider)
-                .formLogin(login -> login.loginPage("/admin/login").permitAll()
-                        .usernameParameter("username")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/admin/dashboard", true)
-                        .failureUrl("/admin/login?error"))
-                .logout(logout -> logout
-                        .logoutUrl("/admin/logout")
-                        .logoutSuccessUrl("/admin/login")
-                        .deleteCookies("JSESSIONID")
-                        .invalidateHttpSession(true))
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                        .anyRequest()
-                        .authenticated())
-                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+        @Bean
+        @Order(1)
+        public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
+                http.csrf(csrf -> csrf.disable())
+                                .securityMatcher("/admin/**")
+                                .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
+                                .authenticationProvider(authenticationProvider)
+                                .formLogin(login -> login.loginPage("/admin/login").permitAll()
+                                                .usernameParameter("username")
+                                                .passwordParameter("password")
+                                                .defaultSuccessUrl("/admin/dashboard", true)
+                                                .failureUrl("/admin/login?error"))
+                                .logout(logout -> logout
+                                                .logoutUrl("/admin/logout")
+                                                .logoutSuccessUrl("/admin/login")
+                                                .deleteCookies("JSESSIONID")
+                                                .invalidateHttpSession(true))
+                                .authorizeHttpRequests(requests -> requests
+                                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                                                .anyRequest()
+                                                .authenticated())
+                                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                return http.build();
+        }
 
     @Bean
     @Order(2)

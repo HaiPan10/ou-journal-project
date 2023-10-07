@@ -31,13 +31,12 @@ public class HomeController {
         return "userManager";
     }
 
-    @GetMapping("/submit")
-    public String submitPage() {
-        return "client/submitManuscript/step1";
-    }
-
     @GetMapping("/register")
     public String registerPage() {
         return "client/register";
+    }
+    @GetMapping({"/submit", "/submit-step1"})
+    public String submitPage() {
+        return "client/submitManuscript/step1";
     }
 }
