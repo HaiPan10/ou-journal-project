@@ -12,14 +12,10 @@ import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
-import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
-import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
-import com.ou.journal.service.interfaces.UserService;
-
 import jakarta.transaction.Transactional;
 
 @Service
