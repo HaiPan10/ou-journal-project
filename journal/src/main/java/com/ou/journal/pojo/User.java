@@ -55,9 +55,9 @@ public class User implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
-    @NotBlank(message = "{account.email.notBlank}")
-    @Email(message = "{account.email.invalid}")
-    @Size(min = 1, message = "{account.email.invalidSize}")
+    @NotBlank(message = "{user.email.notBlank}")
+    @Email(message = "{user.email.invalid}")
+    @Size(min = 1, message = "{user.email.invalidSize}")
     @Column(name = "email")
     private String email;
 
@@ -73,7 +73,7 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "user")
     private Account account;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
     @JsonIgnore

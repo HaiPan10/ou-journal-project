@@ -52,7 +52,9 @@ Value:
         },
         {
             "user": {
-                "id": 4
+                "firstName": "Thành",
+                "lastName": "Dương Hữu",
+                "email": "thanhdh@gmail.com"
             },
             "authorRoles": [
                 {
@@ -64,7 +66,9 @@ Value:
         },
         {
             "user": {
-                "id": 5
+                "firstName": "Hy",
+                "lastName": "Thanh",
+                "email": "thanhhy@gmail.com"
             },
             "authorRoles": [
                 {

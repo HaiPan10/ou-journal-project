@@ -38,6 +38,6 @@ public class Role implements Serializable {
     private String roleName;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "role")
     private List<UserRole> userRoles;
 }
