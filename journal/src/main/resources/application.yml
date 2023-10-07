@@ -10,8 +10,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ou-journal-db
     username: root
-    # password: mai2604
-    password: IamPhong89
+    password: mai2604
+    # password: IamPhong89
     # password: Admin@123
   jpa:
     show-sql: true
@@ -47,4 +47,4 @@ logging:
     root: info
     org:
       springframework:
-        security: TRACE
+        security: INFO

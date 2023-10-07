@@ -1,5 +1,8 @@
 package com.ou.journal.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -21,7 +24,11 @@ public class HomeController {
     }
 
     @GetMapping("/admin/dashboard")
-    public String homepage() {
+    public String homepage(Authentication authentication) {
+        if(authentication != null && authentication.isAuthenticated()){
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println("[DEBUG] - " + userDetails.getUsername());
+        }
         return "userManager";
     }
 
