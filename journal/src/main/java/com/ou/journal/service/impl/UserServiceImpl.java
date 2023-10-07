@@ -64,5 +64,15 @@ public class UserServiceImpl implements UserService {
             throw new Exception("Người dùng không hợp lệ!");
         }
     }
+
+    @Override
+    public User findByEmail(String email) throws Exception {
+        Optional<User> userOptional = userRepositoryJPA.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new Exception("Người dùng không hợp lệ!");
+        }
+    }
     
 }

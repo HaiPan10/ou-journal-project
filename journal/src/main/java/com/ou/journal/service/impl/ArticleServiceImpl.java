@@ -16,6 +16,8 @@ import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
+import com.ou.journal.service.interfaces.UserService;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,6 +27,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleRepositoryJPA articleRepositoryJPA;
     @Autowired
     private DateTypeService dateTypeService;
+    @Autowired
+    private UserService userService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -50,6 +54,17 @@ public class ArticleServiceImpl implements ArticleService {
             
             article.getAuthorArticles().forEach(authorArticle -> {
                 authorArticle.setArticle(article);
+                if (authorArticle.getUser().getId() == null) {
+                    try {
+                        authorArticle.setUser(userService.findByEmail(authorArticle.getUser().getEmail()));
+                    } catch (Exception e) {
+                        try {
+                            authorArticle.setUser(userService.createAuthorUser(authorArticle.getUser()));
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
                 authorArticle.getAuthorRoles().forEach(authorRole -> {
                     authorRole.setAuthorArticle(authorArticle);
                 });

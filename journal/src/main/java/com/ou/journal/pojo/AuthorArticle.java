@@ -39,7 +39,7 @@ public class AuthorArticle implements Serializable {
     @ManyToOne
     private Article article;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "authorArticle")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "authorArticle")
     private List<AuthorRole> authorRoles;
 
     public AuthorArticle(User user, Article article) {

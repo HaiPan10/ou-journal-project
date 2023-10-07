@@ -164,4 +164,16 @@
     .step-pending .step-child {
         @apply bg-main/25
     }
+
+    .alert-danger{
+        @apply flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50
+    }
+
+    .btn-danger {
+        @apply bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center
+    }
+
+    .kw-box {
+        @apply flex items-center gap-2 px-2 py-1 ml-2 text-main rounded bg-main/10 w-fit
+    }
 }
