@@ -27,7 +27,7 @@ public class DateType implements Serializable {
     private Long id;
 
     @Column(name = "type_name")
-    private String type_name;
+    private String typeName;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dateType")

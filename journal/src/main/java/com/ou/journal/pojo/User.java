@@ -75,7 +75,7 @@ public class User implements Serializable {
     private List<UserRole> userRoles;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorUser")
     private List<Article> editorArticles;
 
     @JsonIgnore

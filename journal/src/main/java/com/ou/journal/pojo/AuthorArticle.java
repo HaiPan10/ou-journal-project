@@ -36,4 +36,11 @@ public class AuthorArticle implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "authorArticle")
     private List<AuthorRole> authorRoles;
+
+    public AuthorArticle(User user, Article article) {
+        this.user = user;
+        this.article = article;
+    }
+
+    
 }

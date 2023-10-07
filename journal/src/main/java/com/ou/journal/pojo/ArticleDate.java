@@ -16,9 +16,12 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "article_date")
 @NoArgsConstructor
@@ -40,4 +43,10 @@ public class ArticleDate implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
+
+    public ArticleDate(DateType dateType, Article article, Date date) {
+        this.dateType = dateType;
+        this.article = article;
+        this.date = date;
+    }
 }

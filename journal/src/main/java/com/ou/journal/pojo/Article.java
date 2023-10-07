@@ -49,16 +49,16 @@ public class Article implements Serializable {
 
     @JoinColumn(name = "editor_id", referencedColumnName = "id")
     @ManyToOne
-    private User user;
+    private User editorUser;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<Manuscript> manuscripts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<ArticleDate> articleDates;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "article")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<AuthorArticle> authorArticles;
 
     @Transient

@@ -30,4 +30,11 @@ public class AuthorRole implements Serializable {
     @JoinColumn(name = "author_type_id", referencedColumnName = "id")
     @ManyToOne
     private AuthorType authorType;
+
+    public AuthorRole(AuthorArticle authorArticle, AuthorType authorType) {
+        this.authorArticle = authorArticle;
+        this.authorType = authorType;
+    }
+
+    
 }

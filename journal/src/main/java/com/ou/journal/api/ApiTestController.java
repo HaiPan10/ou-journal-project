@@ -11,9 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleService;
 
 import jakarta.validation.Valid;
 
@@ -22,6 +26,9 @@ import jakarta.validation.Valid;
 public class ApiTestController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> register (@Valid @RequestBody Account account, BindingResult bindingResult) throws Exception {
@@ -39,6 +46,17 @@ public class ApiTestController {
     public ResponseEntity<?> verify (@PathVariable Long accountId, @RequestParam String status) throws Exception {
         try {
             return ResponseEntity.ok(accountService.changeAccountStatus(accountId, status));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/upload")
+    public ResponseEntity<?> uploadArticle (MultipartFile file, String title) {
+        try {
+            Article article = new Article();
+            article.setTitle(title);
+            return ResponseEntity.status(HttpStatus.CREATED).body(articleService.create(article, file, Long.valueOf(2)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

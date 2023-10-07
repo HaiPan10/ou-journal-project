@@ -74,6 +74,29 @@ where not exists(
     where type_name = 'PUBLIC_DATE'
 );
 
+-- INSERT TYPE OF AUTHOR INTO AUTHOR_TYPE TABLE
+insert into `author_type`(type)
+select 'FIRST_AUTHOR'
+where not exists(
+	select *
+    from author_type
+    where type = 'FIRST_AUTHOR'
+);
+insert into `author_type`(type)
+select 'CORRESPONDING_AUTHOR'
+where not exists(
+	select *
+    from author_type
+    where type = 'CORRESPONDING_AUTHOR'
+);
+insert into `author_type`(type)
+select 'AUTHOR'
+where not exists(
+	select *
+    from author_type
+    where type = 'AUTHOR'
+);
+
 -- INSERT DEFAULT ADMIN ACCOUNT INTO ACCOUNT AND RELATED TABLES
 drop procedure if exists insert_default_admin;
 delimiter //

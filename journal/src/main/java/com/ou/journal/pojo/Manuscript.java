@@ -1,8 +1,11 @@
 package com.ou.journal.pojo;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,16 +16,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "manuscript")
 @NoArgsConstructor
@@ -32,9 +38,16 @@ public class Manuscript implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "url")
-    private String url;
+    // @NotNull
+    // @Column(name = "url")
+    // private String url;
+
+    @Lob
+    @Column(name = "content", columnDefinition = "MEDIUMBLOB")
+    private byte[] content;
+
+    @Column(name = "size")
+    private Long size;
 
     @NotNull
     @Column(name = "version")
@@ -48,10 +61,21 @@ public class Manuscript implements Serializable {
     private String type;
 
     @JoinColumn(name = "article_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Article article;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "manuscript")
     private List<ReviewArticle> reviewArticles;
+
+    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, Article article) {
+        this.content = content;
+        this.size = size;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.type = type;
+        this.article = article;
+    }
+
+    
 }
