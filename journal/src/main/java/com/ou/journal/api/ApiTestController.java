@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 
