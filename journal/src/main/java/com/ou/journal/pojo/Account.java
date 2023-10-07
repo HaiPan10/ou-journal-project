@@ -66,4 +66,7 @@ public class Account implements Serializable {
     @MapsId
     @OneToOne(optional = false)
     private User user;
+
+    @Column(name = "avatar", length = 300)
+    private String avatar;
 }

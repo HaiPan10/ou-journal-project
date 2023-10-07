@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ou.journal.configs.JwtService;
@@ -44,6 +45,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     // đăng ký cho Author User
     public Account create(Account account) throws Exception {
@@ -52,6 +56,7 @@ public class AccountServiceImpl implements AccountService {
                 throw new Exception(String.format("Email %s đã tồn tại!", account.getEmail()));
             }
             userService.createAuthorUser(account.getUser());
+            account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setStatus(AccountStatus.PENDING.toString());
