@@ -19,7 +19,7 @@ public class ArticleAspect {
         pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile, Long))",
         returning = "article"
     )    
-    public void addFirstAuthorRole(Article article) throws Exception {
-        authorRoleService.create(article.getAuthorArticles().get(0), AuthorType.FIRST_AUTHOR.toString());
+    public void addCoresponddingAuthorRole(Article article) throws Exception {
+        authorRoleService.create(article.getAuthorArticles().get(0), AuthorType.CORRESPONDING_AUTHOR.toString());
     }
 }

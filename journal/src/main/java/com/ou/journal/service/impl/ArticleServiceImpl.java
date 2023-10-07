@@ -52,12 +52,12 @@ public class ArticleServiceImpl implements ArticleService {
                                             new Date(),
                                             file.getContentType(),
                                             article))));
-            article.setAuthorArticles(
-                    new ArrayList<AuthorArticle>(
-                            Arrays.asList(
-                                    new AuthorArticle(
-                                            userService.retrieve(userId),
-                                            article))));
+        //     article.setAuthorArticles(
+        //             new ArrayList<AuthorArticle>(
+        //                     Arrays.asList(
+        //                             new AuthorArticle(
+        //                                     userService.retrieve(userId),
+        //                                     article))));
             return articleRepositoryJPA.save(article);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
