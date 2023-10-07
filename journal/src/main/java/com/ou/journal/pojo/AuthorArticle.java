@@ -46,6 +46,4 @@ public class AuthorArticle implements Serializable {
         this.user = user;
         this.article = article;
     }
-
-    
 }

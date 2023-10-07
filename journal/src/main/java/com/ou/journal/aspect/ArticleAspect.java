@@ -3,13 +3,12 @@ package com.ou.journal.aspect;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.ou.journal.enums.AuthorType;
+import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.AuthorRoleService;
 
 @Aspect
@@ -17,14 +16,22 @@ import com.ou.journal.service.interfaces.AuthorRoleService;
 public class ArticleAspect {
     @Autowired
     private AuthorRoleService authorRoleService;
+    @Autowired
+    private AccountService accountService;
 
-    // @AfterReturning(
-    //     pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile, Long))",
-    //     returning = "article"
-    // )    
-    // public void addCoresponddingAuthorRole(Article article) throws Exception {
-    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    @AfterReturning(
+        pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile, Long))",
+        returning = "article"
+    )    
+    public void addCoresponddingAuthorRole(Article article) throws Exception {
+        // Chạy postman thì tắt đoạn này
+        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        // Account account = accountService.findByUserName(userDetails.getUsername());
 
-    //     authorRoleService.create(article.getAuthorArticles().get(0), AuthorType.CORRESPONDING_AUTHOR.toString());
-    // }
+        // Test post man thì bật
+        Account account = accountService.findByUserName("phonglai");
+
+        authorRoleService.create(article.getAuthorArticles().get(0), AuthorType.CORRESPONDING_AUTHOR.toString());
+    }
 }

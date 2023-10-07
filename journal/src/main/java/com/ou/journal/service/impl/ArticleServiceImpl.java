@@ -29,9 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleRepositoryJPA articleRepositoryJPA;
     @Autowired
     private DateTypeService dateTypeService;
-    @Autowired
-    private UserService userService;
-
+    
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
         try {
@@ -53,12 +51,13 @@ public class ArticleServiceImpl implements ArticleService {
                                             new Date(),
                                             file.getContentType(),
                                             article))));
-        //     article.setAuthorArticles(
-        //             new ArrayList<AuthorArticle>(
-        //                     Arrays.asList(
-        //                             new AuthorArticle(
-        //                                     userService.retrieve(userId),
-        //                                     article))));
+            
+            article.getAuthorArticles().forEach(authorArticle -> {
+                authorArticle.setArticle(article);
+                authorArticle.getAuthorRoles().forEach(authorRole -> {
+                    authorRole.setAuthorArticle(authorArticle);
+                });
+            });
             return articleRepositoryJPA.save(article);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
