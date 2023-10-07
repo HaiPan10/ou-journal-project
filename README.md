@@ -33,6 +33,7 @@ Key: file
 Value: (choose any docx pdf)
 
 Key: article
+Notice: in authorArticles if user is not exists, pass lastName, firstName, email. If user is already exists, pass email or id
 Value:
 {
     "title": "my title", 
@@ -54,7 +55,7 @@ Value:
             "user": {
                 "firstName": "Thành",
                 "lastName": "Dương Hữu",
-                "email": "thanhdh@gmail.com"
+                "email": "thanhdh@gmail.com" 
             },
             "authorRoles": [
                 {

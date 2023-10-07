@@ -13,9 +13,7 @@ import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.Manuscript;
-import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ArticleRepositoryJPA;
-import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
 import com.ou.journal.service.interfaces.UserService;
@@ -31,8 +29,6 @@ public class ArticleServiceImpl implements ArticleService {
     private DateTypeService dateTypeService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private AccountService accountService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
