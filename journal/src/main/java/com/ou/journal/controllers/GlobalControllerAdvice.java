@@ -83,8 +83,7 @@ public class GlobalControllerAdvice {
     public String getAvatar(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication != null && authentication.isAuthenticated()){
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
+            String username = authentication.getName();
             try {
                 Account account = accountService.findByUserName(username);
                 return account.getAvatar();
