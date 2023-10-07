@@ -19,9 +19,6 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.AuthorTypeService;
-import com.ou.journal.service.interfaces.UserService;
-
 import jakarta.validation.Valid;
 
 @RestController
