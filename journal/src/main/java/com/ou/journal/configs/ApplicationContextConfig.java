@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -34,6 +35,7 @@ import com.ou.journal.components.DateFormatter;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
+import com.ou.journal.service.interfaces.UserRoleService;
 
 @Configuration
 @EnableTransactionManagement
@@ -49,25 +51,59 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
     @Autowired
     private DateFormatter dateFormatter;
 
-    @Bean
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Bean("getUserDetail")
     public UserDetailsService getUserDetail() {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+                String[] split = StringUtils.split(userName, ",");
+                String roleName = "";
+                if (split != null && split.length == 2) {
+                    
+                    userName = split[0];
+                    roleName = split[1];
+                    System.out.println("[DEBUG] - Details: " + userName + " " + roleName);
+                }
                 Account account = accountRepository.findByUserName(userName)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                Set<UserRole> userRoles = account.getUser().getUserRoles();
-                userRoles.forEach(ur -> {
-                    authorities.add(new SimpleGrantedAuthority(ur.getRole().getRoleName()));
-                });
-              
+                if (!roleName.isEmpty()) {
+                    UserRole userRole = userRoleService.findByUserAndRoleName(account.getUser(), roleName);
+                    authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
+                } else {
+                    Set<UserRole> userRoles = account.getUser().getUserRoles();
+                    userRoles.forEach(ur -> {
+                        authorities.add(new SimpleGrantedAuthority(ur.getRole().getRoleName()));
+                    });
+                }
+
                 return new User(account.getUserName(), account.getPassword(), authorities);
             }
 
         };
     }
+
+    // @Bean("clientUserDetailService")
+    // public UserDetailsService getClientUserDetail() {
+    // return new UserDetailsService() {
+    // @Override
+    // public UserDetails loadUserByUsername(String userName) throws
+    // UsernameNotFoundException {
+    // System.out.println("[DEBUG] - " + userName);
+
+    // Account account = accountRepository.findByUserName(split[0])
+    // .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    // Set<GrantedAuthority> authorities = new HashSet<>();
+
+    // return new User(account.getUserName(), account.getPassword(), authorities);
+    // }
+
+    // };
+    // }
 
     @Bean
     public Cloudinary getCloudinary() {
