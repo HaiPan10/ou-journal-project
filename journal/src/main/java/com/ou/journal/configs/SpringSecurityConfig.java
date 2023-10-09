@@ -3,6 +3,7 @@ package com.ou.journal.configs;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -53,8 +54,8 @@ public class SpringSecurityConfig {
     @Autowired 
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     @Autowired
+    @Qualifier("corsConfigurationSource")
     private CorsConfigurationSource corsConfiguration;
-
     @Autowired
     private ClientAuthenticationFilter clientAuthenticationFilter;
 
