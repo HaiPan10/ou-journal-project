@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.session.ChangeSessionIdAu
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.ou.journal.filter.ClientAuthenticationFilter;
@@ -51,6 +52,8 @@ public class SpringSecurityConfig {
     private AuthenticationFailureHandler authenticationFailureHandler;
     @Autowired 
     private AuthenticationSuccessHandler authenticationSuccessHandler;
+    @Autowired
+    private CorsConfigurationSource corsConfiguration;
 
     @Autowired
     private ClientAuthenticationFilter clientAuthenticationFilter;
@@ -155,6 +158,7 @@ public class SpringSecurityConfig {
                 .securityMatcher("/**")
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
+                .cors(cors -> cors.configurationSource(corsConfiguration))
                 .formLogin(login -> login.loginPage("/login").permitAll()
                         .usernameParameter("username")
                         .passwordParameter("password"))

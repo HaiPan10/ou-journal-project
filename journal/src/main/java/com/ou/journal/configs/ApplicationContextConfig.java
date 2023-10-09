@@ -1,6 +1,7 @@
 package com.ou.journal.configs;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -25,6 +26,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -86,24 +90,21 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
         };
     }
 
-    // @Bean("clientUserDetailService")
-    // public UserDetailsService getClientUserDetail() {
-    // return new UserDetailsService() {
-    // @Override
-    // public UserDetails loadUserByUsername(String userName) throws
-    // UsernameNotFoundException {
-    // System.out.println("[DEBUG] - " + userName);
-
-    // Account account = accountRepository.findByUserName(split[0])
-    // .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-    // Set<GrantedAuthority> authorities = new HashSet<>();
-
-    // return new User(account.getUserName(), account.getPassword(), authorities);
-    // }
-
-    // };
-    // }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        // String clientHostname = environment.getProperty("CLIENT_HOSTNAME");
+        CorsConfiguration configuration = new CorsConfiguration();
+        // configuration.setAllowedOrigins(Collections.singletonList(clientHostname));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        // configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token"));
+        // configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // configuration.setAllowCredentials(true);
+        // configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public Cloudinary getCloudinary() {
