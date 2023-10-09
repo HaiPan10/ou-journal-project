@@ -9,4 +9,5 @@ import com.ou.journal.pojo.Article;
 public interface ArticleService {
     Article create(Article article, MultipartFile file) throws Exception;
     List<Article> listPendingArticles();
+    Article retrieve(Long articleId) throws Exception;
 }

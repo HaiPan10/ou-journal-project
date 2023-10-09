@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
+import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.UserService;
 
 import jakarta.transaction.Transactional;
@@ -30,6 +32,8 @@ public class ArticleServiceImpl implements ArticleService {
     private DateTypeService dateTypeService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ManuscriptService manuscriptService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -79,5 +83,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> listPendingArticles() {
         return articleRepositoryJPA.listPendingArticles();
+    }
+
+    @Override
+    public Article retrieve(Long articleId) throws Exception {
+        Optional<Article> articleOptional = articleRepositoryJPA.findById(articleId);
+        if (articleOptional.isPresent()) {
+            Manuscript manuscript = manuscriptService.getLastestManuscript(articleId);
+            Article article = articleOptional.get();
+            article.setCurrentManuscript(manuscript);
+            return article;
+        } else {
+            throw new Exception("Bài báo không tồn tại!");
+        }
     }
 }
