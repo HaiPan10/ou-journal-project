@@ -17,6 +17,18 @@
       </div>
       <div sec:authorize="isAuthenticated()"  class="items-center h-full mt-5 md:mt-0">
          <div class="flex items-center ml-3">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
+               Chào mừng, Tác Giả
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+               Chào mừng, Biên tập viên
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
+               Chào mừng, Người Phán Xét
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
+               Chào mừng, Thư Ký
+            </div>
             <div>
               <button type="button"
                 class="flex gap-2 text-sm items-center"
