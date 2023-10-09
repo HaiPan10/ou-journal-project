@@ -69,10 +69,10 @@ public class ApiTestController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<?> test() {
+    @GetMapping(path = "/articles/list")
+    public ResponseEntity<?> listPendingArticle () throws Exception {
         try {
-            return ResponseEntity.ok().body("hehe");
+            return ResponseEntity.ok(articleService.listPendingArticles());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
