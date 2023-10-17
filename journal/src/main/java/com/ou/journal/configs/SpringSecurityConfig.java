@@ -149,6 +149,7 @@ public class SpringSecurityConfig {
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 

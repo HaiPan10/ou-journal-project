@@ -24,7 +24,7 @@ import com.ou.journal.service.interfaces.UserService;
 import jakarta.transaction.Transactional;
 
 @Service
-@Transactional(rollbackOn = Exception.class)
+@Transactional
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
