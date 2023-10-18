@@ -19,18 +19,16 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
   # mail:
-  #   host: cp03hn.emailserver.net.vn
-  #   port: 465
-  #   username: admin@ousocialnetwork.id.vn
-  #   password: Vo2Z%)nF_+,{
+  #   host: smtp.gmail.com
+  #   port: 587
+  #   username: pladevspace@gmail.com
+  #   password: kriu znmd svmi iibr
   #   properties:
   #     mail:
   #       smtp:
   #         auth: true
-  #         ssl:
+  #         starttls:
   #           enable: true
-  #           protocols: TLSv1.2
-  #           trust: "*"
   #       debug: true
 
 #JPA/Hibernate

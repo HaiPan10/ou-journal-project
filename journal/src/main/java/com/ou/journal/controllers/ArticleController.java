@@ -9,12 +9,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ou.journal.pojo.Article;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.utils.FileConverterUtils;
 
 @Controller
 public class ArticleController {
@@ -42,17 +42,18 @@ public class ArticleController {
     }
 
     @GetMapping("/admin/articles/view/{articleId}")
-    public ResponseEntity<byte[]> download(@PathVariable Long articleId) throws Exception {
+    public ResponseEntity<byte[]> view(@PathVariable Long articleId) throws Exception {
         Article article = articleService.retrieve(Long.valueOf(articleId));
         byte[] documentData = article.getCurrentManuscript().getContent();
         HttpHeaders headers = new HttpHeaders();
+        byte[] htmlData;
         if (article.getCurrentManuscript().getType().equals("application/pdf")) {
-            headers.setContentType(MediaType.APPLICATION_PDF);
+            htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
         } else {
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
+            htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
         }
-        headers.setContentLength(documentData.length);
-
-        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
+        headers.setContentType(MediaType.TEXT_HTML);
+        return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
     }
 }
