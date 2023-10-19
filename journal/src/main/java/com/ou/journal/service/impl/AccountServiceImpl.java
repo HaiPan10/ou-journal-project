@@ -55,6 +55,10 @@ public class AccountServiceImpl implements AccountService {
             if (accountRepositoryJPA.findByEmail(account.getEmail()).isPresent()) {
                 throw new Exception(String.format("Email %s đã tồn tại!", account.getEmail()));
             }
+
+            if (accountRepositoryJPA.findByUserName(account.getUserName()).isPresent()) {
+                throw new Exception(String.format("Username %s đã tồn tại!", account.getUserName()));
+            }
             userService.createAuthorUser(account.getUser());
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
