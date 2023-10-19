@@ -164,10 +164,6 @@ public class SpringSecurityConfig {
                 .formLogin(login -> login.loginPage("/login").permitAll()
                         .usernameParameter("username")
                         .passwordParameter("password"))
-                        // .successHandler(authenticationSuccessHandler)
-                        // .failureHandler(authenticationFailureHandler))
-                        // .defaultSuccessUrl("/submit", true)
-                        // .failureUrl("/login?error"))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
@@ -176,6 +172,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
                                 "/resources/**",
+                                "/register",
                                 "/css/**",
                                 "/img/**",
                                 "/js/**",
