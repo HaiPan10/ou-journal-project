@@ -59,7 +59,7 @@ public class User implements Serializable {
     @NotBlank(message = "{user.email.notBlank}")
     @Email(message = "{user.email.invalid}")
     @Size(min = 1, message = "{user.email.invalidSize}")
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "created_at")
