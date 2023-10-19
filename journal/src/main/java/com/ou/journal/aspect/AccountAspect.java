@@ -19,6 +19,6 @@ public class AccountAspect {
         returning = "account"
     )
     public void sendVerificationEmail(Account account) throws Exception {
-        mailService.sendVerificationMail(account);
+        // mailService.sendVerificationMail(account);
     }
 }

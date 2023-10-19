@@ -60,7 +60,8 @@ public class AccountServiceImpl implements AccountService {
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
-            account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
+            // account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
+            account.setStatus(AccountStatus.ACCEPTED.toString());
             accountRepositoryJPA.save(account);
             return account;
         } catch (Exception e) {

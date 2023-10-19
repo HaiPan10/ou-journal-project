@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
@@ -62,6 +63,9 @@ public class Article implements Serializable {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "article")
     private List<AuthorArticle> authorArticles;
+
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
+    private ArticleNote articleNote;
 
     @Transient
     private Manuscript currentManuscript;
