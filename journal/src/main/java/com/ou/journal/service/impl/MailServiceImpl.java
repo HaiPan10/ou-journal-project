@@ -1,6 +1,9 @@
 package com.ou.journal.service.impl;
 
+import java.util.concurrent.ExecutorService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,6 +25,10 @@ public class MailServiceImpl implements MailService {
     
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    @Qualifier("executorService")
+    private ExecutorService executorService;
 
     @Autowired
     private Environment environment;
@@ -52,6 +59,9 @@ public class MailServiceImpl implements MailService {
         context.setVariable("actionLink", String.format("%s/api/mail/verify/%s/%s", environment.getProperty("SERVER_HOSTNAME") ,account.getId(), account.getVerificationCode()));
         context.setVariable("actionName", "Xác thực ngay");
         MailRequest mailRequest = new MailRequest(account.getEmail(), subject, body, context);
-        sendEmail(mailRequest);            
+        Runnable runnable = () -> {
+            sendEmail(mailRequest);
+        };
+        executorService.execute(runnable);
     }
 }
