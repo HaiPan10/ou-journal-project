@@ -37,7 +37,7 @@ public class ArticleAspect {
     @AfterReturning(
         pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))",
         returning = "article"
-    )    
+    )
     public void addCoresponddingAuthorRole(Article article) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

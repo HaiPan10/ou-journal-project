@@ -69,4 +69,8 @@ public class Account implements Serializable {
 
     @Column(name = "avatar", length = 300)
     private String avatar;
+
+    @Size(max = 64)
+    @Column(name = "verification_code")
+    private String verificationCode;
 }

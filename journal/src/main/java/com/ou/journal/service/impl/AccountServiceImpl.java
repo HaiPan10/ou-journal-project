@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +15,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.pojo.Account;
@@ -59,7 +59,8 @@ public class AccountServiceImpl implements AccountService {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-            account.setStatus(AccountStatus.PENDING.toString());
+            account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
+            account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
             accountRepositoryJPA.save(account);
             return account;
         } catch (Exception e) {
@@ -121,15 +122,23 @@ public class AccountServiceImpl implements AccountService {
             // throw new Exception(jsonString);
             // }
 
-            AuthResponse authResponse = new AuthResponse();
-            authResponse.setUser(authenticationAccount.getUser());
-            authResponse.setAccessToken(token);
-            return authResponse;
+            if (authenticationAccount.getStatus().equals(AccountStatus.EMAIL_VERIFICATION.toString())) {
+                throw new Exception("Chưa xác thực email!");
+            } else if (authenticationAccount.getStatus().equals(AccountStatus.PENDING.toString())) {
+                throw new Exception("Tài khoản đang chờ duyệt!");
+            } else if (authenticationAccount.getStatus().equals(AccountStatus.REJECTED.toString())) {
+                throw new Exception("Tài khoản không được duyệt!");
+            } else {
+                AuthResponse authResponse = new AuthResponse();
+                authResponse.setUser(authenticationAccount.getUser());
+                authResponse.setAccessToken(token);
+                return authResponse;
+            }
         } catch (AuthenticationException exception) {
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }
     }
-    
+
     @Override
     public Account findByUserName(String userName) throws Exception {
         Optional<Account> accountOptional = accountRepositoryJPA.findByUserName(userName);
@@ -137,6 +146,25 @@ public class AccountServiceImpl implements AccountService {
             return accountOptional.get();
         } else {
             throw new Exception("Tài khoản không tồn tại!");
+        }
+    }
+
+    @Override
+    public boolean verifyEmail(Long accountId, String verificationCode) throws Exception {
+        try {
+            Account account = retrieve(accountId);
+            if (!account.getStatus().equals(AccountStatus.EMAIL_VERIFICATION.toString())) {
+                throw new Exception("This account can't not be verified");
+            }
+            if (account.getVerificationCode().equals(verificationCode)) {
+                account.setStatus(AccountStatus.PENDING.toString());
+                accountRepositoryJPA.save(account);
+                return true;
+            } else {
+                throw new Exception("Verification code doesn't match!");
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 }

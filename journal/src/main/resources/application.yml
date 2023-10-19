@@ -18,18 +18,18 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
-  # mail:
-  #   host: smtp.gmail.com
-  #   port: 587
-  #   username: pladevspace@gmail.com
-  #   password: kriu znmd svmi iibr
-  #   properties:
-  #     mail:
-  #       smtp:
-  #         auth: true
-  #         starttls:
-  #           enable: true
-  #       debug: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: pladevspace@gmail.com
+    password: kriu znmd svmi iibr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
 
 #JPA/Hibernate
 server:

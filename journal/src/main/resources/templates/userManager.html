@@ -154,6 +154,9 @@
                             <div th:if="${account.status eq 'REJECTED'}">
                                 <span class="badge-danger">Không duyệt</span>
                             </div>
+                            <div th:if="${account.status eq 'EMAIL_VERIFICATION'}">
+                                <span class="badge-danger">Chờ xác thực mail</span>
+                            </div>
                         </td>
                         <td class="px-6 py-4">
                             <a href="#" class="table-action" th:href="@{/accounts/{id}(id=${account.id})}">Xem chi tiết</a>

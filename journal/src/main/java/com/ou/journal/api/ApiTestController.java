@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.context.Context;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
+import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.MailService;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,6 +33,9 @@ public class ApiTestController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private MailService mailService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> register (@Valid @RequestBody Account account, BindingResult bindingResult) throws Exception {
@@ -70,11 +77,24 @@ public class ApiTestController {
     }
 
     @GetMapping(path = "/articles/list")
-    public ResponseEntity<?> listPendingArticle () throws Exception {
+    public ResponseEntity<?> listPendingArticle() throws Exception {
         try {
             return ResponseEntity.ok(articleService.listPendingArticles());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // @PostMapping(path = "/mail/send")
+    // public void sendMail () {
+    //     MailRequest mailRequest = new MailRequest("phongvulai96@gmail.com", "subject", "body");
+    //     // mailService.sendEmail(mailRequest.getTo(), mailRequest.getSubject(), mailRequest.getBody());
+
+    //     Context context = new Context();
+    //     context.setVariable("subject", mailRequest.getSubject());
+    //     context.setVariable("body", mailRequest.getBody());
+
+    //     mailService.sendEmailWithHtmlTemplate(mailRequest.getTo(), mailRequest.getSubject(), "mail/index", context);
+    // }
+
 }
