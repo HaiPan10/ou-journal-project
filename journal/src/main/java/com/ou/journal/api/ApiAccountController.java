@@ -21,6 +21,9 @@ public class ApiAccountController {
     @Autowired
     private JwtService jwtService;
     
+    // Chưa hoàn thiện chỉ mới test lấy được account id
+    // Chưa lưu lại reviewer đã xác nhận trong database trong bảng trung gian review_article
+    // Chưa thêm role cho account được mời làm reviewer
     @GetMapping("reviewer/verify")
     public ResponseEntity<?> verifyReviewer(@RequestParam Map<String, String> params, HttpServletRequest httpServletRequest){
         Long id = jwtService.getIdFromToken(params.get("token"), SecrectType.EMAIL);

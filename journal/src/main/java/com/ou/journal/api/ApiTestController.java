@@ -76,6 +76,7 @@ public class ApiTestController {
         }
     }
 
+    // Chỉ dùng cho test để dễ dàng lấy được email token
     @GetMapping(path = "/get-email-token/{accountId}")
     public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
         try {

@@ -96,6 +96,23 @@ The header of each request testing by postman should have:
 Authorization: Bearer <Token>
 ```
 
+## Generate Email Token
+```
+Test endpoint: GET:localhost:8080/api/tests/get-email-token/{accountId}"
+This api will generate a test token email based account id.
+```
+
+## Reviewer Verify From Email With Existed Account
+```
+Test endpoint: GET:localhost:8080/api/accounts/reviewer/verify?token=<The Email Token>
+With this API reviewer verify to join for review the article using existed account.
+
+Calling getVerificationCodeFromToken(String token, SecrectType secrectType)
+from JwtService for getting verification code from token
+
+More methods references the JwtService.class
+```
+
 ## Endpoints
 ```
 Accounts page: http://localhost:8080/admin/accounts
