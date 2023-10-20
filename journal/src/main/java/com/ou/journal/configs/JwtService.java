@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @Service
 public class JwtService {
     private static final String SECRECT = "ajfipupieuqwpieuasipdhfajlbfljh3y012637018274hfajlsdadfqweasdadfa3123123123123";
+    private static final String MAIL_SECRECT = "asdfkladsjfiqwuepuqwpieu1238701287408712047kasdjkfja;dksjf";
     private static final long HOUR = 365;
     private static final long MINUTE = 60;
     private static final long SECOND = 60;
@@ -30,6 +31,30 @@ public class JwtService {
     private static final byte[] BYTES = SECRECT.getBytes();
 
     public String generateAccessToken(Account account){
+        String token = null;
+        if(account != null){
+            try {
+                JWSSigner signer = new MACSigner(BYTES);
+                JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
+                builder.claim("userName", account.getUserName());
+                builder.claim("id", account.getId());
+                builder.issueTime(new Date(System.currentTimeMillis()));
+                builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
+                
+                JWTClaimsSet claimsSet = builder.build();
+                SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+                signedJWT.sign(signer);
+
+                token = signedJWT.serialize();
+
+            } catch (JOSEException e) {
+                System.out.println("[ERROR] - " + e.getMessage());
+            }
+        }
+        return token;
+    }
+
+    public String generateMailToken(Account account){
         String token = null;
         if(account != null){
             try {

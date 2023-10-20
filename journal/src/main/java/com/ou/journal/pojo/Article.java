@@ -69,4 +69,8 @@ public class Article implements Serializable {
 
     @Transient
     private Manuscript currentManuscript;
+
+    @Column(name = "total_reviewer")
+    private Integer totalReviewer = 1;
+
 }
