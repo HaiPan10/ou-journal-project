@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ou.journal.configs.JwtService;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
@@ -28,6 +30,9 @@ public class ApiTestController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private JwtService jwtService;
 
     // @Autowired
     // private MailService mailService;
@@ -69,6 +74,18 @@ public class ApiTestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping(path = "/get-email-token/{accountId}")
+    public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
+        try {
+            Account account = accountService.retrieve(accountId);
+            String token = jwtService.generateMailToken(account);
+            return ResponseEntity.ok().body(token);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        
     }
 
     // @PostMapping(path = "/mail/send")
