@@ -18,8 +18,6 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.MailService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -31,8 +29,8 @@ public class ApiTestController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private MailService mailService;
+    // @Autowired
+    // private MailService mailService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> register (@Valid @RequestBody Account account, BindingResult bindingResult) throws Exception {

@@ -66,13 +66,21 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                 String[] split = StringUtils.split(userName, ",");
                 String roleName = "";
                 if (split != null && split.length == 2) {
-                    
+
                     userName = split[0];
                     roleName = split[1];
                     System.out.println("[DEBUG] - Details: " + userName + " " + roleName);
                 }
-                Account account = accountRepository.findByUserName(userName)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+                Account account = null;
+
+                if (userName.contains("@")) {
+                    account = accountRepository.findByEmail(userName)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                } else {
+                    account = accountRepository.findByUserName(userName)
+                            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                }
                 Set<GrantedAuthority> authorities = new HashSet<>();
                 if (!roleName.isEmpty()) {
                     UserRole userRole = userRoleService.findByUserAndRoleName(account.getUser(), roleName);
@@ -96,7 +104,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
         CorsConfiguration configuration = new CorsConfiguration();
         // configuration.setAllowedOrigins(Collections.singletonList(clientHostname));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        // configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token"));
+        // configuration.setAllowedHeaders(Arrays.asList("Authorization",
+        // "Content-Type", "X-Auth-Token"));
         // configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         // configuration.setAllowCredentials(true);

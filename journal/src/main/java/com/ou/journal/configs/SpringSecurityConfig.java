@@ -144,7 +144,7 @@ public class SpringSecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SECRETARY")
                         .anyRequest()
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
