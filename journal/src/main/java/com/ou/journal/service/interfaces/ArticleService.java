@@ -8,6 +8,6 @@ import com.ou.journal.pojo.Article;
 
 public interface ArticleService {
     Article create(Article article, MultipartFile file) throws Exception;
-    List<Article> listPendingArticles();
+    List<Article> list(String status);
     Article retrieve(Long articleId) throws Exception;
 }

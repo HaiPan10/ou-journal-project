@@ -22,7 +22,7 @@ public class AccountController {
     public String list(Model model) {
         List<Account> accounts = accountService.findAll();
         model.addAttribute("accounts", accounts);
-        return "userManager";
+        return "accountManager";
     }
 
     // Dẫn ra trang account, nếu account id không tồn tại hiện lỗi (đã đc throw sẵn từ api) ra ngoài front end

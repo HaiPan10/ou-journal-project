@@ -81,8 +81,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> listPendingArticles() {
-        return articleRepositoryJPA.listPendingArticles();
+    public List<Article> list(String status) {
+        if (status == null) {
+            return articleRepositoryJPA.list(ArticleStatus.PENDING.toString());
+        } else {
+            return articleRepositoryJPA.list(status);
+        }
     }
 
     @Override

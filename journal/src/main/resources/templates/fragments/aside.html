@@ -3,7 +3,7 @@
    aria-label="Sidebar">
    <div class="h-full pb-4 overflow-y-auto">
       <ul class="space-y-2 font-medium">
-         <li class="menu-item">
+         <li class="menu-item" id="dashboard">
             <a href="/" class="menu-item-child group">
                <span class="menu-item-child-icon">
                   <i class="bi bi-pie-chart-fill before:text-xl"></i>
@@ -12,12 +12,20 @@
                <span class="menu-item-child-text">Trang chủ</span>
             </a>
          </li>
-         <li class="menu-item active">
-            <a href="/" class="menu-item-child group">
+         <li class="menu-item" id="accounts">
+            <a href="/admin/accounts" class="menu-item-child group">
                <span class="menu-item-child-icon">
                   <i class="bi bi-people-fill before:text-xl"></i>
                </span>
                <span class="menu-item-child-text">Quản lý người dùng</span>
+            </a>
+         </li>
+         <li class="menu-item" id="articles">
+            <a href="/admin/articles" class="menu-item-child group">
+               <span class="menu-item-child-icon">
+                  <i class="bi bi-people-fill before:text-xl"></i>
+               </span>
+               <span class="menu-item-child-text">Quản lý bài đăng</span>
             </a>
          </li>
       </ul>

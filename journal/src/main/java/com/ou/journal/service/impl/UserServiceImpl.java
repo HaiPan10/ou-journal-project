@@ -3,6 +3,7 @@ package com.ou.journal.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,11 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new Exception("Người dùng không hợp lệ!");
         }
+    }
+
+    @Override
+    public List<Object[]> listUser() {
+        return userRepositoryJPA.listUser();
     }
     
 }

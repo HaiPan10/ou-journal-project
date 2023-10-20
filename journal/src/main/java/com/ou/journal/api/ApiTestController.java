@@ -73,15 +73,6 @@ public class ApiTestController {
         }
     }
 
-    @GetMapping(path = "/articles/list")
-    public ResponseEntity<?> listPendingArticle() throws Exception {
-        try {
-            return ResponseEntity.ok(articleService.listPendingArticles());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     // @PostMapping(path = "/mail/send")
     // public void sendMail () {
     //     MailRequest mailRequest = new MailRequest("phongvulai96@gmail.com", "subject", "body");
