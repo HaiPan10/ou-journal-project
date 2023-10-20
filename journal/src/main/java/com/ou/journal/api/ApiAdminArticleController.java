@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.utils.FileConverterUtils;
 
@@ -45,9 +44,9 @@ public class ApiAdminArticleController {
     }
 
     @PutMapping("/accept/{articleId}")
-    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody ArticleNote articleNote){
+    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
         try {
-            articleService.updateArticleStatus(articleId, articleNote, ArticleStatus.ACCEPT.toString());
+            articleService.updateArticleStatus(articleId, article, ArticleStatus.ACCEPT.toString());
             return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,9 +55,9 @@ public class ApiAdminArticleController {
     }
 
     @PutMapping("/reject/{articleId}")
-    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody ArticleNote articleNote){
+    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
         try {
-            articleService.updateArticleStatus(articleId, articleNote, ArticleStatus.REJECT.toString());
+            articleService.updateArticleStatus(articleId, article, ArticleStatus.REJECT.toString());
             return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -107,11 +107,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticleStatus(Long articleId, ArticleNote articleNote, String status) throws Exception {
-        Article article = retrieve(articleId);
-        article.setStatus(status);
-        articleRepositoryJPA.save(article);
+    public void updateArticleStatus(Long articleId, Article article, String status) throws Exception {
+        Article persistArticle = retrieve(articleId);
+        persistArticle.setStatus(status);
+        if(status.equals(ArticleStatus.ACCEPT.toString())){
+            persistArticle.setTotalReviewer(article.getTotalReviewer());
+        }
+        articleRepositoryJPA.save(persistArticle);
 
-        articleNoteService.createOrUpdate(articleNote, article);
+        ArticleNote articleNote = article.getArticleNote();
+        articleNoteService.createOrUpdate(articleNote, persistArticle);
     }
 }
