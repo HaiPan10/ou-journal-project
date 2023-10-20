@@ -14,8 +14,10 @@ import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
+import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
+import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
 import com.ou.journal.service.interfaces.ManuscriptService;
@@ -34,6 +36,8 @@ public class ArticleServiceImpl implements ArticleService {
     private UserService userService;
     @Autowired
     private ManuscriptService manuscriptService;
+    @Autowired
+    private ArticleNoteService articleNoteService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -96,5 +100,14 @@ public class ArticleServiceImpl implements ArticleService {
         } else {
             throw new Exception("Bài báo không tồn tại!");
         }
+    }
+
+    @Override
+    public void updateArticleStatus(Long articleId, ArticleNote articleNote, String status) throws Exception {
+        Article article = retrieve(articleId);
+        article.setStatus(status);
+        articleRepositoryJPA.save(article);
+
+        articleNoteService.createOrUpdate(articleNote, article);
     }
 }
