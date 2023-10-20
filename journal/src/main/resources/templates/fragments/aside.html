@@ -4,7 +4,7 @@
    <div class="h-full pb-4 overflow-y-auto">
       <ul class="space-y-2 font-medium">
          <li class="menu-item">
-            <a href="/" class="menu-item-child group">
+            <a th:href="@{/admin/dashboard}" class="menu-item-child group">
                <span class="menu-item-child-icon">
                   <i class="bi bi-pie-chart-fill before:text-xl"></i>
                </span>
@@ -13,11 +13,19 @@
             </a>
          </li>
          <li class="menu-item active">
-            <a href="/" class="menu-item-child group">
+            <a th:href="@{/admin/accounts}" class="menu-item-child group">
                <span class="menu-item-child-icon">
                   <i class="bi bi-people-fill before:text-xl"></i>
                </span>
                <span class="menu-item-child-text">Quản lý người dùng</span>
+            </a>
+         </li>
+         <li class="menu-item active">
+            <a th:href="@{/admin/articles}" class="menu-item-child group">
+               <span class="menu-item-child-icon">
+                  <i class="bi bi-people-fill before:text-xl"></i>
+               </span>
+               <span class="menu-item-child-text">Duyệt bài tạp chí</span>
             </a>
          </li>
       </ul>
