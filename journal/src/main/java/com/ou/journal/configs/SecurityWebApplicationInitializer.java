@@ -1,8 +1,8 @@
-package com.ou.journal.configs;
+// package com.ou.journal.configs;
 
-import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+// import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 
-public class SecurityWebApplicationInitializer 
-    extends AbstractSecurityWebApplicationInitializer{
+// public class SecurityWebApplicationInitializer 
+//     extends AbstractSecurityWebApplicationInitializer{
     
-}
+// }

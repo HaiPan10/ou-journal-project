@@ -38,8 +38,9 @@ public class HomeController {
         return "client/register";
     }
 
-    @GetMapping({"/submit", "/submit-step1"})
-    public String submitPage() {
-        return "client/submitManuscript/step1";
-    }
+    // @GetMapping({"/submit", "/submit-step1"})
+    // public String submitPage() {
+    //     return "client/submitManuscript/step1";
+    // }
+
 }

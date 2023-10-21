@@ -158,7 +158,6 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
         ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
         return executor;
     }
-
     @Bean(name = "scheduledExecutorService")
     public ScheduledExecutorService getScheduledService() {
         int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));

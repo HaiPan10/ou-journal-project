@@ -5,73 +5,60 @@
 
 <section layout:fragment="content">
     <div th:replace="~{fragments/stepper :: stepper (step=1)}"></div>
-    <form>
+    <form th:object="${article}" th:action="@{'/submit/step1'}" method="post">
         <div class="space-y-6 flex flex-col justify-center">
-            <div class="px-10 pt-10 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 pb-12">
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-3">
-                    <div class="col-span-full">
-                        <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
-                        <input id="title" name="title" type="text"
-                            class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
-                    </div>
-
-                    <div class="col-span-full">
-                        <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
-                        <textarea id="description" name="description" rows="3"
-                        class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-4 py-2 mt-1 mb-5 w-full"></textarea>
-                    </div>
-                    
-                    <div class="col-span-full">
-                        <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ khóa</label>
-                        <div class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/25 rounded-md mt-1 mb-5 w-full">
-                            <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
-                            </div>
-                            <div class="hidden p-0 m-0" id="last-child"></div>
-                            <input id="keyword-input" style="min-width: 100px" name="keyword-input" type="text"
-                            class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
+            <div class="bg-white rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between">
+                <div>
+                    <div class="grid grid-cols-1 gap-x-6 gap-y-3">
+                        <div class="col-span-full">
+                            <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
+                            <input id="title" name="title" type="text" th:field="*{title}"
+                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                         </div>
-  
-                        <input id="keyword" name="keyword" type="text" class="hidden"/>
-                    </div>
-
-                    <div class="col-span-full">
-                        <label class="block text-sm font-medium leading-6 text-gray-900">Tài liệu</label>
-                        <div
-                            class="mt-2 flex bg-white justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                            <div class="text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
-                                    aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <label for="file-upload"
-                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-main focus-within:outline-none focus-within:ring-2 focus-within:ring-main/50 focus-within:ring-offset-2 hover:text-main/50">
-                                        <span>Tải lên</span>
-                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                    </label>
-                                    <p class="pl-1">hoặc kéo thả vào đây</p>
+    
+                        <div class="col-span-full">
+                            <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
+                            <textarea id="description" name="description" rows="6" th:field="*{abstracts}"
+                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-4 py-2 mt-1 mb-5 w-full"></textarea>
+                        </div>
+    
+                        <div class="col-span-full">
+                            <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
+                                khóa</label>
+                            <div
+                                class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/25 rounded-md mt-1 mb-5 w-full">
+                                <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
                                 </div>
-                                <p class="text-xs leading-5 text-gray-600">PDF, DOCX</p>
+                                <div class="hidden p-0 m-0" id="last-child"></div>
+                                <input id="keyword-input" style="min-width: 100px" name="keyword-input" type="text"
+                                    class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
                             </div>
+    
+                            <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" />
                         </div>
+    
+                        
                     </div>
                 </div>
+                
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button>
-                    <button type="button"
+                    <!-- <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button> -->
+                    <button type="button" id="btnSubmit" onclick="submitForm()"
                         class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                         tục</button>
                 </div>
             </div>
+        </div>
 
-            
     </form>
     <script>
         const kwInput = document.querySelector("#keyword-input")
         const kw = document.querySelector("#keyword")
         const kwBox = document.querySelector("#keywords-box")
+
+        function submitForm() {
+            document.querySelector("form").submit();
+        }
 
         function removeKeyword(obj) {
             let rmElement = document.querySelector(`${obj.getAttribute("data-dismiss-target")}`)
@@ -84,19 +71,22 @@
 
         }
 
-        function insertKeywordBox (elementHTML) {
+        function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
         }
 
-        function isExisted (value) {
+        function isExisted(value) {
             if (!kw.value) return false
             const currentKeywords = kw.value.split(" ");
-            return currentKeywords.includes(value)
+            for (let i = 0; i < currentKeywords.length; i++)
+                if (value == currentKeywords[i])
+                    return true;
+            return false;
         }
 
-        function handleKeydown(event) {
-            if (event.key === ' ' || event.key === 'Enter') {
-                let value = event.target.value.toLowerCase();
+        function handleKeyUp(event) {
+            if (event.key == ' ' || event.code === "Space" || event.key === 'Enter') {
+                let value = event.target.value.toLowerCase().trim();
                 event.target.value = ""
                 if (value && isExisted(value) == false) {
                     let newKwHTML = ` <div id="kw-${value}" class="kw-box" role="alert">
@@ -109,8 +99,8 @@
                             </span>
                         </button>
                       </div>`
-                      insertKeywordBox(newKwHTML);
-                      kw.value += " " + value;
+                    insertKeywordBox(newKwHTML);
+                    kw.value += " " + value;
                 }
             } else if (!event.target.value && event.key === 'Backspace') {
                 const keywords = document.querySelectorAll(".kw");
@@ -122,7 +112,29 @@
             }
         }
 
-        kwInput.addEventListener("keydown", handleKeydown)
+        kwInput.addEventListener("keyup", handleKeyUp)
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (kw.value) {
+                let kws = kw.value.split(" ");
+                kws.forEach(k => {
+                    if (k.trim()) {
+                        let newKwHTML = ` <div id="kw-${k}" class="kw-box" role="alert">
+                            <div class="kw text-sm font-medium whitespace-nowrap">
+                                ${k}
+                            </div>
+                              <button id="btn-remove-kw-${k}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${k}" aria-label="Close">
+                                <span class="material-symbols-rounded text-sm">
+                                    close
+                                </span>
+                            </button>
+                          </div>`
+                        insertKeywordBox(newKwHTML);
+                    }
+                    
+                });
+            }
+        });
     </script>
 </section>
 

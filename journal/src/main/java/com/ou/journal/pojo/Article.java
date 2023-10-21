@@ -3,6 +3,8 @@ package com.ou.journal.pojo;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -73,6 +75,9 @@ public class Article implements Serializable {
     @Transient
     private Manuscript currentManuscript;
 
+    @Transient
+    private MultipartFile file;
+    
     @Column(name = "total_reviewer")
     private Integer totalReviewer = 1;
 
