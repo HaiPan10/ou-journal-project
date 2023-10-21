@@ -63,7 +63,7 @@ public class JwtService {
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
                 builder.claim("userName", account.getUserName());
                 builder.claim("id", account.getId());
-                builder.claim("verificationCode", account.getVerificationCode());
+                // builder.claim("verificationCode", account.getVerificationCode());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
                 
