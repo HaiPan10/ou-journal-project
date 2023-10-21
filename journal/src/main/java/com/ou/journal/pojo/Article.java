@@ -67,6 +67,9 @@ public class Article implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
     private ArticleNote articleNote;
 
+    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
+    private List<ReviewArticle> reviewArticles;
+
     @Transient
     private Manuscript currentManuscript;
 

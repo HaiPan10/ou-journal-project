@@ -132,7 +132,7 @@
                                 <a class="table-action" th:href="@{/admin/articles/{id}(id=${article.id})}">Duyệt bài</a>
                             </div>
                             <div th:if="${article.status eq 'IN_REVIEW'}">
-                                <a class="table-action" th:href="@{/admin/articles/invite-reviewer/{id}(id=${article.id})}">Mời review</a>
+                                <a class="table-action" th:href="@{/admin/review-articles/{id}(id=${article.id})}">Mời review</a>
                             </div>
                         </td>
                     </tr>

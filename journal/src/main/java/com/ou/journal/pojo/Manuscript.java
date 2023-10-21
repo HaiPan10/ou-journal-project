@@ -64,7 +64,7 @@ public class Manuscript implements Serializable {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "manuscript")
-    private List<ReviewArticle> reviewArticles;
+    private List<ReviewCriteria> reviewCriterias;
 
     public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, Article article) {
         this.content = content;

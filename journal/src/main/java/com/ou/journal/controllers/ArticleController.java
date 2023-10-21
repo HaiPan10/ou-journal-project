@@ -10,16 +10,24 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.utils.FileConverterUtils;
+import com.ou.journal.validator.WebAppValidator;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class ArticleController {
@@ -27,10 +35,10 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private MailService mailService;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private WebAppValidator webAppValidator;
 
     @GetMapping("/admin/articles")
     public String list(Model model, @RequestParam(name="status", required = false, defaultValue = "PENDING") String status) {
@@ -84,16 +92,38 @@ public class ArticleController {
         return "articleDetail";
     }
 
-    @GetMapping("/admin/articles/invite-reviewer/{articleId}")
-    public String inviteReviewer(Model model, @PathVariable Long articleId) throws Exception {
+    @GetMapping("/admin/review-articles/{articleId}")
+    public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
         try {
             Article article = articleService.retrieve(articleId);
+            model.addAttribute("articleId", articleId);
             model.addAttribute("article", article);
             List<Object[]> users = userService.listUser();
             model.addAttribute("users", users);
+            User user = new User();
+            model.addAttribute("user", user);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
         return "articleReviewerManager";
+    }
+
+    @PostMapping(path = "/admin/review-articles/invite/{articleId}")
+    public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
+     Model model, BindingResult bindingResult) {
+        try {
+            webAppValidator.validate(user, bindingResult);
+            if (bindingResult.hasErrors()) {
+                return "articleReviewerManager";
+            }
+
+            System.out.println("Email: " + user.getEmail());
+            System.out.println("Lastname: " + user.getLastName());
+            System.out.println("Firstname: " + user.getFirstName());
+            return "redirect:/admin/review-articles/{articleId}";
+        } catch (Exception e) {
+            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
+            return "articleReviewerManager";
+        }
     }
 }
