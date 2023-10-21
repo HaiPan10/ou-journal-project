@@ -43,21 +43,21 @@ public class ApiAdminArticleController {
         return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
     }
 
-    @PutMapping("/accept/{articleId}")
-    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
-        try {
-            articleService.updateArticleStatus(articleId, article, ArticleStatus.ACCEPT.toString());
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @PutMapping("/in-review/{articleId}")
+    // public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
+    //     try {
+    //         articleService.updateArticleStatus(articleId, article, ArticleStatus.IN_REVIEW.toString());
+    //         return ResponseEntity.ok().body("Cập nhật thành công");
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
-    @PutMapping("/reject/{articleId}")
-    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
+    @PutMapping("/verify/{articleId}")
+    public ResponseEntity<?> verifyArticle(@PathVariable Long articleId, @RequestBody Article article){
         try {
-            articleService.updateArticleStatus(articleId, article, ArticleStatus.REJECT.toString());
+            articleService.updateArticleStatus(articleId, article);
             return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
