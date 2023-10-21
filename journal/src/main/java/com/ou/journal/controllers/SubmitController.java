@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.AuthorType;
@@ -27,6 +28,7 @@ import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleService;
 
 // test
 @Controller
@@ -34,6 +36,9 @@ import com.ou.journal.service.interfaces.AccountService;
 public class SubmitController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @ModelAttribute("authorTypes")
     public com.ou.journal.enums.AuthorType[] getTypes() {
@@ -125,11 +130,22 @@ public class SubmitController {
 
     @PostMapping({ "/submit/step3" })
     public String submitPage3(@RequestParam(name = "back", required = false) String back,
-            @RequestParam("file") MultipartFile file, @ModelAttribute("article") Article article) {
+            @RequestParam("file") MultipartFile file, @ModelAttribute("article") Article article, SessionStatus sessionStatus) {
         if (file != null && !file.isEmpty())
             article.setFile(file);
         if (back != null)
             return "redirect:/submit/step2";
+
+        try {
+            articleService.create(article, article.getFile());
+            sessionStatus.setComplete();
+
+            return "redirect:/";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/submit/step3";
+
     }
 }
