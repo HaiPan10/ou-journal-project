@@ -112,32 +112,42 @@
         </table>
     </div>
 
-    <div class="autocomplete" style="width:300px;">
-        <input id="myInput" type="text" name="myCountry" placeholder="Email reviewer">
-        <div id="users-data" style="display: none;">
-            <th:block th:each="user, loop : ${users}">
-                <th:block th:text="${user[1]} + (${loop.last} ? '' : ',')"></th:block>
-            </th:block>
-        </div>
-        <div id="last-name-data" style="display: none;">
-            <th:block th:each="user, loop : ${users}">
-                <th:block th:text="${user[2]} + (${loop.last} ? '' : ',')"></th:block>
-            </th:block>
-        </div>
-        <div id="first-name-data" style="display: none;">
-            <th:block th:each="user, loop : ${users}">
-                <th:block th:text="${user[3]} + (${loop.last} ? '' : ',')"></th:block>
-            </th:block>
-        </div>
+    <div id="ids-data" style="display: none;">
+        <th:block th:each="user, loop : ${users}">
+            <th:block th:text="${user[0]} + (${loop.last} ? '' : ',')"></th:block>
+        </th:block>
+    </div>
+    <div id="users-data" style="display: none;">
+        <th:block th:each="user, loop : ${users}">
+            <th:block th:text="${user[1]} + (${loop.last} ? '' : ',')"></th:block>
+        </th:block>
+    </div>
+    <div id="last-name-data" style="display: none;">
+        <th:block th:each="user, loop : ${users}">
+            <th:block th:text="${user[2]} + (${loop.last} ? '' : ',')"></th:block>
+        </th:block>
+    </div>
+    <div id="first-name-data" style="display: none;">
+        <th:block th:each="user, loop : ${users}">
+            <th:block th:text="${user[3]} + (${loop.last} ? '' : ',')"></th:block>
+        </th:block>
     </div>
     <br>
-    <span class="badge-danger" id="notAvailable" style="display: none;">Mail của reviewer này chưa có trên hệ thống! Vui lòng nhập họ tên</span><br>
-    Họ reviewer: <input id="user-last-name"><br>
-    Tên reviewer: <input id="user-first-name"><br>
 
-    <button type="button"
+    <form th:action="@{/admin/review-articles/invite/{id}(id=${articleId})}" th:object="${user}" method="post">
+        <div th:if="${#fields.hasAnyErrors()}" class="mb-3 pt-5 text-danger">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+        </div>
+        <div class="autocomplete" style="width:300px;">
+            <input id="myInput" type="text" th:field="*{email}" name="email" placeholder="Email reviewer">
+        </div>
+        <span class="badge-danger" id="notAvailable" style="display: none; width: fit-content;">Mail của reviewer này chưa có trên hệ thống! Vui lòng nhập họ tên</span><br>
+        Họ reviewer: <input th:field="*{lastName}" name="lastName" style="width:300px;" type="text" id="user-last-name"><br>
+        Tên reviewer: <input th:field="*{firstName}" name="firstName" style="width:300px;" type="text" id="user-first-name"><br>
+        <button type="submit"
         class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">
         Mời reviewer</button>
+    </form>
 
     <script>
         var currentSide = document.getElementById("articles");
@@ -241,19 +251,25 @@
         });
 
         function checkAvailabe() {
-            var isAvailableUser = users.includes(input.value);
-            if (isAvailableUser) {
-                document.getElementById("notAvailable").style.display = "none";
-                document.getElementById("user-last-name").value = lastNames[users.indexOf(input.value)];
-                document.getElementById("user-first-name").value = firstNames[users.indexOf(input.value)];
-                document.getElementById("user-last-name").readOnly = true;
-                document.getElementById("user-first-name").readOnly = true;
-            } else {
-                document.getElementById("notAvailable").style.display = "block";
-                document.getElementById("user-last-name").value = "";
-                document.getElementById("user-first-name").value = "";
-                document.getElementById("user-last-name").readOnly = false;
+            if (input.value.length !== 0) {
+                var isAvailableUser = users.includes(input.value);
                 document.getElementById("user-first-name").readOnly = false;
+                document.getElementById("user-last-name").readOnly = false;
+                if (isAvailableUser) {
+                    document.getElementById("notAvailable").style.display = "none";
+                    document.getElementById("user-last-name").value = lastNames[users.indexOf(input.value)];
+                    document.getElementById("user-first-name").value = firstNames[users.indexOf(input.value)];
+                    document.getElementById("user-last-name").readOnly = true;
+                    document.getElementById("user-first-name").readOnly = true;
+                } else {
+                    document.getElementById("notAvailable").style.display = "block";
+                    document.getElementById("user-last-name").readOnly = false;
+                    document.getElementById("user-first-name").readOnly = false;
+                }
+            } else {
+                document.getElementById("user-first-name").readOnly = true;
+                document.getElementById("user-last-name").readOnly = true;
+                document.getElementById("notAvailable").style.display = "none";
             }
         }
     </script>

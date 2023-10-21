@@ -39,7 +39,7 @@ public class ReviewArticle implements Serializable {
 
     @JoinColumn(name = "article_id", referencedColumnName = "id")
     @ManyToOne
-    private Manuscript manuscript;
+    private Article article;
 
     @Column(name = "invited_at")
     @Temporal(TemporalType.TIMESTAMP)
