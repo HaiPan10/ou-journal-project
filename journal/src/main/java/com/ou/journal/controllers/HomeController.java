@@ -1,33 +1,46 @@
 package com.ou.journal.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import com.ou.journal.service.interfaces.MailService;
 
 @Controller
 public class HomeController {
-    @ModelAttribute("webName")
-    public String getWebName() {
-        return "test";
+    // @ModelAttribute("webName")
+    // public String getWebName() {
+    //     return "test";
+    // }
+
+    @GetMapping("/login")
+    public String userLoginPage() {
+        return "login";
     }
 
-    @GetMapping("/")
-    public String homePage() {
+    @GetMapping("/admin/login")
+    public String adminLoginPage() {
+        return "admin_login";
+    }
+
+    @GetMapping("/admin/dashboard")
+    public String homepage(Authentication authentication) {
+        if(authentication != null && authentication.isAuthenticated()){
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            System.out.println("[DEBUG] - " + userDetails.getUsername());
+        }
         return "userManager";
-    }
-
-    @GetMapping("/submit")
-    public String submitPage() {
-        return "submitManuscript";
     }
 
     @GetMapping("/register")
     public String registerPage() {
-        return "register";
+        return "client/register";
     }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login_admin";
-    }
+    // @GetMapping({"/submit", "/submit-step1"})
+    // public String submitPage() {
+    //     return "client/submitManuscript/step1";
+    // }
+
 }

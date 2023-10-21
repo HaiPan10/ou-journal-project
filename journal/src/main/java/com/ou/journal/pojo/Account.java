@@ -17,11 +17,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "account")
+@NoArgsConstructor
 public class Account implements Serializable {
     @Id
     @Column(name = "id")
@@ -30,19 +34,22 @@ public class Account implements Serializable {
     @NotBlank(message = "{account.userName.notBlank}")
     @NotNull
     @Size(min = 1, max = 45, message = "{account.userName.invalidSize}")
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @NotBlank(message = "{account.email.notBlank}")
     @Email(message = "{account.email.invalid}")
     @Size(min = 1, message = "{account.email.invalidSize}")
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @NotBlank(message = "{account.password.notBlank}")
     @Size(min = 6, message = "{account.password.invalidSize}")
     @Column(name = "password")
     private String password;
+
+    @Column(name = "status")
+    private String status;
 
     @Transient
     private String confirmPassword;
@@ -59,4 +66,11 @@ public class Account implements Serializable {
     @MapsId
     @OneToOne(optional = false)
     private User user;
+
+    @Column(name = "avatar", length = 300)
+    private String avatar;
+
+    @Size(max = 64)
+    @Column(name = "verification_code")
+    private String verificationCode;
 }

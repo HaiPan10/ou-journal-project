@@ -13,11 +13,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "date_type")
+@NoArgsConstructor
 public class DateType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +29,7 @@ public class DateType implements Serializable {
     private Long id;
 
     @Column(name = "type_name")
-    private String type_name;
+    private String typeName;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dateType")

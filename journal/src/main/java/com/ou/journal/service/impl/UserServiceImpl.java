@@ -3,6 +3,7 @@ package com.ou.journal.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,26 @@ public class UserServiceImpl implements UserService {
             return create(user, RoleName.ROLE_AUTHOR.toString());
         } catch (Exception e) {
             throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public User retrieve(Long id) throws Exception {
+        Optional<User> userOptional = userRepositoryJPA.findById(id);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new Exception("Người dùng không hợp lệ!");
+        }
+    }
+
+    @Override
+    public User findByEmail(String email) throws Exception {
+        Optional<User> userOptional = userRepositoryJPA.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new Exception("Người dùng không hợp lệ!");
         }
     }
     

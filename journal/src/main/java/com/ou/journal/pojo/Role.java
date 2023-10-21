@@ -16,11 +16,15 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "role")
+@NoArgsConstructor
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +38,6 @@ public class Role implements Serializable {
     private String roleName;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "role")
     private List<UserRole> userRoles;
 }

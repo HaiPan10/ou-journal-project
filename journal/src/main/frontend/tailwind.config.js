@@ -1,11 +1,12 @@
 module.exports = {
-  content: ["../resources/templates/**/*.{html,js}", "../resources/templates/*.{html,js}"],
+  content: ["../resources/templates/**/*.{html,js}", "../resources/templates/*.{html,js}", "./node_modules/flowbite/**/*.js"],
   mode: 'jit',
   theme: {
     extend: {
       colors: {
         main: "#084ac4",
         'main-action': "#063793",
+        transparent: "transparent"
       }
     },
     

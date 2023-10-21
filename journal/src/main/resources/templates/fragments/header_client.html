@@ -8,12 +8,51 @@
          <h1 class="font-bold uppercase" th:text="${webName}"></h1>
          <h1 class="uppercase" th:text="${schoolName}"></h1>
       </div>
-      <div class="items-center h-full mt-5 md:mt-0">
+      <div sec:authorize="!isAuthenticated()" class="items-center h-full mt-5 md:mt-0">
          <a href="#" class="mr-5 font-medium hover:border-b">Đăng nhập</a>
          <a href="#"
             class="px-4 py-2 text-xs font-bold text-black uppercase transition-all duration-150 bg-white rounded shadow outline-none hover:bg-white/50 hover:shadow-lg focus:outline-none ease">
             Đăng ký
          </a>
+      </div>
+      <div sec:authorize="isAuthenticated()"  class="items-center h-full mt-5 md:mt-0">
+         <div class="flex items-center ml-3">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
+               Chào mừng, Tác Giả
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+               Chào mừng, Biên tập viên
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
+               Chào mừng, Người Phán Xét
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
+               Chào mừng, Thư Ký
+            </div>
+            <div>
+              <button type="button"
+                class="flex gap-2 text-sm items-center"
+                aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                <span class="sr-only">Open user menu</span>
+                <img class="w-10 h-10" th:src="@{/images/avatar.png}"/>
+                <h3 class="font-medium" th:text="${#authentication.name}"></h3>
+                <span class="material-symbols-rounded">
+                  keyboard_arrow_down
+                  </span>
+              </button>
+            </div>
+
+            <div
+              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+              id="dropdown-user">
+              <ul class="py-1" role="none">
+                <li>
+                  <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    role="menuitem">Đăng xuất</a>
+                </li>
+              </ul>
+            </div>
+          </div>
       </div>
    </div>
    <nav id="header" class="w-full bg-white shadow-sm">

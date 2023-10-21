@@ -14,7 +14,7 @@
             <span class="self-center text-xl sm:text-2xl font-bold whitespace-nowrap text-main" th:text="${webName}"></span>
           </a>
         </div>
-        <div class="flex items-center">
+        <div sec:authorize="isAuthenticated()" class="flex items-center">
             <div class="flex items-center ml-3">
               <div>
                 <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-200" aria-expanded="false" data-dropdown-toggle="dropdown-user">
@@ -25,7 +25,7 @@
               <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow" id="dropdown-user">
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm text-gray-900 dark:text-gray-900 w-full" role="none">
-                    Tên admin
+                    
                   </p>
                   <p class="text-sm font-medium text-gray-900 truncate w-full" role="none">
                     email admin
@@ -36,7 +36,8 @@
                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Cài đặt</a>
                   </li>
                   <li>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Đăng xuất</a>
+                    <a th:href="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? '/admin/logout' : '/logout'}" 
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300" role="menuitem">Đăng xuất</a>
                   </li>
                 </ul>
               </div>

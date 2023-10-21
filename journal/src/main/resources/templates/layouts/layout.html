@@ -6,23 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE"></title>
 
-    <script defer th:src="@{/js/header.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
+    <script defer th:src="@{/js/header.js}"></script>
     <link th:href="@{/css/style.css}" rel="stylesheet" />
     <link th:href="@{/css/main.css}" rel="stylesheet" /> 
 
 </head>
 
 <body class="bg-gray-100">
-    <header th:replace="~{fragments/header :: header}"></header>
+    <header th:replace="~{fragments/header_client :: header}"></header>
     <section layout:fragment="content">
         <p>This is filled by the content template.</p>
     </section>
 
     <!-- Optional Section -->
     <th:block layout:fragment="optional" />
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <footer th:replace="~{fragments/footer_client :: footer}"></footer>
 
 </body>
 

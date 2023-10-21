@@ -3,6 +3,7 @@ package com.ou.journal.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +24,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,10 +56,10 @@ public class User implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
-    @NotBlank(message = "{account.email.notBlank}")
-    @Email(message = "{account.email.invalid}")
-    @Size(min = 1, message = "{account.email.invalidSize}")
-    @Column(name = "email")
+    @NotBlank(message = "{user.email.notBlank}")
+    @Email(message = "{user.email.invalid}")
+    @Size(min = 1, message = "{user.email.invalidSize}")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "created_at")
@@ -68,11 +74,11 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "user")
     private Account account;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<UserRole> userRoles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<UserRole> userRoles;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "editorUser")
     private List<Article> editorArticles;
 
     @JsonIgnore

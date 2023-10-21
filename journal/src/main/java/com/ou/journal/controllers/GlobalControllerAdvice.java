@@ -1,11 +1,17 @@
 package com.ou.journal.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.ou.journal.pojo.Account;
+import com.ou.journal.service.interfaces.AccountService;
 
 @ControllerAdvice
 @Controller
@@ -13,13 +19,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
         @PropertySource(value = "classpath:information.yml", encoding = "UTF-8")
 })
 public class GlobalControllerAdvice {
+    @Autowired
+    private AccountService accountService;
+
     @Value("${schoolName}")
     private String schoolName;
 
     @Value("${webName}")
     private String webName;
 
-     @Value("${address}")
+    @Value("${address}")
     private String address;
 
     @Value("${publishingAgency}")
@@ -31,7 +40,7 @@ public class GlobalControllerAdvice {
     @Value("${editorialSecretary}")
     private String editorialSecretary;
 
-     @Value("${emailEditorialSecretary}")
+    @Value("${emailEditorialSecretary}")
     private String emailEditorialSecretary;
 
     @ModelAttribute("schoolName")
@@ -67,5 +76,20 @@ public class GlobalControllerAdvice {
     @ModelAttribute("emailEditorialSecretary")
     public String[] getEmailEditorialSecretary() {
         return emailEditorialSecretary.split(",");
+    }
+
+    @ModelAttribute("userAvatar")
+    public String getAvatar(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null && authentication.isAuthenticated()){
+            String username = authentication.getName();
+            try {
+                Account account = accountService.findByUserName(username);
+                return account.getAvatar();
+            } catch (Exception e) {
+                
+            }
+        }
+        return null;
     }
 }

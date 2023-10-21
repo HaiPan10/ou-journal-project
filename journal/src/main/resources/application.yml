@@ -8,9 +8,7 @@ spring:
     allow-circular-references: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/ou-journey
-    # url: jdbc:mysql://localhost:3306/ou-journal
-    url: jdbc:mysql://localhost:3306/journal_db
+    url: jdbc:mysql://localhost:3306/ou-journal-db
     username: root
     # password: mai2604
     # password: IamPhong89
@@ -20,20 +18,18 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
-  # mail:
-  #   host: cp03hn.emailserver.net.vn
-  #   port: 465
-  #   username: admin@ousocialnetwork.id.vn
-  #   password: Vo2Z%)nF_+,{
-  #   properties:
-  #     mail:
-  #       smtp:
-  #         auth: true
-  #         ssl:
-  #           enable: true
-  #           protocols: TLSv1.2
-  #           trust: "*"
-  #       debug: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: pladevspace@gmail.com
+    password: kriu znmd svmi iibr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
 
 #JPA/Hibernate
 server:
@@ -49,4 +45,4 @@ logging:
     root: info
     org:
       springframework:
-        security: INFO
+        security: TRACE
