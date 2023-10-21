@@ -30,7 +30,7 @@ public class HomeController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             System.out.println("[DEBUG] - " + userDetails.getUsername());
         }
-        return "userManager";
+        return "dashboard";
     }
 
     @GetMapping("/register")

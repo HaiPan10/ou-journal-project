@@ -1,6 +1,7 @@
 package com.ou.journal.filter;
 
 import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class JwtTokenFilter extends OncePerRequestFilter {
+public class JwtTokenEmailFilter extends OncePerRequestFilter{
 
     @Autowired
     private JwtService jwtService;
@@ -42,8 +43,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // Re-create the user with given token
     private UserDetails getAccount(String token) {
-        String userName = jwtService.getUserNameFromToken(token, SecrectType.DEFAULT);
-        Long id = jwtService.getIdFromToken(token, SecrectType.DEFAULT);
+        String userName = jwtService.getUserNameFromToken(token, SecrectType.EMAIL);
+        Long id = jwtService.getIdFromToken(token, SecrectType.EMAIL);
         // Account account = new Account();
         System.out.println("[User ID] - " + id);
         System.out.println("[userName] - " + userName);
@@ -56,32 +57,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
-        if (request.getRequestURI().equals("/api/accounts/register")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        // HttpServletRequest request = (HttpServletRequest) servletRequest;
-
-        // DEBUG header
-        // System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
-
-        String header = jwtService.getAuthorization(request);
-        request.setCharacterEncoding("UTF-8");
-
-        if (header == null || !header.startsWith("Bearer")) {
+        if(!request.getRequestURI().equals("/api/account/reviewer/verify")){
             filterChain.doFilter(request, response);
             return;
         }
 
         System.out.println("[DEBUG] - Start filter Token");
         System.out.println("[DEBUG] - uri=" + request.getRequestURI());
-        System.out.println("[DEBUG] - Has Authorization Bearer");
 
-        String token = jwtService.getAccessToken(header);
-
-        if (!jwtService.isValidAccessToken(token, SecrectType.DEFAULT)) {
+        String token = request.getParameter("token");
+        if (!jwtService.isValidAccessToken(token, SecrectType.EMAIL)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -91,4 +76,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         setAuthenticationContext(token, request);
         filterChain.doFilter(request, response);
     }
+    
 }

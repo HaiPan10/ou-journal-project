@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.ou.journal.configs.JwtService;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.MailService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,7 +32,10 @@ public class ApiTestController {
     private ArticleService articleService;
 
     @Autowired
-    private MailService mailService;
+    private JwtService jwtService;
+
+    // @Autowired
+    // private MailService mailService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> register (@Valid @RequestBody Account account, BindingResult bindingResult) throws Exception {
@@ -73,13 +76,17 @@ public class ApiTestController {
         }
     }
 
-    @GetMapping(path = "/articles/list")
-    public ResponseEntity<?> listPendingArticle() throws Exception {
+    // Chỉ dùng cho test để dễ dàng lấy được email token
+    @GetMapping(path = "/get-email-token/{accountId}")
+    public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
         try {
-            return ResponseEntity.ok(articleService.listPendingArticles());
+            Account account = accountService.retrieve(accountId);
+            String token = jwtService.generateMailToken(account);
+            return ResponseEntity.ok().body(token);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+        
     }
 
     // @PostMapping(path = "/mail/send")

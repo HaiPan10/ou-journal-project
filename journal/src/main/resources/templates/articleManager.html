@@ -54,39 +54,20 @@
                     <li>
                         <h3>Tình trạng</h3>
                         <div class="filter-container">
-                            <input name="status" type="checkbox" class="filter-input">
-                            <label class="filter-label">Đã duyệt</label>
+                            <input id="pending-status" name="status" type="radio" class="filter-input" value="PENDING" onchange="handleChange(this);" checked>
+                            <label class="filter-label" for="pending-status">Chưa duyệt</label>
                         </div>
                         <div class="filter-container">
-                            <input name="status" type="checkbox" class="filter-input">
-                            <label class="filter-label">Chưa duyệt</label>
+                            <input id="inreview-status" name="status" type="radio" class="filter-input" value="IN_REVIEW"  onchange="handleChange(this);">
+                            <label class="filter-label" for="inreview-status">Đang mời review</label>
                         </div>
                     </li>
-                    <li>
-                        <hr>
-                        </hr>
-                    </li>
-                    <li>
-                        <h3>Loại tài khoản</h3>
-                        <div class="filter-container">
-                            <input name="userRole" type="checkbox" class="filter-input">
-                            <label class="filter-label">Tác giả</label>
-                        </div>
-                        <div class="filter-container">
-                            <input name="userRole" type="checkbox" class="filter-input">
-                            <label class="filter-label">Reviewer</label>
-                        </div>
-                    </li>
-                    <li>
-                        <hr>
-                        </hr>
-                    </li>
-                    <li class="flex justify-end gap-2 pt-3">
+                    <!-- <li class="flex justify-end gap-2 pt-3">
                         <button type="button" class="btn-secondary-small">Làm
                             mới</button>
                         <button type="submit" class="btn-main-small">Áp
                             dụng</button>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -103,7 +84,7 @@
     <div class="table-container">
         <table class="table">
             <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                Danh sách bài đăng chờ duyệt
+                Danh sách bài đăng
             </h3>
             <thead class="table-header">
                 <tr>
@@ -139,16 +120,49 @@
                             </th:block>
                         </th:block>
                         <td class="px-6 py-4">
-                            <span class="badge-warning">Chờ duyệt</span>
+                            <div th:if="${article.status eq 'PENDING'}">
+                                <span class="badge-warning">Chờ duyệt</span>
+                            </div>
+                            <div th:if="${article.status eq 'IN_REVIEW'}">
+                                <span class="badge-success">Chờ review</span>
+                            </div>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="#" class="table-action" th:href="@{/admin/articles/{id}(id=${article.id})}">Xem chi tiết</a>
+                            <div th:if="${article.status eq 'PENDING'}">
+                                <a class="table-action" th:href="@{/admin/articles/{id}(id=${article.id})}">Duyệt bài</a>
+                            </div>
+                            <div th:if="${article.status eq 'IN_REVIEW'}">
+                                <a class="table-action" th:href="@{/admin/review-articles/{id}(id=${article.id})}">Mời review</a>
+                            </div>
                         </td>
                     </tr>
                 </th:block>
             </tbody>
         </table>
     </div>
+
+    <script>
+        var currentSide = document.getElementById("articles");
+        currentSide.classList.add("active");
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var status = urlParams.get('status');
+        var radioButtons = document.getElementsByName("status");
+
+        if (status) {
+            for (let i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].value === status) {
+                    radioButtons[i].checked = true;
+                    break;
+                }
+            }
+        }
+
+        function handleChange(src) {
+            window.location.replace(`/admin/articles?status=${src.value}`);
+        }
+
+    </script>
 
 </section>
 
