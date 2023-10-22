@@ -16,8 +16,8 @@
                         <div>
                             <label for="username" class="font-medium pb-1 block">Tên đăng nhập <span
                                     class="text-main">*</span></label>
-                            <input id="username" required name="username" type="text" data-popover-target="popover-username"
-                                data-popover-placement="right"
+                            <input id="username" required name="username" type="text"
+                                data-popover-target="popover-username" data-popover-placement="right"
                                 class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                             <div data-popover id="popover-username" role="tooltip"
                                 class="absolute z-10 shadow-lg invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72">
@@ -25,12 +25,13 @@
                                     <h3 class="font-semibold text-gray-900 dark:text-white">Yêu cầu</h3>
                                 </div>
                                 <div class="px-3 py-2">
-                                    <p>Tên người dùng chỉ được sử dụng chữ cái in thường, chữ số và dấu trừ (-) hoặc gạch
+                                    <p>Tên người dùng chỉ được sử dụng chữ cái in thường, chữ số và dấu trừ (-) hoặc
+                                        gạch
                                         dưới (_).</p>
                                 </div>
                                 <div data-popper-arrow></div>
                             </div>
-    
+
                         </div>
                         <div>
                             <label for="password" class="font-medium pb-1 block">Mật khẩu <span
@@ -60,7 +61,7 @@
                         class="absolute rounded ml-5 shadow bg-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
                         Thông tin khác</h1>
                     <div class="px-5 py-7">
-    
+
                         <div class="w-full md:w-1/2 lg:w-1/4">
                             <label for="orcid" class="font-medium pb-1 block">ORCID iD</label>
                             <input id="orcid" name="orcid" type="text"
@@ -73,16 +74,16 @@
                         </div>
                         <div class="w-full">
                             <label for="biography" class="font-medium pb-1 block">Quá trình nghiên cứu</label>
-                            <textarea name="biography" id="biography" rows="5"
+                            <textarea name="biography" id="biography" rows="6"
                                 class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full">
-    
+
                         </textarea>
                         </div>
-    
+
                     </div>
                 </div>
             </div>
-   
+
             <div class="col-span-1 md:col-span-3 md:h-full">
                 <div class="relative pt-3 mb-12 md:mb-0 bg-white shadow border w-full rounded-lg md:h-full">
                     <h1
@@ -94,7 +95,7 @@
                         <input id="salutation" required name="salutation" type="text"
                             class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-5">
-    
+
                             <div class="col-span-1">
                                 <label for="lastName" class="font-medium pb-1 block">Họ và tên đệm <span
                                         class="text-main">*</span></label>
@@ -115,7 +116,7 @@
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
                             <div class="col-span-1">
                                 <label for="dob" class="font-medium pb-1 block">Ngày sinh <span
@@ -134,12 +135,12 @@
                                 </select>
                             </div>
                         </div>
-    
+
                         <label for="affiliation" class="font-medium pb-1 block">Tổ chức <span
                                 class="text-main">*</span></label>
                         <input id="affiliation" required name="affiliation" type="text"
                             class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
-    
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
                             <div class="col-span-1">
                                 <label for="position" class="font-medium pb-1 block">Chức vụ <span
@@ -421,7 +422,8 @@
                                 </select>
                             </div>
                         </div>
-                        <label for="address" class="font-medium pb-1 block">Địa chỉ <span class="text-main">*</span></label>
+                        <label for="address" class="font-medium pb-1 block">Địa chỉ <span
+                                class="text-main">*</span></label>
                         <input id="address" required name="address" type="text"
                             class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
@@ -446,6 +448,10 @@
                                     class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
                         </div>
+                        <button type="submit"
+                            class="p-2.5 mt-3 transition duration-500 bg-main hover:bg-main/75 focus:hover:bg-main focus:shadow-sm focus:ring-4 focus:ring-main/50 text-white w-full rounded-lg shadow-sm hover:shadow-md font-semibold text-center">
+                            <span class="inline-block mr-2">Đăng ký</span>
+                        </button>
                     </div>
                 </div>
             </div>

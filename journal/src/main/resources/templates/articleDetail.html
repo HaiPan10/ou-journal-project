@@ -20,23 +20,24 @@
         var rejectBtn = document.getElementById('rejectBtn')
         var commentArticle = document.getElementById('commentArticle')
         acceptBtn.addEventListener('click', (e) => {
-            callUpdateApi('accept')
+            callUpdateApi('IN_REVIEW')
         })
 
         rejectBtn.addEventListener('click', (e) => {
-            callUpdateApi('reject')
+            callUpdateApi('SECRETARY_REJECT')
         })
 
         function callUpdateApi(status) {
             var requestBody = {
                 articleNote: {
                     note: commentArticle.value
-                }
+                },
+                status: status
             }
-            if (status === 'accept') {
+            if (status === 'IN_REVIEW') {
                 requestBody["totalReviewer"] = document.getElementById("totalReviewer").value
             }
-            fetch(`/admin/articles/${status}/[[${article.id}]]`, {
+            fetch(`/admin/articles/verify/[[${article.id}]]`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

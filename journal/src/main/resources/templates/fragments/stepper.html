@@ -1,4 +1,4 @@
-<div th:fragment="stepper (step)" class="flex justify-center mb-5">
+<div th:fragment="stepper (step)" class="flex justify-center mb-20">
     <ol class="px-6 max-w-7xl flex items-center w-full h-full">
         <li th:class="${1 == step ? 'step step-in-progress' : 1 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
@@ -33,7 +33,7 @@
                 <p class="text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li>
-        <li th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
+        <!-- <li th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <span th:if="${4 < step}" class="material-symbols-rounded">
                     done
@@ -43,7 +43,7 @@
                 <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
                 <p class="text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
-        </li>
+        </li> -->
 
 
         <li class="step-end step-pending">

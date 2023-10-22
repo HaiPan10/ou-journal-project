@@ -115,10 +115,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticleStatus(Long articleId, Article article, String status) throws Exception {
+    public void updateArticleStatus(Long articleId, Article article) throws Exception {
         Article persistArticle = retrieve(articleId);
+        String status = article.getStatus();
         persistArticle.setStatus(status);
-        if(status.equals(ArticleStatus.ACCEPT.toString())){
+        if(status.equals(ArticleStatus.IN_REVIEW.toString())){
             persistArticle.setTotalReviewer(article.getTotalReviewer());
         }
         articleRepositoryJPA.save(persistArticle);

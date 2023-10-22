@@ -5,56 +5,199 @@
 
 <section layout:fragment="content">
     <div th:replace="~{fragments/stepper :: stepper (step=2)}"></div>
-    <form>
+    <section name="main">
         <div class="space-y-6 flex flex-col justify-center">
-            <div class="px-10 pt-10 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 pb-12">
-                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8">
-                    <div class="col-span-full">
-                        <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
-                        <input id="title" name="title" type="text"
-                            class="border focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+            <div class="bg-white rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between"
+                style="min-height: 600px">
+                <div>
+                    <div class="flex justify-between pl-3">
+                        <h2 class="col-span-1 text-lg font-semibold">Danh sách tác giả</h2>
+                        <button type="button" data-modal-target="add-author-modal" data-modal-toggle="add-author-modal"
+                            class="w-fit rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Thêm
+                            tác giả</button>
                     </div>
+                    <div class="mt-3 authors">
 
-                    <div class="col-span-full">
-                        <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
-                        <textarea id="description" name="description" rows="3"
-                        class="border focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full"></textarea>
-                    </div>
-
-                    <div class="col-span-full">
-                        <label class="block text-sm font-medium leading-6 text-gray-900">Tài liệu</label>
-                        <div
-                            class="mt-2 flex bg-white justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                            <div class="text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
-                                    aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                                    <label for="file-upload"
-                                        class="relative cursor-pointer rounded-md bg-white font-semibold text-main focus-within:outline-none focus-within:ring-2 focus-within:ring-main/50 focus-within:ring-offset-2 hover:text-main/50">
-                                        <span>Tải lên</span>
-                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                    </label>
-                                    <p class="pl-1">hoặc kéo thả vào đây</p>
-                                </div>
-                                <p class="text-xs leading-5 text-gray-600">PDF, DOCX</p>
-                            </div>
-                        </div>
+                        <hr id="last-hr" />
                     </div>
                 </div>
+
                 <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button>
-                    <button type="submit"
+                    <button type="button" onclick="goBackStep()"
+                        class="text-sm font-semibold leading-6 text-gray-900">Trở
+                        về</button>
+                    <button type="button" onclick="goNextStep()"
                         class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                         tục</button>
                 </div>
             </div>
 
-            
-    </form>
+
+    </section>
+    <div id="add-author-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                        Thêm tác giả
+                    </h3>
+                    <button type="button" id="btn-close-modal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="add-author-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form  name="newAuthor" class="p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                        <div class="col-span-full">
+                            <label for="new-author-email"
+                                class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                            <input id="new-author-email" type="email" name="email" title="Vui lòng nhập email" required
+                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                        </div>
+
+                        <div class="col-span-1">
+                            <label for="new-last-name" class="block text-sm font-medium leading-6 text-gray-900">Họ và
+                                tên đệm</label>
+                            <input id="new-last-name" type="text" name="last-name" required
+                                title="Vui lòng nhập họ và tên đệm"
+                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                        </div>
+
+                        <div class="col-span-1">
+                            <label for="new-first-name"
+                                class="block text-sm font-medium leading-6 text-gray-900">Tên</label>
+                            <input id="new-first-name" type="text" name="first-name" required title="Vui lòng nhập tên"
+                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                        </div>
+                        <div class="col-span-full flex">
+                            <th:block th:each="type : ${authorTypes}">
+
+                                <div th:if="${!#strings.equals('CORRESPONDING_AUTHOR', type)}"
+                                    class="flex items-center p-2 rounded hover:bg-gray-100">
+                                    <input th:id="${type}" name="author-type" type="radio" th:value="${type.id}"
+                                        required title="Vui lòng chọn loại tác giá"
+                                        class="rounded-full w-4 h-4 text-main bg-gray-100 border-gray-300 rounded focus:ring-action focus:ring-2">
+                                    <label th:for="${type}"
+                                        class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                                        th:text="${type.displayName}"></label>
+                                </div>
+
+                            </th:block>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                        <button id="btn-add-author" type="button" onclick="addAuthor()"
+                            class="text-white bg-main hover:bg-main/50 hover:text-gray-700 focus:ring-4 focus:outline-none focus:ring-main/25 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Thêm</button>
+                        <button data-modal-hide="add-author-modal" type="button"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Hủy</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script th:inline="javascript">
+        const authorArticles = /*[[${ article.authorArticles }]]*/ "";
+        console.log(authorArticles);
+        const lastHr = document.querySelector("#last-hr");
+        const btnClose = document.querySelector("#btn-close-modal");
+
+        authorArticles.forEach(author => { addAuthorEl(author) });
+
+        function addAuthorEl(authorEl) {
+
+            const html = `
+                    <div>
+                        <hr/>
+                        <div class="p-3 author" data-user-id="${authorEl.user.id}">
+                            <h3 class="font-medium author-name">${authorEl.user.firstName + " " + authorEl.user.lastName}</h3>
+                            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
+                        </div>
+                    </div>
+                    `
+            lastHr.insertAdjacentHTML('beforebegin', html);
+        }
+
+        function goNextStep() {
+            fetch("/submit/step2", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(authorArticles),
+                redirect: 'follow'
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
+        }
+        
+        function goBackStep() {
+            fetch("/submit/step2?back=1", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(authorArticles),
+                redirect: 'follow'
+            }).then(response => {
+                if (response.redirected) {
+                    window.location.href = response.url;
+                }
+            });
+        }
+
+
+        function addAuthor() {
+            const formNewAuthor = document.forms.newAuthor;
+
+            var formData = new FormData(formNewAuthor);
+            if (formNewAuthor.checkValidity()) {
+                const firstnval = formData.get("first-name")
+                const lastnval = formData.get("last-name")
+                const emailval = formData.get("email")
+                const typeval = formData.get("author-type")
+                const authorEl = {
+                    "user": {
+                        "firstName": firstnval,
+                        "lastName": lastnval,
+                        "email": emailval
+                    },
+                    "authorRoles": [
+                        {
+                            "authorType": {
+                                "id": typeval
+                            }
+                        }
+                    ]
+                }
+                authorArticles.push(authorEl)
+                btnClose.click();
+                addAuthorEl(authorEl);
+                btnClose.click();
+                formNewAuthor.reset();
+            } else {
+                const inputs = formNewAuthor.querySelectorAll("input");
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].reportValidity();
+                }
+            }
+
+        }
+    </script>
 </section>
 
 </html>
