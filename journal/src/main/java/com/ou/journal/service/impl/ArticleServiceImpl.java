@@ -93,7 +93,7 @@ public class ArticleServiceImpl implements ArticleService {
             return articleRepositoryJPA.list(ArticleStatus.PENDING.toString());
         } else {
             List<Article> articles = articleRepositoryJPA.list(status);
-            if (status.equals(ArticleStatus.IN_REVIEW.toString())) {
+            if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
                 articles.forEach(article -> article.setAcceptedReviewer(
                     reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
             }
@@ -119,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article persistArticle = retrieve(articleId);
         String status = article.getStatus();
         persistArticle.setStatus(status);
-        if(status.equals(ArticleStatus.IN_REVIEW.toString())){
+        if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
             persistArticle.setTotalReviewer(article.getTotalReviewer());
         }
         articleRepositoryJPA.save(persistArticle);
@@ -133,7 +133,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article persistArticle = retrieve(articleId);
         Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
         if (acceptedReviewTotal > 0) {
-            persistArticle.setStatus(ArticleStatus.DECIDING.toString());
+            persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
             return articleRepositoryJPA.save(persistArticle);
         } else {
             throw new Exception("Bài báo này chưa có reviewer nào!");

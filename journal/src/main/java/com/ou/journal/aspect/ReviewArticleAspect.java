@@ -42,8 +42,8 @@ public class ReviewArticleAspect {
         Article article = articleService.retrieve(reviewArticle.getArticle().getId());
         if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString()) &&
         article.getTotalReviewer().equals(reviewArticleRepositoryJPA.countAcceptedReview(article.getId()))
-        && article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-            article.setStatus(ArticleStatus.DECIDING.toString());
+        && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+            article.setStatus(ArticleStatus.IN_REVIEW.toString());
             articleRepositoryJPA.save(article);
         }
     }
@@ -56,8 +56,8 @@ public class ReviewArticleAspect {
         Article article = articleService.retrieve(reviewArticle.getArticle().getId());
         if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString()) &&
         article.getTotalReviewer().equals(reviewArticleRepositoryJPA.countAcceptedReview(article.getId()))
-        && article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-            article.setStatus(ArticleStatus.DECIDING.toString());
+        && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+            article.setStatus(ArticleStatus.IN_REVIEW.toString());
             articleRepositoryJPA.save(article);
         }
     }

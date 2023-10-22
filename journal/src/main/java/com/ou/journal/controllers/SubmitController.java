@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,17 +51,17 @@ public class SubmitController {
             try {
 
                 List<AuthorRole> authorRoles = new ArrayList<>();
-                AuthorRole authorRole1 = new AuthorRole();
-                AuthorType type1 = new AuthorType();
-                type1.setId(Long.valueOf(1));
-                authorRole1.setAuthorType(type1);
+                // AuthorRole authorRole1 = new AuthorRole();
+                // AuthorType type1 = new AuthorType();
+                // type1.setId(Long.valueOf(1));
+                // authorRole1.setAuthorType(type1);
 
                 AuthorRole authorRole2 = new AuthorRole();
                 AuthorType type2 = new AuthorType();
                 type2.setId(Long.valueOf(2));
                 authorRole2.setAuthorType(type2);
 
-                authorRoles.add(authorRole1);
+                // authorRoles.add(authorRole1);
                 authorRoles.add(authorRole2);
 
                 List<AuthorArticle> authorArticles = new ArrayList<>();

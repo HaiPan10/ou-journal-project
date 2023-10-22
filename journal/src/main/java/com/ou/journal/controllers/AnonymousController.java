@@ -1,7 +1,5 @@
 package com.ou.journal.controllers;
 
-import java.text.ParseException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
-import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;

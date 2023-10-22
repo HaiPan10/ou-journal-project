@@ -117,17 +117,36 @@
         authorArticles.forEach(author => { addAuthorEl(author) });
 
         function addAuthorEl(authorEl) {
-
+            var authorRoles = authorEl.authorRoles;
             const html = `
                     <div>
                         <hr/>
                         <div class="p-3 author" data-user-id="${authorEl.user.id}">
-                            <h3 class="font-medium author-name">${authorEl.user.firstName + " " + authorEl.user.lastName}</h3>
+                            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
                             <p class="text-gray-500 author-email">${authorEl.user.email}</p>
+                            <div id="authorRolesContainer${authorEl.user.id}">
+                            </div>
                         </div>
                     </div>
                     `
             lastHr.insertAdjacentHTML('beforebegin', html);
+
+            authorRoles.forEach(function(role) {
+                const roleContainer = document.getElementById(`authorRolesContainer${authorEl.user.id}`);
+                const roleElement = document.createElement('span');
+                roleElement.classList.add('badge');
+                if (role.authorType.id === 1) {
+                    roleElement.classList.add('badge-danger');
+                    roleElement.textContent = 'Tác giả chính';
+                } else if (role.authorType.id === 2) {
+                    roleElement.classList.add('badge-warning');
+                    roleElement.textContent = 'Tác giả liên hệ';
+                } else if (role.authorType.id === 3) {
+                    roleElement.classList.add('badge-success');
+                    roleElement.textContent = 'Tác giả';
+                }
+                roleContainer.appendChild(roleElement);
+            });
         }
 
         function goNextStep() {

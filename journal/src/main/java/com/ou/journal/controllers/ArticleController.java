@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +40,7 @@ public class ArticleController {
     public String list(Model model, @RequestParam(name="status", required = false, defaultValue = "PENDING") String status) {
         List<Article> articles = new ArrayList<>();
         model.addAttribute("status", status);
-        if (status.equals(ArticleStatus.PENDING.toString()) || status.equals(ArticleStatus.IN_REVIEW.toString())) {
+        if (status.equals(ArticleStatus.PENDING.toString()) || status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             articles = articleService.list(status);
         }
         model.addAttribute("articles", articles);
@@ -82,7 +81,7 @@ public class ArticleController {
     public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
         try {
             Article article = articleService.retrieve(articleId);
-            if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+            if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
                 model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);

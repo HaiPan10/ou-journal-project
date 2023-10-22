@@ -20,7 +20,7 @@
         var rejectBtn = document.getElementById('rejectBtn')
         var commentArticle = document.getElementById('commentArticle')
         acceptBtn.addEventListener('click', (e) => {
-            callUpdateApi('IN_REVIEW')
+            callUpdateApi('INVITING_REVIEWER')
         })
 
         rejectBtn.addEventListener('click', (e) => {
@@ -34,7 +34,7 @@
                 },
                 status: status
             }
-            if (status === 'IN_REVIEW') {
+            if (status === 'INVITING_REVIEWER') {
                 requestBody["totalReviewer"] = document.getElementById("totalReviewer").value
             }
             fetch(`/admin/articles/verify/[[${article.id}]]`, {

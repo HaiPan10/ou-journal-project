@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.security.auth.login.AccountNotFoundException;
 
-import org.apache.http.client.RedirectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
 
     @Override
     public ReviewArticle create(User user, Article article) {
-        if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+        if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             if (user.getId() == null) {
                 userService.create(user);
             } else if (reviewArticleRepositoryJPA.findByUserAndArticle(user, article).isPresent()) {
@@ -78,7 +77,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         // if (reviewArticleOptional.isPresent()) {
         // ReviewArticle reviewArticle = reviewArticleOptional.get();
         // if
-        // (reviewArticle.getArticle().getStatus().equals(ArticleStatus.IN_REVIEW.toString())
+        // (reviewArticle.getArticle().getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())
         // && reviewArticle.getStatus().equals(ReviewArticleStatus.PENDING.toString()))
         // {
         // if (reviewArticle.getUser().getEmail().equals(email) &&
@@ -145,7 +144,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         Optional<ReviewArticle> reviewArticleOptional = reviewArticleRepositoryJPA.findById(reviewArticleId);
         if (reviewArticleOptional.isPresent()) {
             ReviewArticle reviewArticle = reviewArticleOptional.get();
-            if (reviewArticle.getArticle().getStatus().equals(ArticleStatus.IN_REVIEW.toString())
+            if (reviewArticle.getArticle().getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())
                     && reviewArticle.getStatus().equals(ReviewArticleStatus.PENDING.toString())) {
                 if (reviewArticle.getUser().getEmail().equals(email)
                         && reviewArticle.getUser().getId().equals(userId)) {
