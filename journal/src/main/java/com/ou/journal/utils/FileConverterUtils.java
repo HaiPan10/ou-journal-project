@@ -29,6 +29,7 @@ public class FileConverterUtils {
                          "body {" +
                          "    display: flex;" +
                          "    justify-content: center;" +
+                         "    flex-wrap: wrap;" +
                          "}" +
                          "</style>";
             htmlContent = css + htmlContent;
