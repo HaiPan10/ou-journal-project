@@ -12,5 +12,4 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
     @Query("FROM Article a WHERE a.status = ?1")
     List<Article> list(String status);
     Optional<Article> findById(Long id);
-    
 }

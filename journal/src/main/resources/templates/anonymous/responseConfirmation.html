@@ -1,0 +1,71 @@
+<!-- Simple 404 Page using HTML & CSS -->
+<!-- Author: Godnon Dsilva -->
+
+<!-- HTML5 -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Enter your title of the page -->
+    <title>Ghi nhận phản hồi</title>
+    <!-- Link the CSS posted below to this page, change the href -->
+    <!--  Enter your website icon -->
+    <!-- This one is very important, don't skip this part! -->
+    <base href=""> <!-- Enter your website URL here -->
+
+    <!-- Just some important metas, you can ignore these -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- If you want to learn more about them then visit https://www.w3schools.com/tags/tag_meta.asp -->
+    <style>
+        /* Imported fonts */
+        @import url('https://fonts.googleapis.com/css?family=Anton');
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+        /* CSS */
+        body {
+            background-color: #222;
+            font-family: 'Anton', sans-serif;
+            margin: 0;
+        }
+
+
+        body>main>center>p {
+            color: #ddd;
+            font-family: 'Open Sans', sans-serif !important;
+        }
+
+        body>main>center>h1 {
+            text-transform: uppercase;
+            color: lightgreen;
+            font-size: 48px;
+        }
+
+        body>main>center>h3>a {
+            text-transform: uppercase;
+            font-size: 18px;
+            color: #000;
+            background-color: lightgreen;
+            text-decoration: none;
+            padding: 1px 5px;
+            border: 1px solid lightgreen;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <center>
+            <br /><br /><br /><br /><br /><br />
+            <h1>Ghi nhận thành công!</h1>
+            <p>Xin chào <span th:text="${user}"></span>! Cảm ơn bạn đã phản hồi chúng tôi.<br />
+                Chúng tôi đã ghi nhận kết quả phản hồi từ bạn! <br><br>
+                • Đã ghi nhận: <span th:text="${action}"></span><br /><br /><br /></p>
+            <h3><a th:href="${home}">Nhấn vào đây để về trang chủ</a></h3>
+            <br /><br /><br /><br />
+        </center>
+    </main>
+</body>
+
+</html>

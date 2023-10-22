@@ -26,5 +26,4 @@ public class UserRoleServiceImpl implements UserRoleService{
             throw new UsernameNotFoundException("User don't have specific role");
         }
     }
-    
 }

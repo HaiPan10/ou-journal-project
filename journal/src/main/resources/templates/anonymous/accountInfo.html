@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #ccc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Add padding to containers */
+        .container {
+            padding: 16px;
+            background-color: white;
+            box-shadow: 5px 10px 8px #888888;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        /* For tablets (greater than or equal to 600px width) */
+        @media screen and (min-width: 600px) {
+            .container {
+                width: 70%;
+                /* 70% width for tablets */
+            }
+        }
+
+        /* For PCs (greater than or equal to 1024px width) */
+        @media screen and (min-width: 1024px) {
+            .container {
+                width: 30%;
+                /* 30% width for PCs */
+            }
+        }
+
+        /* Full-width input fields */
+        input[type=text],
+        input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus,
+        input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        /* Overwrite default styles of hr */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* Set a style for the submit button */
+        .registerbtn {
+            background-color: #04AA6D;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        .registerbtn:hover {
+            opacity: 1;
+        }
+
+        /* Add a blue text color to links */
+        a {
+            color: dodgerblue;
+        }
+
+        /* Set a grey background color and center the text of the "sign in" section */
+        .signin {
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <form th:action="@{/reviewer-invite/create(token=${token})}" th:object="${account}" method="post">
+        <div class="container">
+            <h1>Thông tin tài khoản</h1>
+            <p>Vui lòng nhập thông tin tài khoản của bạn!</p>
+            <hr>
+
+            <div th:if="${#fields.hasAnyErrors()}" class="mb-3 pt-5 text-danger">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            </div>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" th:field="*{email}" name="email" id="email" readonly th:value="${account.email}">
+
+            <label for="userName"><b>Username</b></label>
+            <input type="text" placeholder="Nhập username"  th:field="*{userName}" name="userName" id="userName" required>
+
+            <label for="psw"><b>Mật khẩu</b></label>
+            <input type="password" placeholder="Nhập mật khẩu" th:field="*{password}" name="password" id="psw" required>
+
+            <label for="psw-repeat"><b>Nhập lại mật khẩu</b></label>
+            <input type="password" placeholder="Nhập lại mật khẩu" th:field="*{confirmPassword}" name="confirmPassword" id="psw-repeat" required>
+            <hr>
+            <p>Khi nhấn đồng ý, bạn sẽ được gán review cho bài báo được mời. Đồng thời, chúng tôi sẽ tạo tài khoản dựa
+                trên thông tin bạn đã cung cấp!</p>
+
+            <button type="submit" class="registerbtn">Xác nhận</button>
+        </div>
+    </form>
+
+</body>
+
+</html>

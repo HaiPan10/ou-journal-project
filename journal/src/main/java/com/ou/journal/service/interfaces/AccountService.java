@@ -1,6 +1,7 @@
 package com.ou.journal.service.interfaces;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.security.auth.login.AccountNotFoundException;
 
@@ -16,4 +17,6 @@ public interface AccountService {
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     Account findByUserName(String userName) throws Exception;
     boolean verifyEmail(Long accountId, String verificationCode) throws Exception;
+    Optional<Account> getAccount(Long accountId);
+    Optional<Account> getByEmail(String email) throws Exception;
 }

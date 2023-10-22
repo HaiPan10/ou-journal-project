@@ -67,6 +67,7 @@ public class Article implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
     private ArticleNote articleNote;
 
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
     private List<ReviewArticle> reviewArticles;
 
@@ -75,5 +76,8 @@ public class Article implements Serializable {
 
     @Column(name = "total_reviewer")
     private Integer totalReviewer = 1;
+
+    @Transient
+    private Integer acceptedReviewer;
 
 }

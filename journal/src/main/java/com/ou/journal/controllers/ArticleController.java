@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,14 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.MailService;
+import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
-import com.ou.journal.utils.FileConverterUtils;
 import com.ou.journal.validator.WebAppValidator;
-
-import jakarta.validation.Valid;
 
 @Controller
 public class ArticleController {
@@ -40,9 +34,13 @@ public class ArticleController {
     @Autowired
     private WebAppValidator webAppValidator;
 
+    @Autowired
+    private ReviewArticleService reviewArticleService;
+
     @GetMapping("/admin/articles")
     public String list(Model model, @RequestParam(name="status", required = false, defaultValue = "PENDING") String status) {
         List<Article> articles = new ArrayList<>();
+        model.addAttribute("status", status);
         if (status.equals(ArticleStatus.PENDING.toString()) || status.equals(ArticleStatus.IN_REVIEW.toString())) {
             articles = articleService.list(status);
         }
@@ -54,31 +52,19 @@ public class ArticleController {
     public String retrieve(Model model, @PathVariable Long articleId) throws Exception {
         try {
             Article article = articleService.retrieve(articleId);
-            model.addAttribute("viewUrl", String.format("/admin/articles/view/%s", article.getId()));
-            model.addAttribute("article", article);
+            if (article.getStatus().equals(ArticleStatus.PENDING.toString())) {
+                model.addAttribute("viewUrl", String.format("/admin/articles/view/%s", article.getId()));
+                model.addAttribute("article", article);
+            } else {
+                model.addAttribute("error", "invalid status");
+            }
 
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
         return "articleDetail";
     }
-
-    // @GetMapping("/admin/articles/view/{articleId}")
-    // public ResponseEntity<byte[]> view(@PathVariable Long articleId) throws Exception {
-    //     Article article = articleService.retrieve(Long.valueOf(articleId));
-    //     byte[] documentData = article.getCurrentManuscript().getContent();
-    //     HttpHeaders headers = new HttpHeaders();
-    //     byte[] htmlData;
-    //     if (article.getCurrentManuscript().getType().equals("application/pdf")) {
-    //         htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
-    //     } else {
-    //         byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
-    //         htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
-    //     }
-    //     headers.setContentType(MediaType.TEXT_HTML);
-    //     return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
-    // }
-
+    
     @GetMapping("/admin/articles/accept/{articleId}")
     public String secretaryAccept(Model model, @PathVariable Long articleId) throws Exception {
         try {
@@ -96,12 +82,18 @@ public class ArticleController {
     public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
         try {
             Article article = articleService.retrieve(articleId);
-            model.addAttribute("articleId", articleId);
-            model.addAttribute("article", article);
-            List<Object[]> users = userService.listUser();
-            model.addAttribute("users", users);
-            User user = new User();
-            model.addAttribute("user", user);
+            if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+                model.addAttribute("reviewArticles", reviewArticles);
+                model.addAttribute("articleId", articleId);
+                model.addAttribute("article", article);
+                List<Object[]> users = userService.listUser();
+                model.addAttribute("users", users);
+                User user = new User();
+                model.addAttribute("user", user);
+            } else {
+                model.addAttribute("error", "in valid status");
+            }
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -116,14 +108,11 @@ public class ArticleController {
             if (bindingResult.hasErrors()) {
                 return "articleReviewerManager";
             }
-
-            System.out.println("Email: " + user.getEmail());
-            System.out.println("Lastname: " + user.getLastName());
-            System.out.println("Firstname: " + user.getFirstName());
+            Article article = articleService.retrieve(articleId);
+            reviewArticleService.create(user, article);
             return "redirect:/admin/review-articles/{articleId}";
         } catch (Exception e) {
-            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
-            return "articleReviewerManager";
+            return "redirect:/admin/review-articles/{articleId}";
         }
     }
 }

@@ -97,6 +97,11 @@
                     <th scope="col" class="px-6 py-3">
                         Email tác giả đứng tên
                     </th>
+                    <div th:if="${status eq 'IN_REVIEW'}">
+                        <th scope="col" class="px-6 py-3">
+                            Số lượng reviewer
+                        </th>
+                    </div>
                     <th scope="col" class="px-6 py-3">
                         Tình trạng
                     </th>
@@ -119,12 +124,15 @@
                                 </div>
                             </th:block>
                         </th:block>
+                        <div th:if="${article.status eq 'IN_REVIEW'}">
+                            <td class="px-6 py-4" th:text="${article.acceptedReviewer} + '/' + ${article.totalReviewer} "></td>
+                        </div>
                         <td class="px-6 py-4">
                             <div th:if="${article.status eq 'PENDING'}">
                                 <span class="badge-warning">Chờ duyệt</span>
                             </div>
                             <div th:if="${article.status eq 'IN_REVIEW'}">
-                                <span class="badge-success">Chờ review</span>
+                                <span class="badge-success">Chờ mời review</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">

@@ -13,14 +13,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.ou.journal.enums.AuthorType;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.AuthorRole;
+import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
+import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.AuthorTypeService;
+import com.ou.journal.service.interfaces.RoleService;
 
 @Aspect
 @Component
@@ -33,17 +37,19 @@ public class ArticleAspect {
     private AuthorTypeService authorTypeService;
     @Autowired
     private AuthorRoleRepositoryJPA authorRoleRepositoryJPA;
+    @Autowired
+    private UserRoleRepositoryJPA userRoleRepositoryJPA;
+    @Autowired
+    private RoleService roleService;
 
     @AfterReturning(
         pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))",
         returning = "article"
     )
-    public void addCoresponddingAuthorRole(Article article) throws Exception {
+    public void addAuthorRole(Article article) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account account = accountService.findByUserName(userDetails.getUsername());
-
-        System.out.println(account.getEmail());
 
         Optional<AuthorArticle> authorArticleOptional = authorArticleRepositoryJPA.findByArticleAndUser(article.getId(), account.getId());
         if (authorArticleOptional.isPresent()) {
@@ -59,5 +65,19 @@ public class ArticleAspect {
             ));
             authorArticleRepositoryJPA.save(authorArticle);
         }
+
+        article.getAuthorArticles().forEach(authorArticle -> {
+            if (!userRoleRepositoryJPA.findByUserAndRoleName(authorArticle.getUser(),
+             RoleName.ROLE_AUTHOR.toString()).isPresent()) {
+                try {
+                    UserRole userRole = new UserRole(authorArticle.getUser(),
+                     roleService.retrieve(RoleName.ROLE_AUTHOR.toString()));
+                    userRoleRepositoryJPA.save(userRole);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 }
