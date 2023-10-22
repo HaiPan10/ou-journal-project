@@ -22,12 +22,24 @@ public class FileConverterUtils {
             Writer output = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
             new PDFDomTree().writeText(pdf, output);
             output.close();
-            return outputStream.toByteArray();
+    
+            String htmlContent = outputStream.toString(StandardCharsets.UTF_8.name());
+    
+            String css = "<style>" +
+                         "body {" +
+                         "    display: flex;" +
+                         "    justify-content: center;" +
+                         "}" +
+                         "</style>";
+            htmlContent = css + htmlContent;
+    
+            return htmlContent.getBytes(StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
+    
     public static byte[] convertToPDF(byte[] docBytes) throws IOException {
         try (ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docBytes);
              ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream()) {
