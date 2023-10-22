@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Role;
@@ -18,10 +19,9 @@ import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.RoleService;
 import com.ou.journal.service.interfaces.UserService;
 
-import jakarta.transaction.Transactional;
 
 @Service
-@Transactional (rollbackOn = Exception.class)
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepositoryJPA userRepositoryJPA;
@@ -79,6 +79,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Object[]> listUser() {
         return userRepositoryJPA.listUser();
+    }
+
+    @Override
+    public User create(User user) {
+        user.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        user.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        return userRepositoryJPA.save(user);
     }
     
 }

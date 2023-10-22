@@ -47,7 +47,7 @@
                             <label class="filter-label" for="pending-status">Chưa duyệt</label>
                         </div>
                         <div class="filter-container">
-                            <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="IN_REVIEW"  onchange="handleChange(this);">
+                            <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
                             <label class="filter-label" for="inreview-status">Đang mời review</label>
                         </div>
                     </li>
@@ -86,6 +86,11 @@
                     <th scope="col" class="px-6 py-3">
                         Email tác giả đứng tên
                     </th>
+                    <div th:if="${status eq 'INVITING_REVIEWER'}">
+                        <th scope="col" class="px-6 py-3">
+                            Số lượng reviewer
+                        </th>
+                    </div>
                     <th scope="col" class="px-6 py-3">
                         Tình trạng
                     </th>
@@ -108,19 +113,22 @@
                                 </div>
                             </th:block>
                         </th:block>
+                        <div th:if="${article.status eq 'INVITING_REVIEWER'}">
+                            <td class="px-6 py-4" th:text="${article.acceptedReviewer} + '/' + ${article.totalReviewer} "></td>
+                        </div>
                         <td class="px-6 py-4">
                             <div th:if="${article.status eq 'PENDING'}">
                                 <span class="badge-warning">Chờ duyệt</span>
                             </div>
-                            <div th:if="${article.status eq 'IN_REVIEW'}">
-                                <span class="badge-success">Chờ review</span>
+                            <div th:if="${article.status eq 'INVITING_REVIEWER'}">
+                                <span class="badge-success">Chờ mời review</span>
                             </div>
                         </td>
                         <td class="px-6 py-4">
                             <div th:if="${article.status eq 'PENDING'}">
                                 <a class="table-action" th:href="@{/admin/articles/{id}(id=${article.id})}">Duyệt bài</a>
                             </div>
-                            <div th:if="${article.status eq 'IN_REVIEW'}">
+                            <div th:if="${article.status eq 'INVITING_REVIEWER'}">
                                 <a class="table-action" th:href="@{/admin/review-articles/{id}(id=${article.id})}">Mời review</a>
                             </div>
                         </td>

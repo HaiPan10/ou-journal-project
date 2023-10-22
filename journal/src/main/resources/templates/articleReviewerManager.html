@@ -87,7 +87,9 @@
         class="my-5 p-5 bg-white rounded-lg">
         <div class="grid grid-cols-1 gap-y-5">
             <h1 class="font-semibold uppercase text-lg text-main">Thông tin reviewer</h1>
-
+            <div th:if="${#fields.hasAnyErrors()}" class="mb-3 pt-5 text-danger">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            </div>
             <div class="relative">
                 <input id="myInput" type="text" th:field="*{email}" class="input-floating peer" placeholder=" " />
                 <label for="myInput" class="label-floating">Email</label>
@@ -145,11 +147,11 @@
                             <span th:text="${reviewArticle.user.email}"></span>
                         </th>
                         <td class="px-6 py-4"
-                            th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.fistName}"></td>
+                            th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
                         <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
                         <td class="px-6 py-4">
                             <div th:if="${reviewArticle.status eq 'PENDING'}">
-                                <span class="badge-warning">Chờ xem xét</span>
+                                <span class="badge-warning">Chờ phản hồi</span>
                             </div>
                             <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
                                 <span class="badge-success">Đồng ý</span>
@@ -186,9 +188,13 @@
     </div>
     <br>
 
+    
 
+    <button type="button" id="endInvitationBtn"
+    class="rounded-md mt-2 bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">
+    Tiến hành review</button>
 
-    <script>
+    <script th:inline="javascript">
         var currentSide = document.getElementById("articles");
         currentSide.classList.add("active");
 
@@ -211,6 +217,7 @@
                         b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                         b.addEventListener("click", function (e) {
                             inp.value = this.getElementsByTagName("input")[0].value;
+                            checkAvailabe();
                             closeAllLists();
                         });
                         a.appendChild(b);
@@ -255,7 +262,6 @@
             }
             document.addEventListener("click", function (e) {
                 closeAllLists(e.target);
-                checkAvailabe()
             });
         }
 
@@ -284,6 +290,14 @@
             }
         });
 
+        var usersId = document.getElementById("ids-data").textContent.split(',');
+        var ids = [];
+        usersId.forEach(id => {
+            if (id.trim().length != 0) {
+                ids.push(id.trim());
+            }
+        });
+
         var input = document.getElementById("myInput");
         input.addEventListener("input", function () {
             checkAvailabe()
@@ -299,6 +313,7 @@
                     document.getElementById("notAvailable").classList.add("hidden");
                     document.getElementById("user-last-name").value = lastNames[users.indexOf(input.value)];
                     document.getElementById("user-first-name").value = firstNames[users.indexOf(input.value)];
+                    document.getElementById("user-id").value = ids[users.indexOf(input.value)];
                     document.getElementById("user-last-name").readOnly = true;
                     document.getElementById("user-first-name").readOnly = true;
                 } else {
@@ -306,6 +321,9 @@
                     document.getElementById("myInput").classList.add("border-red-500");
                     document.getElementById("user-last-name").readOnly = false;
                     document.getElementById("user-first-name").readOnly = false;
+                    document.getElementById("user-last-name").value = "";
+                    document.getElementById("user-first-name").value = "";
+                    document.getElementById("user-id").value = null;
                 }
             } else {
                 document.getElementById("user-first-name").readOnly = true;
@@ -314,6 +332,23 @@
                 document.getElementById("myInput").classList.remove("border-red-500");
             }
         }
+
+        document.getElementById('endInvitationBtn').addEventListener('click', (e) => {
+            fetch(`/admin/articles/end-review/[[${article.id}]]`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = `/admin/articles?status=IN_REVIEW`
+                } else {
+                    throw new Error(res.error)
+                }
+            }).catch(err => {
+                alert("Bài đăng này chưa có reviewer nào!")
+            })
+        })
     </script>
 
 </section>

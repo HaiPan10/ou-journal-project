@@ -102,7 +102,7 @@
         var commentArticle = document.getElementById('commentArticle')
         acceptBtn.addEventListener('click', (e) => {
             if (document.getElementById("totalReviewer").value) {
-                callUpdateApi('IN_REVIEW')
+                callUpdateApi('INVITING_REVIEWER')
             } else {
                 alert ("Vui lòng nhập tổng số reviewer");
             }
@@ -121,7 +121,7 @@
                 },
                 status: status
             }
-            if (status === 'IN_REVIEW') {
+            if (status === 'INVITING_REVIEWER') {
                 requestBody["totalReviewer"] = document.getElementById("totalReviewer").value
             }
             fetch(`/admin/articles/verify/[[${article.id}]]`, {
