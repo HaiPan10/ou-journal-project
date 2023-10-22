@@ -3,28 +3,115 @@
     layout:decorate="~{layouts/adminLayout}">
 
 <section layout:fragment="content">
-    <div>Tiêu đề: <span th:text="${article.title}"></span></div>
-    <div>Abstract: <span th:text="${article.abstracts}"></span></div>
-    <div>Từ khóa: <span th:text="${article.keywords}"></span></div>
-    <div>Nội dung: </div>
-    <div id="acceptBtn" style="color: green; cursor:pointer">Đồng ý</div>
-    <div id="rejectBtn" style="color: red; cursor: pointer;">Từ chối</div>
-    <div>Tổng số reviewer: <input id="totalReviewer" type="number" value="1" min="1" max="10"></div>
-    <textarea id="commentArticle" maxlength="255" cols="60" rows="5" placeholder="Nhận xét"></textarea>
+    <div class="font-semibold text-3xl">
+        <span th:text="${article.title}"> </span>
+    </div>
+    <div class="my-3">
+        <div class="text-gray-500" th:text="${article.abstracts}"></div>
+    </div>
+    <div class="my-3">
+        <div class="flex gap-x-3 ml-0 mt-2" id="keywords-box">
+        </div>
+    </div>
+
+
+
+    <div class="my-3">
+        <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
+            placeholder="Nhập nhận xét..."></textarea>
+    </div>
+
+    <div class="flex gap-x-3 justify-end mb-5">
+        <button id="rejectBtn"
+            class="font-semibold outline-rose-500/50 group flex gap-x-3 hover:text-white items-center bg-white transition-all duration-300 bg-gradient-to-r hover:from-rose-400 hover:to-rose-600 rounded-lg px-5 py-3 shadow-lg">
+            <span> Từ chối </span> <i
+                class="bi bi-x-circle-fill transition-all duration-300 text-rose-600 group-hover:text-white"></i></button>
+        <button data-modal-target="modal" data-modal-toggle="modal"
+            class="font-semibold outline-emerald-500/50 group flex gap-x-3 hover:text-white items-center bg-white transition-all duration-300 bg-gradient-to-r hover:from-emerald-400 hover:to-emerald-600 rounded-lg px-5 py-3 shadow-lg"><span>
+                Đồng ý </span> <i
+                class="bi bi-check-circle-fill transition-all duration-300 text-emerald-600 group-hover:text-white"></i></button>
+    </div>
     <div>
-        <iframe th:src="${viewUrl}" style="width: 100%; height: 1000px; background-color: white;"></iframe>
+        <iframe th:src="${viewUrl}" class="w-full bg-white h-[1000px]"></iframe>
+    </div>
+
+    <div id="modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-5 border-b rounded-t">
+                    <h3 class="text-xl font-medium text-gray-900">
+                        Nhập số lượng reviewer
+                    </h3>
+                    <button type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center"
+                        data-modal-hide="modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <div class="my-3 flex gap-x-5 items-center justify-center">
+                        <p class="text-gray-900">Tổng số reviewer</p>
+                        <input class="input w-fit" id="totalReviewer" type="number" value="1" min="1" max="10">
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex justify-end items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
+                    <button data-modal-hide="modal" type="button"
+                        class="btn-secondary-md">Hủy</button>
+                    <button type="button" id="acceptBtn"
+                        class="btn-main-md">Xác nhận</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script th:inline="javascript">
+        const kwBox = document.querySelector("#keywords-box")
+
+        function insertKeywordBox(elementHTML) {
+            kwBox.insertAdjacentHTML('beforeend', elementHTML);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const keywords = /*[[${ article.keywords }]]*/ "";
+            if (keywords) {
+                let kws = keywords.split(" ");
+                kws.forEach(k => {
+                    if (k.trim()) {
+                        let newKwHTML = ` <div id="kw-${k}" class="kw-box ml-0" role="alert">
+                            <div class="kw text-sm font-medium whitespace-nowrap">
+                                ${k}
+                            </div>
+                          </div>`
+                        insertKeywordBox(newKwHTML);
+                    }
+
+                });
+            }
+        });
         var acceptBtn = document.getElementById('acceptBtn')
         var rejectBtn = document.getElementById('rejectBtn')
         var commentArticle = document.getElementById('commentArticle')
         acceptBtn.addEventListener('click', (e) => {
-            callUpdateApi('IN_REVIEW')
+            if (document.getElementById("totalReviewer").value) {
+                callUpdateApi('IN_REVIEW')
+            } else {
+                alert ("Vui lòng nhập tổng số reviewer");
+            }
         })
 
         rejectBtn.addEventListener('click', (e) => {
-            callUpdateApi('SECRETARY_REJECT')
+            if (confirm("Xác nhận từ chối bài đăng")) {
+                callUpdateApi('SECRETARY_REJECT')
+            }
         })
 
         function callUpdateApi(status) {
