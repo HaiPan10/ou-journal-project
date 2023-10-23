@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,18 +102,28 @@ public class ArticleController {
 
     @PostMapping(path = "/admin/review-articles/invite/{articleId}")
     public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
-     Model model, BindingResult bindingResult) {
-        try {
-            System.out.println("CATCH");
+     Model model, BindingResult bindingResult) throws Exception {
+        Article article = articleService.retrieve(articleId);
+        List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+        List<Object[]> users = userService.listUser();
+        try {            
             webAppValidator.validate(user, bindingResult);
             if (bindingResult.hasErrors()) {
+                model.addAttribute("article", article);
+                model.addAttribute("reviewArticles", reviewArticles);
+                model.addAttribute("articleId", articleId);
+                model.addAttribute("users", users);
                 return "articleReviewerManager";
             }
-            Article article = articleService.retrieve(articleId);
             reviewArticleService.create(user, article);
             return "redirect:/admin/review-articles/{articleId}";
         } catch (Exception e) {
-            return "redirect:/admin/review-articles/{articleId}";
+            model.addAttribute("article", article);
+            model.addAttribute("reviewArticles", reviewArticles);
+            model.addAttribute("articleId", articleId);
+            model.addAttribute("users", users);
+            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
+            return "articleReviewerManager";
         }
     }
 }

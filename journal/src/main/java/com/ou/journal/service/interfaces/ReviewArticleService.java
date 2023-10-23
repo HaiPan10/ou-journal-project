@@ -8,7 +8,7 @@ import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 
 public interface ReviewArticleService {
-    ReviewArticle create(User user, Article article);
+    ReviewArticle create(User user, Article article) throws Exception;
     List<ReviewArticle> findByArticle(Article article);
     ReviewArticle changeReviewStatus(Long reviewArticleId, String status, String email, Long userId) throws Exception;
     boolean checkArticleAvailable(Long reviewArticleId, String email, Long userId) throws Exception;

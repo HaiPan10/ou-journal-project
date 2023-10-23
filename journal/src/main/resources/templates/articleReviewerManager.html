@@ -221,7 +221,9 @@
                             checkAvailabe();
                             closeAllLists();
                         });
-                        a.appendChild(b);
+                        if (a.childElementCount <= 5) {
+                            a.appendChild(b);
+                        }
                     }
                 }
             });
