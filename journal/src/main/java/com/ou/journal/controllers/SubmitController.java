@@ -55,18 +55,18 @@ public class SubmitController {
             try {
 
                 List<AuthorRole> authorRoles = new ArrayList<>();
-                // AuthorRole authorRole1 = new AuthorRole();
-                // AuthorType type1 = new AuthorType();
-                // type1.setId(Long.valueOf(1));
-                // authorRole1.setAuthorType(type1);
+                AuthorRole authorRole1 = new AuthorRole();
+                AuthorType type1 = new AuthorType();
+                type1.setId(Long.valueOf(1));
+                authorRole1.setAuthorType(type1);
 
                 AuthorRole authorRole2 = new AuthorRole();
                 AuthorType type2 = new AuthorType();
                 type2.setId(Long.valueOf(2));
                 authorRole2.setAuthorType(type2);
 
-                // authorRoles.add(authorRole1);
                 authorRoles.add(authorRole2);
+                authorRoles.add(authorRole1);
 
                 List<AuthorArticle> authorArticles = new ArrayList<>();
                 AuthorArticle authorArticle = new AuthorArticle();
