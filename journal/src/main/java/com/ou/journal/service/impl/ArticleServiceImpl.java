@@ -129,6 +129,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> findByAuthorId(Long authorId) {
+        return articleRepositoryJPA.findByAuthorId(authorId);
+    }
+
+    @Override
     public Article endInvitationReview(Long articleId) throws Exception {
         Article persistArticle = retrieve(articleId);
         Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);

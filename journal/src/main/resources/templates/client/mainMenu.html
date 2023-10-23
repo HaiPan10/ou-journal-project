@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section layout:fragment="content">
+    <div style="margin-left: 80px">
+        <div style="font-weight: bold;">Các bài đăng</div>
+        <div style="margin-left: 50px">
+            <ul>
+                <li><a th:href="@{/submit}">Đăng Manuscript mới</a></li>
+                <li><a th:href="@{/submission/processing}">Bài đăng đang được xử lý</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+</html>

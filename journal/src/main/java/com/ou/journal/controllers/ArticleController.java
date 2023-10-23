@@ -64,19 +64,34 @@ public class ArticleController {
         }
         return "articleDetail";
     }
-    
-    @GetMapping("/admin/articles/accept/{articleId}")
-    public String secretaryAccept(Model model, @PathVariable Long articleId) throws Exception {
-        try {
-            Article article = articleService.retrieve(articleId);
-            model.addAttribute("viewUrl", String.format("/admin/articles/view/%s", article.getId()));
-            model.addAttribute("article", article);
 
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "articleDetail";
-    }
+    // @GetMapping("/admin/articles/view/{articleId}")
+    // public ResponseEntity<byte[]> view(@PathVariable Long articleId) throws Exception {
+    //     Article article = articleService.retrieve(Long.valueOf(articleId));
+    //     byte[] documentData = article.getCurrentManuscript().getContent();
+    //     HttpHeaders headers = new HttpHeaders();
+    //     byte[] htmlData;
+    //     if (article.getCurrentManuscript().getType().equals("application/pdf")) {
+    //         htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
+    //     } else {
+    //         byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
+    //         htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
+    //     }
+    //     headers.setContentType(MediaType.TEXT_HTML);
+    //     return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
+    // }
+
+    // @GetMapping("/admin/articles/accept/{articleId}")
+    // public String secretaryAccept(Model model, @PathVariable Long articleId) throws Exception {
+    //     try {
+    //         Article article = articleService.retrieve(articleId);
+    //         model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+    //         model.addAttribute("article", article);
+    //     } catch (Exception e) {
+    //         model.addAttribute("error", e.getMessage());
+    //     }
+    //     return "articleDetail";
+    // }
 
     @GetMapping("/admin/review-articles/{articleId}")
     public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
