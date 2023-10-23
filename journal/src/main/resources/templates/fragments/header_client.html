@@ -15,7 +15,7 @@
             Đăng ký
          </a>
       </div>
-      <div sec:authorize="isAuthenticated()"  class="items-center h-full mt-5 md:mt-0">
+      <div sec:authorize="isAuthenticated()" class="items-center h-full mt-5 md:mt-0">
          <div class="flex items-center ml-3">
             <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
                Chào mừng, Tác Giả
@@ -30,29 +30,28 @@
                Chào mừng, Thư Ký
             </div>
             <div>
-              <button type="button"
-                class="flex gap-2 text-sm items-center"
-                aria-expanded="false" data-dropdown-toggle="dropdown-user">
-                <span class="sr-only">Open user menu</span>
-                <img class="w-10 h-10" th:src="@{/images/avatar.png}"/>
-                <h3 class="font-medium" th:text="${#authentication.name}"></h3>
-                <span class="material-symbols-rounded">
-                  keyboard_arrow_down
+               <button type="button" class="flex gap-2 text-sm items-center" aria-expanded="false"
+                  data-dropdown-toggle="dropdown-user">
+                  <span class="sr-only">Open user menu</span>
+                  <img class="w-10 h-10" th:src="@{/images/avatar.png}" />
+                  <h3 class="font-medium" th:text="${#authentication.name}"></h3>
+                  <span class="material-symbols-rounded">
+                     keyboard_arrow_down
                   </span>
-              </button>
+               </button>
             </div>
 
             <div
-              class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
-              id="dropdown-user">
-              <ul class="py-1" role="none">
-                <li>
-                  <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem">Đăng xuất</a>
-                </li>
-              </ul>
+               class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+               id="dropdown-user">
+               <ul class="py-1" role="none">
+                  <li>
+                     <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem">Đăng xuất</a>
+                  </li>
+               </ul>
             </div>
-          </div>
+         </div>
       </div>
    </div>
    <nav id="header" class="w-full bg-white shadow-sm">
@@ -60,7 +59,7 @@
          <label for="menu-toggle" class="cursor-pointer text-main md:hidden block m-0 py-2 px-4">
             <span id="menu-icon" class="material-symbols-rounded flex justify-center">
                menu
-           </span>
+            </span>
          </label>
          <input class="hidden" type="checkbox" id="menu-toggle">
 
@@ -68,9 +67,11 @@
             <nav>
                <ul class="md:flex items-center justify-between text-base text-main lg:pt-0">
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
-                        href="#">Trang chủ</a></li>
+                        th:href="@{/homepage}">Trang chủ</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
-                        href="#">Gửi bài</a></li>
+                        th:href="@{/main-menu}">Main Menu</a></li>
+                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                     th:href="@{/submit}">Gửi bài</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
                         href="#">Giới thiệu</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"

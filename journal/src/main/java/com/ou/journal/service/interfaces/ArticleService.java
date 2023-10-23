@@ -11,4 +11,5 @@ public interface ArticleService {
     List<Article> list(String status);
     Article retrieve(Long articleId) throws Exception;
     void updateArticleStatus(Long articleId, Article article) throws Exception;
+    List<Article> findByAuthorId(Long authorId);
 }

@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class JwtService {
     private static final String SECRECT = "ajfipupieuqwpieuasipdhfajlbfljh3y012637018274hfajlsdadfqweasdadfa3123123123123";
     private static final String MAIL_SECRECT = "asdfkladsjfiqwuepieu1238701{Dung16052005}712047kasdjkfja;dksjf512340870";
-    private static final long HOUR = 1;
+    private static final long HOUR = 24;
     private static final long MINUTE = 60;
     private static final long SECOND = 60;
     private static final long MILISECOND = 1000;

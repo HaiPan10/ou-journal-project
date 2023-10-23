@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.ou.journal.components.UserSessionInfo;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.service.interfaces.AccountService;
 
@@ -21,6 +22,9 @@ import com.ou.journal.service.interfaces.AccountService;
 public class GlobalControllerAdvice {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private UserSessionInfo userSessionInfo;
 
     @Value("${schoolName}")
     private String schoolName;
@@ -91,5 +95,14 @@ public class GlobalControllerAdvice {
             }
         }
         return null;
+    }
+
+    @ModelAttribute("currentAccount")
+    public Account getCurrentAccountFromSession(){
+        try {
+            return userSessionInfo.getCurrentAccount();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

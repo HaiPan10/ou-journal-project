@@ -119,4 +119,9 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleNote articleNote = article.getArticleNote();
         articleNoteService.createOrUpdate(articleNote, persistArticle);
     }
+
+    @Override
+    public List<Article> findByAuthorId(Long authorId) {
+        return articleRepositoryJPA.findByAuthorId(authorId);
+    }
 }

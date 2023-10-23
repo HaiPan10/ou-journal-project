@@ -38,6 +38,11 @@ public class HomeController {
         return "client/register";
     }
 
+    @GetMapping("/homepage")
+    public String clientHomepage(){
+        return "client/homepage";
+    }
+
     // @GetMapping({"/submit", "/submit-step1"})
     // public String submitPage() {
     //     return "client/submitManuscript/step1";

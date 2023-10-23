@@ -172,4 +172,14 @@ public class AccountServiceImpl implements AccountService {
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    public Account findByEmail(String email) throws Exception {
+        Optional<Account> accountOptional = accountRepositoryJPA.findByEmail(email);
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new Exception("Tài khoản không tồn tại!");
+        }
+    }
 }

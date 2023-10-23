@@ -16,4 +16,5 @@ public interface AccountService {
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     Account findByUserName(String userName) throws Exception;
     boolean verifyEmail(Long accountId, String verificationCode) throws Exception;
+    Account findByEmail(String email) throws Exception;
 }

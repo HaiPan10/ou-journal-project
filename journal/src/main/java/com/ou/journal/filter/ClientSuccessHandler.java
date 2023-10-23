@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class ClientSuccessHandler implements AuthenticationSuccessHandler {
 
-    private String targetUrl = "/submit";
+    private String targetUrl = "/homepage";
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 

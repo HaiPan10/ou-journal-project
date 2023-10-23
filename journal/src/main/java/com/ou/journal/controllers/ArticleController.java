@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +18,8 @@ import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.UserService;
-import com.ou.journal.utils.FileConverterUtils;
 import com.ou.journal.validator.WebAppValidator;
-
-import jakarta.validation.Valid;
 
 @Controller
 public class ArticleController {
@@ -79,18 +71,18 @@ public class ArticleController {
     //     return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
     // }
 
-    @GetMapping("/admin/articles/accept/{articleId}")
-    public String secretaryAccept(Model model, @PathVariable Long articleId) throws Exception {
-        try {
-            Article article = articleService.retrieve(articleId);
-            model.addAttribute("viewUrl", String.format("/admin/articles/view/%s", article.getId()));
-            model.addAttribute("article", article);
+    // @GetMapping("/admin/articles/accept/{articleId}")
+    // public String secretaryAccept(Model model, @PathVariable Long articleId) throws Exception {
+    //     try {
+    //         Article article = articleService.retrieve(articleId);
+    //         model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+    //         model.addAttribute("article", article);
 
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "articleDetail";
-    }
+    //     } catch (Exception e) {
+    //         model.addAttribute("error", e.getMessage());
+    //     }
+    //     return "articleDetail";
+    // }
 
     @GetMapping("/admin/review-articles/{articleId}")
     public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
