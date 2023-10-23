@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.enums.ArticleStatus;
@@ -17,16 +18,16 @@ import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
+import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.UserService;
 
-import jakarta.transaction.Transactional;
 
 @Service
-// @Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
@@ -38,6 +39,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ManuscriptService manuscriptService;
     @Autowired
     private ArticleNoteService articleNoteService;
+    @Autowired
+    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -89,7 +92,12 @@ public class ArticleServiceImpl implements ArticleService {
         if (status == null) {
             return articleRepositoryJPA.list(ArticleStatus.PENDING.toString());
         } else {
-            return articleRepositoryJPA.list(status);
+            List<Article> articles = articleRepositoryJPA.list(status);
+            if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+                articles.forEach(article -> article.setAcceptedReviewer(
+                    reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
+            }
+            return articles;
         }
     }
 
@@ -111,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article persistArticle = retrieve(articleId);
         String status = article.getStatus();
         persistArticle.setStatus(status);
-        if(status.equals(ArticleStatus.IN_REVIEW.toString())){
+        if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
             persistArticle.setTotalReviewer(article.getTotalReviewer());
         }
         articleRepositoryJPA.save(persistArticle);
@@ -123,5 +131,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> findByAuthorId(Long authorId) {
         return articleRepositoryJPA.findByAuthorId(authorId);
+    }
+
+    @Override
+    public Article endInvitationReview(Long articleId) throws Exception {
+        Article persistArticle = retrieve(articleId);
+        Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
+        if (acceptedReviewTotal > 0) {
+            persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
+            return articleRepositoryJPA.save(persistArticle);
+        } else {
+            throw new Exception("Bài báo này chưa có reviewer nào!");
+        }
     }
 }

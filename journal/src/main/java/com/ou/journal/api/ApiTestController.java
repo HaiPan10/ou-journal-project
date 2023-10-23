@@ -20,6 +20,9 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ReviewArticleService;
+import com.ou.journal.service.interfaces.UserService;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,6 +36,12 @@ public class ApiTestController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ReviewArticleService reviewArticleService;
 
     // @Autowired
     // private MailService mailService;
@@ -100,5 +109,4 @@ public class ApiTestController {
 
     //     mailService.sendEmailWithHtmlTemplate(mailRequest.getTo(), mailRequest.getSubject(), "mail/index", context);
     // }
-
 }

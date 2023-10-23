@@ -3,7 +3,7 @@ package com.ou.journal.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -19,15 +19,28 @@ public class FileConverterUtils {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(pdfBytes);
             PDDocument pdf = PDDocument.load(inputStream);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Writer output = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+            Writer output = new PrintWriter(outputStream, true, StandardCharsets.UTF_8);
             new PDFDomTree().writeText(pdf, output);
             output.close();
-            return outputStream.toByteArray();
+    
+            String htmlContent = outputStream.toString(StandardCharsets.UTF_8.name());
+    
+            String css = "<style>" +
+                         "body {" +
+                         "    display: flex;" +
+                         "    justify-content: center;" +
+                         "    flex-wrap: wrap;" +
+                         "}" +
+                         "</style>";
+            htmlContent = css + htmlContent;
+    
+            return htmlContent.getBytes(StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
     }
+    
     public static byte[] convertToPDF(byte[] docBytes) throws IOException {
         try (ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docBytes);
              ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream()) {

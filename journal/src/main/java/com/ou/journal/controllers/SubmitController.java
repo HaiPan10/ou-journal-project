@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.AuthorType;
@@ -27,6 +26,8 @@ import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.UserService;
 
 // test
 @Controller
@@ -34,6 +35,12 @@ import com.ou.journal.service.interfaces.AccountService;
 public class SubmitController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private UserService userService;
 
     @ModelAttribute("authorTypes")
     public com.ou.journal.enums.AuthorType[] getTypes() {
@@ -48,17 +55,17 @@ public class SubmitController {
             try {
 
                 List<AuthorRole> authorRoles = new ArrayList<>();
-                AuthorRole authorRole1 = new AuthorRole();
-                AuthorType type1 = new AuthorType();
-                type1.setId(Long.valueOf(1));
-                authorRole1.setAuthorType(type1);
+                // AuthorRole authorRole1 = new AuthorRole();
+                // AuthorType type1 = new AuthorType();
+                // type1.setId(Long.valueOf(1));
+                // authorRole1.setAuthorType(type1);
 
                 AuthorRole authorRole2 = new AuthorRole();
                 AuthorType type2 = new AuthorType();
                 type2.setId(Long.valueOf(2));
                 authorRole2.setAuthorType(type2);
 
-                authorRoles.add(authorRole1);
+                // authorRoles.add(authorRole1);
                 authorRoles.add(authorRole2);
 
                 List<AuthorArticle> authorArticles = new ArrayList<>();
@@ -92,7 +99,9 @@ public class SubmitController {
     }
 
     @GetMapping({ "/submit/step2" })
-    public String getSubmitPage2(@ModelAttribute("article") Article article) {
+    public String getSubmitPage2(@ModelAttribute("article") Article article, Model model) {
+        List<Object[]> users = userService.listUser();
+        model.addAttribute("users", users);
         return "client/submitManuscript/step2";
     }
 
@@ -125,11 +134,22 @@ public class SubmitController {
 
     @PostMapping({ "/submit/step3" })
     public String submitPage3(@RequestParam(name = "back", required = false) String back,
-            @RequestParam("file") MultipartFile file, @ModelAttribute("article") Article article) {
+            @RequestParam("file") MultipartFile file, @ModelAttribute("article") Article article, SessionStatus sessionStatus) {
         if (file != null && !file.isEmpty())
             article.setFile(file);
         if (back != null)
             return "redirect:/submit/step2";
+
+        try {
+            articleService.create(article, article.getFile());
+            sessionStatus.setComplete();
+
+            return "redirect:/";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/submit/step3";
+
     }
 }

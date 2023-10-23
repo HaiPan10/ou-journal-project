@@ -23,7 +23,7 @@ public class UserSessionInfo {
         try {
             this.account = accountService.findByUserName(name);
         } catch (Exception e) {
-            this.account = accountService.findByEmail(name);
+            this.account = accountService.getByEmail(name).get();
         }
 
         return this.account;

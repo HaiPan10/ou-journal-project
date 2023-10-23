@@ -15,6 +15,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.pojo.Account;
@@ -25,10 +27,8 @@ import com.ou.journal.repository.UserRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.UserService;
 
-import jakarta.transaction.Transactional;
-
 @Service
-@Transactional(rollbackOn = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepositoryJPA accountRepositoryJPA;
@@ -174,12 +174,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account findByEmail(String email) throws Exception {
-        Optional<Account> accountOptional = accountRepositoryJPA.findByEmail(email);
-        if (accountOptional.isPresent()) {
-            return accountOptional.get();
-        } else {
-            throw new Exception("Tài khoản không tồn tại!");
-        }
+    public Optional<Account> getAccount(Long accountId) {
+        return accountRepositoryJPA.findById(accountId);
+    }
+
+    @Override
+    public Optional<Account> getByEmail(String email) throws Exception {
+        return accountRepositoryJPA.findByEmail(email);
     }
 }
