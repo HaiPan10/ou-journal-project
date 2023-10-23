@@ -27,6 +27,7 @@ import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.UserService;
 
 // test
 @Controller
@@ -37,6 +38,9 @@ public class SubmitController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private UserService userService;
 
     @ModelAttribute("authorTypes")
     public com.ou.journal.enums.AuthorType[] getTypes() {
@@ -95,7 +99,9 @@ public class SubmitController {
     }
 
     @GetMapping({ "/submit/step2" })
-    public String getSubmitPage2(@ModelAttribute("article") Article article) {
+    public String getSubmitPage2(@ModelAttribute("article") Article article, Model model) {
+        List<Object[]> users = userService.listUser();
+        model.addAttribute("users", users);
         return "client/submitManuscript/step2";
     }
 

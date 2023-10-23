@@ -33,12 +33,15 @@ public class ApiAdminArticleController {
         HttpHeaders headers = new HttpHeaders();
         byte[] htmlData;
         if (article.getCurrentManuscript().getType().equals("application/pdf")) {
-            htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
+            // htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
+            htmlData = documentData;
         } else {
-            byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
-            htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
+            // byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
+            // htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);                
+            htmlData = FileConverterUtils.convertToPDF(documentData);
         }
-        headers.setContentType(MediaType.TEXT_HTML);
+        // headers.setContentType(MediaType.TEXT_HTML);
+        headers.setContentType(MediaType.APPLICATION_PDF);
 
         return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
     }

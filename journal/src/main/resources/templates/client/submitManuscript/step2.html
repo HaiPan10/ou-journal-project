@@ -2,6 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
+<head>
+    <style>
+        .autocomplete {
+            position: relative;
+            /* display: inline-block; */
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
+</head>
 
 <section layout:fragment="content">
     <div th:replace="~{fragments/stepper :: stepper (step=2)}"></div>
@@ -55,14 +93,23 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form  name="newAuthor" class="p-6 space-y-6">
+                <form name="newAuthor" class="p-6 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                         <div class="col-span-full">
                             <label for="new-author-email"
                                 class="block text-sm font-medium leading-6 text-gray-900">Email</label>
-                            <input id="new-author-email" type="email" name="email" title="Vui lòng nhập email" required
-                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                            <div class="autocomplete">
+                                <input id="new-author-email" type="email" name="email" title="Vui lòng nhập email"
+                                    required
+                                    class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                            </div>
                         </div>
+                        <div class="col-span-full">
+                            <label id="notAvailable" class="badge-danger" style="display: none;">Mail của author này
+                                chưa có trên hệ thống! Vui lòng nhập họ tên</label>
+                        </div>
+
+                        <input id="new-id" type="hidden" name="new-id">
 
                         <div class="col-span-1">
                             <label for="new-last-name" class="block text-sm font-medium leading-6 text-gray-900">Họ và
@@ -110,29 +157,45 @@
 
     <script th:inline="javascript">
         const authorArticles = /*[[${ article.authorArticles }]]*/ "";
-        console.log(authorArticles);
+        const users = /*[[${ users }]]*/ "";
+        var isFirstAuthorChosen = false;
+
+        var emails = [];
+        users.forEach(user => {
+            emails.push(user[1]);
+        });
+        var lastNames = [];
+        users.forEach(user => {
+            lastNames.push(user[2]);
+        });
+        var firstNames = [];
+        users.forEach(user => {
+            firstNames.push(user[3]);
+        });
+        var ids = [];
+        users.forEach(user => {
+            ids.push(user[0]);
+        });
+
+        // var emailArticles = [];
+        // authorArticles.forEach(author => { 
+        //     emailArticles.push(author.user.email);
+        // })
+
+        // console.log(emailArticles);
+        // console.log(users);
         const lastHr = document.querySelector("#last-hr");
         const btnClose = document.querySelector("#btn-close-modal");
 
-        authorArticles.forEach(author => { addAuthorEl(author) });
+        authorArticles.forEach(author => { 
+            addAuthorEl(author);
+            addRole(author);
+        });
 
-        function addAuthorEl(authorEl) {
+        function addRole(authorEl) {
             var authorRoles = authorEl.authorRoles;
-            const html = `
-                    <div>
-                        <hr/>
-                        <div class="p-3 author" data-user-id="${authorEl.user.id}">
-                            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
-                            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
-                            <div id="authorRolesContainer${authorEl.user.id}">
-                            </div>
-                        </div>
-                    </div>
-                    `
-            lastHr.insertAdjacentHTML('beforebegin', html);
-
-            authorRoles.forEach(function(role) {
-                const roleContainer = document.getElementById(`authorRolesContainer${authorEl.user.id}`);
+            authorRoles.forEach(function (role) {
+                const roleContainer = document.getElementById(`authorRolesContainer${authorEl.user.email}`);
                 const roleElement = document.createElement('span');
                 roleElement.classList.add('badge');
                 if (role.authorType.id === 1) {
@@ -149,21 +212,41 @@
             });
         }
 
-        function goNextStep() {
-            fetch("/submit/step2", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(authorArticles),
-                redirect: 'follow'
-            }).then(response => {
-                if (response.redirected) {
-                    window.location.href = response.url;
-                }
-            });
+        function addAuthorEl(authorEl) {
+            const html = `
+                    <div>
+                        <hr/>
+                        <div class="p-3 author" data-user-id="${authorEl.user.id}">
+                            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
+                            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
+                            <div id="authorRolesContainer${authorEl.user.email}">
+                            </div>
+                        </div>
+                    </div>
+                    `
+
+            lastHr.insertAdjacentHTML('beforebegin', html);
         }
-        
+
+        function goNextStep() {
+            if (!isFirstAuthorChosen) {
+                alert("Chưa có tác giả chính!");
+            } else {
+                fetch("/submit/step2", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(authorArticles),
+                    redirect: 'follow'
+                }).then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                });
+            }
+        }
+
         function goBackStep() {
             fetch("/submit/step2?back=1", {
                 method: "POST",
@@ -188,9 +271,11 @@
                 const firstnval = formData.get("first-name")
                 const lastnval = formData.get("last-name")
                 const emailval = formData.get("email")
+                const idval = formData.get("new-id");
                 const typeval = formData.get("author-type")
                 const authorEl = {
                     "user": {
+                        "id": parseInt(idval),
                         "firstName": firstnval,
                         "lastName": lastnval,
                         "email": emailval
@@ -198,14 +283,44 @@
                     "authorRoles": [
                         {
                             "authorType": {
-                                "id": typeval
+                                "id": parseInt(typeval)
                             }
                         }
                     ]
                 }
-                authorArticles.push(authorEl)
-                btnClose.click();
-                addAuthorEl(authorEl);
+                
+                if (parseInt(typeval) === 1 && isFirstAuthorChosen) {
+                    alert("Chỉ có một tác giả chính!");
+                } else {
+                    if (parseInt(typeval) === 1 && !isFirstAuthorChosen) {
+                        isFirstAuthorChosen = true;
+                    }
+                    let isUserExists = authorArticles.map(authorArticle => authorArticle.user.email).indexOf(emailval);
+                    if (isUserExists === -1) {
+                        authorArticles.push(authorEl);
+                        btnClose.click();
+                        addAuthorEl(authorEl);
+                        addRole(authorEl);
+                    } else {
+                        let isRoleExists = authorArticles[isUserExists].authorRoles
+                        .map(authorRole => authorRole.authorType.id).indexOf(parseInt(typeval));
+                        if (isRoleExists === -1) {
+                            const newAuthorType = {
+                                "authorType": {
+                                    "id": parseInt(typeval)
+                                }
+                            }
+                            authorArticles[isUserExists].authorRoles.push(newAuthorType)
+                            btnClose.click();
+                            addRole(authorEl);
+                        }
+                    }
+                }
+                // authorArticles.push(authorEl)
+                // btnClose.click();
+                // addAuthorEl(authorEl);
+                // btnClose.click();
+                console.log(authorArticles);
                 btnClose.click();
                 formNewAuthor.reset();
             } else {
@@ -215,6 +330,108 @@
                 }
             }
 
+        }
+
+        // auto complete
+        function autocomplete(inp, arr) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < arr.length; i++) {
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        b.addEventListener("click", function (e) {
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            checkAvailabe();
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        autocomplete(document.getElementById("new-author-email"), emails);
+
+        var input = document.getElementById("new-author-email");
+        input.addEventListener("input", function () {
+            checkAvailabe()
+        });
+
+        function checkAvailabe() {
+            if (input.value.length !== 0) {
+                var isAvailableUser = emails.includes(input.value);
+                document.getElementById("new-first-name").readOnly = false;
+                document.getElementById("new-last-name").readOnly = false;
+                if (isAvailableUser) {
+                    document.getElementById("notAvailable").style.display = "none";
+                    document.getElementById("new-last-name").value = lastNames[emails.indexOf(input.value)];
+                    document.getElementById("new-first-name").value = firstNames[emails.indexOf(input.value)];
+                    document.getElementById("new-id").value = ids[emails.indexOf(input.value)];
+                    document.getElementById("new-last-name").readOnly = true;
+                    document.getElementById("new-first-name").readOnly = true;
+                } else {
+                    document.getElementById("notAvailable").style.display = "block";
+                    document.getElementById("new-last-name").readOnly = false;
+                    document.getElementById("new-first-name").readOnly = false;
+                    document.getElementById("new-last-name").value = "";
+                    document.getElementById("new-first-name").value = "";
+                    document.getElementById("new-id").value = null;
+                }
+            } else {
+                document.getElementById("new-first-name").readOnly = true;
+                document.getElementById("new-last-name").readOnly = true;
+                document.getElementById("notAvailable").style.display = "none";
+            }
         }
     </script>
 </section>
