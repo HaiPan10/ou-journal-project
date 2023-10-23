@@ -90,6 +90,7 @@
             <div th:if="${#fields.hasAnyErrors()}" class="mb-3 pt-5 text-danger">
                 <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
             </div>
+            <input type="hidden" id="user-id" th:field="*{id}">
             <div class="relative">
                 <input id="myInput" type="text" th:field="*{email}" class="input-floating peer" placeholder=" " />
                 <label for="myInput" class="label-floating">Email</label>
@@ -166,7 +167,7 @@
         </table>
     </div>
 
-    <div id="ids-data" style="display: none;">
+    <!-- <div id="ids-data" style="display: none;">
         <th:block th:each="user, loop : ${users}">
             <th:block th:text="${user[0]} + (${loop.last} ? '' : ',')"></th:block>
         </th:block>
@@ -185,7 +186,7 @@
         <th:block th:each="user, loop : ${users}">
             <th:block th:text="${user[3]} + (${loop.last} ? '' : ',')"></th:block>
         </th:block>
-    </div>
+    </div> -->
     <br>
 
     
@@ -265,38 +266,24 @@
             });
         }
 
-        var usersElement = document.getElementById("users-data").textContent.split(',');
-        var users = [];
-        usersElement.forEach(user => {
-            if (user.trim().length != 0) {
-                users.push(user.trim());
-            }
+        var users = /*[[${ users }]]*/ "";
+        var emails = [];
+        users.forEach(user => {
+            emails.push(user[1]);
         });
-        autocomplete(document.getElementById("myInput"), users);
-
-        var usersLastName = document.getElementById("last-name-data").textContent.split(',');
         var lastNames = [];
-        usersLastName.forEach(lastName => {
-            if (lastName.trim().length != 0) {
-                lastNames.push(lastName.trim());
-            }
+        users.forEach(user => {
+            lastNames.push(user[2]);
         });
-
-        var usersFirstName = document.getElementById("first-name-data").textContent.split(',');
         var firstNames = [];
-        usersFirstName.forEach(firstName => {
-            if (firstName.trim().length != 0) {
-                firstNames.push(firstName.trim());
-            }
+        users.forEach(user => {
+            firstNames.push(user[3]);
         });
-
-        var usersId = document.getElementById("ids-data").textContent.split(',');
         var ids = [];
-        usersId.forEach(id => {
-            if (id.trim().length != 0) {
-                ids.push(id.trim());
-            }
+        users.forEach(user => {
+            ids.push(user[0]);
         });
+        autocomplete(document.getElementById("myInput"), emails);
 
         var input = document.getElementById("myInput");
         input.addEventListener("input", function () {
@@ -305,15 +292,15 @@
 
         function checkAvailabe() {
             if (input.value.length !== 0) {
-                var isAvailableUser = users.includes(input.value);
+                var isAvailableUser = emails.includes(input.value);
                 document.getElementById("user-first-name").readOnly = false;
                 document.getElementById("user-last-name").readOnly = false;
                 if (isAvailableUser) {
                     document.getElementById("myInput").classList.remove("border-red-500");
                     document.getElementById("notAvailable").classList.add("hidden");
-                    document.getElementById("user-last-name").value = lastNames[users.indexOf(input.value)];
-                    document.getElementById("user-first-name").value = firstNames[users.indexOf(input.value)];
-                    document.getElementById("user-id").value = ids[users.indexOf(input.value)];
+                    document.getElementById("user-last-name").value = lastNames[emails.indexOf(input.value)];
+                    document.getElementById("user-first-name").value = firstNames[emails.indexOf(input.value)];
+                    document.getElementById("user-id").value = ids[emails.indexOf(input.value)];
                     document.getElementById("user-last-name").readOnly = true;
                     document.getElementById("user-first-name").readOnly = true;
                 } else {

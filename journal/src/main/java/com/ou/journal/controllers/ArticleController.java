@@ -103,6 +103,7 @@ public class ArticleController {
     public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
      Model model, BindingResult bindingResult) {
         try {
+            System.out.println("CATCH");
             webAppValidator.validate(user, bindingResult);
             if (bindingResult.hasErrors()) {
                 return "articleReviewerManager";
