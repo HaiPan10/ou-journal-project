@@ -138,6 +138,9 @@ public class SpringSecurityConfig {
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .securityMatcher("/admin/**")
+                .headers(headers -> headers.frameOptions(frame -> {
+                    frame.sameOrigin();
+                }))
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
                 .formLogin(login -> login.loginPage("/admin/login").permitAll()
@@ -156,7 +159,6 @@ public class SpringSecurityConfig {
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 
@@ -165,6 +167,9 @@ public class SpringSecurityConfig {
     public SecurityFilterChain clientSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .securityMatcher("/**")
+                .headers(headers -> headers.frameOptions(frame -> {
+                    frame.sameOrigin();
+                }))
                 .httpBasic(basic -> basic.authenticationEntryPoint(authenticationEntryPoint))
                 .authenticationProvider(authenticationProvider)
                 .cors(cors -> cors.configurationSource(corsConfiguration))
