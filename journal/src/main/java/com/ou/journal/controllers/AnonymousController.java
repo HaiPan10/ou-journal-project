@@ -55,6 +55,16 @@ public class AnonymousController {
         }
     }
 
+    @GetMapping("/reviewer-invite/test")
+    public String accountInfotést(Model model) throws Exception {
+        
+            
+            Account account = new Account();
+            model.addAttribute("account", account);
+            model.addAttribute("token", "hheehe");
+            return "anonymous/accountInfo";
+    }
+
     @PostMapping("/reviewer-invite/create")
     public String createAccountAndAcceptInvitation(Model model, @ModelAttribute("account") Account account,
     @RequestParam String token, BindingResult bindingResult) throws Exception {
