@@ -6,7 +6,10 @@
 <section layout:fragment="content">
 
     <div class="flex flex-col justify-center">
-        <div class="p-10 xs:p-0 mx-auto w-full container grid grid-cols-1 md:grid-cols-5 gap-x-10 items-strech">
+        <form th:object="${user}" th:action="@{'/register?token=' + ${token}}" method="post"
+            class="p-10 xs:p-0 mx-auto w-full container grid grid-cols-1 md:grid-cols-5 gap-x-10 items-strech">
+            <input readonly required th:field="*{email}" type="text" class="hidden" />
+
             <div class="col-span-1 md:col-span-2 h-fit">
                 <div class="relative pt-3 mb-12 bg-white shadow border w-full rounded-lg">
                     <h1
@@ -16,9 +19,11 @@
                         <div>
                             <label for="username" class="font-medium pb-1 block">Tên đăng nhập <span
                                     class="text-main">*</span></label>
-                            <input id="username" required name="username" type="text"
+                            <input id="username" required th:field="*{account.userName}" type="text"
                                 data-popover-target="popover-username" data-popover-placement="right"
                                 class="input px-3 py-2 mt-1 mb-5 w-full" />
+                            <span class="text-sm text-red-500" th:if="${#fields.hasErrors('account.userName')}"
+                                th:errors="*{account.userName}"></span>
                             <div data-popover id="popover-username" role="tooltip"
                                 class="absolute z-10 shadow-lg invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72">
                                 <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
@@ -36,9 +41,11 @@
                         <div>
                             <label for="password" class="font-medium pb-1 block">Mật khẩu <span
                                     class="text-main">*</span></label>
-                            <input id="password" required name="password" type="password"
+                            <input id="password" required th:field="*{account.password}" type="password"
                                 data-popover-target="popover-password" data-popover-placement="right"
                                 class="input px-3 py-2 mt-1 mb-5 w-full" />
+                            <span class="text-sm text-red-500" th:if="${#fields.hasErrors('account.password')}"
+                                th:errors="*{account.password}"></span>
                             <div data-popover id="popover-password" role="tooltip"
                                 class="absolute z-10 shadow-lg invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72">
                                 <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg">
@@ -52,8 +59,9 @@
                         </div>
                         <label for="confirmPassword" class="font-medium pb-1 block">Xác nhận mật khẩu <span
                                 class="text-main">*</span></label>
-                        <input id="confirmPassword" required name="confirmPassword" type="password"
-                            class="input px-3 py-2 mt-1 mb-5 w-full" />
+                        <input id="confirmPassword" required th:field="*{account.confirmPassword}" type="password" class="input px-3 py-2 mt-1 mb-5 w-full" />
+                        <span class="text-sm text-red-500" th:if="${#fields.hasErrors('account.confirmPassword')}"
+                                th:errors="*{account.confirmPassword}"></span>
                     </div>
                 </div>
                 <div class="relative pt-3 mb-12 md:mb-0 bg-white shadow border w-full rounded-lg">
@@ -105,6 +113,7 @@
                                             class="text-main">*</span></label>
                                     <input id="firstName" required name="firstName" type="text"
                                         class="input px-3 py-2 mt-1 mb-5 w-full" />
+
                                 </div>
                                 <div class="col-span-1">
                                     <label for="initials" class="font-medium pb-1 block">Tên viết tắt</label>
@@ -112,6 +121,10 @@
                                         class="input px-3 py-2 mt-1 mb-5 w-full" />
                                 </div>
                             </div>
+                            <span class="text-sm text-red-500" th:if="${#fields.hasErrors('lastName')}"
+                                th:errors="*{lastName}"></span>
+                            <span class="text-sm text-red-500" th:if="${#fields.hasErrors('firstName')}"
+                                th:errors="*{firstName}"></span>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
@@ -120,6 +133,8 @@
                                         class="text-main">*</span></label>
                                 <input id="dob" required name="dob" type="date"
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
+                                    <span class="text-sm text-red-500" th:if="${#fields.hasErrors('dob')}"
+                                th:errors="*{dob}"></span>
                             </div>
                             <div class="col-span-1">
                                 <label for="gender" class="font-medium pb-1 block">Giới tính</label>
@@ -435,8 +450,6 @@
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
                         </div> -->
-                        <input id="token" required name="token" type="text" th:value="token"
-                        class="hidden" />
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
                             <div class="col-span-1">
                                 <label for="phoneNumber" class="font-medium pb-1 block">Số điện thoại <span
@@ -455,7 +468,7 @@
 
 
 
-        </div>
+        </form>
     </div>
 </section>
 

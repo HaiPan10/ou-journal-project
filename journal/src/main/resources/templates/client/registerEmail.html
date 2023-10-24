@@ -4,7 +4,7 @@
 
 
 <section class="flex justify-center h-[500px] items-center" layout:fragment="content">
-    <form th:action="@{/register}" method="post" class="container m-6 md:m-12 bg-white rounded-lg px-6 py-8 flex flex-col gap-3 h-fit">
+    <form th:action="@{/register/email}" method="post" enctype="multipart/form-data" class="container m-6 md:m-12 bg-white rounded-lg px-6 py-8 flex flex-col gap-3 h-fit">
         <h1 class="text-2xl font-semibold">Điền email để đăng ký tài khoản</h1>
   
         <div>
