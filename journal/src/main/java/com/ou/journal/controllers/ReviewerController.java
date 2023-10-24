@@ -8,14 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-
 import com.ou.journal.components.UserSessionInfo;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.ReviewArticleStatus;
-import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
-import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 
 @Controller
@@ -26,8 +22,8 @@ public class ReviewerController {
     @Autowired
     private UserSessionInfo userSessionInfo;
 
-    @Autowired
-    private ArticleService articleService;
+    // @Autowired
+    // private ArticleService articleService;
 
     @GetMapping("/reviewer/invitation-list")
     public String getInvitationList(Model model) {        

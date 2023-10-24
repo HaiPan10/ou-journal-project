@@ -7,14 +7,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.RenderPDFService;
 
 @RestController
 @RequestMapping("/api/articles")
 public class ApiArticleController {
-    @Autowired
-    private ArticleService articleService;
+    // @Autowired
+    // private ArticleService articleService;
 
     @Autowired
     private RenderPDFService renderPDFService;
