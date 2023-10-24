@@ -185,6 +185,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(
                                 "/resources/**",
                                 "/register",
+                                "/register/email",
                                 "/css/**",
                                 "/img/**",
                                 "/js/**",

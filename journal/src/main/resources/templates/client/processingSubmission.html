@@ -2,37 +2,42 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
-    <section layout:fragment="content">
-        <div><button type="button" id="mainMenuBtn">Về menu</button></div>
+<section class="flex justify-center" layout:fragment="content">
+    <div class="container">
+        <div><button type="button" id="mainMenuBtn">Về menu</button>
+        </div>
         <!-- FILTER -->
         <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
             <div class="w-fit">
-                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
+                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main"
+                    type="button">
                     Bộ lọc
                     <i class="bi bi-sliders2 text-lg"></i>
                 </button>
-    
+
                 <div id="dropdownBgHover" class="dropdown">
                     <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
                         aria-labelledby="dropdownBgHoverButton">
                         <li>
                             <h3>Tình trạng</h3>
                             <div class="filter-container">
-                                <input id="pending-status" name="status" type="radio" class="filter-input" value="PENDING" onchange="handleChange(this);" checked>
+                                <input id="pending-status rounded-full" name="status" type="radio" class="filter-input"
+                                    value="PENDING" onchange="handleChange(this);" checked>
                                 <label class="filter-label" for="pending-status">Chưa duyệt</label>
                             </div>
                             <div class="filter-container">
-                                <input id="inreview-status" name="status" type="radio" class="filter-input" value="IN_REVIEW"  onchange="handleChange(this);">
+                                <input id="inreview-status rounded-full" name="status" type="radio" class="filter-input"
+                                    value="IN_REVIEW" onchange="handleChange(this);">
                                 <label class="filter-label" for="inreview-status">Đang mời review</label>
                             </div>
                         </li>
                         <!-- <li class="flex justify-end gap-2 pt-3">
-                            <button type="button" class="btn-secondary-small">Làm
-                                mới</button>
-                            <button type="submit" class="btn-main-small">Áp
-                                dụng</button>
-                        </li> -->
+                                <button type="button" class="btn-secondary-small">Làm
+                                    mới</button>
+                                <button type="submit" class="btn-main-small">Áp
+                                    dụng</button>
+                            </li> -->
                     </ul>
                 </div>
             </div>
@@ -44,8 +49,7 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
-    
-    
+
         <div class="table-container">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
@@ -77,15 +81,27 @@
                         <tr class="table-row">
                             <td class="px-6 py-4 font-medium text-gray-900" th:text="${article.id}">
                             </td>
-                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                                <span th:text="${article.title}"></span>
-                            </th>
+                            <td class="px-6 py-4 font-bold">
+                                <div>
+                                    <div th:text="${article.title}"></div>
+                                </div>
+                            </td>
+
                             <td class="px-6 py-4">
                                 <th:block th:each="authorArticle : ${article.authorArticles}">
                                     <th:block th:if="${authorArticle.user.id == currentAccount.id}">
-                                        <th:block th:each="authorRole : ${authorArticle.authorRoles}">
-                                            <div th:text="${authorRole.authorType.type}"></div>
-                                        </th:block>
+                                        <div class="flex flex-col gap-2">
+
+                                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                                <th:block th:each="typeEnum : ${authorTypesEnum}">
+                                                    <div th:class="${'whitespace-nowrap w-fit badge-' + authorRole.authorType.type}"
+                                                        th:if="${#strings.equals(typeEnum, authorRole.authorType.type)}"
+                                                        th:text="${typeEnum.displayName}"></div>
+                                                </th:block>
+
+                                            </th:block>
+                                        </div>
+
                                     </th:block>
                                 </th:block>
                             </td>
@@ -98,18 +114,24 @@
                             </th:block>
                             <td class="px-6 py-4">
                                 <!-- <div th:if="${article.status eq 'PENDING'}">
-                                    <span class="badge-warning">Chờ duyệt</span>
-                                </div>
-                                <div th:if="${article.status eq 'IN_REVIEW'}">
-                                    <span class="badge-success">Chờ review</span>
-                                </div> -->
+                                        <span class="badge-warning">Chờ duyệt</span>
+                                    </div>
+                                    <div th:if="${article.status eq 'IN_REVIEW'}">
+                                        <span class="badge-success">Chờ review</span>
+                                    </div> -->
                                 <div>
-                                    <span th:text="${article.status}"></span>
+                                    <th:block th:each="statusEnum : ${articleStatusEnum}">
+                                        <div th:class="${'whitespace-nowrap w-fit badge-' + article.status}"
+                                            th:if="${#strings.equals(statusEnum, article.status)}"
+                                            th:text="${statusEnum.displayName}"></div>
+                                    </th:block>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div>
-                                    <a th:href="@{/submission/processing/{articleId}(articleId=${article.id})}">Xem chi tiết</a>
+                                    <a class="text-main hover:underline font-semibold"
+                                        th:href="@{/submission/processing/{articleId}(articleId=${article.id})}">Xem chi
+                                        tiết</a>
                                 </div>
                             </td>
                         </tr>
@@ -117,35 +139,37 @@
                 </tbody>
             </table>
         </div>
-    
-        <script>
-            // var currentSide = document.getElementById("articles");
-            // currentSide.classList.add("active");
-    
-            // var urlParams = new URLSearchParams(window.location.search);
-            // var status = urlParams.get('status');
-            // var radioButtons = document.getElementsByName("status");
-    
-            // if (status) {
-            //     for (let i = 0; i < radioButtons.length; i++) {
-            //         if (radioButtons[i].value === status) {
-            //             radioButtons[i].checked = true;
-            //             break;
-            //         }
-            //     }
-            // }
-    
-            // function handleChange(src) {
-            //     window.location.replace(`/admin/articles?status=${src.value}`);
-            // }
+    </div>
 
-            var articleDate = document.getElementById("articleDate");
-            if(articleDate != null){
-                articleDate.innerText = articleDate.innerText.split(' ')[0]
-            }
-    
-        </script>
-    
-    </section>
+
+    <script>
+        // var currentSide = document.getElementById("articles");
+        // currentSide.classList.add("active");
+
+        // var urlParams = new URLSearchParams(window.location.search);
+        // var status = urlParams.get('status');
+        // var radioButtons = document.getElementsByName("status");
+
+        // if (status) {
+        //     for (let i = 0; i < radioButtons.length; i++) {
+        //         if (radioButtons[i].value === status) {
+        //             radioButtons[i].checked = true;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // function handleChange(src) {
+        //     window.location.replace(`/admin/articles?status=${src.value}`);
+        // }
+
+        var articleDate = document.getElementById("articleDate");
+        if (articleDate != null) {
+            articleDate.innerText = articleDate.innerText.split(' ')[0]
+        }
+
+    </script>
+
+</section>
 
 </html>

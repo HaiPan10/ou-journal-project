@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ou.journal.components.UserSessionInfo;
@@ -20,6 +21,16 @@ public class SubmissionController {
 
     @Autowired
     private UserSessionInfo userSessionInfo;
+
+    @ModelAttribute("articleStatusEnum")
+    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
+        return com.ou.journal.enums.ArticleStatus.values();
+    }
+
+    @ModelAttribute("authorTypesEnum")
+    public com.ou.journal.enums.AuthorType[] getTypes() {
+        return com.ou.journal.enums.AuthorType.values();
+    }
     
     @GetMapping("/submission/processing")
     public String processedSubmission(Model model){
