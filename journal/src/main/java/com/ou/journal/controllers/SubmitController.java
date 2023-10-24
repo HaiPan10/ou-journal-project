@@ -55,18 +55,18 @@ public class SubmitController {
             try {
 
                 List<AuthorRole> authorRoles = new ArrayList<>();
-                // AuthorRole authorRole1 = new AuthorRole();
-                // AuthorType type1 = new AuthorType();
-                // type1.setId(Long.valueOf(1));
-                // authorRole1.setAuthorType(type1);
+                AuthorRole authorRole1 = new AuthorRole();
+                AuthorType type1 = new AuthorType();
+                type1.setId(Long.valueOf(1));
+                authorRole1.setAuthorType(type1);
 
                 AuthorRole authorRole2 = new AuthorRole();
                 AuthorType type2 = new AuthorType();
                 type2.setId(Long.valueOf(2));
                 authorRole2.setAuthorType(type2);
 
-                // authorRoles.add(authorRole1);
                 authorRoles.add(authorRole2);
+                authorRoles.add(authorRole1);
 
                 List<AuthorArticle> authorArticles = new ArrayList<>();
                 AuthorArticle authorArticle = new AuthorArticle();
@@ -100,6 +100,9 @@ public class SubmitController {
 
     @GetMapping({ "/submit/step2" })
     public String getSubmitPage2(@ModelAttribute("article") Article article, Model model) {
+        if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null || article.getTitle().isBlank()) {
+            return "redirect:/submit/step1";
+        }
         List<Object[]> users = userService.listUser();
         model.addAttribute("users", users);
         return "client/submitManuscript/step2";
@@ -107,7 +110,23 @@ public class SubmitController {
 
     @GetMapping({ "/submit/step3" })
     public String getSubmitPage3(@ModelAttribute("article") Article article, Model model) {
-        if (article.getFile() != null) {
+        if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null || article.getTitle().isBlank()) {
+            return "redirect:/submit/step1";
+        } else {
+            final boolean[] isHasFirstAuthor = {false};
+            final boolean[] isHasCorresponding = {false};
+            article.getAuthorArticles().forEach(authorArticle -> {
+                authorArticle.getAuthorRoles().forEach(role -> {
+                    if (role.getAuthorType().getId() == 1) 
+                        isHasFirstAuthor[0] = true;
+                    else if (role.getAuthorType().getId() == 2)
+                        isHasCorresponding[0] = true;
+                });
+            });
+            if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
+                return "redirect:/submit/step2";
+        }
+        if (article.getFile() != null && !article.getFile().isEmpty()) {
             String originalFilename = article.getFile().getOriginalFilename();
             String extension = FilenameUtils.getExtension(originalFilename);
             model.addAttribute("extension", extension);

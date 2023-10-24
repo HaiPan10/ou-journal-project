@@ -55,7 +55,10 @@
                             tác giả</button>
                     </div>
                     <div class="mt-3 authors">
+                        <div>
+                            <hr />
 
+                        </div>
                         <hr id="last-hr" />
                     </div>
                 </div>
@@ -101,16 +104,18 @@
                             <div class="autocomplete">
                                 <input id="new-author-email" type="email" name="email" title="Vui lòng nhập email"
                                     required
-                                    class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                                    class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 w-full" />
                             </div>
+
                         </div>
-                        <div class="col-span-full">
-                            <label id="notAvailable" class="badge-danger" style="display: none;">Mail của author này
-                                chưa có trên hệ thống! Vui lòng nhập họ tên</label>
-                        </div>
+
 
                         <input id="new-id" type="hidden" name="new-id">
-
+                        <div class="col-span-full">
+                            <label id="notAvailable" class="text-yellow-400 text-sm font-medium"
+                                style="display: none;">Email của tác giả này
+                                chưa có trên hệ thống! Vui lòng điền đầy đủ thông tin bên dưới</label>
+                        </div>
                         <div class="col-span-1">
                             <label for="new-last-name" class="block text-sm font-medium leading-6 text-gray-900">Họ và
                                 tên đệm</label>
@@ -125,21 +130,6 @@
                             <input id="new-first-name" type="text" name="first-name" required title="Vui lòng nhập tên"
                                 class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                         </div>
-                        <div class="col-span-full flex">
-                            <th:block th:each="type : ${authorTypes}">
-
-                                <div th:if="${!#strings.equals('CORRESPONDING_AUTHOR', type)}"
-                                    class="flex items-center p-2 rounded hover:bg-gray-100">
-                                    <input th:id="${type}" name="author-type" type="radio" th:value="${type.id}"
-                                        required title="Vui lòng chọn loại tác giá"
-                                        class="rounded-full w-4 h-4 text-main bg-gray-100 border-gray-300 rounded focus:ring-action focus:ring-2">
-                                    <label th:for="${type}"
-                                        class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
-                                        th:text="${type.displayName}"></label>
-                                </div>
-
-                            </th:block>
-                        </div>
                     </div>
                     <div
                         class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -149,16 +139,23 @@
                             class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">Hủy</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
 
-
+    <!-- <div>
+        <hr/>
+        <div class="p-3 author" data-user-id="${authorEl.user.id}">
+            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
+            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
+            <div id="authorRolesContainer${authorEl.user.email}">
+            </div>
+        </div>
+    </div> -->
     <script th:inline="javascript">
-        const authorArticles = /*[[${ article.authorArticles }]]*/ "";
+        let authorArticles = /*[[${ article.authorArticles }]]*/ "";
         const users = /*[[${ users }]]*/ "";
-        var isFirstAuthorChosen = false;
+        //var isFirstAuthorChosen = true;
 
         var emails = [];
         users.forEach(user => {
@@ -186,11 +183,43 @@
         // console.log(users);
         const lastHr = document.querySelector("#last-hr");
         const btnClose = document.querySelector("#btn-close-modal");
+        const btnCloseEdit = document.querySelector("#btn-close-edit-modal");
 
-        authorArticles.forEach(author => { 
+        authorArticles.forEach(author => {
             addAuthorEl(author);
             addRole(author);
         });
+
+        function isHasFirstAuthor () {
+            const firstAuthor = authorArticles.filter(author => {
+                let flag = false;
+                author.authorRoles.forEach(role => {
+                    if (role.authorType.id == 1)
+                        flag = true;
+                })
+                return flag;
+            })
+            if (firstAuthor.length > 0)
+                return true;
+            return false;
+        }
+
+        function changeFristAuthorToAuthor(obj) {
+            if (confirm("Bạn có chắc chắn muốn xóa vai trò tác giả này")) {
+                const container = obj.parentNode.parentNode.parentNode.parentNode;
+
+                const userEmail = container.querySelector(".author-email").innerText;
+                userChange = authorArticles.filter(au => au.user.email == userEmail)[0];
+                if (userChange.authorRoles.length > 1) {
+                    const roleChange = authorArticles[authorArticles.indexOf(userChange)].authorRoles.filter(role => role.authorType.id == 1)[0];
+                    authorArticles[authorArticles.indexOf(userChange)].authorRoles.splice(authorArticles[authorArticles.indexOf(userChange)].authorRoles.indexOf(roleChange), 1);
+                } else {
+                    authorArticles[authorArticles.indexOf(userChange)].authorRoles[0].authorType.id = 3;
+                }
+                document.getElementById(`authorRolesContainer${userChange.user.email}`).innerHTML = "";
+                addRole(userChange);
+            }
+        }
 
         function addRole(authorEl) {
             var authorRoles = authorEl.authorRoles;
@@ -199,13 +228,23 @@
                 const roleElement = document.createElement('span');
                 roleElement.classList.add('badge');
                 if (role.authorType.id === 1) {
-                    roleElement.classList.add('badge-danger');
-                    roleElement.textContent = 'Tác giả chính';
+                    roleElement.classList.add('badge-danger', "h-fit", "flex", "gap-x-3", "items-center");
+                    const textlRole = document.createElement('span');
+                    textlRole.textContent = 'Tác giả chính';
+                    const btnDel = document.createElement('button');
+                    btnDel.classList.add('focus:ring-0', 'p-1', 'inline-flex', 'items-center', 'justify-center', 'h-3', 'w-3');
+                    const iconDel = document.createElement('span');
+                    iconDel.classList.add('material-symbols-rounded', 'text-sm');
+                    iconDel.textContent = 'close';
+                    btnDel.appendChild(iconDel);
+                    btnDel.setAttribute("onclick", "changeFristAuthorToAuthor(this)");
+                    roleElement.appendChild(textlRole);
+                    roleElement.appendChild(btnDel);
                 } else if (role.authorType.id === 2) {
-                    roleElement.classList.add('badge-warning');
+                    roleElement.classList.add('badge-warning', "h-fit");
                     roleElement.textContent = 'Tác giả liên hệ';
                 } else if (role.authorType.id === 3) {
-                    roleElement.classList.add('badge-success');
+                    roleElement.classList.add('badge-success', "h-fit");
                     roleElement.textContent = 'Tác giả';
                 }
                 roleContainer.appendChild(roleElement);
@@ -214,22 +253,97 @@
 
         function addAuthorEl(authorEl) {
             const html = `
-                    <div>
-                        <hr/>
-                        <div class="p-3 author" data-user-id="${authorEl.user.id}">
-                            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
-                            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
-                            <div id="authorRolesContainer${authorEl.user.email}">
+                <div>
+                    <hr/>
+
+                    <div class="p-3 author flex justify-between items-center" data-user-id="${authorEl.user.id}">
+                        <div class="flex grow gap-x-4">
+                            <div>
+                                <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
+                                <p class="text-gray-500 author-email">${authorEl.user.email}</p>
                             </div>
+                       
+                            <div class="flex gap-x-2" id="authorRolesContainer${authorEl.user.email}">
+                            </div>
+                        </div>  
+                        <div class="flex gap-x-3">
+                            <a role="button" onclick="chooseFirstAuthor(this)" class="block underline-none text-main hover:underline">Chọn làm tác giả chính</a>
+                            <a role="button" onclick="delAuthor(this)" class="block underline-none text-main hover:underline">Xóa</a>
                         </div>
                     </div>
+                </div>
                     `
 
             lastHr.insertAdjacentHTML('beforebegin', html);
         }
 
+        function delAuthor(obj) {
+            if (confirm("Bạn có chắc chắn muốn xóa tác giả này")) {
+                const container = obj.parentNode.parentNode;
+                const userId = container.getAttribute("data-user-id");
+                let delUser;
+                if (userId) {
+                    delUser = authorArticles.filter(au => au.user.id == userId)[0];
+                }
+                else {
+                    const userEmail = container.querySelector(".author-email").innerText;
+                    delUser = authorArticles.filter(au => au.user.email == userEmail)[0];
+                }
+                if (authorArticles.indexOf(delUser) == 0) {
+                    alert("Không thể xóa tác giả liên hệ");
+                    return;
+                }
+
+                authorArticles.splice(authorArticles.indexOf(delUser), 1);
+                container.parentNode.remove();
+            }
+        }
+
+        function chooseFirstAuthor(obj) {
+            const container = obj.parentNode.parentNode;
+            const userEmail = container.querySelector(".author-email").innerText;
+            const oldFirstAuthor = authorArticles.filter(author => {
+                let flag = false;
+                author.authorRoles.forEach(role => {
+                    if (role.authorType.id == 1)
+                        flag = true;
+                })
+                return flag;
+            })
+
+            if (oldFirstAuthor.length > 0) {
+                const oldEmail = oldFirstAuthor[0].user.email 
+                if (userEmail == oldEmail) {
+                    return;
+                } else {
+                    const firstTypeIndex = oldFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(1);
+                    if (authorArticles.indexOf(oldFirstAuthor[0]) == 0) {
+                        oldFirstAuthor[0].authorRoles.splice(firstTypeIndex, 1);
+                    } else {
+                        oldFirstAuthor[0].authorRoles[firstTypeIndex].authorType.id = 3;
+                    }
+                    document.getElementById(`authorRolesContainer${oldEmail}`).innerHTML = "";
+                    addRole(oldFirstAuthor[0]);
+                }
+            }
+            const newFirstAuthor = authorArticles.filter(author => author.user.email == userEmail);
+            const normalTypeIndex =newFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(3);
+            if (normalTypeIndex !== -1) {
+                newFirstAuthor[0].authorRoles[normalTypeIndex].authorType.id = 1;
+            } else {
+                const newAuthorType = {
+                    "authorType": {
+                        "id": 1
+                    }
+                }
+                newFirstAuthor[0].authorRoles.push(newAuthorType);
+            }
+            document.getElementById(`authorRolesContainer${userEmail}`).innerHTML = "";
+            addRole(newFirstAuthor[0]);
+        }
+
         function goNextStep() {
-            if (!isFirstAuthorChosen) {
+            if (!isHasFirstAuthor()) {
                 alert("Chưa có tác giả chính!");
             } else {
                 fetch("/submit/step2", {
@@ -248,6 +362,10 @@
         }
 
         function goBackStep() {
+            if (!isHasFirstAuthor()) {
+                alert("Chưa có tác giả chính!");
+                return;
+            }
             fetch("/submit/step2?back=1", {
                 method: "POST",
                 headers: {
@@ -263,6 +381,8 @@
         }
 
 
+
+
         function addAuthor() {
             const formNewAuthor = document.forms.newAuthor;
 
@@ -272,7 +392,6 @@
                 const lastnval = formData.get("last-name")
                 const emailval = formData.get("email")
                 const idval = formData.get("new-id");
-                const typeval = formData.get("author-type")
                 const authorEl = {
                     "user": {
                         "id": parseInt(idval),
@@ -283,46 +402,54 @@
                     "authorRoles": [
                         {
                             "authorType": {
-                                "id": parseInt(typeval)
+                                "id": 3
                             }
                         }
                     ]
                 }
-                
-                if (parseInt(typeval) === 1 && isFirstAuthorChosen) {
-                    alert("Chỉ có một tác giả chính!");
+
+
+                let isUserExists = authorArticles.map(authorArticle => authorArticle.user.email).indexOf(emailval);
+                if (isUserExists === -1) {
+                    authorArticles.push(authorEl);
+                    btnClose.click();
+                    formNewAuthor.reset();
+                    addAuthorEl(authorEl);
+                    addRole(authorEl);
                 } else {
-                    if (parseInt(typeval) === 1 && !isFirstAuthorChosen) {
-                        isFirstAuthorChosen = true;
-                    }
-                    let isUserExists = authorArticles.map(authorArticle => authorArticle.user.email).indexOf(emailval);
-                    if (isUserExists === -1) {
-                        authorArticles.push(authorEl);
-                        btnClose.click();
-                        addAuthorEl(authorEl);
-                        addRole(authorEl);
-                    } else {
-                        let isRoleExists = authorArticles[isUserExists].authorRoles
-                        .map(authorRole => authorRole.authorType.id).indexOf(parseInt(typeval));
-                        if (isRoleExists === -1) {
-                            const newAuthorType = {
-                                "authorType": {
-                                    "id": parseInt(typeval)
-                                }
-                            }
-                            authorArticles[isUserExists].authorRoles.push(newAuthorType)
-                            btnClose.click();
-                            addRole(authorEl);
-                        }
-                    }
+                    alert("Thông tin người dùng đã được thêm!")
+                    //let isRoleExists = authorArticles[isUserExists].authorRoles
+                    //    .map(authorRole => authorRole.authorType.id).indexOf(parseInt(typeval));
+                    //if (isRoleExists === -1) {
+                    //    
+                    //        if (changeRoleIndex === -1) {
+                    //            const newAuthorType = {
+                    //                "authorType": {
+                    //                    "id": parseInt(typeval)
+                    //                }
+                    //            }
+                    //            authorArticles[isUserExists].authorRoles.push(newAuthorType)
+                    //            btnClose.click();
+                    //            addRole(authorEl);
+                    //        } else {
+                    //            authorArticles[isUserExists].authorRoles[changeRoleIndex].authorType.id = parseInt(typeval);
+                    //            if (changeRole == 1) isFirstAuthorChosen = false;
+                    //            btnClose.click();
+                    //            document.getElementById(`authorRolesContainer${authorArticles[isUserExists].user.email}`).innerHTML = "";
+                    //            addRole(authorArticles[isUserExists]);
+//
+                    //        }
+                    //    
+//
+                    //}
+
+
                 }
+
                 // authorArticles.push(authorEl)
                 // btnClose.click();
                 // addAuthorEl(authorEl);
                 // btnClose.click();
-                console.log(authorArticles);
-                btnClose.click();
-                formNewAuthor.reset();
             } else {
                 const inputs = formNewAuthor.querySelectorAll("input");
                 for (var i = 0; i < inputs.length; i++) {

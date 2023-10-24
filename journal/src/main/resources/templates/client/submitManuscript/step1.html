@@ -13,20 +13,20 @@
                         <div class="col-span-full">
                             <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
                             <input required id="title" name="title" type="text" th:field="*{title}"
-                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                                class="input px-3 py-2 mt-1 mb-5 w-full" />
                         </div>
     
                         <div class="col-span-full">
                             <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
                             <textarea required id="description" name="description" rows="6" th:field="*{abstracts}"
-                                class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-4 py-2 mt-1 mb-5 w-full"></textarea>
+                                class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
                         </div>
     
                         <div class="col-span-full">
                             <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
                                 khóa</label>
                             <div
-                                class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/25 rounded-md mt-1 mb-5 w-full">
+                                class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/10 rounded-md mt-1 mb-5 w-full">
                                 <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
                                 </div>
                                 <div class="hidden p-0 m-0" id="last-child"></div>
