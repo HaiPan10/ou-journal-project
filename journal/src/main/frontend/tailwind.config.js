@@ -1,5 +1,5 @@
 module.exports = {
-  content: ["../resources/templates/**/*.{html,js}", "../resources/templates/*.{html,js}", "./node_modules/flowbite/**/*.js"],
+  content: ["../resources/templates/**/*.{html,js}", "../resources/templates/*.{html,js}", "./node_modules/flowbite/**/*.js", "./main.css"],
   mode: 'jit',
   theme: {
     extend: {

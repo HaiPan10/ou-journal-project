@@ -72,7 +72,7 @@
                         </div>
                         <div class="w-full">
                             <label for="biography" class="font-medium pb-1 block">Quá trình nghiên cứu</label>
-                            <textarea name="biography" id="biography" rows="6" class="input px-3 py-2 mt-1 mb-5 w-full">
+                            <textarea name="biography" id="biography" rows="5" class="input px-3 py-2 mt-1 mb-5 w-full">
 
                         </textarea>
                         </div>
@@ -421,7 +421,7 @@
                                 class="text-main">*</span></label>
                         <input id="address" required name="address" type="text"
                             class="input px-3 py-2 mt-1 mb-5 w-full" />
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+                        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
                             <div class="col-span-1">
                                 <label for="email" class="font-medium pb-1 block">Email <span
                                         class="text-main">*</span></label>
@@ -434,7 +434,9 @@
                                 <input id="confirmEmail" required name="confirmEmail" type="text"
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
-                        </div>
+                        </div> -->
+                        <input id="token" required name="token" type="text" th:value="token"
+                        class="hidden" />
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5">
                             <div class="col-span-1">
                                 <label for="phoneNumber" class="font-medium pb-1 block">Số điện thoại <span

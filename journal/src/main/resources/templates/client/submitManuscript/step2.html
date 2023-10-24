@@ -228,7 +228,7 @@
                 const roleElement = document.createElement('span');
                 roleElement.classList.add('badge');
                 if (role.authorType.id === 1) {
-                    roleElement.classList.add('badge-danger', "h-fit", "flex", "gap-x-3", "items-center");
+                    roleElement.classList.add('badge-FIRST_AUTHOR', "h-fit", "flex", "gap-x-3", "items-center");
                     const textlRole = document.createElement('span');
                     textlRole.textContent = 'Tác giả chính';
                     const btnDel = document.createElement('button');
@@ -241,10 +241,10 @@
                     roleElement.appendChild(textlRole);
                     roleElement.appendChild(btnDel);
                 } else if (role.authorType.id === 2) {
-                    roleElement.classList.add('badge-warning', "h-fit");
+                    roleElement.classList.add('badge-CORRESPONDING_AUTHOR', "h-fit");
                     roleElement.textContent = 'Tác giả liên hệ';
                 } else if (role.authorType.id === 3) {
-                    roleElement.classList.add('badge-success', "h-fit");
+                    roleElement.classList.add('badge-AUTHOR', "h-fit");
                     roleElement.textContent = 'Tác giả';
                 }
                 roleContainer.appendChild(roleElement);

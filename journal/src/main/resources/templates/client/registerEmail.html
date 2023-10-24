@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+
+<section class="flex justify-center h-[500px] items-center" layout:fragment="content">
+    <form th:action="@{/register}" method="post" class="container m-6 md:m-12 bg-white rounded-lg px-6 py-8 flex flex-col gap-3 h-fit">
+        <h1 class="text-2xl font-semibold">Điền email để đăng ký tài khoản</h1>
+  
+        <div>
+            <label for="email" class="font-medium pb-1 block">Email <span class="text-main">*</span></label>
+            <input id="email" required name="email" type="text" class="input px-3 py-2 mt-1 mb-5 w-full" />
+            <div th:if="${errorMessage}" id="alert-error p-2" class="alert-danger" role="alert">
+                <div class="ml-3 text-sm font-medium" th:text="${errorMessage}"></div>
+            </div>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="btn-main w-fit">Tiếp tục</button>
+        </div>
+    </form>
+</section>
+
+</html>
