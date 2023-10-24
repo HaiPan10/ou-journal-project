@@ -85,6 +85,10 @@ public class JwtService {
     public String generateEmailToken(Account account, User user, String email) {
         String token = null;
         try {
+            if(account == null && user == null && email == null){
+                throw new NullPointerException();
+            }
+            
             JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
             if (account != null) {
@@ -108,6 +112,8 @@ public class JwtService {
             token = signedJWT.serialize();
 
         } catch (JOSEException e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+        } catch (NullPointerException e){
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return token;
