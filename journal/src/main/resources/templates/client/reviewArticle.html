@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section layout:fragment="content">
+    <div>Tiêu đề: <span th:text="${reviewArticle.article.title}"></span></div>
+    <div>Abstract: <span th:text="${reviewArticle.article.abstracts}"></span></div>
+    <div>Từ khóa: <span th:text="${reviewArticle.article.keywords}"></span></div>
+    <button class="badge badge-success" onclick="doneReview()">Hoàn tất review</button>
+    <div>
+        <iframe th:src="${viewUrl}" style="width: 100%; height: 1000px; background-color: white;"></iframe>
+    </div>
+
+    <script th:inline="javascript">
+        function doneReview() {
+            fetch(`/api/review-articles/reviewer/review/[[${reviewArticle.id}]]`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = "/reviewer/review-list"
+                } else {
+                }
+            }).catch(err => {
+                alert(err);
+                console.error(err);
+            });
+        }
+    </script>
+</section>
+
+</html>

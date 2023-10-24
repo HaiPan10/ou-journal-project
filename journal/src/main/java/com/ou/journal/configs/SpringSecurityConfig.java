@@ -187,8 +187,7 @@ public class SpringSecurityConfig {
                                 "/vendor/**",
                                 "/pages/index",
                                 "/api/tests/**",
-                                "/api/review-articles/accept",
-                                "/api/review-articles/reject",
+                                "/api/review-articles/response",
                                 "/reviewer-invite/create",
                                 "/reviewer-invite/success",
                                 "/api/accounts/reviewer/verify")

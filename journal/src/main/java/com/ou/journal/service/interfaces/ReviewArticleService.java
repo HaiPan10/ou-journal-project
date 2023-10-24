@@ -14,4 +14,7 @@ public interface ReviewArticleService {
     boolean checkArticleAvailable(Long reviewArticleId, String email, Long userId) throws Exception;
     ReviewArticle acceptReviewAndCreateAccount(Long reviewArticleId, String email, Long userId, Account account) throws Exception;
     boolean checkResponseRevviewArticleInvitation(Long reviewArticleId, Long userId, String email);
+    List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus, String articleStatus);
+    ReviewArticle doneReview(Long reviewArticle, Long userId) throws Exception;
+    ReviewArticle retrieve(Long reviewArticle) throws Exception;
 }
