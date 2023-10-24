@@ -150,6 +150,10 @@
         @apply after:border-emerald-500
     }
 
+    .step-failure{
+        @apply after:border-rose-600
+    }
+
     .step-in-progress{
         @apply after:border-main
     }
@@ -165,6 +169,11 @@
     .step-complete .step-child{
         @apply bg-emerald-500 text-white 
     }
+
+    .step-failure .step-child{
+        @apply bg-rose-600 text-white 
+    }
+
 
     .step-in-progress .step-child {
         @apply ring-4 border-4 border-gray-100 ring-main/25 bg-main
