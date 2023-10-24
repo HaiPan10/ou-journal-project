@@ -3,16 +3,22 @@ package com.ou.journal.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +28,13 @@ import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.AuthResponse;
+import com.ou.journal.pojo.Role;
+import com.ou.journal.pojo.User;
+import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.repository.UserRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.UserRoleService;
 import com.ou.journal.service.interfaces.UserService;
 
 @Service
@@ -47,6 +57,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     // đăng ký cho Author User
@@ -181,5 +194,23 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> getByEmail(String email) throws Exception {
         return accountRepositoryJPA.findByEmail(email);
+    }
+
+    @Override
+    public void changeRole(Role role, User user) throws AccessDeniedException, Exception{
+        try {
+            UserRole userRole = userRoleService.findByUserAndRoleName(user, role.getRoleName());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Set<GrantedAuthority> authorities = new HashSet<>();
+            authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
+            Authentication changedRoleAuth = new UsernamePasswordAuthenticationToken(
+                authentication.getPrincipal(), authentication.getCredentials(), authorities
+            );
+            SecurityContextHolder.getContext().setAuthentication(changedRoleAuth);
+        } catch (UsernameNotFoundException e) {
+            throw new AccessDeniedException("User don't have specific role");
+        } catch (Exception e){
+            throw new Exception("Bad request");
+        }
     }
 }

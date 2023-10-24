@@ -17,7 +17,6 @@ import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
@@ -56,7 +55,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
             if (user.getId() == null) {
                 userService.create(user);
             } else if (user.getId() != null && reviewArticleRepositoryJPA.findByUserAndArticle(user, article).isPresent()) {
-                return null;
+                throw new Exception("Reviewer này đã được mời!");
             } else if (user.getId() != null && authorArticleRepositoryJPA.findByArticleAndUser(article.getId(), user.getId()).isPresent()) {
                 throw new Exception("Không thể mời tác giả review bài đăng của mình!");
             }
@@ -168,4 +167,31 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         }
     }
 
+    @Override
+    public List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus, String articleStatus) {
+        return reviewArticleRepositoryJPA.getReviewArticles(userId, reviewArticleStatus, articleStatus);
+    }
+
+    @Override
+    public ReviewArticle retrieve(Long reviewArticle) throws Exception {
+        Optional<ReviewArticle> reviewArticleOptional = reviewArticleRepositoryJPA.findById(reviewArticle);
+        if (reviewArticleOptional.isPresent()) {
+            return reviewArticleOptional.get();
+        } else {
+            throw new Exception("Lượt review này không tồn tại!");
+        }
+    }
+
+    @Override
+    public ReviewArticle doneReview(Long reviewArticleId, Long userId) throws Exception {
+        ReviewArticle reviewArticle = retrieve(reviewArticleId);
+        if (!reviewArticle.getUser().getId().equals(userId)) {
+            throw new Exception("Bạn không có quyền review lượt review này!");
+        }
+        if (!reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString())) {
+            throw new Exception("Lượt review này có trạng thái không hợp lệ!");
+        }
+        reviewArticle.setStatus(ReviewArticleStatus.REVIEWED.toString());
+        return reviewArticleRepositoryJPA.save(reviewArticle);
+    }
 }

@@ -14,15 +14,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ou.journal.configs.JwtService;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.ReviewArticleService;
-import com.ou.journal.service.interfaces.UserService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,14 +30,14 @@ public class ApiTestController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private JwtService jwtService;
+    // @Autowired
+    // private JwtService jwtService;
 
-    @Autowired
-    private UserService userService;
+    // @Autowired
+    // private UserService userService;
 
-    @Autowired
-    private ReviewArticleService reviewArticleService;
+    // @Autowired
+    // private ReviewArticleService reviewArticleService;
 
     // @Autowired
     // private MailService mailService;

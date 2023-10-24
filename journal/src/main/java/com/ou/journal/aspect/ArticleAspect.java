@@ -1,29 +1,14 @@
 package com.ou.journal.aspect;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.RoleName;
-import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.AuthorArticle;
-import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.UserRole;
-import com.ou.journal.repository.AuthorArticleRepositoryJPA;
-import com.ou.journal.repository.AuthorRoleRepositoryJPA;
 import com.ou.journal.repository.UserRoleRepositoryJPA;
-import com.ou.journal.service.interfaces.AccountService;
-import com.ou.journal.service.interfaces.AuthorTypeService;
 import com.ou.journal.service.interfaces.RoleService;
 
 @Aspect

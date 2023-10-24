@@ -12,6 +12,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.ou.journal.configs.JwtService;
+import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.pojo.ReviewArticle;
@@ -78,9 +79,9 @@ public class MailServiceImpl implements MailService {
         context.setVariable("subject", subject);
         context.setVariable("body", body);
         String token = jwtService.generateReviewerInvitationToken(reviewArticle.getUser(), reviewArticle);
-        context.setVariable("firstActionLink", String.format("%s/api/review-articles/accept?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("firstActionLink", String.format("%s/api/review-articles/response?status=%s&token=%s", environment.getProperty("SERVER_HOSTNAME"), ReviewArticleStatus.ACCEPTED.toString(), token));
         context.setVariable("firstActionName", "Đồng ý");
-        context.setVariable("secondActionLink", String.format("%s/api/review-articles/reject?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionLink", String.format("%s/api/review-articles/response?status=%s&token=%s", environment.getProperty("SERVER_HOSTNAME"), ReviewArticleStatus.REJECTED.toString(), token));
         context.setVariable("secondActionName", "Từ chối");
         MailRequest mailRequest = new MailRequest(reviewArticle.getUser().getEmail(), subject, body, context);
         sendEmail(mailRequest);

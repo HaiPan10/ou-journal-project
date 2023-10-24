@@ -23,16 +23,18 @@ public class RenderPDFServiceImpl implements RenderPDFService{
         Article article = articleService.retrieve(Long.valueOf(articleId));
         byte[] documentData = article.getCurrentManuscript().getContent();
         HttpHeaders headers = new HttpHeaders();
-        byte[] htmlData;
+        // byte[] htmlData;
         if (article.getCurrentManuscript().getType().equals("application/pdf")) {
-            htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
+            // htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
         } else {
-            byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
-            htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
+            // byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
+            // htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
+            documentData = FileConverterUtils.convertToPDF(documentData);
         }
-        headers.setContentType(MediaType.TEXT_HTML);
+        // headers.setContentType(MediaType.TEXT_HTML);
+        headers.setContentType(MediaType.APPLICATION_PDF);
 
-        return new ResponseEntity<>(htmlData, headers, HttpStatus.OK);
+        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
     }
     
 }

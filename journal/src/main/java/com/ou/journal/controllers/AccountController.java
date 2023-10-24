@@ -14,6 +14,7 @@ import com.ou.journal.pojo.Account;
 import com.ou.journal.service.interfaces.AccountService;
 
 
+
 @Controller
 public class AccountController {
     @Autowired

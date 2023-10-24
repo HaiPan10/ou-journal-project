@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section layout:fragment="content">
+    <div class="table-container">
+        <table class="table">
+            <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                Danh sách lời mời
+            </h3>
+            <thead class="table-header">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Tiêu đề bài báo
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Ngày mời
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email tác giả chính
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email tác giả liên hệ
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="reviewArticle : ${reviewArticles}">
+                    <tr class="table-row">
+                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                            <span th:text="${reviewArticle.article.title}"></span>
+                        </th>
+                        <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                        <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                <div th:if="${authorRole.authorType.id == 1}">
+                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                <div th:if="${authorRole.authorType.id == 2}">
+                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <td class="px-6 py-4">
+                            <button class="table-action" th:onclick="'responseInvitation(\'ACCEPTED\', ' + ${reviewArticle.id} + ')'" style="margin-right: 20px;">Đồng ý</button>
+                            <button class="table-action" th:onclick="'responseInvitation(\'REJECTED\', ' + ${reviewArticle.id} + ')'">Từ chối</button>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:inline="javascript">
+        function responseInvitation(status, reviewArticleId) {
+            fetch(`/api/review-articles/reviewer/${reviewArticleId}/response?status=${status}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => {
+                if (res.ok) {
+                    location.reload();
+                } else {
+                    throw new Error("Something wrong")
+                }
+            }).catch(err => {
+                alert(err)
+                console.log(err)
+            })
+        }
+    </script>
+</section>
+
+</html>

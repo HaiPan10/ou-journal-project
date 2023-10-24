@@ -51,4 +51,11 @@ public class ReviewArticle implements Serializable {
 
     @Column(name = "status")
     private String status;
+
+    @Override
+    public String toString() {
+        return "ReviewArticle [id=" + id + ", status=" + status + "]";
+    }
+
+    
 }

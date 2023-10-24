@@ -16,4 +16,6 @@ public interface ReviewArticleRepositoryJPA extends JpaRepository<ReviewArticle,
     Optional<ReviewArticle> findById(Long id);
     @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.article.id = ?1 AND r.status = 'ACCEPTED'")
     Integer countAcceptedReview(Long articleId);
+    @Query("FROM ReviewArticle r WHERE r.user.id = ?1 AND r.status = ?2 AND r.article.status = ?3")
+    List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus, String articleStatus);
 }
