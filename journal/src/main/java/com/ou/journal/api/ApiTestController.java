@@ -86,17 +86,17 @@ public class ApiTestController {
     }
 
     // Chỉ dùng cho test để dễ dàng lấy được email token
-    @GetMapping(path = "/get-email-token/{accountId}")
-    public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
-        try {
-            Account account = accountService.retrieve(accountId);
-            String token = jwtService.generateMailToken(account);
-            return ResponseEntity.ok().body(token);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    // @GetMapping(path = "/get-email-token/{accountId}")
+    // public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
+    //     try {
+    //         Account account = accountService.retrieve(accountId);
+    //         String token = jwtService.generateMailToken(account);
+    //         return ResponseEntity.ok().body(token);
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
         
-    }
+    // }
 
     // @PostMapping(path = "/mail/send")
     // public void sendMail () {
