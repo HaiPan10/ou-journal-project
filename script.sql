@@ -117,6 +117,22 @@ begin
                 '$2a$10$WBFsrPYuJz7aAEFpSJFo2OfFKaWiCH2oJW4Y34zr3W9dlr0laNad6' as password,
                 'admin' as user_name;
     end if;
+
+    if not exists(select 1 from user where email = 'secretary@gmail.com') then
+        insert into `user`(created_at, dob, email, first_name, last_name)
+			values (now(), '2005-05-16', 'secretary@gmail.com', 'Mở TP.HCM', 'Thư ký trường Đại Học');
+            
+		insert into `user_role`(role_id, user_id)
+			select (select r.id from role r where r.role_name = 'ROLE_SECRETARY') as role_id, u.id as user_id
+            from user u
+            where u.email = 'secretary@gmail.com';
+            
+		insert into `account`(id, created_at, email, password, user_name)
+			select (select u.id from user u where u.email = 'secretary@gmail.com') as id,
+				now() as created_at, 'secretary@gmail.com' as email,
+                '$2a$10$WBFsrPYuJz7aAEFpSJFo2OfFKaWiCH2oJW4Y34zr3W9dlr0laNad6' as password,
+                'secretary' as user_name;
+    end if;
 end //
 delimiter ;
 
