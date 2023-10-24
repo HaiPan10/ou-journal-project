@@ -49,6 +49,27 @@
                      <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem">Đăng xuất</a>
                   </li>
+                  <hr>
+                  <li>
+                     <div>
+                        <label class="block px-4 py-2 text-sm text-gray-700">Đổi vai trò:</label>
+                        <select style="color: black" id="roleName"
+                           class="text-sm bg-white border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md p-2.5 mt-1 mb-5">
+                           <option value="ROLE_AUTHOR">Tác giả</option>
+                           <option value="ROLE_REVIEWER">Reviewer</option>
+                           <option value="ROLE_EDITOR">Biên tập</option>
+                        </select>
+                        <button id="btnChangeRole" type="click" onclick="callChangeRoleApi()"
+                           class="p-2.5 mt-3 transition duration-500 bg-main hover:bg-main/75 focus:hover:bg-main focus:shadow-sm focus:ring-4 focus:ring-main/50 text-white rounded-lg shadow-sm hover:shadow-md text-sm font-semibold text-center">
+                           <span class="inline-block mr-2">Xác nhận đổi</span>
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                              class="w-4 h-4 inline-block">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                           </svg>
+                        </button>
+                     </div>
+                  </li>
                </ul>
             </div>
          </div>
@@ -71,7 +92,7 @@
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
                         th:href="@{/main-menu}">Main Menu</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
-                     th:href="@{/submit}">Gửi bài</a></li>
+                        th:href="@{/submit}">Gửi bài</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
                         href="#">Giới thiệu</a></li>
                   <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"

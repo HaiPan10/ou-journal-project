@@ -1,33 +1,41 @@
 package com.ou.journal.api;
 
-import java.util.Map;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ou.journal.configs.JwtService;
-import com.ou.journal.enums.SecrectType;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.ou.journal.components.UserSessionInfo;
+import com.ou.journal.pojo.Role;
+import com.ou.journal.pojo.User;
+import com.ou.journal.service.interfaces.AccountService;
 
 @RestController
 @RequestMapping("api/accounts")
 public class ApiAccountController {
+    // @Autowired
+    // private JwtService jwtService;
+
     @Autowired
-    private JwtService jwtService;
+    private UserSessionInfo userSessionInfo;
+
+    @Autowired
+    private AccountService accountService;
     
-    // Chưa hoàn thiện chỉ mới test lấy được account id
-    // Chưa lưu lại reviewer đã xác nhận trong database trong bảng trung gian review_article
-    // Chưa thêm role cho account được mời làm reviewer
-    @GetMapping("reviewer/verify")
-    public ResponseEntity<?> verifyReviewer(@RequestParam Map<String, String> params, HttpServletRequest httpServletRequest){
-        Long id = jwtService.getIdFromToken(params.get("token"), SecrectType.EMAIL);
-        System.out.println("[DEBUG] - ACCOUNT ID: " + id);
-        return ResponseEntity.ok().body("Success");
+    @PostMapping("change-role")
+    public ResponseEntity<?> changeRole(@RequestBody Role roleName){
+        try {
+            User user = userSessionInfo.getCurrentAccount().getUser();
+            accountService.changeRole(roleName, user);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

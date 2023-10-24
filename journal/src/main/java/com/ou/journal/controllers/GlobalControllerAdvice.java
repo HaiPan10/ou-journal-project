@@ -1,8 +1,5 @@
 package com.ou.journal.controllers;
 
-import java.io.IOException;
-
-import org.apache.http.client.RedirectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -11,18 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.servlet.FlashMap;
-import org.springframework.web.servlet.support.RequestContextUtils;
-import org.springframework.web.servlet.view.RedirectView;
-
 import com.ou.journal.components.UserSessionInfo;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.service.interfaces.AccountService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 @Controller

@@ -33,9 +33,9 @@ public class JwtService {
     private static final long EXPIRE_DURATION = HOUR * MINUTE * SECOND * MILISECOND;
     private static final byte[] BYTES = SECRECT.getBytes();
 
-    public String generateAccessToken(Account account){
+    public String generateAccessToken(Account account) {
         String token = null;
-        if(account != null){
+        if (account != null) {
             try {
                 JWSSigner signer = new MACSigner(BYTES);
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
@@ -43,7 +43,7 @@ public class JwtService {
                 builder.claim("id", account.getId());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
-                
+
                 JWTClaimsSet claimsSet = builder.build();
                 SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
                 signedJWT.sign(signer);
@@ -57,9 +57,9 @@ public class JwtService {
         return token;
     }
 
-    public String generateReviewerInvitationToken(User user, ReviewArticle reviewArticle){
+    public String generateReviewerInvitationToken(User user, ReviewArticle reviewArticle) {
         String token = null;
-        if(user != null){
+        if (user != null) {
             try {
                 JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
@@ -68,7 +68,7 @@ public class JwtService {
                 builder.claim("reviewArticleId", reviewArticle.getId());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
-                
+
                 JWTClaimsSet claimsSet = builder.build();
                 SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
                 signedJWT.sign(signer);
@@ -82,43 +82,55 @@ public class JwtService {
         return token;
     }
 
-    public String generateMailToken(Account account){
+    public String generateEmailToken(Account account, User user, String email) {
         String token = null;
-        if(account != null){
-            try {
-                JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
-                JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-                builder.claim("userName", account.getUserName());
-                builder.claim("id", account.getId());
-                // builder.claim("verificationCode", account.getVerificationCode());
-                builder.issueTime(new Date(System.currentTimeMillis()));
-                builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
-                
-                JWTClaimsSet claimsSet = builder.build();
-                SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
-                signedJWT.sign(signer);
-
-                token = signedJWT.serialize();
-
-            } catch (JOSEException e) {
-                System.out.println("[ERROR] - " + e.getMessage());
+        try {
+            if(account == null && user == null && email == null){
+                throw new NullPointerException();
             }
+            
+            JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
+            JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
+            if (account != null) {
+                builder.claim("userName", account.getUserName());
+            }
+
+            if (user != null) {
+                builder.claim("email", user.getEmail());
+                builder.claim("id", user.getId());
+            } else {
+                builder.claim("email", email);
+            }
+            // builder.claim("verificationCode", account.getVerificationCode());
+            builder.issueTime(new Date(System.currentTimeMillis()));
+            builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
+
+            JWTClaimsSet claimsSet = builder.build();
+            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+            signedJWT.sign(signer);
+
+            token = signedJWT.serialize();
+
+        } catch (JOSEException e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+        } catch (NullPointerException e){
+            System.out.println("[ERROR] - " + e.getMessage());
         }
         return token;
     }
 
-    private JWTClaimsSet getClaimsSet(String token, SecrectType secrectType){
+    private JWTClaimsSet getClaimsSet(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = null;
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWSVerifier verifier = null;
-            if(secrectType.equals(SecrectType.DEFAULT)){
+            if (secrectType.equals(SecrectType.DEFAULT)) {
                 verifier = new MACVerifier(BYTES);
             } else {
                 verifier = new MACVerifier(MAIL_SECRECT);
             }
-            
-            if(signedJWT.verify(verifier)){
+
+            if (signedJWT.verify(verifier)) {
                 claimsSet = signedJWT.getJWTClaimsSet();
             }
         } catch (JOSEException | ParseException e) {
@@ -127,14 +139,14 @@ public class JwtService {
         return claimsSet;
     }
 
-    private Date getExpirationDate(String token, SecrectType secrectType){
+    private Date getExpirationDate(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         Date expirationDate = claimsSet.getExpirationTime();
         return expirationDate;
     }
 
-    public boolean isValidAccessToken(String token, SecrectType secrectType){
-        if(token == null || token.trim().length() == 0){
+    public boolean isValidAccessToken(String token, SecrectType secrectType) {
+        if (token == null || token.trim().length() == 0) {
             return false;
         }
 
@@ -144,7 +156,8 @@ public class JwtService {
         // System.out.println("[DEBUG] - " + userName);
         // System.out.println("[DEBUG] - " + id);
         // System.out.println("[DEBUG] - " + expirationDate);
-        // System.out.println("[DEBUG] - " + !(userName == null || userName.isEmpty() || id == null || expirationDate.before(new Date())));
+        // System.out.println("[DEBUG] - " + !(userName == null || userName.isEmpty() ||
+        // id == null || expirationDate.before(new Date())));
         return !(userName == null || userName.isEmpty() || id == null || expirationDate.before(new Date()));
     }
 
@@ -153,7 +166,7 @@ public class JwtService {
      * @param token
      * @return a string with format [id,userName]
      */
-    public String getUserNameFromToken(String token, SecrectType secrectType){
+    public String getUserNameFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         String value = null;
         try {
@@ -164,7 +177,7 @@ public class JwtService {
         return value;
     }
 
-    public Long getIdFromToken(String token, SecrectType secrectType){
+    public Long getIdFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         Long value = null;
         try {
@@ -175,7 +188,7 @@ public class JwtService {
         return value;
     }
 
-    public Long getUserIdFromToken(String token, SecrectType secrectType){
+    public Long getUserIdFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         Long value = null;
         try {
@@ -186,7 +199,7 @@ public class JwtService {
         return value;
     }
 
-    public String getEmailFromToken(String token, SecrectType secrectType){
+    public String getEmailFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         String value = null;
         try {
@@ -197,7 +210,7 @@ public class JwtService {
         return value;
     }
 
-    public Long getReviewArticleIdFromToken(String token, SecrectType secrectType){
+    public Long getReviewArticleIdFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         Long value = null;
         try {
@@ -225,21 +238,21 @@ public class JwtService {
     }
 
     public String getAccessToken(String header) {
-        if(header == null){
+        if (header == null) {
             return null;
         }
         String token = header.split(" ")[1].trim();
         return token;
     }
 
-    public Long getAccountId(HttpServletRequest request, SecrectType secrectType){
+    public Long getAccountId(HttpServletRequest request, SecrectType secrectType) {
         String header = getAuthorization(request);
         String token = getAccessToken(header);
         Long id = getIdFromToken(token, secrectType);
         return id;
     }
 
-    public String getVerificationCodeFromToken(String token, SecrectType secrectType){
+    public String getVerificationCodeFromToken(String token, SecrectType secrectType) {
         JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
         String value = null;
         try {

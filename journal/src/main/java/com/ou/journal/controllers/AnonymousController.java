@@ -57,7 +57,7 @@ public class AnonymousController {
 
     @PostMapping("/reviewer-invite/create")
     public String createAccountAndAcceptInvitation(Model model, @ModelAttribute("account") Account account,
-    @RequestParam String token, BindingResult bindingResult) throws Exception {
+            @RequestParam String token, BindingResult bindingResult) throws Exception {
         try {
             Long id = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
             String email = jwtService.getEmailFromToken(token, SecrectType.EMAIL);
