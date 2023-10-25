@@ -17,18 +17,7 @@
       </div>
       <div sec:authorize="isAuthenticated()" class="items-center h-full mt-5 md:mt-0">
          <div class="flex items-center ml-3">
-            <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
-               Chào mừng, Tác Giả
-            </div>
-            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
-               Chào mừng, Biên tập viên
-            </div>
-            <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
-               Chào mừng, Người Phán Xét
-            </div>
-            <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
-               Chào mừng, Thư Ký
-            </div>
+            
             <div>
                <button type="button" class="flex gap-2 text-sm items-center" aria-expanded="false"
                   data-dropdown-toggle="dropdown-user">
@@ -42,34 +31,75 @@
             </div>
 
             <div
-               class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+               class="z-50 hidden my-4 text-base list-none border border-gray-200 bg-white divide-y divide-gray-100 rounded shadow-2xl"
                id="dropdown-user">
                <ul class="py-1" role="none">
+                  <div class="px-6 py-3 text-gray-700 font-medium text-sm">
+                     <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
+                        Chào mừng tác giả
+                     </div>
+                     <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+                        Chào mừng biên tập viên
+                     </div>
+                     <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
+                        Chào mừng người đánh giá
+                     </div>
+                     <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
+                        Chào mừng thư ký
+                     </div>
+                     <p class="text-base text-main" th:text="${currentAccount.user.lastName + ' ' + currentAccount.user.firstName}"></p>
+                  </div>
+                  <hr/>
                   <li>
-                     <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        role="menuitem">Đăng xuất</a>
-                  </li>
-                  <hr>
-                  <li>
-                     <div>
-                        <label class="block px-4 py-2 text-sm text-gray-700">Đổi vai trò:</label>
-                        <select style="color: black" id="roleName"
-                           class="text-sm bg-white border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md p-2.5 mt-1 mb-5">
+                     <div data-accordion="collapse" class="text-gray-700 my-1 py-1" data-active-classes="bg-white text-main font-medium">
+                        <!-- <select style="padding-right: 2rem" id="roleName"
+                           class="text-sm pl-2 bg-white border-none focus:ring-0 text-gray-600 focus:outline-none rounded-md">
                            <option value="ROLE_AUTHOR">Tác giả</option>
                            <option value="ROLE_REVIEWER">Reviewer</option>
                            <option value="ROLE_EDITOR">Biên tập</option>
-                        </select>
-                        <button id="btnChangeRole" type="click" onclick="callChangeRoleApi()"
-                           class="p-2.5 mt-3 transition duration-500 bg-main hover:bg-main/75 focus:hover:bg-main focus:shadow-sm focus:ring-4 focus:ring-main/50 text-white rounded-lg shadow-sm hover:shadow-md text-sm font-semibold text-center">
+                        </select> -->
+                        <h2  data-accordion-target="#temp" aria-expanded="true" aria-controls="temp">
+
+                        </h2>
+                        <h2 id="dropdown-heading" class="px-3">
+                           <button data-accordion-target="#roles" aria-expanded="true" aria-controls="roles" class="transition-all w-full rounded-t-lg flex gap-x-2 items-center px-3 py-1 text-sm text-gray-700 hover:text-main hover:font-medium" type="button">Đổi vai trò <i data-accordion-icon class="bi bi-chevron-down rolate-180 transition-all flex justify-center text-2xs shrink-0"></i>
+                          </button>
+                        </h2>
+                        
+                       <div id="temp"></div>
+                       <!-- Dropdown menu -->
+                       <div id="roles" class="transition-all hidden px-3">
+                           <ul class="mb-3 text-sm text-gray-700 border-x border-b border-gray-200 rounded-b-lg shadow-md" aria-labelledby="dropdown-heading">
+                             <li>
+                               <a data-role="ROLE_AUTHOR"  onclick="callChangeRoleApi(this)" class="block px-3 py-2 hover:bg-gray-100 cursor-pointer ">Tác giả</a>
+                             </li>
+                             <hr/>
+                             <li>
+                               <a data-role="ROLE_REVIEWER"  onclick="callChangeRoleApi(this)" class="block px-3 py-2 hover:bg-gray-100 cursor-pointer">Reviewer</a>
+                             </li>
+                             <hr/>
+                             <li>
+                               <a data-role="ROLE_EDITOR"  onclick="callChangeRoleApi(this)" class="block px-3 py-2 rounded-b-lg hover:bg-gray-100 cursor-pointer">Biên tập</a>
+                             </li>
+                           </ul>
+                       </div>
+                        <!-- <button id="btnChangeRole" type="click" onclick="callChangeRoleApi()"
+                           class="mt-3 transition duration-500 bg-main hover:bg-main/75 focus:hover:bg-main focus:shadow-sm focus:ring-4 focus:ring-main/50 text-white rounded-lg shadow-sm hover:shadow-md text-sm font-semibold text-center">
                            <span class="inline-block mr-2">Xác nhận đổi</span>
                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                               class="w-4 h-4 inline-block">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                  d="M17 8l4 4m0 0l-4 4m4-4H3" />
                            </svg>
-                        </button>
+                        </button> -->
                      </div>
                   </li>
+                  <hr/>
+                  <li>
+                     <a th:href="@{/logout}" class="transition-all block mx-3 mt-1 rounded-lg px-3 py-2 text-sm text-gray-700 hover:text-main hover:font-medium"
+                        role="menuitem">Đăng xuất</a>
+                  </li>
+                 
                </ul>
             </div>
          </div>
@@ -87,15 +117,15 @@
          <div class="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-1" id="menu">
             <nav>
                <ul class="md:flex items-center justify-between text-base text-main lg:pt-0">
-                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                  <li><a class="nav-item"
                         th:href="@{/homepage}">Trang chủ</a></li>
-                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                  <li><a class="nav-item"
                         th:href="@{/main-menu}">Main Menu</a></li>
-                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                  <li><a class="nav-item"
                         th:href="@{/submit}">Gửi bài</a></li>
-                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                  <li><a class="nav-item"
                         href="#">Giới thiệu</a></li>
-                  <li><a class="inline-block no-underline hover:text-black hover:no-underline hover:bg-main hover:text-white font-medium py-2 w-full md:w-fit px-4 lg:-ml-2"
+                  <li><a class="nav-item"
                         href="#">Hỗ trợ</a></li>
                </ul>
             </nav>

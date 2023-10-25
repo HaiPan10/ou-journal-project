@@ -1,5 +1,5 @@
 <div th:fragment="statusStage (status)" class="flex justify-center mb-20">
-    <ol class="flex items-center w-full h-full">
+    <ol id="statusStage" class="flex items-center w-full h-full">
         <li class="step step-complete">
             <span class="step-child">
                 <i class="bi bi-check-lg">
@@ -21,7 +21,7 @@
         </li>
         <li data-stage-index="2" class="step step-pending">
             <span class="step-child">
-    
+
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 3:</p>
@@ -30,7 +30,7 @@
         </li>
         <li data-stage-index="3" class="step step-pending">
             <span class="step-child">
-            
+
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 4:</p>
@@ -39,7 +39,7 @@
         </li>
         <li data-stage-index="4" class="step step-pending">
             <span class="step-child">
-       
+
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 5:</p>
@@ -59,46 +59,58 @@
         const articleStatusEnum = /*[[${articleStatusEnum}]]*/[];
         var displayNames = [];
 
-            /*[# th:each="n : ${articleStatusEnum}"]*/
-            displayNames.push("[(${n.displayName})]");
-            /*[/]*/
+        /*[# th:each="n : ${articleStatusEnum}"]*/
+        displayNames.push("[(${n.displayName})]");
+        /*[/]*/
 
         var stages = []
-            /*[# th:each="n : ${articleStatusEnum}"]*/
-            stages.push("[(${n.stage})]");
-            /*[/]*/
+        /*[# th:each="n : ${articleStatusEnum}"]*/
+        stages.push("[(${n.stage})]");
+        /*[/]*/
 
-            //<i th:if="${1 < stage}" class="bi bi-check-lg">
-                    
-            //</i>
-        
-        const index = articleStatusEnum.indexOf(currentStatus);
-        const currentStage = parseInt(stages[index]);
-        let stagesEl = document.querySelectorAll('li[data-stage-index]');
-        stagesEl.forEach(el => {
-            const stageIndex = parseInt(el.getAttribute("data-stage-index"));
-            if (stageIndex < currentStage) {
-                el.classList.remove("step-pending")
-                el.classList.add("step-complete")
-                el.querySelector(".step-child").innerHTML = `
-                <i class="bi bi-check-lg">
-                </i>
-                `
-            } else if (stageIndex === currentStage) {
-                el.classList.remove("step-pending")
-                if (currentStatus.indexOf("REJECT") > -1) {
-                    el.classList.add("step-failure")
+
+        if (currentStatus == "WITHDRAW") {
+            document.querySelector("#statusStage").classList.add("hidden");
+            //Cần fetch api để biết tình trạng trước khi withdraw ne
+            
+        } else {
+            const index = articleStatusEnum.indexOf(currentStatus);
+            const currentStage = parseInt(stages[index]);
+            let stagesEl = document.querySelectorAll('li[data-stage-index]');
+            stagesEl.forEach(el => {
+                const stageIndex = parseInt(el.getAttribute("data-stage-index"));
+                if (stageIndex < currentStage) {
+                    el.classList.remove("step-pending")
+                    el.classList.add("step-complete")
                     el.querySelector(".step-child").innerHTML = `
-                    <i class="bi bi-x-lg">
-                    </i>
-                    `
+                        <i class="bi bi-check-lg">
+                        </i>
+                        `
+                } else if (stageIndex === currentStage) {
+                    el.classList.remove("step-pending")
+                    if (currentStatus.indexOf("REJECT") > -1) {
+                        el.classList.add("step-failure")
+                        el.querySelector(".step-child").innerHTML = `
+                            <i class="bi bi-x-lg">
+                            </i>
+                            `
 
-                } else {
-                    el.classList.add("step-in-progress")
+                    } else if (currentStatus == "WITHDRAW") {
+                        el.classList.add("step-withdraw");
+                        el.querySelector(".step-child").innerHTML = `
+                            <i class="bi bi-x-lg">
+                            </i>
+                            `;
+                    }
+                    else {
+                        el.classList.add("step-in-progress")
+                    }
+                    el.querySelector(".stage-title").innerText = displayNames[index];
                 }
-                el.querySelector(".stage-title").innerText = displayNames[index];
-            }
-        });
+            });
+        }
+
+
 
     </script>
 
