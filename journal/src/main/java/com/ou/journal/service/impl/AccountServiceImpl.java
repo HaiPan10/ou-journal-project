@@ -73,6 +73,7 @@ public class AccountServiceImpl implements AccountService {
                 throw new Exception(String.format("Username %s đã tồn tại!", account.getUserName()));
             }
             userService.createAuthorUser(account.getUser());
+            account.setEmail(account.getUser().getEmail());
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
@@ -84,6 +85,25 @@ public class AccountServiceImpl implements AccountService {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public Account create(Account account, Long userId) throws Exception {
+        User persistUser = null;
+        try {
+            persistUser = userService.retrieve(userId);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+        account.setUser(persistUser);
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
+        // account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
+        account.setStatus(AccountStatus.ACCEPTED.toString());
+        accountRepositoryJPA.save(account);
+        return account;
     }
 
     @Override
@@ -197,19 +217,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changeRole(Role role, User user) throws AccessDeniedException, Exception{
+    public void changeRole(Role role, User user) throws AccessDeniedException, Exception {
         try {
             UserRole userRole = userRoleService.findByUserAndRoleName(user, role.getRoleName());
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Set<GrantedAuthority> authorities = new HashSet<>();
             authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
             Authentication changedRoleAuth = new UsernamePasswordAuthenticationToken(
-                authentication.getPrincipal(), authentication.getCredentials(), authorities
-            );
+                    authentication.getPrincipal(), authentication.getCredentials(), authorities);
             SecurityContextHolder.getContext().setAuthentication(changedRoleAuth);
         } catch (UsernameNotFoundException e) {
             throw new AccessDeniedException("User don't have specific role");
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new Exception("Bad request");
         }
     }

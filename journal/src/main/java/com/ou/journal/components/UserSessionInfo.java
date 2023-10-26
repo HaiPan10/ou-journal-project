@@ -18,14 +18,19 @@ public class UserSessionInfo {
     @Autowired
     private AccountService accountService;
 
-    public Account getCurrentAccount() throws Exception{
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        try {
-            this.account = accountService.findByUserName(name);
-        } catch (Exception e) {
-            this.account = accountService.getByEmail(name).get();
+    public Account getCurrentAccount() throws Exception {
+        System.out.println("[DEBUG] - GET CURRENT ACCOUNT");
+        if(SecurityContextHolder.getContext().getAuthentication() == null){
+            this.account = null;
         }
-
+        else if (account == null) {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            try {
+                this.account = accountService.findByUserName(name);
+            } catch (Exception e) {
+                this.account = accountService.getByEmail(name).get();
+            }
+        }
         return this.account;
     }
 }
