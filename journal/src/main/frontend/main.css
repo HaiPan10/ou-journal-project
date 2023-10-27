@@ -33,7 +33,7 @@
     }
     
     .nav-item.active {
-        @apply after:right-0
+        @apply after:left-0 group-hover:after:-left-full hover:after:left-0
     }
 
     .btn-main {
