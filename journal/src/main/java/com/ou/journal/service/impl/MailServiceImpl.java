@@ -1,5 +1,6 @@
 package com.ou.journal.service.impl;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,18 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.ou.journal.configs.JwtService;
+import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleNote;
+import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.pojo.ReviewArticle;
+import com.ou.journal.pojo.User;
+import com.ou.journal.repository.AuthorArticleRepositoryJPA;
+import com.ou.journal.repository.AuthorRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
 
 import jakarta.mail.MessagingException;
@@ -38,6 +47,12 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
+
+    @Autowired
+    private AuthorRoleRepositoryJPA authorRoleRepositoryJPA;
     
     @Override
     public void sendEmail(MailRequest mailRequest) {
@@ -84,6 +99,36 @@ public class MailServiceImpl implements MailService {
         context.setVariable("secondActionLink", String.format("%s/api/review-articles/response?status=%s&token=%s", environment.getProperty("SERVER_HOSTNAME"), ReviewArticleStatus.REJECTED.toString(), token));
         context.setVariable("secondActionName", "Từ chối");
         MailRequest mailRequest = new MailRequest(reviewArticle.getUser().getEmail(), subject, body, context);
+        sendEmail(mailRequest);
+    }
+
+    @Override
+    public void sendSecretaryVerificationmail(Article article, ArticleNote articleNote) {
+        Context context = new Context();
+        String subject = "Thông báo trạng thái bài báo";
+        System.out.println("SUBJECT IS: " + subject);
+        String articleAction = (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ? " được chấp thuận và đang tiến hành mời reviewer." :
+        " bị từ chối.");
+        System.out.println("articleAction IS: " + articleAction);
+        String secretaryNote = (articleNote.getNote().length() != 0 ? " Nhận xét từ thư ký: " + articleNote.getNote() : "");
+        System.out.println("secretaryNote IS: " + secretaryNote);
+        String body = String.format("Phía thư ký đã duyệt bài báo của bạn. Bài báo của bạn đã %s %s." +
+        " Bạn có thể truy cập vào trang web để theo dõi trạng thái bài đăng hoặc rút bài khi nhấn vào đường link phía dưới.", articleAction, secretaryNote);
+
+        System.out.println("BODY IS: " + body);
+        context.setVariable("subject", subject);
+        context.setVariable("body", body);
+
+        User correspondingUser = authorArticleRepositoryJPA.findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
+        System.out.println("USER IS: " + correspondingUser.getEmail());
+        
+        String token = jwtService.generateArticleMailActionToken(correspondingUser, article);
+        System.out.println("TOKEN IS: " + token);
+        context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        context.setVariable("firstActionName", "Theo dõi trạng thái");
+        context.setVariable("secondActionLink", String.format("%s/api/author/article/withdraw&token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionName", "Rút bài");
+        MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
     }
 }

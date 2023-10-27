@@ -12,16 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
+import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ArticleRepositoryJPA;
+import com.ou.journal.repository.AuthorArticleRepositoryJPA;
+import com.ou.journal.repository.AuthorRoleRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
+import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.UserService;
 
@@ -41,6 +46,12 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleNoteService articleNoteService;
     @Autowired
     private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
+    @Autowired
+    private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
+    @Autowired
+    private AuthorRoleRepositoryJPA authorRoleRepositoryJPA;
+    @Autowired
+    private MailService mailService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -81,6 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
                     authorRole.setAuthorArticle(authorArticle);
                 });
             });
+            
             return articleRepositoryJPA.save(article);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -117,15 +129,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void updateArticleStatus(Long articleId, Article article) throws Exception {
         Article persistArticle = retrieve(articleId);
-        String status = article.getStatus();
-        persistArticle.setStatus(status);
-        if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
-            persistArticle.setTotalReviewer(article.getTotalReviewer());
+        if (persistArticle.getStatus().equals(ArticleStatus.PENDING.toString())) {
+            String status = article.getStatus();
+            persistArticle.setStatus(status);
+            if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
+                persistArticle.setTotalReviewer(article.getTotalReviewer());
+            }
+            articleRepositoryJPA.save(persistArticle);
+            ArticleNote articleNote = article.getArticleNote();
+            articleNoteService.createOrUpdate(articleNote, persistArticle);
+            mailService.sendSecretaryVerificationmail(persistArticle, articleNote);
         }
-        articleRepositoryJPA.save(persistArticle);
-
-        ArticleNote articleNote = article.getArticleNote();
-        articleNoteService.createOrUpdate(articleNote, persistArticle);
     }
 
     @Override
@@ -142,6 +156,43 @@ public class ArticleServiceImpl implements ArticleService {
             return articleRepositoryJPA.save(persistArticle);
         } else {
             throw new Exception("Bài báo này chưa có reviewer nào!");
+        }
+    }
+
+    @Override
+    public Article editorDecide(Long articleId, String status) throws Exception {
+        Article article = retrieve(articleId);
+        if (article.getStatus().equals(ArticleStatus.DECIDING.toString())) {
+            if (status.equals(ArticleStatus.ACCEPT.toString()) || status.equals(ArticleStatus.REJECT.toString())) {
+                article.setStatus(status);
+                return articleRepositoryJPA.save(article);
+            } else {
+                throw new Exception("Trạng thái chuyển đổi không hợp lệ!");
+            }
+        } else {
+            throw new Exception("Trạng thái bài báo không hợp lệ!");
+        }
+    }
+
+    @Override
+    public Article widthdrawArticle(Long articleId, Long userId) throws Exception {
+        try {
+            Optional<AuthorArticle> authorArticleOptional = authorArticleRepositoryJPA.findByArticleAndUser(articleId, userId);
+            if (authorArticleOptional.isPresent()) {
+                AuthorArticle authorArticle = authorArticleOptional.get();
+                if (authorRoleRepositoryJPA.findByAuthorArticleAndAuthorType(authorArticle.getId(),
+                 AuthorType.CORRESPONDING_AUTHOR.toString()).isPresent()) {
+                    Article article = retrieve(articleId);
+                    article.setStatus(ArticleStatus.WITHDRAW.toString());
+                    return articleRepositoryJPA.save(article);
+                } else {
+                    throw new Exception("Bạn không có quyền rút bài báo này!");
+                }
+            } else {
+                throw new Exception("Bạn không có tên trong danh sách tác giả bài báo này!");
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
         }
     }
 }

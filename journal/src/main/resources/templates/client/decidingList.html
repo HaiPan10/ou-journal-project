@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section layout:fragment="content">
+    <div class="table-container">
+        <table class="table">
+            <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                Danh sách bài báo chờ quyết định
+            </h3>
+            <thead class="table-header">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Tiêu đề bài báo
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email tác giả chính
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Email tác giả liên hệ
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="article : ${articles}">
+                    <tr class="table-row">
+                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                            <span th:text="${article.title}"></span>
+                        </th>
+                        <th:block th:each="authorArticle : ${article.authorArticles}">
+                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                <div th:if="${authorRole.authorType.id == 1}">
+                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:each="authorArticle : ${article.authorArticles}">
+                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                <div th:if="${authorRole.authorType.id == 2}">
+                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                </div>
+                            </th:block>
+                        </th:block>
+                        <td class="px-6 py-4">
+                            <a th:href="@{/editor/review/{id}(id=${article.id})}" class="table-action" >Xem chi tiết</a>
+                        </td>
+                    </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+</html>

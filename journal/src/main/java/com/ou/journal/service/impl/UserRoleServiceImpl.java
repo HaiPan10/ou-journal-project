@@ -18,12 +18,17 @@ public class UserRoleServiceImpl implements UserRoleService{
     private UserRoleRepositoryJPA userRoleRepositoryJPA;
 
     @Override
-    public UserRole findByUserAndRoleName(User user, String roleName) throws UsernameNotFoundException{
+    public UserRole findByUserAndRoleName(User user, String roleName) throws UsernameNotFoundException {
         Optional<UserRole> userRole = userRoleRepositoryJPA.findByUserAndRoleName(user, roleName);
         if(userRole.isPresent()){
             return userRole.get();
         } else {
             throw new UsernameNotFoundException("User don't have specific role");
         }
+    }
+
+    @Override
+    public Optional<UserRole> getByUserAndRoleName(User user, String roleName) {
+        return userRoleRepositoryJPA.findByUserAndRoleName(user, roleName);
     }
 }

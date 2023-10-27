@@ -61,4 +61,18 @@ public class ReviewArticleAspect {
             articleRepositoryJPA.save(article);
         }
     }
+
+    @AfterReturning(
+        pointcut = "execution(com.ou.journal.pojo.ReviewArticle com.ou.journal.service.interfaces.ReviewArticleService.doneReview(Long, Long))",
+        returning = "reviewArticle"
+    )
+    public void autoChangeDecidingStatus(ReviewArticle reviewArticle) throws Exception {
+        if (reviewArticleRepositoryJPA.countAcceptedReview(reviewArticle.getArticle().getId()) == 0) {
+            Article article = articleService.retrieve(reviewArticle.getArticle().getId());
+            if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                article.setStatus(ArticleStatus.DECIDING.toString());
+                articleRepositoryJPA.save(article);
+            }
+        }
+    }
 }
