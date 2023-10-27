@@ -2652,6 +2652,10 @@ input:checked + .toggle-bg {
   margin-top: 0.25rem;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
 .mt-14 {
   margin-top: 3.5rem;
 }
@@ -2762,10 +2766,6 @@ input:checked + .toggle-bg {
 
 .h-\[30px\] {
   height: 30px;
-}
-
-.h-\[500px\] {
-  height: 500px;
 }
 
 .h-\[800px\] {
