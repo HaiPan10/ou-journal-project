@@ -24,9 +24,9 @@ function callChangeRoleApi(obj) {
         roleName: roleName
       })
     }).then(response => {
-      if(response.status === 204){
+      if (response.status === 204) {
         window.location.reload()
-      } else if(response.status === 403){
+      } else if (response.status === 403) {
         alert("Không có vai trò đó")
       } else {
         throw new Error()
@@ -35,8 +35,26 @@ function callChangeRoleApi(obj) {
       alert("Something Wrong")
     })
   }
- 
+
 }
+var url = window.location.pathname;
+var tabName = url.split("/");
+// var activeItem;
+
+switch (tabName[1]) {
+  case 'homepage':
+    document.querySelector("#nav-item-homepage").classList.add("active");
+    break;
+  case 'main-menu': case 'submission': case 'reviewer':
+    document.querySelector("#nav-item-main-menu").classList.add("active");
+    break;
+  case 'submit':
+    document.querySelector("#nav-item-submit").classList.add("active");
+    break;
+  default:
+    activeItem = 'homepage';
+}
+// console.log("Active item is: " + activeItem);
 
 // Gắn hàm xử lý vào sự kiện 'change'
 menuToogle.addEventListener('change', handleChange);
