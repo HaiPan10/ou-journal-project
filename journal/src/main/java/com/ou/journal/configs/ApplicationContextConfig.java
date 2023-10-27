@@ -18,7 +18,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,6 +36,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.journal.components.DateFormatter;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.service.interfaces.UserRoleService;
@@ -92,7 +92,13 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                     });
                 }
 
-                return new User(account.getUserName(), account.getPassword(), authorities);
+                AuthenticationUser authenticationUser = 
+                    new AuthenticationUser(account.getUserName(), account.getPassword(), authorities);
+                authenticationUser.setId(account.getId());
+                authenticationUser.setFirstName(account.getUser().getFirstName());
+                authenticationUser.setLastName(account.getUser().getLastName());
+                authenticationUser.setEmail(account.getEmail());
+                return authenticationUser;
             }
 
         };

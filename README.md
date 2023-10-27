@@ -118,3 +118,27 @@ More methods references the JwtService.class
 Accounts page: http://localhost:8080/admin/accounts
 Articles page: http://localhost:8080/admin/articles
 ```
+
+## Custom new AuthenticationUser extends userDetails.User
+```
+Including additional information:
+Long id;
+String firstName;
+String lastName;
+String email;
+String userName;
+```
+
+## How To Get Authentication Information In Thymeleaf
+```
+Using the #authentication.principal of the Thymeleaf security, get from the AuthenticationUser
+For example:
+<div th:text="${#authentication.principal.id}">
+<div th:text="${#authentication.principal.lastName}">
+```
+
+## How To Get Authentication Information In Controller Or RestController
+```
+Including the "@AuthenticationPrincipal AuthenticationUser currentUser" as the
+parameters of the Controller or Restcontroller
+```
