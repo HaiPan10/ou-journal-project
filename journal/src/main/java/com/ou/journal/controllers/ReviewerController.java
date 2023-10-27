@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.ou.journal.components.UserSessionInfo;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.ReviewArticleStatus;
+import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 
@@ -19,17 +20,14 @@ public class ReviewerController {
     @Autowired
     private ReviewArticleService reviewArticleService;
 
-    @Autowired
-    private UserSessionInfo userSessionInfo;
-
     // @Autowired
     // private ArticleService articleService;
 
     @GetMapping("/reviewer/invitation-list")
-    public String getInvitationList(Model model) {        
+    public String getInvitationList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
         try {
             List<ReviewArticle> reviewArticles = reviewArticleService.getReviewArticles(
-                userSessionInfo.getCurrentAccount().getId(), 
+                currentUser.getId(), 
                 ReviewArticleStatus.PENDING.toString(), 
                 ArticleStatus.INVITING_REVIEWER.toString());
             model.addAttribute("reviewArticles", reviewArticles);
@@ -41,10 +39,10 @@ public class ReviewerController {
     }
 
     @GetMapping("/reviewer/review-list")
-    public String getReviewArticles(Model model) {
+    public String getReviewArticles(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             List<ReviewArticle> reviewArticles = reviewArticleService.getReviewArticles(
-                userSessionInfo.getCurrentAccount().getId(), 
+                currentUser.getId(), 
                 ReviewArticleStatus.ACCEPTED.toString(), 
                 ArticleStatus.IN_REVIEW.toString());
             model.addAttribute("reviewArticles", reviewArticles);

@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ou.journal.components.UserSessionInfo;
+import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.Role;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,18 +31,19 @@ public class ApiAccountController {
     // private JwtService jwtService;
 
     @Autowired
-    private UserSessionInfo userSessionInfo;
+    private AccountService accountService;
 
     @Autowired
-    private AccountService accountService;
+    private UserService userService;
 
     @Autowired
     private Environment environment;
     
     @PostMapping("change-role")
-    public ResponseEntity<?> changeRole(@RequestBody Role roleName){
+    public ResponseEntity<?> changeRole(@RequestBody Role roleName, @AuthenticationPrincipal AuthenticationUser currentUser){
         try {
-            User user = userSessionInfo.getCurrentAccount().getUser();
+            Long id = currentUser.getId();
+            User user = userService.retrieve(id);
             accountService.changeRole(roleName, user);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (AccessDeniedException e) {
