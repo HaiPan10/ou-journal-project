@@ -65,8 +65,9 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
             reviewArticle.setInvitedAt(new Date());
             reviewArticle.setStatus(ReviewArticleStatus.PENDING.toString());
             return reviewArticleRepositoryJPA.save(reviewArticle);
+        } else {
+            throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này! Vui lòng quay về danh sách bài đăng!");
         }
-        return null;
     }
 
     @Override
@@ -116,8 +117,12 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
                 } else {
                     throw new Exception("Người gọi API không phải user được mời!");
                 }
+            } else if (reviewArticle.getArticle().getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                throw new Exception("Bài đăng này đã tiến hành review!");
+            } else if (reviewArticle.getArticle().getStatus().equals(ArticleStatus.WITHDRAW.toString())) {
+                throw new Exception("Bài đăng này đã bị rút!");
             } else {
-                throw new Exception("Lời mời không còn hợp lệ!");
+                throw new Exception("Bài đăng này không còn mời review!");
             }
         } else {
             throw new Exception("Lời mời không hợp lệ!");

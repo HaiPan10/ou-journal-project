@@ -30,6 +30,21 @@
             <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
                 Chào mừng biên tập viên
             </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+                <div class="flex gap-x-3 items-center">
+                    <div class="w-1 h-[30px] bg-main"></div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của biên tập viên</div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                    <div class="action-item">
+                        <a class="group" th:href="@{/editor/deciding-list}">
+                            <i class="bi bi-envelope text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Danh sách bài đăng chờ quyết định</p>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
                 <div class="flex gap-x-3 items-center">
                     <div class="w-1 h-[30px] bg-main"></div>
@@ -54,10 +69,7 @@
             <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
                 Chào mừng thư ký
             </div>
-
-
         </div>
-
     </div>
 </section>
 

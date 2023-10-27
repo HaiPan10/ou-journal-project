@@ -101,13 +101,45 @@ public class AnonymousController {
                 model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
                 User user = userService.retrieve(userId);
                 model.addAttribute("user", String.format("%s %s", user.getLastName(), user.getLastName()));
-                model.addAttribute("action", "kết quản phản hồi lời mời");
+                model.addAttribute("action", "kết quả phản hồi lời mời");
                 return "anonymous/responseConfirmation";
             } else {
                 model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
                 model.addAttribute("error", "Phản hồi của bạn không hợp lệ! Vui lòng không tùy chỉnh đường dẫn!");
                 return "anonymous/errorPage";
             }
+        } catch (Exception e) {
+            model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+            model.addAttribute("error", "Token của bạn không hợp lệ! Vui lòng không giả mạo token!");
+            return "anonymous/errorPage";
+        }
+    }
+
+    @GetMapping("/article-action/success")
+    public String articleActionSuccess(Model model, @RequestParam String token) throws Exception {
+        try {
+            Long userId = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
+            jwtService.getArticleIdFromToken(token, SecrectType.EMAIL);
+            User user = userService.retrieve(userId);
+            model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+            model.addAttribute("user", String.format("%s %s", user.getLastName(), user.getLastName()));
+            model.addAttribute("action", "hành động rút bài đăng");
+            return "anonymous/responseConfirmation";
+        } catch (Exception e) {
+            model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+            model.addAttribute("error", "Token của bạn không hợp lệ! Vui lòng không giả mạo token!");
+            return "anonymous/errorPage";
+        }
+    }
+
+    @GetMapping("/article-action/failed")
+    public String articleActionFailed(Model model, @RequestParam String token, @RequestParam String reason) throws Exception {
+        try {
+            jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
+            jwtService.getArticleIdFromToken(token, SecrectType.EMAIL);
+            model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+            model.addAttribute("error", String.format("Hành động rút bài không hợp lệ. Lý do: %s", reason));
+            return "anonymous/errorPage";
         } catch (Exception e) {
             model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
             model.addAttribute("error", "Token của bạn không hợp lệ! Vui lòng không giả mạo token!");

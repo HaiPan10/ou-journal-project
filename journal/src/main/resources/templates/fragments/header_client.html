@@ -47,7 +47,8 @@
                      <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
                         Chào mừng thư ký
                      </div>
-                     <!-- <p class="text-base text-main" th:text="${currentAccount.user.lastName + ' ' + currentAccount.user.firstName}"></p> -->
+                     <p class="text-base text-main" 
+                        th:text="${#authentication.principal.lastName + ' ' + #authentication.principal.firstName}"></p>
                   </div>
                   <hr/>
                   <li>

@@ -16,6 +16,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 
@@ -42,6 +43,31 @@ public class JwtService {
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
                 builder.claim("userName", account.getUserName());
                 builder.claim("id", account.getId());
+                builder.issueTime(new Date(System.currentTimeMillis()));
+                builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
+
+                JWTClaimsSet claimsSet = builder.build();
+                SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);
+                signedJWT.sign(signer);
+
+                token = signedJWT.serialize();
+
+            } catch (JOSEException e) {
+                System.out.println("[ERROR] - " + e.getMessage());
+            }
+        }
+        return token;
+    }
+
+    public String generateArticleMailActionToken(User user, Article article) {
+        String token = null;
+        if (user != null) {
+            try {
+                JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
+                JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
+                builder.claim("id", user.getId());
+                builder.claim("email", user.getEmail());
+                builder.claim("articleId", article.getId());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
 
@@ -247,6 +273,17 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("reviewArticleId");
+        } catch (ParseException e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+        }
+        return value;
+    }
+
+    public Long getArticleIdFromToken(String token, SecrectType secrectType) {
+        JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
+        Long value = null;
+        try {
+            value = claimsSet.getLongClaim("articleId");
         } catch (ParseException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }

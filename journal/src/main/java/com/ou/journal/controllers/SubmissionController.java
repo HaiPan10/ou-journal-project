@@ -4,23 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.ou.journal.components.UserSessionInfo;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
 
 @Controller
 public class SubmissionController {
     @Autowired
     private ArticleService articleService;
-
-    @Autowired
-    private UserSessionInfo userSessionInfo;
 
     @ModelAttribute("articleStatusEnum")
     public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
@@ -33,10 +31,9 @@ public class SubmissionController {
     }
     
     @GetMapping("/submission/processing")
-    public String processedSubmission(Model model){
+    public String processedSubmission(Model model, @AuthenticationPrincipal AuthenticationUser currentUser){
         try {
-            System.out.println("[DEBUG] - " + userSessionInfo.getCurrentAccount().getUserName());
-            List<Article> articles = articleService.findByAuthorId(userSessionInfo.getCurrentAccount().getId());
+            List<Article> articles = articleService.findByAuthorId(currentUser.getId());
             model.addAttribute("articles", articles);
             System.out.println("[DEBUG] - Finish Fetching");
         } catch (Exception e) {

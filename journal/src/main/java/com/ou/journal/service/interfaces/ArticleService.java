@@ -13,4 +13,6 @@ public interface ArticleService {
     Article endInvitationReview(Long articleId) throws Exception;
     void updateArticleStatus(Long articleId, Article article) throws Exception;
     List<Article> findByAuthorId(Long authorId);
+    Article editorDecide(Long articleId, String status) throws Exception;
+    Article widthdrawArticle(Long articleId, Long userId) throws Exception;
 }

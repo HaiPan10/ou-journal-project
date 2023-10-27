@@ -12,11 +12,16 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.ou.journal.configs.JwtService;
+import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
+import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
 
 import jakarta.mail.MessagingException;
@@ -40,6 +45,9 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
+    
     @Override
     public void sendEmail(MailRequest mailRequest) {
         Runnable runnable = () -> {
@@ -92,6 +100,29 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
+    public void sendSecretaryVerificationmail(Article article, ArticleNote articleNote) {
+        Context context = new Context();
+        String subject = "Thông báo trạng thái bài báo";
+        String articleAction = (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ? " được chấp thuận và đang tiến hành mời reviewer." :
+        " bị từ chối.");
+        String secretaryNote = (articleNote.getNote().length() != 0 ? " Nhận xét từ thư ký: " + articleNote.getNote() + "." : "");
+        String body = String.format("Phía thư ký đã duyệt bài báo của bạn. Bài báo của bạn đã %s%s" +
+        " Bạn có thể truy cập vào trang web để theo dõi trạng thái bài đăng hoặc rút bài khi nhấn vào đường link phía dưới.", articleAction, secretaryNote);
+
+        context.setVariable("subject", subject);
+        context.setVariable("body", body);
+
+        User correspondingUser = authorArticleRepositoryJPA.findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
+        
+        String token = jwtService.generateArticleMailActionToken(correspondingUser, article);
+        context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        context.setVariable("firstActionName", "Theo dõi trạng thái");
+        context.setVariable("secondActionLink", String.format("%s/api/articles/author/article/withdraw?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionName", "Rút bài");
+        MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
+        sendEmail(mailRequest);
+    }
+    
     public void sendCreateAccountMail(User user) {
         Context context = new Context();
         String subject = "Thư mời tạo tài khoản";

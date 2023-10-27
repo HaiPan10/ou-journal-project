@@ -191,6 +191,7 @@ public class SpringSecurityConfig {
                                 "/reviewer-invite/create",
                                 "/reviewer-invite/success",
                                 "/api/accounts/reviewer/verify",
+                                "/api/articles/author/article/withdraw",
                                 "/api/accounts/create")
                         .permitAll()
                         .anyRequest()
