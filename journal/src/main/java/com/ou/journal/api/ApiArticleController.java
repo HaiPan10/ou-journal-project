@@ -85,7 +85,7 @@ public class ApiArticleController {
             articleService.widthdrawArticle(articleId, id);
             
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(String.format("%s/article-action/success&token=%s", environment.getProperty("SERVER_HOSTNAME"), token)));
+            headers.setLocation(URI.create(String.format("%s/article-action/success?token=%s", environment.getProperty("SERVER_HOSTNAME"), token)));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         } catch (Exception e) {
             HttpHeaders headers = new HttpHeaders();

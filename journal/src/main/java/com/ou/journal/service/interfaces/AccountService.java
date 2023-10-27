@@ -15,6 +15,7 @@ import com.ou.journal.pojo.User;
 
 public interface AccountService {
     Account create(Account account) throws Exception;
+    Account create(Account account, Long userId) throws Exception;
     boolean changeAccountStatus(Long accountId, String status) throws Exception;
     List<Account> findAll();
     Account retrieve(Long accountId) throws Exception;

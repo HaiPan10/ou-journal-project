@@ -332,10 +332,12 @@
                 if (res.ok) {
                     window.location.href = `/admin/articles?status=IN_REVIEW`
                 } else {
-                    throw new Error(res.error)
+                    return res.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
                 }
             }).catch(err => {
-                alert("Bài đăng này chưa có reviewer nào!")
+                alert(err.message)
             })
         })
     </script>

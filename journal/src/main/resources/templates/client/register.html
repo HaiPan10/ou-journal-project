@@ -6,7 +6,7 @@
 <section layout:fragment="content">
 
     <div class="flex flex-col justify-center">
-        <form th:object="${user}" th:action="@{'/register?token=' + ${token}}" method="post"
+        <form th:object="${user}" th:action="@{/register(token=${token})}" method="post"
             class="p-10 xs:p-0 mx-auto w-full container grid grid-cols-1 md:grid-cols-5 gap-x-10 items-strech">
             <input readonly required th:field="*{email}" type="text" class="hidden" />
 
@@ -454,7 +454,7 @@
                             <div class="col-span-1">
                                 <label for="phoneNumber" class="font-medium pb-1 block">Số điện thoại <span
                                         class="text-main">*</span></label>
-                                <input id="phoneNumber" required name="phoneNumber" type="number"
+                                <input id="phoneNumber" name="phoneNumber" type="number"
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
                         </div>

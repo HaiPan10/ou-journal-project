@@ -32,7 +32,6 @@ import com.ou.journal.filter.ClientFailureHandler;
 import com.ou.journal.filter.ClientSuccessHandler;
 import com.ou.journal.filter.CustomAccessDeniedHandler;
 import com.ou.journal.filter.CustomAuthenticationEntryPoint;
-import com.ou.journal.filter.JwtTokenEmailFilter;
 import com.ou.journal.filter.JwtTokenFilter;
 
 @EnableWebSecurity
@@ -63,12 +62,6 @@ public class SpringSecurityConfig {
     @Bean
     public JwtTokenFilter jwtTokenFilter() throws Exception {
         JwtTokenFilter jwtAuthenticationTokenFilter = new JwtTokenFilter();
-        return jwtAuthenticationTokenFilter;
-    }
-
-    @Bean
-    public JwtTokenEmailFilter jwtTokenEmailFilter() throws Exception {
-        JwtTokenEmailFilter jwtAuthenticationTokenFilter = new JwtTokenEmailFilter();
         return jwtAuthenticationTokenFilter;
     }
 
@@ -186,6 +179,7 @@ public class SpringSecurityConfig {
                                 "/resources/**",
                                 "/register",
                                 "/register/email",
+                                "/register/account",
                                 "/css/**",
                                 "/img/**",
                                 "/js/**",
@@ -196,15 +190,16 @@ public class SpringSecurityConfig {
                                 "/api/review-articles/response",
                                 "/reviewer-invite/create",
                                 "/reviewer-invite/success",
-                                "/api/accounts/reviewer/verify")
+                                "/api/accounts/reviewer/verify",
+                                "/api/articles/author/article/withdraw",
+                                "/api/accounts/create")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(clientAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtTokenEmailFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

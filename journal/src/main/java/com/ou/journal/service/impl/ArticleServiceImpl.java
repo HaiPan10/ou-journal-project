@@ -23,6 +23,7 @@ import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
+import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.DateTypeService;
@@ -52,6 +53,8 @@ public class ArticleServiceImpl implements ArticleService {
     private AuthorRoleRepositoryJPA authorRoleRepositoryJPA;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private ArticleDateService articleDateService;
     
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -135,6 +138,7 @@ public class ArticleServiceImpl implements ArticleService {
             if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
                 persistArticle.setTotalReviewer(article.getTotalReviewer());
             }
+            articleDateService.addOrUpdate(persistArticle, DateTypeName.SECRETARY_VIEWED_DATE.toString());
             articleRepositoryJPA.save(persistArticle);
             ArticleNote articleNote = article.getArticleNote();
             articleNoteService.createOrUpdate(articleNote, persistArticle);
@@ -150,12 +154,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article endInvitationReview(Long articleId) throws Exception {
         Article persistArticle = retrieve(articleId);
-        Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
-        if (acceptedReviewTotal > 0) {
-            persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
-            return articleRepositoryJPA.save(persistArticle);
+        if (persistArticle.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+            Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
+            if (acceptedReviewTotal > 0) {
+                persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
+                articleDateService.addOrUpdate(persistArticle, DateTypeName.IN_REVIEW_DATE.toString());
+                return articleRepositoryJPA.save(persistArticle);
+            } else {
+                throw new Exception("Bài báo này chưa có reviewer nào!");
+            }
         } else {
-            throw new Exception("Bài báo này chưa có reviewer nào!");
+            throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này! Vui lòng quay về danh sách bài đăng!");
         }
     }
 
@@ -165,6 +174,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (article.getStatus().equals(ArticleStatus.DECIDING.toString())) {
             if (status.equals(ArticleStatus.ACCEPT.toString()) || status.equals(ArticleStatus.REJECT.toString())) {
                 article.setStatus(status);
+                articleDateService.addOrUpdate(article, DateTypeName.DECIDED_DATE.toString());
                 return articleRepositoryJPA.save(article);
             } else {
                 throw new Exception("Trạng thái chuyển đổi không hợp lệ!");
@@ -184,6 +194,7 @@ public class ArticleServiceImpl implements ArticleService {
                  AuthorType.CORRESPONDING_AUTHOR.toString()).isPresent()) {
                     Article article = retrieve(articleId);
                     article.setStatus(ArticleStatus.WITHDRAW.toString());
+                    articleDateService.addOrUpdate(article, DateTypeName.WITHDRAW_DATE.toString());
                     return articleRepositoryJPA.save(article);
                 } else {
                     throw new Exception("Bạn không có quyền rút bài báo này!");

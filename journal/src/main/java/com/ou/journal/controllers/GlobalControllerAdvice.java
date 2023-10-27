@@ -1,17 +1,11 @@
 package com.ou.journal.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import com.ou.journal.components.UserSessionInfo;
-import com.ou.journal.pojo.Account;
-import com.ou.journal.service.interfaces.AccountService;
 
 @ControllerAdvice
 @Controller
@@ -19,11 +13,6 @@ import com.ou.journal.service.interfaces.AccountService;
         @PropertySource(value = "classpath:information.yml", encoding = "UTF-8")
 })
 public class GlobalControllerAdvice {
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private UserSessionInfo userSessionInfo;
 
     @Value("${schoolName}")
     private String schoolName;
@@ -81,27 +70,4 @@ public class GlobalControllerAdvice {
         return emailEditorialSecretary.split(",");
     }
 
-    @ModelAttribute("userAvatar")
-    public String getAvatar(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && authentication.isAuthenticated()){
-            String username = authentication.getName();
-            try {
-                Account account = accountService.findByUserName(username);
-                return account.getAvatar();
-            } catch (Exception e) {
-                
-            }
-        }
-        return null;
-    }
-
-    @ModelAttribute("currentAccount")
-    public Account getCurrentAccountFromSession(){
-        try {
-            return userSessionInfo.getCurrentAccount();
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }

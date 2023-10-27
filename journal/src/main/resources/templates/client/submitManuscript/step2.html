@@ -231,15 +231,15 @@
                     roleElement.classList.add('badge-FIRST_AUTHOR', "h-fit", "flex", "gap-x-3", "items-center");
                     const textlRole = document.createElement('span');
                     textlRole.textContent = 'Tác giả chính';
-                    const btnDel = document.createElement('button');
-                    btnDel.classList.add('focus:ring-0', 'p-1', 'inline-flex', 'items-center', 'justify-center', 'h-3', 'w-3');
-                    const iconDel = document.createElement('span');
-                    iconDel.classList.add('material-symbols-rounded', 'text-sm');
-                    iconDel.textContent = 'close';
-                    btnDel.appendChild(iconDel);
-                    btnDel.setAttribute("onclick", "changeFristAuthorToAuthor(this)");
+                    //const btnDel = document.createElement('button');
+                    //btnDel.classList.add('focus:ring-0', 'p-1', 'inline-flex', 'items-center', 'justify-center', 'h-3', 'w-3');
+                    //const iconDel = document.createElement('span');
+                    //iconDel.classList.add('material-symbols-rounded', 'text-sm');
+                    //iconDel.textContent = 'close';
+                    //btnDel.appendChild(iconDel);
+                    //btnDel.setAttribute("onclick", "changeFristAuthorToAuthor(this)");
                     roleElement.appendChild(textlRole);
-                    roleElement.appendChild(btnDel);
+                    //roleElement.appendChild(btnDel);
                 } else if (role.authorType.id === 2) {
                     roleElement.classList.add('badge-CORRESPONDING_AUTHOR', "h-fit");
                     roleElement.textContent = 'Tác giả liên hệ';
@@ -294,6 +294,11 @@
                     return;
                 }
 
+                const isFirstAuthor = delUser.authorRoles.map(authorRole => authorRole.authorType.id).indexOf(1);
+                if (isFirstAuthor > -1) {
+                    alert("Không thể xóa tác giả chính");
+                    return;
+                }
                 authorArticles.splice(authorArticles.indexOf(delUser), 1);
                 container.parentNode.remove();
             }

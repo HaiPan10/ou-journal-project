@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
+import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.MailService;
 
@@ -25,6 +27,8 @@ public class ReviewArticleAspect {
     private ArticleService articleService;
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
+    @Autowired
+    private ArticleDateService articleDateService;
 
     @AfterReturning(
         pointcut = "execution(com.ou.journal.pojo.ReviewArticle com.ou.journal.service.interfaces.ReviewArticleService.create(com.ou.journal.pojo.User, com.ou.journal.pojo.Article))",
@@ -58,6 +62,7 @@ public class ReviewArticleAspect {
         article.getTotalReviewer().equals(reviewArticleRepositoryJPA.countAcceptedReview(article.getId()))
         && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             article.setStatus(ArticleStatus.IN_REVIEW.toString());
+            articleDateService.addOrUpdate(article, DateTypeName.IN_REVIEW_DATE.toString());
             articleRepositoryJPA.save(article);
         }
     }
@@ -71,6 +76,7 @@ public class ReviewArticleAspect {
             Article article = articleService.retrieve(reviewArticle.getArticle().getId());
             if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 article.setStatus(ArticleStatus.DECIDING.toString());
+                articleDateService.addOrUpdate(article, DateTypeName.DECIDING_DATE.toString());
                 articleRepositoryJPA.save(article);
             }
         }

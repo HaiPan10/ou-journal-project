@@ -32,6 +32,13 @@ public class AnonymousController {
     @Autowired
     private WebAppValidator webAppValidator;
 
+    @GetMapping("/error-page")
+    public String errorPage(Model model) {
+        model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        model.addAttribute("error", "Token của bạn không hợp lệ! Vui lòng không giả mạo token!");
+        return "anonymous/errorPage";
+    }
+
     @GetMapping("/reviewer-invite/create")
     public String accountInfo(Model model, @RequestParam String token) throws Exception {
         try {
@@ -42,7 +49,11 @@ public class AnonymousController {
             Account account = new Account();
             account.setEmail(email);
             model.addAttribute("account", account);
+            model.addAttribute("reviewArticleId", reviewArticleId);
             model.addAttribute("token", token);
+            model.addAttribute("targetEndpoint",
+                String.format("%s/reviewer-invite/create?token=%s",
+                environment.getProperty("SERVER_HOSTNAME"), token));
             return "anonymous/accountInfo";
         } catch (NullPointerException e) {
             model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
@@ -66,6 +77,9 @@ public class AnonymousController {
             webAppValidator.validate(account, bindingResult);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("token", token);
+                model.addAttribute("targetEndpoint",
+                    String.format("%s/reviewer-invite/create?token=%s",
+                    environment.getProperty("SERVER_HOSTNAME"), token));
                 return "anonymous/accountInfo";
             }
             reviewArticleService.acceptReviewAndCreateAccount(reviewArticleId, email, id, account);

@@ -95,7 +95,7 @@
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center h-screen w-full">
-    <form th:action="@{/reviewer-invite/create(token=${token})}" th:object="${account}" method="post">
+    <form th:action="${targetEndpoint}" th:object="${account}" method="post">
         <div class="container bg-white shadow-lg drop-shadow-2xl rounded-lg px-6 py-8 flex flex-col gap-y-6 max-w-xl">
             <div>
                 <h1 class="text-2xl font-semibold text-center">Thông tin tài khoản</h1>
@@ -133,7 +133,7 @@
             </div>
 
             <hr>
-            <p class="text-sm text-gray-500">Khi nhấn đồng ý, bạn sẽ được gán review cho bài báo được mời. Đồng thời, chúng tôi sẽ tạo tài khoản dựa
+            <p th:if="${reviewArticleId}" class="text-sm text-gray-500">Khi nhấn đồng ý, bạn sẽ được gán review cho bài báo được mời. Đồng thời, chúng tôi sẽ tạo tài khoản dựa
                 trên thông tin bạn đã cung cấp!</p>
 
             <button type="submit" class="registerbtn btn-main">Xác nhận</button>

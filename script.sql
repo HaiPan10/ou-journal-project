@@ -74,6 +74,13 @@ where not exists(
     where type_name = 'DECIDED_DATE'
 );
 insert into `date_type`(type_name)
+select 'WITHDRAW_DATE'
+where not exists(
+	select *
+    from date_type
+    where type_name = 'WITHDRAW_DATE'
+);
+insert into `date_type`(type_name)
 select 'PUBLIC_DATE'
 where not exists(
 	select *

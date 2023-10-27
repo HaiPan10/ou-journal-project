@@ -11,29 +11,50 @@ function handleChange(event) {
   }
 }
 
-function callChangeRoleApi() {
-  let roleName = document.getElementById("roleName").value
-  console.log(roleName)
-  fetch("/api/accounts/change-role", {
-    headers: {
-      "Content-Type": "application/json"
-    },
-    method: "POST",
-    body: JSON.stringify({
-      roleName: roleName
+function callChangeRoleApi(obj) {
+  if (confirm("Bạn có chắc chắn muốn đổi vai trò không")) {
+    let roleName = obj.getAttribute("data-role");
+    console.log(roleName)
+    fetch("/api/accounts/change-role", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify({
+        roleName: roleName
+      })
+    }).then(response => {
+      if (response.status === 204) {
+        window.location.reload()
+      } else if (response.status === 403) {
+        alert("Không có vai trò đó")
+      } else {
+        throw new Error()
+      }
+    }).catch(err => {
+      alert("Something Wrong")
     })
-  }).then(response => {
-    if(response.status === 204){
-      window.location.reload()
-    } else if(response.status === 403){
-      alert("Không có vai trò đó")
-    } else {
-      throw new Error()
-    }
-  }).catch(err => {
-    alert("Something Wrong")
-  })
+  }
+
 }
+var url = window.location.pathname;
+var tabName = url.split("/");
+// var activeItem;
+
+switch (tabName[1]) {
+  case 'homepage':
+    document.querySelector("#nav-item-homepage").classList.add("active");
+    break;
+  case 'main-menu': case 'submission': case 'reviewer':
+    document.querySelector("#nav-item-main-menu").classList.add("active");
+    break;
+  case 'submit':
+    document.querySelector("#nav-item-submit").classList.add("active");
+    break;
+  default:
+    activeItem = 'homepage';
+}
+// console.log("Active item is: " + activeItem);
 
 // Gắn hàm xử lý vào sự kiện 'change'
 menuToogle.addEventListener('change', handleChange);

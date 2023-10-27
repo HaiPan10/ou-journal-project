@@ -2,27 +2,73 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
-<section layout:fragment="content">
-    <div style="margin-left: 80px">
-        <div style="font-weight: bold;">Các bài đăng (Phân quyền author)</div>
-        <div style="margin-left: 50px">
-            <ul>
-                <li><a th:href="@{/submit}">Đăng Manuscript mới</a></li>
-                <li><a th:href="@{/submission/processing}">Bài đăng đang được xử lý</a></li>
-            </ul>
-        </div>
-        <div style="font-weight: bold;">Các bài đăng (Phân quyền reviewer)</div>
-        <div style="margin-left: 50px">
-            <ul>
-                <li><a th:href="@{/reviewer/invitation-list}">Danh sách lời mời review</a></li>
-                <li><a th:href="@{/reviewer/review-list}">Danh sách bài đăng chờ review</a></li>
-            </ul>
-        </div>
-        <div style="font-weight: bold;">Các bài đăng (Phân quyền editor)</div>
-        <div style="margin-left: 50px">
-            <ul>
-                <li><a th:href="@{/editor/deciding-list}">Danh sách bài đăng chờ quyết định</a></li>
-            </ul>
+<section class="" layout:fragment="content">
+    <div class="my-6 mx-6 md:mx-12 flex justify-center min-h-[800px]">
+        <div class="container">
+            <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
+                <div class="flex gap-x-3 items-center">
+                    <div class="w-1 h-[30px] bg-main"></div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của tác giả</div>
+
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                    <div class="action-item">
+                        <a class="group" th:href="@{/submit}">
+                            <i class="bi bi-file-earmark-text text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Gửi manuscript mới</p>
+                        </a>
+
+                    </div>
+                    <div class="action-item">
+                        <a class="group" th:href="@{/submission/processing}">
+                            <i class="bi bi-hourglass text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Bài đăng đang được xử lý</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+                Chào mừng biên tập viên
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
+                <div class="flex gap-x-3 items-center">
+                    <div class="w-1 h-[30px] bg-main"></div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của biên tập viên</div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                    <div class="action-item">
+                        <a class="group" th:href="@{/editor/deciding-list}">
+                            <i class="bi bi-envelope text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Danh sách bài đăng chờ quyết định</p>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
+                <div class="flex gap-x-3 items-center">
+                    <div class="w-1 h-[30px] bg-main"></div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của người đánh giá</div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                    <div class="action-item">
+                        <a class="group" th:href="@{/reviewer/invitation-list}">
+                            <i class="bi bi-envelope text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Danh sách lời mời đánh giá</p>
+                        </a>
+
+                    </div>
+                    <div class="action-item">
+                        <a class="group" th:href="@{/reviewer/review-list}">
+                            <i class="bi bi-hourglass text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <p class="w-full">Danh sách bài đăng chờ đánh giá</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
+                Chào mừng thư ký
+            </div>
         </div>
     </div>
 </section>

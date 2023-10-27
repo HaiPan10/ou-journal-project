@@ -43,7 +43,7 @@
                 
                 <div class="mt-6 flex items-center justify-end gap-x-6">
                     <!-- <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button> -->
-                    <button type="submit" id="btnSubmit"
+                    <button type="button" id="btnSubmit" onClick="submitForm()"
                         class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                         tục</button>
                 </div>
@@ -56,9 +56,9 @@
         const kw = document.querySelector("#keyword")
         const kwBox = document.querySelector("#keywords-box")
 
-        // function submitForm() {
-        //     document.querySelector("form").submit();
-        // }
+        function submitForm() {
+             document.querySelector("form").submit();
+        }
 
         function removeKeyword(obj) {
             let rmElement = document.querySelector(`${obj.getAttribute("data-dismiss-target")}`)
