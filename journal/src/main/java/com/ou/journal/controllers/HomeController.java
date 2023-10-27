@@ -31,7 +31,7 @@ public class HomeController {
         return "dashboard";
     }
 
-    @GetMapping("/homepage")
+    @GetMapping({"/homepage", "/"})
     public String clientHomepage() {
         return "client/homepage";
     }

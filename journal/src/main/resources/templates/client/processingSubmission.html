@@ -113,7 +113,7 @@
                             </td>
 
                             <td class="px-6 py-4">
-                                <th:block th:each="authorArticle : ${article.authorArticles}">
+                                <!-- <th:block th:each="authorArticle : ${article.authorArticles}">
                                     <th:block th:if="${authorArticle.user.id == currentAccount.id}">
                                         <div class="flex flex-col gap-2">
 
@@ -128,7 +128,7 @@
                                         </div>
 
                                     </th:block>
-                                </th:block>
+                                </th:block> -->
                             </td>
                             <th:block th:each="articleDate : ${article.articleDates}">
                                 <th:block th:if="${articleDate.dateType.typeName.equals('SUBMITTED_DATE')}">

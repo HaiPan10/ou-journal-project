@@ -1342,7 +1342,17 @@ input:checked + .toggle-bg {
 
 .nav-item.active::after {
   content: var(--tw-content);
-  right: 0px;
+  left: 0px;
+}
+
+.nav-item.active:hover::after {
+  content: var(--tw-content);
+  left: 0px;
+}
+
+.group:hover .nav-item.active::after {
+  content: var(--tw-content);
+  left: -100%;
 }
 
 .btn-main {
@@ -2603,6 +2613,10 @@ input:checked + .toggle-bg {
 
 .mt-6 {
   margin-top: 1.5rem;
+}
+
+.mt-auto {
+  margin-top: auto;
 }
 
 .block {
@@ -4429,6 +4443,11 @@ input:checked + .toggle-bg {
 
 .group:hover .group-hover\:text-main\/75 {
   color: rgb(8 74 196 / 0.75);
+}
+
+.group:hover .group-hover\:after\:-left-full::after {
+  content: var(--tw-content);
+  left: -100%;
 }
 
 .peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:top-1\/2 {
