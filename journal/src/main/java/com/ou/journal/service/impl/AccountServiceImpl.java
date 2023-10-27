@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.AccountStatus;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.AuthResponse;
@@ -94,6 +95,10 @@ public class AccountServiceImpl implements AccountService {
             persistUser = userService.retrieve(userId);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
+        }
+        Optional<UserRole> userRole = userRoleService.getByUserAndRoleName(persistUser, RoleName.ROLE_AUTHOR.toString());
+        if(!userRole.isPresent()){
+            userRoleService.addUserRole(persistUser, RoleName.ROLE_AUTHOR.toString());
         }
         account.setUser(persistUser);
         account.setPassword(passwordEncoder.encode(account.getPassword()));
