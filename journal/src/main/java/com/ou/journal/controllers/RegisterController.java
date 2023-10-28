@@ -135,7 +135,7 @@ public class RegisterController {
             try {
                 Long id = jwtService.getIdFromToken(token, SecrectType.EMAIL);
                 accountService.create(account, id);
-                return "login";
+                return "redirect:/login";
             } catch (Exception e) {
                 System.out.println("[ERROR] - Message: " + e.getMessage());
             }
