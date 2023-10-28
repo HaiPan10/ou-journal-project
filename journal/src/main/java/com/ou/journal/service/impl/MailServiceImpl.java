@@ -1,5 +1,6 @@
 package com.ou.journal.service.impl;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
+import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
 
 import jakarta.mail.MessagingException;
@@ -47,6 +49,9 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
+
+    @Autowired
+    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
     
     @Override
     public void sendEmail(MailRequest mailRequest) {
@@ -136,5 +141,41 @@ public class MailServiceImpl implements MailService {
         context.setVariable("firstActionName", "Đồng ý");
         MailRequest mailRequest = new MailRequest(user.getEmail(), subject, body, context);
         sendEmail(mailRequest);
+    }
+
+    @Override
+    public void sendInReviewStatusChangeMail(Article article) {
+        System.out.println("SENDING INREVIEW MAIL");
+        User correspondingUser = authorArticleRepositoryJPA.findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
+        System.out.println("CORS USER " + correspondingUser.getEmail());
+        Context context = new Context();
+        String subject = "Thông báo trạng thái bài báo";
+        String body = String.format("Xin chào %s %s! Bài báo của bạn đã có đủ reviewer và đang tiến vào giai đoạn review. Truy cập vào hệ thống để theo dõi trạng thái bài báo!" +
+        " Để rút bài báo này, nhấn vào tùy chọn rút bài!", correspondingUser.getLastName(), correspondingUser.getFirstName());
+        context.setVariable("subject", subject);
+        context.setVariable("body", body);
+        String token = jwtService.generateArticleMailActionToken(correspondingUser, article);
+        context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        context.setVariable("firstActionName", "Theo dõi trạng thái");
+        context.setVariable("secondActionLink", String.format("%s/api/articles/author/article/withdraw?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionName", "Rút bài");
+        MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
+        sendEmail(mailRequest);
+
+        List<User> reviewers = reviewArticleRepositoryJPA.getReviewer(article.getId());
+        reviewers.forEach(reviewer -> {
+            System.out.println("REVIEWERS " + reviewer.getEmail());
+            Context reviewContext = new Context();
+            String reviewSubject = "Thông báo review bài báo";
+            String reviewBody = String.format("Xin chào %s %s. Bài báo của %s %s đã vào giai đoạn review,"+
+            " truy cập vào nút bên dưới để tiến hành review bài báo!", reviewer.getLastName(), reviewer.getFirstName(),
+             correspondingUser.getLastName(), correspondingUser.getFirstName());
+            reviewContext.setVariable("subject", reviewSubject);
+            reviewContext.setVariable("body", reviewBody);
+            reviewContext.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+            reviewContext.setVariable("firstActionName", "Review ngay");
+            MailRequest reviewMailRequest = new MailRequest(reviewer.getEmail(), reviewSubject, reviewBody, reviewContext);
+            sendEmail(reviewMailRequest);
+        });
     }
 }
