@@ -2,60 +2,87 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
-<section layout:fragment="content">
-    <div class="table-container">
-        <table class="table">
-            <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                Danh sách lời mời
-            </h3>
-            <thead class="table-header">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Tiêu đề bài báo
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Ngày mời
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Email tác giả chính
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Email tác giả liên hệ
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <th:block th:each="reviewArticle : ${reviewArticles}">
-                    <tr class="table-row">
-                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                            <span th:text="${reviewArticle.article.title}"></span>
+<section class="flex justify-center" layout:fragment="content">
+    <div class="container">
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="breadcum">
+                <li class="breadcum-item">
+                    <a th:href="@{/main-menu}" class="breadcum-item-link">
+                        <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                        </svg>
+                        <span class="breadcum-item-text ml-0">Main menu</span>
+                    </a>
+                </li>
+                <li class="breadcum-item" aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="breadcum-item-text current">Danh sách lời mời</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+        <div class="table-container my-6">
+            <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách lời mời
+                </h3>
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Tiêu đề bài báo
                         </th>
-                        <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
-                        <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
-                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
-                                <div th:if="${authorRole.authorType.id == 1}">
-                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
-                                </div>
-                            </th:block>
-                        </th:block>
-                        <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
-                            <th:block th:each="authorRole : ${authorArticle.authorRoles}">
-                                <div th:if="${authorRole.authorType.id == 2}">
-                                    <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
-                                </div>
-                            </th:block>
-                        </th:block>
-                        <td class="px-6 py-4">
-                            <button class="table-action" th:onclick="'responseInvitation(\'ACCEPTED\', ' + ${reviewArticle.id} + ')'" style="margin-right: 20px;">Đồng ý</button>
-                            <button class="table-action" th:onclick="'responseInvitation(\'REJECTED\', ' + ${reviewArticle.id} + ')'">Từ chối</button>
-                        </td>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày mời
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email tác giả chính
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email tác giả liên hệ
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                        </th>
                     </tr>
-                </th:block>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <th:block th:each="reviewArticle : ${reviewArticles}">
+                        <tr class="table-row">
+                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                <span th:text="${reviewArticle.article.title}"></span>
+                            </th>
+                            <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                            <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                    <div th:if="${authorRole.authorType.id == 1}">
+                                        <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                            <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                    <div th:if="${authorRole.authorType.id == 2}">
+                                        <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                            <td class="px-6 py-4">
+                                <button class="table-action" th:onclick="'responseInvitation(\'ACCEPTED\', ' + ${reviewArticle.id} + ')'" style="margin-right: 20px;">Đồng ý</button>
+                                <button class="table-action" th:onclick="'responseInvitation(\'REJECTED\', ' + ${reviewArticle.id} + ')'">Từ chối</button>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 
     <script th:inline="javascript">
         function responseInvitation(status, reviewArticleId) {

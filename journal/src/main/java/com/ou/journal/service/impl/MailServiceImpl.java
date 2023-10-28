@@ -62,7 +62,7 @@ public class MailServiceImpl implements MailService {
             try {
                 helper.setTo(mailRequest.getTo());
                 helper.setSubject(mailRequest.getSubject());
-                String htmlContent = templateEngine.process("mail/index", mailRequest.getContext());
+                String htmlContent = templateEngine.process("mail/test", mailRequest.getContext());
                 helper.setText(htmlContent, true);
                 mailSender.send(mimeMessage);
             } catch (MessagingException e) {

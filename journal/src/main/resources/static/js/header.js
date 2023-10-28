@@ -5,9 +5,9 @@ const menuIcon = document.querySelector('#menu-icon');
 // Định nghĩa hàm xử lý sự kiện
 function handleChange(event) {
   if (event.target.checked) {
-    menuIcon.innerHTML = "menu_open"
+    menuIcon.classList.add("rotate-90")
   } else {
-    menuIcon.innerHTML = "menu"
+    menuIcon.classList.remove("rotate-90")
   }
 }
 

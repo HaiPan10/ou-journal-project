@@ -14,21 +14,18 @@
                 <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/submit}">
-                            <i class="bi bi-file-earmark-text text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Gửi manuscript mới</p>
                         </a>
 
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/submission/processing}">
-                            <i class="bi bi-hourglass text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <i class="bi bi-hourglass text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Bài đăng đang được xử lý</p>
                         </a>
                     </div>
                 </div>
-            </div>
-            <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
-                Chào mừng biên tập viên
             </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
                 <div class="flex gap-x-3 items-center">
@@ -38,7 +35,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/deciding-list}">
-                            <i class="bi bi-envelope text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Danh sách bài đăng chờ quyết định</p>
                         </a>
 
@@ -53,21 +50,21 @@
                 <div class="grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/reviewer/invitation-list}">
-                            <i class="bi bi-envelope text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <i class="bi bi-envelope text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Danh sách lời mời đánh giá</p>
                         </a>
 
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/reviewer/review-list}">
-                            <i class="bi bi-hourglass text-7xl text-main-action/60 group-hover:text-white"></i>
+                            <i class="bi bi-hourglass text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Danh sách bài đăng chờ đánh giá</p>
                         </a>
                     </div>
                 </div>
             </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
-                Chào mừng thư ký
+                <!-- THƯ KÝ -->
             </div>
         </div>
     </div>

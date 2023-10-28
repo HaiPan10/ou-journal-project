@@ -87,8 +87,8 @@
         class="my-5 p-5 bg-white rounded-lg">
         <div class="grid grid-cols-1 gap-y-5">
             <h1 class="font-semibold uppercase text-lg text-main">Thông tin reviewer</h1>
-            <div th:if="${#fields.hasAnyErrors()}" class="mb-3 pt-5 text-danger">
-                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            <div th:if="${#fields.hasAnyErrors()}" class="flex flex-col gap-3">
+                <div class="text-red-500 text-sm font-medium w-fit" th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
             </div>
             <input type="hidden" id="user-id" th:field="*{id}">
             <div class="relative">

@@ -24,9 +24,7 @@
                   <span class="sr-only">Open user menu</span>
                   <img class="w-10 h-10 mr-2" th:src="@{/images/avatar.png}" />
                   <h3 class="font-medium" th:text="${#authentication.name}"></h3>
-                  <span class="material-symbols-rounded">
-                     keyboard_arrow_down
-                  </span>
+                  <i class="bi bi-chevron-down"></i>
                </button>
             </div>
 
@@ -109,9 +107,7 @@
    <nav id="header" class="w-full bg-white shadow-sm">
       <div class="w-full flex flex-col md:flex-row items-start md:items-center justify-between px-6">
          <label for="menu-toggle" class="cursor-pointer text-main md:hidden block m-0 py-2 px-4">
-            <span id="menu-icon" class="material-symbols-rounded flex justify-center">
-               menu
-            </span>
+            <i id="menu-icon" class="bi bi-list text-2xl transition-transform"></i>
          </label>
          <input class="hidden" type="checkbox" id="menu-toggle">
 

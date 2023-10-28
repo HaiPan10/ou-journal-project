@@ -10,10 +10,10 @@
         <div>
             <label for="email" class="font-medium pb-1 block">Email <span class="text-main">*</span></label>
             <input id="email" required name="email" type="text" class="input px-3 py-2 mt-1 mb-5 w-full" />
-            <div th:if="${errorMessage}" id="alert-error p-2" class="alert-danger" role="alert">
+            <div th:if="${errorMessage}" class="alert-danger" role="alert">
                 <div class="ml-3 text-sm font-medium" th:text="${errorMessage}"></div>
             </div>
-            <div th:if="${sendMailMessage}">
+            <div th:if="${sendMailMessage}" class="alert-danger" role="alert">
                 <div class="ml-3 text-sm font-medium" th:text="${sendMailMessage}"></div>
             </div>
         </div>
