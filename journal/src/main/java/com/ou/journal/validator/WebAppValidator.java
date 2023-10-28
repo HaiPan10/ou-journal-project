@@ -12,7 +12,6 @@ import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.User;
 
-
 import jakarta.validation.ConstraintViolation;
 import lombok.Setter;
 
@@ -39,7 +38,8 @@ public class WebAppValidator implements Validator {
         springValidators.add(passValidator);
         Set<ConstraintViolation<Object>> constraintViolations = beanValidators.validate(target);
         constraintViolations.forEach(cs -> {
-            errors.reject(
+            errors.rejectValue(
+                    cs.getPropertyPath().toString(),
                     cs.getMessageTemplate(),
                     cs.getMessage());
         });

@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     // đăng ký cho Author User
-    public Account create(Account account) throws Exception {
+    public Account create(Account account, User user) throws Exception {
         try {
             if (accountRepositoryJPA.findByEmail(account.getEmail()).isPresent()) {
                 throw new Exception(String.format("Email %s đã tồn tại!", account.getEmail()));
@@ -73,8 +73,8 @@ public class AccountServiceImpl implements AccountService {
             if (accountRepositoryJPA.findByUserName(account.getUserName()).isPresent()) {
                 throw new Exception(String.format("Username %s đã tồn tại!", account.getUserName()));
             }
-            userService.createAuthorUser(account.getUser());
-            account.setEmail(account.getUser().getEmail());
+            userService.createAuthorUser(user);
+            account.setUser(user);
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));

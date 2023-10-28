@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.UserRole;
+import com.ou.journal.service.interfaces.UserRoleService;
 import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.RoleService;
@@ -16,24 +16,21 @@ import com.ou.journal.service.interfaces.RoleService;
 @Component
 public class ArticleAspect {
     @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
     private UserRoleRepositoryJPA userRoleRepositoryJPA;
     @Autowired
     private RoleService roleService;
     @Autowired
     private MailService mailService;
 
-    @AfterReturning(
-        pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))",
-        returning = "article"
-    )
+    @AfterReturning(pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))", returning = "article")
     public void addAuthorRole(Article article) throws Exception {
         article.getAuthorArticles().forEach(authorArticle -> {
-            if (!userRoleRepositoryJPA.findByUserAndRoleName(authorArticle.getUser(),
-             RoleName.ROLE_AUTHOR.toString()).isPresent()) {
+            if (!userRoleService.getByUserAndRoleName(authorArticle.getUser(),
+                    RoleName.ROLE_AUTHOR.toString()).isPresent()) {
                 try {
-                    UserRole userRole = new UserRole(authorArticle.getUser(),
-                     roleService.retrieve(RoleName.ROLE_AUTHOR.toString()));
-                    userRoleRepositoryJPA.save(userRole);
+                    userRoleService.addUserRole(authorArticle.getUser(), RoleName.ROLE_AUTHOR.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
