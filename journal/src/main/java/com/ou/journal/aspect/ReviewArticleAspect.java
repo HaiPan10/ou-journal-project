@@ -49,6 +49,7 @@ public class ReviewArticleAspect {
         && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             article.setStatus(ArticleStatus.IN_REVIEW.toString());
             articleRepositoryJPA.save(article);
+            mailService.sendInReviewStatusChangeMail(article);
         }
     }
 
@@ -64,6 +65,7 @@ public class ReviewArticleAspect {
             article.setStatus(ArticleStatus.IN_REVIEW.toString());
             articleDateService.addOrUpdate(article, DateTypeName.IN_REVIEW_DATE.toString());
             articleRepositoryJPA.save(article);
+            mailService.sendInReviewStatusChangeMail(article);
         }
     }
 

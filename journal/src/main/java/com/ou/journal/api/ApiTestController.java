@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
+import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 import jakarta.validation.Valid;
@@ -29,6 +30,9 @@ public class ApiTestController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
 
     // @Autowired
     // private JwtService jwtService;
@@ -105,4 +109,14 @@ public class ApiTestController {
 
     //     mailService.sendEmailWithHtmlTemplate(mailRequest.getTo(), mailRequest.getSubject(), "mail/index", context);
     // }
+
+    @GetMapping(path = "/get-reviewers/{articleId}")
+    public ResponseEntity<?> generateEmailToken(@PathVariable Long articleId){
+        try {
+            return ResponseEntity.ok().body(reviewArticleRepositoryJPA.getReviewer(articleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        
+    }
 }
