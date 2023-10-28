@@ -20,6 +20,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -73,6 +74,7 @@ public class User implements Serializable {
     private Date updatedAt;
 
     @JsonIgnore
+    @Valid
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "user")
     private Account account;
 

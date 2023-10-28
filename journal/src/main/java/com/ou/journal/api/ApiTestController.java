@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthRequest;
+import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleService;
 import jakarta.validation.Valid;
@@ -48,7 +49,9 @@ public class ApiTestController {
             if (bindingResult.hasErrors()) {
                 throw new Exception(bindingResult.getAllErrors().get(0).getDefaultMessage());
             }
-            return ResponseEntity.status(HttpStatus.CREATED).body(accountService.create(account));
+            User user = account.getUser();
+            account.setUser(null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(accountService.create(account, user));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

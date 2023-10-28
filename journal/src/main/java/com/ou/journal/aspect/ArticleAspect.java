@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.UserRole;
-import com.ou.journal.repository.UserRoleRepositoryJPA;
-import com.ou.journal.service.interfaces.RoleService;
+import com.ou.journal.service.interfaces.UserRoleService;
 
 @Aspect
 @Component
@@ -22,42 +20,44 @@ public class ArticleAspect {
     // private AuthorTypeService authorTypeService;
     // @Autowired
     // private AuthorRoleRepositoryJPA authorRoleRepositoryJPA;
+    // @Autowired
+    // private UserRoleRepositoryJPA userRoleRepositoryJPA;
+    // @Autowired
+    // private RoleService roleService;
     @Autowired
-    private UserRoleRepositoryJPA userRoleRepositoryJPA;
-    @Autowired
-    private RoleService roleService;
+    private UserRoleService userRoleService;
 
-    @AfterReturning(
-        pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))",
-        returning = "article"
-    )
+    @AfterReturning(pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.create(com.ou.journal.pojo.Article, org.springframework.web.multipart.MultipartFile))", returning = "article")
     public void addAuthorRole(Article article) throws Exception {
-        // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Authentication authentication =
+        // SecurityContextHolder.getContext().getAuthentication();
         // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // Account account = accountService.findByUserName(userDetails.getUsername());
 
-        // Optional<AuthorArticle> authorArticleOptional = authorArticleRepositoryJPA.findByArticleAndUser(article.getId(), account.getId());
+        // Optional<AuthorArticle> authorArticleOptional =
+        // authorArticleRepositoryJPA.findByArticleAndUser(article.getId(),
+        // account.getId());
         // if (authorArticleOptional.isPresent()) {
-        //     AuthorArticle authorArticle = authorArticleOptional.get();
-        //     AuthorRole authorRole = new AuthorRole(authorArticle, authorTypeService.findByType(AuthorType.CORRESPONDING_AUTHOR.toString()));
-        //     authorRoleRepositoryJPA.save(authorRole);
+        // AuthorArticle authorArticle = authorArticleOptional.get();
+        // AuthorRole authorRole = new AuthorRole(authorArticle,
+        // authorTypeService.findByType(AuthorType.CORRESPONDING_AUTHOR.toString()));
+        // authorRoleRepositoryJPA.save(authorRole);
         // } else {
-        //     AuthorArticle authorArticle = new AuthorArticle(account.getUser(), article);
-        //     authorArticle.setAuthorRoles(new ArrayList<AuthorRole>(
-        //         Arrays.asList(
-        //             new AuthorRole(authorArticle, authorTypeService.findByType(AuthorType.CORRESPONDING_AUTHOR.toString()))
-        //         )
-        //     ));
-        //     authorArticleRepositoryJPA.save(authorArticle);
+        // AuthorArticle authorArticle = new AuthorArticle(account.getUser(), article);
+        // authorArticle.setAuthorRoles(new ArrayList<AuthorRole>(
+        // Arrays.asList(
+        // new AuthorRole(authorArticle,
+        // authorTypeService.findByType(AuthorType.CORRESPONDING_AUTHOR.toString()))
+        // )
+        // ));
+        // authorArticleRepositoryJPA.save(authorArticle);
         // }
 
         article.getAuthorArticles().forEach(authorArticle -> {
-            if (!userRoleRepositoryJPA.findByUserAndRoleName(authorArticle.getUser(),
-             RoleName.ROLE_AUTHOR.toString()).isPresent()) {
+            if (!userRoleService.getByUserAndRoleName(authorArticle.getUser(),
+                    RoleName.ROLE_AUTHOR.toString()).isPresent()) {
                 try {
-                    UserRole userRole = new UserRole(authorArticle.getUser(),
-                     roleService.retrieve(RoleName.ROLE_AUTHOR.toString()));
-                    userRoleRepositoryJPA.save(userRole);
+                    userRoleService.addUserRole(authorArticle.getUser(), RoleName.ROLE_AUTHOR.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

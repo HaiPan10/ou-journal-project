@@ -9,6 +9,7 @@
         <form th:object="${user}" th:action="@{/register(token=${token})}" method="post"
             class="p-10 xs:p-0 mx-auto w-full container grid grid-cols-1 md:grid-cols-5 gap-x-10 items-strech">
             <input readonly required th:field="*{email}" type="text" class="hidden" />
+            <input readonly required th:field="*{account.email}" value="${user.email}" type="text" class="hidden" />
 
             <div class="col-span-1 md:col-span-2 h-fit">
                 <div class="relative pt-3 mb-12 bg-white shadow border w-full rounded-lg">
