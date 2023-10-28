@@ -13,4 +13,5 @@ public interface MailService {
     void sendInvitationMail(ReviewArticle reviewArticle);
     void sendSecretaryVerificationmail(Article article, ArticleNote articleNote);
     void sendCreateAccountMail(User user);
+    void sendInReviewStatusChangeMail(Article article);
 }
