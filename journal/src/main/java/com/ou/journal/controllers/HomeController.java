@@ -1,15 +1,23 @@
 package com.ou.journal.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.User;
+import com.ou.journal.service.interfaces.AccountService;
 
 @Controller
 public class HomeController {
+    @Autowired
+    AccountService accountService;
     // @ModelAttribute("webName")
     // public String getWebName() {
-    // return "test";
+    // return "test";S
     // }
 
     @GetMapping("/login")
@@ -22,6 +30,20 @@ public class HomeController {
         return "admin_login";
     }
 
+    @GetMapping("/profile")
+    public String profilePage(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            try {
+                Account account = accountService.findByUserName(userDetails.getUsername());
+                model.addAttribute("account", account);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "client/profile";
+    }
+
     @GetMapping("/admin/dashboard")
     public String homepage(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
@@ -31,7 +53,7 @@ public class HomeController {
         return "dashboard";
     }
 
-    @GetMapping({"/homepage", "/"})
+    @GetMapping({ "/homepage", "/" })
     public String clientHomepage() {
         return "client/homepage";
     }

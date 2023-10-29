@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section class="flex justify-center my-12 min-h-[800px]" layout:fragment="content">
+    <div class="container">
+
+        <div class="w-full grid grid-cols-12 gap-5">
+            <div class="col-span-3 rounded-lg shadow-lg bg-white">
+                <div class="p-5 flex flex-col gap-3">
+                    <h1 class="text-xl font-semibold">
+                        Cài đặt
+                    </h1>
+                    <ul>
+                        <li data-modal-target="updateInfo" data-modal-toggle="updateInfo" class="p-3 cursor-pointer flex items-center font-medium gap-x-2 rounded-lg bg-white hover:bg-gray-50 hover:text-main">
+                            <i class="bi bi-person-lines-fill text-xl"></i>
+                            Cập nhật thông tin
+                        </li>
+                        <hr />
+                        <li class="p-3 cursor-pointer flex items-center font-medium gap-x-2 rounded-lg bg-white hover:bg-gray-50 hover:text-main">
+                            <i class="bi bi-key-fill text-xl rotate-45"></i>
+                            Đổi mật khẩu
+                        </li>
+                        <hr />
+                        <li class="p-3 cursor-pointer flex items-center font-medium gap-x-2 rounded-lg bg-white hover:bg-gray-50 hover:text-main">
+                            
+
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-span-9 rounded-lg shadow-lg bg-white">
+                <div class="p-5 flex flex-col gap-3">
+                    <h1 class="text-xl font-semibold mb-0" th:text="${account.user.lastName + ' ' + account.user.firstName}">
+                    </h1>
+                    <h2 class="font-semibold text-main">Tác giả, Reviewer</h2>
+                    <div class="text-sm font-medium text-gray-500">
+                        <div class="mb-4 border-b border-gray-200">
+                            <ul class="flex flex-wrap -mb-px text-sm font-medium text-start" id="default-tab"
+                                data-tabs-toggle="#default-tab-content" role="tablist">
+                                <li class="mr-2 flex gap-2" role="presentation">
+                                    <button class="gap-x-2 py-3.5 px-4 border-b-2 rounded-t-lg" id="profile-tab"
+                                        data-tabs-target="#profile" type="button" role="tab" aria-controls="profile"
+                                        aria-selected="true">
+                                        Cá nhân
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="default-tab-content">
+                            <div class="hidden p-4 rounded-lg bg-gray-50 h-full text-start" id="profile" role="tabpanel"
+                                aria-labelledby="profile-tab">
+                                <div class="flex gap-5 ">
+                                    <div class="w-fit flex flex-col gap-3 text-gray-700">
+                                        <div>
+                                            Họ tên:
+                                        </div>
+                                        <div>
+                                            Tên người dùng:
+                                        </div>
+                                        <div>
+                                            Ngày sinh:
+                                        </div>
+                                        <div>
+                                            Email:
+                                        </div>
+                                    </div>
+                                    <div class="grow flex flex-col gap-3">
+                                        <div th:text="${account.user.lastName + ' ' + account.user.firstName}">
+                                           
+                                        </div>
+                                        <div th:text="${account.userName}">
+                                        
+                                        </div>
+                                        <div th:text="${account.user.dob != null ? account.user.dob : 'Chưa có'}">
+                                           
+                                        </div>
+                                        <div th:text="${account.email}">                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="updateInfo" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-4xl max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-5 border-b rounded-t">
+                        <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                            Cập nhật thông tin
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="updateInfo">
+                            <i class="bi bi-x-lg"></i>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="p-6 space-y-6">
+                        <form name="update-form" th:object="${account}" method="POST">
+                            <div class="relative">
+                                <input id="user-last-name" type="text" placeholder=" "
+                                    class="input-floating peer" th:field="*{user.lastName}" />
+                                <label for="user-last-name" class="label-floating">Họ và tên đệm</label>
+                            </div>
+                            <div class="relative mt-5">
+                                <input id="user-first-name" type="text" placeholder=" "
+                                    class="input-floating peer" th:field="*{user.firstName}" />
+                                <label for="user-first-name" class="label-floating">Tên</label>
+                            </div>
+                            <div class="relative mt-5">
+                                <input id="user-dob" type="date" placeholder=" "
+                                    class="input-floating peer" th:field="*{user.dob}" />
+                                <label for="user-dob" class="label-floating">Ngày sinh</label>
+                            </div>
+                        
+                            <div class="relative mt-5">
+                                <input id="user-email" type="text" placeholder=" "
+                                    class="input-floating peer" th:field="*{email}" />
+                                <label for="user-email" class="label-floating">Email</label>
+                            </div>
+                            
+                        </form>
+                        
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
+                        <button data-modal-hide="updateInfo" type="button" class="btn-main w-fit">Xác nhận</button>
+                        <button data-modal-hide="updateInfo" type="button" class="btn-secondary w-fit">Hủy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+
+    </script>
+</section>
+
+</html>

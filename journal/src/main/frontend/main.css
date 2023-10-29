@@ -306,4 +306,13 @@
     .text-gradient-main {
         @apply text-transparent text-8xl bg-clip-text bg-gradient-to-br from-main-light to-main
     }
+    [role="tab"] {
+        @apply border-b-0 overflow-hidden transition-all relative hover:text-gray-600 after:transition-all after:duration-300 after:content-[''] after:w-full after:h-0.5 after:absolute after:bottom-0 after:-left-full hover:after:left-0 after:bg-gray-100 hover:after:bg-gray-600
+    }
+    [role="tab"][aria-selected="true"] {
+        @apply border-b-0 text-main after:left-0 after:bg-main hover:text-main font-semibold
+    }
+    [role="tab"][aria-selected="false"] {
+        @apply border-b-0
+    }
 }
