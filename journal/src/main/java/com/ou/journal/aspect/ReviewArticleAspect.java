@@ -80,6 +80,7 @@ public class ReviewArticleAspect {
                 article.setStatus(ArticleStatus.DECIDING.toString());
                 articleDateService.addOrUpdate(article, DateTypeName.DECIDING_DATE.toString());
                 articleRepositoryJPA.save(article);
+                mailService.sendDecidingArticleEmail(article);
             }
         }
     }
