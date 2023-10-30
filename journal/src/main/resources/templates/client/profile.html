@@ -4,9 +4,12 @@
 
 <section class="flex justify-center my-12 min-h-[800px]" layout:fragment="content">
     <div class="container">
-
-        <div class="w-full grid grid-cols-12 gap-5">
-            <div class="col-span-3 rounded-lg shadow-lg bg-white">
+        <button data-drawer-target="menu-profile" data-drawer-toggle="menu-profile" aria-controls="menu-profile" type="button" class="fixed bottom-0 right-0 mb-5 mr-5 z-40 transition-all absolute flex justify-center items-center p-3 text-gray-500 rounded-full md:hidden hover:rotate-180 bg-white shadow-lg hover:bg-main text-main hover:text-white focus:outline-none">
+            <span class="sr-only">Open sidebar</span>
+            <i class="bi bi-grid-fill"></i>
+        </button>
+        <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-5">
+            <div id="menu-profile" class="w-64 md:w-full transition-transform -translate-x-full md:translate-x-0 rounded-0 fixed md:relative top-0 left-0 h-screen md:h-full col-span-full md:col-span-3 md:rounded-lg shadow-lg bg-white z-40" aria-label="Sidebar">
                 <div class="p-5 flex flex-col gap-3">
                     <h1 class="text-xl font-semibold">
                         Cài đặt
@@ -30,7 +33,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-span-9 rounded-lg shadow-lg bg-white">
+            <div class="col-span-full md:col-span-9 rounded-lg shadow-lg bg-white">
                 <div class="p-5 flex flex-col gap-3">
                     <h1 class="text-xl font-semibold mb-0" th:text="${account.user.lastName + ' ' + account.user.firstName}">
                     </h1>
@@ -90,9 +93,7 @@
 
         <div id="updateInfo" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative w-full max-w-4xl max-h-full">
-                <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <!-- Modal header -->
                     <div class="flex items-center justify-between p-5 border-b rounded-t">
                         <h3 class="text-xl font-medium text-gray-900 dark:text-white">
                             Cập nhật thông tin
@@ -102,16 +103,15 @@
                             <span class="sr-only">Close modal</span>
                         </button>
                     </div>
-                    <!-- Modal body -->
                     <div class="p-6 space-y-6">
-                        <form name="update-form" th:object="${account}" method="POST">
+                        <form th:action="@{/}" name="updateForm" th:object="${account}" method="POST">
                             <div class="relative">
-                                <input id="user-last-name" type="text" placeholder=" "
+                                <input required id="user-last-name" type="text" placeholder=" "
                                     class="input-floating peer" th:field="*{user.lastName}" />
                                 <label for="user-last-name" class="label-floating">Họ và tên đệm</label>
                             </div>
                             <div class="relative mt-5">
-                                <input id="user-first-name" type="text" placeholder=" "
+                                <input required id="user-first-name" type="text" placeholder=" "
                                     class="input-floating peer" th:field="*{user.firstName}" />
                                 <label for="user-first-name" class="label-floating">Tên</label>
                             </div>
@@ -122,7 +122,7 @@
                             </div>
                         
                             <div class="relative mt-5">
-                                <input id="user-email" type="text" placeholder=" "
+                                <input required id="user-email" type="text" placeholder=" "
                                     class="input-floating peer" th:field="*{email}" />
                                 <label for="user-email" class="label-floating">Email</label>
                             </div>
@@ -130,17 +130,18 @@
                         </form>
                         
                     </div>
-                    <!-- Modal footer -->
                     <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
-                        <button data-modal-hide="updateInfo" type="button" class="btn-main w-fit">Xác nhận</button>
+                        <button onclick="updateInfo()" type="button" class="btn-main w-fit">Xác nhận</button>
                         <button data-modal-hide="updateInfo" type="button" class="btn-secondary w-fit">Hủy</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-
+    <script>
+        function updateInfo() {
+            document.forms.updateForm.submit();
+        }
     </script>
 </section>
 
