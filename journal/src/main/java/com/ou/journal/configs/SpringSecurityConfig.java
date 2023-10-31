@@ -65,10 +65,10 @@ public class SpringSecurityConfig {
         return jwtAuthenticationTokenFilter;
     }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    // @Bean
+    // public PasswordEncoder getPasswordEncoder() {
+    //     return new BCryptPasswordEncoder();
+    // }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
