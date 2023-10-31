@@ -2597,6 +2597,14 @@ input:checked + .toggle-bg {
   color: transparent;
 }
 
+.bg-gradient-main {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+  --tw-gradient-from: #739dd9 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(115 157 217 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #084ac4 var(--tw-gradient-to-position);
+}
+
 [role="tab"] {
   position: relative;
   overflow: hidden;
