@@ -1,5 +1,8 @@
 package com.ou.journal.controllers;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.User;
+import com.ou.journal.pojo.UserRole;
 import com.ou.journal.service.interfaces.AccountService;
 
 @Controller
@@ -37,6 +42,21 @@ public class HomeController {
             try {
                 Account account = accountService.findByUserName(userDetails.getUsername());
                 model.addAttribute("account", account);
+
+                // Lấy ra danh sách các Role từ Account
+                Set<UserRole> userRoles = account.getUser().getUserRoles();
+
+                // Chuyển đổi từ UserRole sang RoleName và lấy ra displayName
+                String roles = userRoles.stream().map(userRole -> {
+                    for (RoleName role : RoleName.values()) {
+                        if (role.name().equals(userRole.getRole().getRoleName())) {
+                            return role.getDisplayName();
+                        }
+                    }
+                    return "";
+                }).collect(Collectors.joining(", "));
+
+                model.addAttribute("roles", roles);
             } catch (Exception e) {
                 e.printStackTrace();
             }

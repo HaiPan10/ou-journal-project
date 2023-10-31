@@ -4,60 +4,66 @@
 
 
 <section class="mt-6 mb-3" layout:fragment="content">
-    <div th:replace="~{fragments/stepper :: stepper (step=1)}"></div>
-    <form th:object="${article}" th:action="@{'/submit/step1'}" method="post">
-        <div class="fade-anim space-y-6 flex flex-col justify-center">
-            <div class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between">
-                <div>
-                    <div class="grid grid-cols-1 gap-x-6 gap-y-3">
-                        <div class="col-span-full">
-                            <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu đề</label>
-                            <input required id="title" name="title" type="text" th:field="*{title}"
-                                class="input px-3 py-2 mt-1 mb-5 w-full" />
-                        </div>
-    
-                        <div class="col-span-full">
-                            <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô tả</label>
-                            <textarea required id="description" name="description" rows="6" th:field="*{abstracts}"
-                                class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
-                        </div>
-    
-                        <div class="col-span-full">
-                            <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
-                                khóa</label>
-                            <div
-                                class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/10 rounded-md mt-1 mb-5 w-full">
-                                <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
-                                </div>
-                                <div class="hidden p-0 m-0" id="last-child"></div>
-                                <input id="keyword-input" style="min-width: 100px" name="keyword-input" type="text"
-                                    class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
+    <div class="min-h-[800px]">
+        <div th:replace="~{fragments/stepper :: stepper (step=1)}"></div>
+        <form th:object="${article}" th:action="@{'/submit/step1'}" method="post">
+            <div class="fade-anim space-y-6 flex flex-col justify-center">
+                <div
+                    class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between">
+                    <div>
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-3">
+                            <div class="col-span-full">
+                                <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu
+                                    đề</label>
+                                <input required id="title" name="title" type="text" th:field="*{title}"
+                                    class="input px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
-    
-                            <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" />
+
+                            <div class="col-span-full">
+                                <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô
+                                    tả</label>
+                                <textarea required id="description" name="description" rows="6" th:field="*{abstracts}"
+                                    class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
+                            </div>
+
+                            <div class="col-span-full">
+                                <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
+                                    khóa</label>
+                                <div
+                                    class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/10 rounded-md mt-1 mb-5 w-full">
+                                    <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
+                                    </div>
+                                    <div class="hidden p-0 m-0" id="last-child"></div>
+                                    <input id="keyword-input" style="min-width: 100px" name="keyword-input" type="text"
+                                        class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
+                                </div>
+
+                                <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" />
+                            </div>
+
+
                         </div>
-    
-                        
+                    </div>
+
+                    <div class="mt-6 flex items-center justify-end gap-x-6">
+                        <!-- <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button> -->
+                        <button type="button" id="btnSubmit" onClick="submitForm()"
+                            class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
+                            tục</button>
                     </div>
                 </div>
-                
-                <div class="mt-6 flex items-center justify-end gap-x-6">
-                    <!-- <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button> -->
-                    <button type="button" id="btnSubmit" onClick="submitForm()"
-                        class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
-                        tục</button>
-                </div>
             </div>
-        </div>
 
-    </form>
+        </form>
+    </div>
+
     <script>
         const kwInput = document.querySelector("#keyword-input")
         const kw = document.querySelector("#keyword")
         const kwBox = document.querySelector("#keywords-box")
 
         function submitForm() {
-             document.querySelector("form").submit();
+            document.querySelector("form").submit();
         }
 
         function removeKeyword(obj) {
@@ -131,7 +137,7 @@
                           </div>`
                         insertKeywordBox(newKwHTML);
                     }
-                    
+
                 });
             }
         });

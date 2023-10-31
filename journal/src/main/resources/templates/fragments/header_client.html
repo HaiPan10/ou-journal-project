@@ -122,7 +122,7 @@
                         th:href="@{/homepage}">Trang chủ</a></li>
                   <li><a class="nav-item" id="nav-item-main-menu"
                         th:href="@{/main-menu}">Main Menu</a></li>
-                  <li><a class="nav-item" id="nav-item-submit"
+                  <li sec:authorize="isAuthenticated()" th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}"><a class="nav-item" id="nav-item-submit"
                         th:href="@{/submit}">Gửi bài</a></li>
                   <li><a class="nav-item" 
                         href="#">Giới thiệu</a></li>
