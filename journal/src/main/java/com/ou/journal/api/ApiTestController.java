@@ -79,14 +79,14 @@ public class ApiTestController {
         }
     }
 
-    @PostMapping(path = "/generate-token")
-    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
-        try {
-            return ResponseEntity.ok().body(accountService.login(authRequest));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @PostMapping(path = "/generate-token")
+    // public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+    //     try {
+    //         return ResponseEntity.ok().body(accountService.login(authRequest));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 
     // Chỉ dùng cho test để dễ dàng lấy được email token
     // @GetMapping(path = "/get-email-token/{accountId}")
