@@ -66,7 +66,7 @@ public class MailServiceImpl implements MailService {
             try {
                 helper.setTo(mailRequest.getTo());
                 helper.setSubject(mailRequest.getSubject());
-                String htmlContent = templateEngine.process("mail/test", mailRequest.getContext());
+                String htmlContent = templateEngine.process("mail/index", mailRequest.getContext());
                 helper.setText(htmlContent, true);
                 mailSender.send(mimeMessage);
             } catch (MessagingException e) {
@@ -112,8 +112,8 @@ public class MailServiceImpl implements MailService {
     public void sendSecretaryVerificationmail(Article article, ArticleNote articleNote) {
         Context context = new Context();
         String subject = "Thông báo trạng thái bài báo";
-        String articleAction = (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())
-                ? " được chấp thuận và đang tiến hành mời reviewer."
+        String articleAction = (article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString())
+                ? " được chấp thuận và đang tiến hành chờ biên tập viên."
                 : " bị từ chối.");
         String secretaryNote = (articleNote.getNote().length() != 0
                 ? " Nhận xét từ thư ký: " + articleNote.getNote() + "."

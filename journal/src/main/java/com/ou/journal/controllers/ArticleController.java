@@ -53,7 +53,7 @@ public class ArticleController {
         try {
             Article article = articleService.retrieve(articleId);
             if (article.getStatus().equals(ArticleStatus.PENDING.toString())) {
-                model.addAttribute("viewUrl", String.format("/admin/articles/view/%s", article.getId()));
+                model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
                 model.addAttribute("article", article);
             } else {
                 model.addAttribute("error", "invalid status");

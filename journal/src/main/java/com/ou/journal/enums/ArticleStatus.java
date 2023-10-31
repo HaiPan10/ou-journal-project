@@ -3,6 +3,7 @@ package com.ou.journal.enums;
 public enum ArticleStatus {
     PENDING("Chờ duyệt", 1),
 	SECRETARY_REJECT("Thư ký từ chối", 1),
+    ASSIGN_EDITOR("Chờ gán biên tập viên", 1),
     INVITING_REVIEWER("Chờ mời reviewer", 1),
 	IN_REVIEW("Đang review", 2),
     DECIDING("Chờ quyết định", 3),

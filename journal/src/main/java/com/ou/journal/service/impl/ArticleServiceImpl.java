@@ -135,9 +135,9 @@ public class ArticleServiceImpl implements ArticleService {
         if (persistArticle.getStatus().equals(ArticleStatus.PENDING.toString())) {
             String status = article.getStatus();
             persistArticle.setStatus(status);
-            if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
-                persistArticle.setTotalReviewer(article.getTotalReviewer());
-            }
+            // if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
+            //     persistArticle.setTotalReviewer(article.getTotalReviewer());
+            // }
             articleDateService.addOrUpdate(persistArticle, DateTypeName.SECRETARY_VIEWED_DATE.toString());
             articleRepositoryJPA.save(persistArticle);
             ArticleNote articleNote = article.getArticleNote();
