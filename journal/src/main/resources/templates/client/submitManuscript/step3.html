@@ -3,7 +3,7 @@
     layout:decorate="~{layouts/layout}">
 
 
-<section layout:fragment="content">
+<section class="mt-6 mb-3" layout:fragment="content">
     <div th:replace="~{fragments/stepper :: stepper (step=2)}"></div>
     <form name="main" enctype="multipart/form-data" th:action="@{'/submit/step3'}" method="post"> 
         <div class="space-y-6 flex flex-col justify-center">

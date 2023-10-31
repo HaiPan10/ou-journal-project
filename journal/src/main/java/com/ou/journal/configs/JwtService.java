@@ -176,8 +176,8 @@ public class JwtService {
             if (signedJWT.verify(verifier)) {
                 claimsSet = signedJWT.getJWTClaimsSet();
             }
-        } catch (JOSEException | ParseException e) {
-            System.out.println("[ERROR] - " + e.getMessage());
+        } catch (JOSEException | ParseException | NullPointerException e) {
+            System.out.println("[ERROR] - JwtService Error: " + e.getMessage());
         }
         return claimsSet;
     }
@@ -229,7 +229,7 @@ public class JwtService {
         String value = null;
         try {
             value = claimsSet.getStringClaim("userName");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;
@@ -240,7 +240,7 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("id");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;
@@ -251,7 +251,7 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("id");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;
@@ -262,7 +262,7 @@ public class JwtService {
         String value = null;
         try {
             value = claimsSet.getStringClaim("email");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;
@@ -273,7 +273,7 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("reviewArticleId");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;
@@ -284,7 +284,7 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("articleId");
-        } catch (ParseException e) {
+        } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return value;

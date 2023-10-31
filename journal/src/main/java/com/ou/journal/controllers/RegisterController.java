@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.nimbusds.jose.JOSEException;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
@@ -20,8 +21,6 @@ import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
-
-import jakarta.validation.Valid;
 
 @Controller
 public class RegisterController {
@@ -59,6 +58,11 @@ public class RegisterController {
                 user.setAccount(account);
                 model.addAttribute("user", user);
                 return "client/register";
+            } else {
+                model.addAttribute("home",
+                    String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+                model.addAttribute("error", "Token không hợp lệ");
+                return "anonymous/errorPage";
             }
         }
         return "client/registerEmail";
@@ -87,25 +91,38 @@ public class RegisterController {
 
     // Người dùng chưa có trong hệ thống gửi thông tin đăng ký
     @PostMapping("/register")
-    public String submitRegister(@ModelAttribute("user") @Valid User user, BindingResult rs,
-            @RequestParam(required = false, name = "token") String token) {
+    public String submitRegister(@ModelAttribute("user") User user, BindingResult rs,
+            @RequestParam(required = false, name = "token") String token, Model model,
+            RedirectAttributes redirectAttributes) {
+        webAppValidator.validate(user, rs);
         if (!rs.hasErrors()) {
             try {
                 String email = jwtService.getEmailFromToken(token, SecrectType.REGISTER);
-                if (email == null || !email.equals(user.getEmail())) {
-                    throw new Exception("Token không hợp lệ");
+                System.out.println("[DEBUG] - " + email);
+                if (email == null || !email.equals(user.getEmail()) || !email.equals(user.getAccount().getEmail())) {
+                    throw new JOSEException("Token không hợp lệ");
                 }
                 Account account = user.getAccount();
                 user.setAccount(null);
-                account.setUser(user);
-                accountService.create(account);
-                return "login";
+                accountService.create(account, user);
+                redirectAttributes.addFlashAttribute("registrySuccess", "Đăng ký thành công");
+                return "redirect:/login";
+            } catch (JOSEException e) {
+                System.out.println("[ERROR] - Message: " + e.getMessage());
+                model.addAttribute("home",
+                    String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+                model.addAttribute("error", e.getMessage());
+                return "anonymous/errorPage";
             } catch (Exception e) {
                 System.out.println("[ERROR] - Message: " + e.getMessage());
             }
 
+        } else {
+            rs.getAllErrors().forEach(e -> {
+                System.out.println("[DEBUG] - " + e.getDefaultMessage());
+            });
         }
-
+        model.addAttribute("token", token);
         return "client/register";
     }
 
@@ -117,9 +134,8 @@ public class RegisterController {
             Account account = new Account();
             account.setEmail(email);
             model.addAttribute("account", account);
-            model.addAttribute("token", token);
             model.addAttribute("targetEndpoint",
-                String.format("%s/register/account?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
+                    String.format("%s/register/account?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
             return "anonymous/accountInfo";
         }
         model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
@@ -134,16 +150,24 @@ public class RegisterController {
         if (!rs.hasErrors()) {
             try {
                 Long id = jwtService.getIdFromToken(token, SecrectType.EMAIL);
+                String email = jwtService.getEmailFromToken(token, SecrectType.EMAIL);
+                if(token == null || id == null || email == null || !email.equals(account.getEmail())){
+                    throw new JOSEException("Token không hợp lệ");
+                }
                 accountService.create(account, id);
                 return "redirect:/login";
+            } catch(JOSEException e){
+                System.out.println("[ERROR] - Message: " + e.getMessage());
+                model.addAttribute("home",
+                    String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+                model.addAttribute("error", e.getMessage());
+                return "anonymous/errorPage";
             } catch (Exception e) {
                 System.out.println("[ERROR] - Message: " + e.getMessage());
             }
-        } else {
-            // model.addAttribute("token", token);
-            // return "";
-        }
-
+        } 
+        model.addAttribute("targetEndpoint",
+                String.format("%s/register/account?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
         return "client/registerAccount";
     }
 

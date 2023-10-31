@@ -24,9 +24,7 @@
                   <span class="sr-only">Open user menu</span>
                   <img class="w-10 h-10 mr-2" th:src="@{/images/avatar.png}" />
                   <h3 class="font-medium" th:text="${#authentication.name}"></h3>
-                  <span class="material-symbols-rounded">
-                     keyboard_arrow_down
-                  </span>
+                  <i class="bi bi-chevron-down"></i>
                </button>
             </div>
 
@@ -95,6 +93,10 @@
                         </button> -->
                      </div>
                   </li>
+                  <li>
+                     <a th:href="@{/profile}" class="transition-all block mx-3 my-1 rounded-lg px-3 py-2 text-sm text-gray-700 hover:text-main hover:font-medium"
+                        role="menuitem">Thông tin cá nhân</a>
+                  </li>
                   <hr/>
                   <li>
                      <a th:href="@{/logout}" class="transition-all block mx-3 mt-1 rounded-lg px-3 py-2 text-sm text-gray-700 hover:text-main hover:font-medium"
@@ -109,9 +111,7 @@
    <nav id="header" class="w-full bg-white shadow-sm">
       <div class="w-full flex flex-col md:flex-row items-start md:items-center justify-between px-6">
          <label for="menu-toggle" class="cursor-pointer text-main md:hidden block m-0 py-2 px-4">
-            <span id="menu-icon" class="material-symbols-rounded flex justify-center">
-               menu
-            </span>
+            <i id="menu-icon" class="bi bi-list text-2xl transition-transform"></i>
          </label>
          <input class="hidden" type="checkbox" id="menu-toggle">
 

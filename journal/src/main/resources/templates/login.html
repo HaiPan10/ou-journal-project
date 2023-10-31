@@ -16,6 +16,9 @@
                                     </div>
                                   </div>
                             </div>
+                            <div th:if="${registrySuccess}" role="alert">
+                                <div class="ml-3 text-sm font-medium" th:text="${registrySuccess}"></div>
+                            </div>
                             <label class="font-medium pb-1 block">Tên đăng nhập / Email</label>
                             <input name="username" type="text"
                                 class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/25 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
