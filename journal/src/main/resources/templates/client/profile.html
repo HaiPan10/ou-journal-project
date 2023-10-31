@@ -20,7 +20,7 @@
                             Cập nhật thông tin
                         </li>
                         <hr />
-                        <li class="p-3 cursor-pointer flex items-center font-medium gap-x-2 rounded-lg bg-white hover:bg-gray-50 hover:text-main">
+                        <li data-modal-target="changePass" data-modal-toggle="changePass" class="p-3 cursor-pointer flex items-center font-medium gap-x-2 rounded-lg bg-white hover:bg-gray-50 hover:text-main">
                             <i class="bi bi-key-fill text-xl rotate-45"></i>
                             Đổi mật khẩu
                         </li>
@@ -133,6 +133,46 @@
                     <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
                         <button onclick="updateInfo()" type="button" class="btn-main w-fit">Xác nhận</button>
                         <button data-modal-hide="updateInfo" type="button" class="btn-secondary w-fit">Hủy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="changePass" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-4xl max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div class="flex items-center justify-between p-5 border-b rounded-t">
+                        <h3 class="text-xl font-medium text-gray-900 dark:text-white">
+                            Đổi mật khẩu
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="changePass">
+                            <i class="bi bi-x-lg"></i>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <form th:action="@{/}" name="updateForm" method="POST">
+                            <div class="relative">
+                                <input required id="user-last-name" type="password" placeholder=" "
+                                    class="input-floating peer" name="oldPass" />
+                                <label for="user-last-name" class="label-floating">Mật khẩu cũ</label>
+                            </div>
+                            <div class="relative mt-5">
+                                <input required id="user-first-name" type="password" placeholder=" "
+                                    class="input-floating peer" name="newPass" />
+                                <label for="user-first-name" class="label-floating">Mật khẩu mới</label>
+                            </div>
+                            <div class="relative mt-5">
+                                <input required id="user-first-name" type="password" placeholder=" "
+                                    class="input-floating peer" name="confirmPass" />
+                                <label for="user-first-name" class="label-floating">Xác nhận mật khẩu mới</label>
+                            </div>
+                        </form>
+                        
+                    </div>
+                    <div class="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b">
+                        <button onclick="changePass()" type="button" class="btn-main w-fit">Xác nhận</button>
+                        <button data-modal-hide="changePass" type="button" class="btn-secondary w-fit">Hủy</button>
                     </div>
                 </div>
             </div>
