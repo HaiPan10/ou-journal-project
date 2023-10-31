@@ -3,7 +3,7 @@
     layout:decorate="~{layouts/adminLayout}">
 
 <section layout:fragment="content">
-    <nav class="flex" aria-label="Breadcrumb">
+    <nav class="fade-anim flex" aria-label="Breadcrumb">
         <ol class="breadcum">
             <li class="breadcum-item">
                 <a href="#" class="breadcum-item-link">
@@ -37,7 +37,7 @@
             </li>
         </ol>
     </nav>
-    <div class="bg-white p-5 rounded-lg mt-5">
+    <div class="move-up-anim bg-white p-5 rounded-lg mt-5">
         <div class="font-semibold text-3xl">
             <span th:text="${article.title}"> </span>
         </div>
