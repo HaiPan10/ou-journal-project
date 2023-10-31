@@ -13,6 +13,10 @@ spring:
     password: mai2604
     # password: IamPhong89
     # password: Admin@123
+
+    # url: jdbc:mysql://mysql-container:3306/ou-journal-db
+    # username: pla
+    # password: 1
   jpa:
     show-sql: true
     hibernate:
