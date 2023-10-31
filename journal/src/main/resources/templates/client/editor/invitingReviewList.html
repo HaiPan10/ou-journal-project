@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section class="flex justify-center" layout:fragment="content">
+    <div class="container min-h-[800px]">
+        <nav class="fade-anim flex" aria-label="Breadcrumb">
+            <ol class="breadcum">
+                <li class="breadcum-item">
+                    <a th:href="@{/main-menu}" class="breadcum-item-link">
+                        <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                        </svg>
+                        <span class="breadcum-item-text ml-0">Main menu</span>
+                    </a>
+                </li>
+                <li class="breadcum-item" aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="breadcum-item-text current">Danh sách bài báo cần mời phản biệt viên</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    
+        <!-- FILTER -->
+        <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+            <!-- EXTRA FILTER -->
+            <!-- <div class="w-fit">
+                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
+                    Bộ lọc
+                    <i class="bi bi-sliders2 text-lg"></i>
+                </button>
+    
+                <div id="dropdownBgHover" class="dropdown">
+                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownBgHoverButton">
+                        <li>
+                            <h3>Tình trạng</h3>
+                            <div class="filter-container">
+                                <input id="pending-status" name="status" type="radio" class="filter-input rounded-full" value="PENDING" onchange="handleChange(this);" checked>
+                                <label class="filter-label" for="pending-status">Chưa duyệt</label>
+                            </div>
+                            <div class="filter-container">
+                                <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
+                                <label class="filter-label" for="inreview-status">Đang mời review</label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div> -->
+            <!-- INPUT FILTER -->
+            <div class="grow relative flex items-center md:mt-0">
+                <span class="absolute pl-3 py-2">
+                    <i class="bi bi-search text-gray-400"></i>
+                </span>
+                <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
+            </div>
+        </form>
+    
+    
+        <div class="move-up-anim table-container my-6">
+            <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách bài đăng cần mời reviewer
+                </h3>
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tiêu đề
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email tác giả đứng tên
+                        </th>
+                        <div>
+                            <th scope="col" class="px-6 py-3">
+                                Số lượng reviewer
+                            </th>
+                        </div>
+                        <th scope="col" class="px-6 py-3">
+                            Tình trạng
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="article : ${articles}">
+                        <tr class="table-row">
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${article.id}">
+                            </td>
+                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                <span th:text="${article.title}"></span>
+                            </th>
+                            <th:block th:each="authorArticle : ${article.authorArticles}">
+                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                    <div th:if="${authorRole.authorType.id == 1}">
+                                        <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                            <div>
+                                <td class="px-6 py-4" th:text="${article.acceptedReviewer} + '/' + ${article.totalReviewer} "></td>
+                            </div>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <span class="badge-success">Chờ mời review</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <a class="table-action" th:href="@{/editor/review-articles/{id}(id=${article.id})}">Mời review</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+        var currentSide = document.getElementById("articles");
+        currentSide.classList.add("active");
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var status = urlParams.get('status');
+        var radioButtons = document.getElementsByName("status");
+
+        if (status) {
+            for (let i = 0; i < radioButtons.length; i++) {
+                if (radioButtons[i].value === status) {
+                    radioButtons[i].checked = true;
+                    break;
+                }
+            }
+        }
+
+        function handleChange(src) {
+            window.location.replace(`/admin/articles?status=${src.value}`);
+        }
+
+    </script>
+
+</section>
+
+</html>

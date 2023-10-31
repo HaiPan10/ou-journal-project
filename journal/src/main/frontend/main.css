@@ -255,6 +255,10 @@
         @apply block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-white rounded-md border border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-main/75
     }
 
+    .input-floating:read-only {
+        @apply cursor-default
+    }
+
     /* authortype */
 
     .badge-FIRST_AUTHOR{
@@ -313,6 +317,17 @@
 
     .bg-gradient-main {
         @apply bg-gradient-to-br from-main-light to-main
+    }
+    .autocomplete-items{
+        @apply bg-white shadow-lg cursor-pointer absolute top-full z-40 w-full
+    } 
+
+    .autocomplete-items div{
+        @apply p-3 border-b border-gray-200 hover:bg-gray-100
+    }
+
+    .autocomplete-active {
+        @apply bg-main text-white
     }
 
     [role="tab"] {

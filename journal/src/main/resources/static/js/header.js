@@ -45,7 +45,7 @@ switch (tabName[1]) {
   case 'homepage':
     document.querySelector("#nav-item-homepage").classList.add("active");
     break;
-  case 'main-menu': case 'submission': case 'reviewer':
+  case 'main-menu': case 'submission': case 'reviewer': case 'editor':
     document.querySelector("#nav-item-main-menu").classList.add("active");
     break;
   case 'submit':

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
+
+<section class="flex justify-center mb-12" layout:fragment="content">
+    <div class="container min-h-[800px]">
+        <nav class="fade-anim flex mb-5" aria-label="Breadcrumb">
+            <ol class="breadcum">
+                <li class="breadcum-item">
+                    <a th:href="@{/main-menu}" class="breadcum-item-link">
+                        <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                        </svg>
+                        <span class="breadcum-item-text ml-0">Main menu</span>
+                    </a>
+                </li>
+                <li class="breadcum-item">
+                    <a th:href="@{/submission/processing}" class="breadcum-item-link">
+                        <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="breadcum-item-text">Danh sách bài báo cần mời phản biệt viên</span>
+                    </a>
+                </li>
+                <li class="breadcum-item" aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="breadcum-item-text current" th:text="${article.title}"></span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+        <form th:action="@{/editor/review-articles/invite/{id}(id=${articleId})}" th:object="${user}" method="post"
+            class="move-up-anim my-5 p-5 bg-white rounded-lg">
+            <div class="grid grid-cols-1 gap-y-5">
+                <h1 class="font-semibold uppercase text-lg text-main">Thông tin reviewer</h1>
+                <div th:if="${#fields.hasAnyErrors()}" class="flex flex-col gap-3">
+                    <div class="text-red-500 text-sm font-medium w-fit" th:each="err : ${#fields.allErrors()}"
+                        th:text="${err}"></div>
+                </div>
+                <input type="hidden" id="user-id" th:field="*{id}">
+                <div class="relative">
+                    <input id="myInput" type="text" th:field="*{email}" class="input-floating peer" placeholder=" " />
+                    <label for="myInput" class="label-floating">Email</label>
+                </div>
+                <span class="text-red-500 text-sm font-medium hidden w-fit mt-1" id="notAvailable">Mail của reviewer
+                    này
+                    chưa có trên hệ thống! Vui lòng nhập họ tên</span>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="col-span-1 relative">
+                        <input id="user-last-name" th:field="*{lastName}" name="lastName" required type="text"
+                            placeholder=" " class="input-floating peer" />
+                        <label for="user-last-name" class="label-floating">Họ và tên đệm</label>
+
+                    </div>
+                    <div class="col-span-1 relative">
+                        <input id="user-first-name" th:field="*{firstName}" name="firstName" type="text" placeholder=" "
+                            class="input-floating peer" />
+                        <label for="user-first-name" class="label-floating">Tên</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-main ml-auto">
+                    Mời reviewer</button>
+            </div>
+        </form>
+        <div class="move-up-anim table-container my-6">
+            <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách reviewer đã mời
+                </h3>
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Mail reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Họ tên reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày mời
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Trạng thái mời
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="reviewArticle : ${reviewArticles}">
+                        <tr class="table-row">
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.id}">
+                            </td>
+                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                <span th:text="${reviewArticle.user.email}"></span>
+                            </th>
+                            <td class="px-6 py-4"
+                                th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
+                            <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                            <td class="px-6 py-4">
+                                <div th:if="${reviewArticle.status eq 'PENDING'}">
+                                    <span class="badge-warning">Chờ phản hồi</span>
+                                </div>
+                                <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
+                                    <span class="badge-success">Đồng ý</span>
+                                </div>
+                                <div th:if="${reviewArticle.status eq 'REJECTED'}">
+                                    <span class="badge-danger">Từ chối</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+        <button type="button" id="endInvitationBtn"
+            class="move-up-anim rounded-md mt-2 bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">
+            Tiến hành review</button>
+    </div>
+    <script th:inline="javascript">
+        
+        function autocomplete(inp, arr) {
+            var currentFocus;
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < arr.length; i++) {
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        b.addEventListener("click", function (e) {
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            checkAvailabe();
+                            closeAllLists();
+                        });
+                        if (a.childElementCount <= 5) {
+                            a.appendChild(b);
+                        }
+                    }
+                }
+            });
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        var users = /*[[${ users }]]*/ "";
+        var emails = [];
+        users.forEach(user => {
+            emails.push(user[1]);
+        });
+        var lastNames = [];
+        users.forEach(user => {
+            lastNames.push(user[2]);
+        });
+        var firstNames = [];
+        users.forEach(user => {
+            firstNames.push(user[3]);
+        });
+        var ids = [];
+        users.forEach(user => {
+            ids.push(user[0]);
+        });
+        autocomplete(document.getElementById("myInput"), emails);
+
+        var input = document.getElementById("myInput");
+        input.addEventListener("input", function () {
+            checkAvailabe()
+        });
+
+        function checkAvailabe() {
+            if (input.value.length !== 0) {
+                var isAvailableUser = emails.includes(input.value);
+                document.getElementById("user-first-name").readOnly = false;
+                document.getElementById("user-last-name").readOnly = false;
+                if (isAvailableUser) {
+                    document.getElementById("myInput").classList.remove("border-red-500");
+                    document.getElementById("notAvailable").classList.add("hidden");
+                    document.getElementById("user-last-name").value = lastNames[emails.indexOf(input.value)];
+                    document.getElementById("user-first-name").value = firstNames[emails.indexOf(input.value)];
+                    document.getElementById("user-id").value = ids[emails.indexOf(input.value)];
+                    document.getElementById("user-last-name").readOnly = true;
+                    document.getElementById("user-first-name").readOnly = true;
+                } else {
+                    document.getElementById("notAvailable").classList.remove("hidden");
+                    document.getElementById("myInput").classList.add("border-red-500");
+                    document.getElementById("user-last-name").readOnly = false;
+                    document.getElementById("user-first-name").readOnly = false;
+                    document.getElementById("user-last-name").value = "";
+                    document.getElementById("user-first-name").value = "";
+                    document.getElementById("user-id").value = null;
+                }
+            } else {
+                document.getElementById("user-first-name").readOnly = true;
+                document.getElementById("user-last-name").readOnly = true;
+                document.getElementById("notAvailable").classList.add("hidden");
+                document.getElementById("myInput").classList.remove("border-red-500");
+            }
+        }
+
+        document.getElementById('endInvitationBtn').addEventListener('click', (e) => {
+            fetch(`/editor/articles/end-review/[[${article.id}]]`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = `/editor/articles?status=IN_REVIEW`
+                } else {
+                    return res.text().then(errorMessage => {
+                        throw new Error(errorMessage);
+                    });
+                }
+            }).catch(err => {
+                alert(err.message)
+            })
+        })
+    </script>
+</section>
+
+</html>
