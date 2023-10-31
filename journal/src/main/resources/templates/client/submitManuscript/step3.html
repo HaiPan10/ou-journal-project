@@ -4,10 +4,10 @@
 
 
 <section class="mt-6 mb-3" layout:fragment="content">
-    <div th:replace="~{fragments/stepper :: stepper (step=2)}"></div>
+    <div th:replace="~{fragments/stepper :: stepper (step=3)}"></div>
     <form name="main" enctype="multipart/form-data" th:action="@{'/submit/step3'}" method="post"> 
-        <div class="space-y-6 flex flex-col justify-center">
-            <div class="bg-white rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between"
+        <div class="fade-anim space-y-6 flex flex-col justify-center">
+            <div class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between"
                 style="min-height: 600px">
                 <div class="col-span-full">
                     <label class="block text-sm font-medium leading-6 text-gray-900">Tài liệu</label>

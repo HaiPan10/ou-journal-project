@@ -3,8 +3,8 @@
     layout:decorate="~{layouts/layout}">
 
 <section class="flex justify-center" layout:fragment="content">
-    <div class="container">
-        <nav class="flex" aria-label="Breadcrumb">
+    <div class="container min-h-[800px]">
+        <nav class="fade-anim flex" aria-label="Breadcrumb">
             <ol class="breadcum">
                 <li class="breadcum-item">
                     <a th:href="@{/main-menu}" class="breadcum-item-link">
@@ -28,7 +28,7 @@
                 </li>
             </ol>
         </nav>
-        <div class="table-container my-6">
+        <div class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
                     Danh sách lời mời

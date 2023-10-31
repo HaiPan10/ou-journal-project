@@ -181,7 +181,7 @@ public class SpringSecurityConfig {
                                 "/register/email",
                                 "/register/account",
                                 "/css/**",
-                                "/img/**",
+                                "/images/**",
                                 "/js/**",
                                 "/styles/**",
                                 "/vendor/**",

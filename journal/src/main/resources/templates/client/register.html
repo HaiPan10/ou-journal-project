@@ -14,9 +14,9 @@
             <div class="col-span-1 md:col-span-2 h-fit">
                 <div class="relative pt-3 mb-12 bg-white shadow border w-full rounded-lg">
                     <h1
-                        class="absolute rounded ml-5 shadow bg-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
+                        class="absolute rounded ml-5 shadow bg-gradient-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
                         Thông tin đăng nhập</h1>
-                    <div class="px-5 py-7">
+                    <div class="px-5 py-7 h-full">
                         <div>
                             <label for="username" class="font-medium pb-1 block">Tên đăng nhập <span
                                     class="text-main">*</span></label>
@@ -60,14 +60,15 @@
                         </div>
                         <label for="confirmPassword" class="font-medium pb-1 block">Xác nhận mật khẩu <span
                                 class="text-main">*</span></label>
-                        <input id="confirmPassword" required th:field="*{account.confirmPassword}" type="password" class="input px-3 py-2 mt-1 mb-5 w-full" />
+                        <input id="confirmPassword" required th:field="*{account.confirmPassword}" type="password"
+                            class="input px-3 py-2 mt-1 mb-5 w-full" />
                         <span class="text-sm text-red-500" th:if="${#fields.hasErrors('account.confirmPassword')}"
-                                th:errors="*{account.confirmPassword}"></span>
+                            th:errors="*{account.confirmPassword}"></span>
                     </div>
                 </div>
                 <div class="relative pt-3 mb-12 md:mb-0 bg-white shadow border w-full rounded-lg">
                     <h1
-                        class="absolute rounded ml-5 shadow bg-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
+                        class="absolute rounded ml-5 shadow bg-gradient-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
                         Thông tin khác</h1>
                     <div class="px-5 py-7">
 
@@ -93,9 +94,9 @@
             <div class="col-span-1 md:col-span-3 md:h-full">
                 <div class="relative pt-3 mb-12 md:mb-0 bg-white shadow border w-full rounded-lg md:h-full">
                     <h1
-                        class="absolute rounded ml-5 shadow bg-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
+                        class="absolute rounded ml-5 shadow bg-gradient-main top-0 -translate-y-1/2 text-white font-semibold leading-none p-3">
                         Thông tin cá nhân</h1>
-                    <div class="px-5 py-7">
+                    <div class="px-5 py-7 h-full flex flex-col">
                         <label for="salutation" class="font-medium pb-1 block">Học vị - học hàm <span
                                 class="text-main">*</span></label>
                         <input id="salutation" required name="salutation" type="text"
@@ -134,8 +135,8 @@
                                         class="text-main">*</span></label>
                                 <input id="dob" required name="dob" type="date"
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
-                                    <span class="text-sm text-red-500" th:if="${#fields.hasErrors('dob')}"
-                                th:errors="*{dob}"></span>
+                                <span class="text-sm text-red-500" th:if="${#fields.hasErrors('dob')}"
+                                    th:errors="*{dob}"></span>
                             </div>
                             <div class="col-span-1">
                                 <label for="gender" class="font-medium pb-1 block">Giới tính</label>
@@ -459,10 +460,13 @@
                                     class="input px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
                         </div>
-                        <button type="submit"
-                            class="p-2.5 mt-3 transition duration-500 bg-main hover:bg-main/75 focus:hover:bg-main focus:shadow-sm focus:ring-4 focus:ring-main/50 text-white w-full rounded-lg shadow-sm hover:shadow-md font-semibold text-center">
-                            <span class="inline-block mr-2">Đăng ký</span>
-                        </button>
+                        <div class="mt-auto flex justify-end">
+                            <button type="submit"
+                                class="py-2.5 px-5  mt-3 md:w-fit transition duration-500 btn-gradient-main text-base font-semibold">
+                                <span class="inline-block">Đăng ký</span>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
