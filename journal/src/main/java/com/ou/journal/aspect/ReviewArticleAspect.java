@@ -43,11 +43,11 @@ public class ReviewArticleAspect {
         returning = "reviewArticle"
     )
     public void autoChangeStatus(ReviewArticle reviewArticle) throws Exception {
-        Article article = articleService.retrieve(reviewArticle.getArticle().getId());
-        if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString()) &&
-        article.getTotalReviewer().equals(reviewArticleRepositoryJPA.countAcceptedReview(article.getId()))
+        Article article = reviewArticle.getManuscript().getArticle();
+        if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString()) 
         && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             article.setStatus(ArticleStatus.IN_REVIEW.toString());
+            articleDateService.addOrUpdate(article, DateTypeName.IN_REVIEW_DATE.toString());
             articleRepositoryJPA.save(article);
             mailService.sendInReviewStatusChangeMail(article);
         }
@@ -58,9 +58,8 @@ public class ReviewArticleAspect {
         returning = "reviewArticle"
     )
     public void autoChangeAcceptStatus(ReviewArticle reviewArticle) throws Exception {
-        Article article = articleService.retrieve(reviewArticle.getArticle().getId());
-        if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString()) &&
-        article.getTotalReviewer().equals(reviewArticleRepositoryJPA.countAcceptedReview(article.getId()))
+        Article article = reviewArticle.getManuscript().getArticle();
+        if (reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString())
         && article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
             article.setStatus(ArticleStatus.IN_REVIEW.toString());
             articleDateService.addOrUpdate(article, DateTypeName.IN_REVIEW_DATE.toString());
@@ -69,19 +68,19 @@ public class ReviewArticleAspect {
         }
     }
 
-    @AfterReturning(
-        pointcut = "execution(com.ou.journal.pojo.ReviewArticle com.ou.journal.service.interfaces.ReviewArticleService.doneReview(Long, Long))",
-        returning = "reviewArticle"
-    )
-    public void autoChangeDecidingStatus(ReviewArticle reviewArticle) throws Exception {
-        if (reviewArticleRepositoryJPA.countAcceptedReview(reviewArticle.getArticle().getId()) == 0) {
-            Article article = articleService.retrieve(reviewArticle.getArticle().getId());
-            if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-                article.setStatus(ArticleStatus.DECIDING.toString());
-                articleDateService.addOrUpdate(article, DateTypeName.DECIDING_DATE.toString());
-                articleRepositoryJPA.save(article);
-                mailService.sendDecidingArticleEmail(article);
-            }
-        }
-    }
+    // @AfterReturning(
+    //     pointcut = "execution(com.ou.journal.pojo.ReviewArticle com.ou.journal.service.interfaces.ReviewArticleService.doneReview(Long, Long))",
+    //     returning = "reviewArticle"
+    // )
+    // public void autoChangeDecidingStatus(ReviewArticle reviewArticle) throws Exception {
+    //     if (reviewArticleRepositoryJPA.countAcceptedReview(reviewArticle.getArticle().getId()) == 0) {
+    //         Article article = articleService.retrieve(reviewArticle.getArticle().getId());
+    //         if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+    //             article.setStatus(ArticleStatus.DECIDING.toString());
+    //             articleDateService.addOrUpdate(article, DateTypeName.DECIDING_DATE.toString());
+    //             articleRepositoryJPA.save(article);
+    //             mailService.sendDecidingArticleEmail(article);
+    //         }
+    //     }
+    // }
 }

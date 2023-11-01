@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.DateTypeName;
+import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
@@ -109,10 +110,10 @@ public class ArticleServiceImpl implements ArticleService {
             return articleRepositoryJPA.list(ArticleStatus.PENDING.toString());
         } else {
             List<Article> articles = articleRepositoryJPA.list(status);
-            if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-                articles.forEach(article -> article.setAcceptedReviewer(
-                    reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
-            }
+            // if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+            //     articles.forEach(article -> article.setAcceptedReviewer(
+            //         reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
+            // }
             return articles;
         }
     }
@@ -152,27 +153,27 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepositoryJPA.findByAuthorId(authorId);
     }
 
-    @Override
-    public Article endInvitationReview(Long articleId) throws Exception {
-        Article persistArticle = retrieve(articleId);
-        if (persistArticle.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-            Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
-            if (acceptedReviewTotal > 0) {
-                persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
-                articleDateService.addOrUpdate(persistArticle, DateTypeName.IN_REVIEW_DATE.toString());
-                return articleRepositoryJPA.save(persistArticle);
-            } else {
-                throw new Exception("Bài báo này chưa có reviewer nào!");
-            }
-        } else {
-            throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này! Vui lòng quay về danh sách bài đăng!");
-        }
-    }
+    // @Override
+    // public Article endInvitationReview(Long articleId) throws Exception {
+    //     Article persistArticle = retrieve(articleId);
+    //     if (persistArticle.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+    //         Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
+    //         if (acceptedReviewTotal > 0) {
+    //             persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
+    //             articleDateService.addOrUpdate(persistArticle, DateTypeName.IN_REVIEW_DATE.toString());
+    //             return articleRepositoryJPA.save(persistArticle);
+    //         } else {
+    //             throw new Exception("Bài báo này chưa có reviewer nào!");
+    //         }
+    //     } else {
+    //         throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này! Vui lòng quay về danh sách bài đăng!");
+    //     }
+    // }
 
     @Override
     public Article editorDecide(Long articleId, String status) throws Exception {
         Article article = retrieve(articleId);
-        if (article.getStatus().equals(ArticleStatus.DECIDING.toString())) {
+        if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
             if (status.equals(ArticleStatus.ACCEPT.toString()) || status.equals(ArticleStatus.REJECT.toString())) {
                 article.setStatus(status);
                 articleDateService.addOrUpdate(article, DateTypeName.DECIDED_DATE.toString());
@@ -205,6 +206,42 @@ public class ArticleServiceImpl implements ArticleService {
             }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Article> list(String status, Long editorId) {
+        List<Article> articles = articleRepositoryJPA.list(status, editorId);
+        articles.forEach(article -> {
+            Manuscript currentManuscript = manuscriptService.getLastestManuscript(article.getId());
+            if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+                article.setInvitedReviewer(reviewArticleRepositoryJPA.countReviewArticle(currentManuscript.getId()));
+                article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
+                article.setRejectedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    currentManuscript.getId(), ReviewArticleStatus.REJECTED.toString()));
+            } 
+            if (status.equals(ArticleStatus.IN_REVIEW.toString())) {
+                article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
+                article.setAcceptedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    currentManuscript.getId(), ReviewArticleStatus.ACCEPTED.toString()));
+                article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    currentManuscript.getId(), ReviewArticleStatus.REVIEWED.toString()));
+            }
+        });
+        return articles;
+    }
+
+    @Override
+    public Article retrieve(Long articleId, Long userId) throws Exception {
+        Article article = retrieve(articleId);
+        if (!article.getEditorUser().getId().equals(userId)) {
+            throw new Exception("Bạn không có quyền để xem bài báo này!");
+        } else {
+            article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()));
+            return article;
         }
     }
 

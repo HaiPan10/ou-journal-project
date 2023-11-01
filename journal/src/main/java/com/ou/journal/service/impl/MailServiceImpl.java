@@ -178,24 +178,24 @@ public class MailServiceImpl implements MailService {
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
 
-        List<User> reviewers = reviewArticleRepositoryJPA.getReviewer(article.getId());
-        reviewers.forEach(reviewer -> {
-            System.out.println("REVIEWERS " + reviewer.getEmail());
-            Context reviewContext = new Context();
-            String reviewSubject = "Thông báo review bài báo";
-            String reviewBody = String.format("Xin chào %s %s. Bài báo của %s %s đã vào giai đoạn review," +
-                    " truy cập vào nút bên dưới để tiến hành review bài báo!", reviewer.getLastName(),
-                    reviewer.getFirstName(),
-                    correspondingUser.getLastName(), correspondingUser.getFirstName());
-            reviewContext.setVariable("subject", reviewSubject);
-            reviewContext.setVariable("body", reviewBody);
-            reviewContext.setVariable("firstActionLink",
-                    String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
-            reviewContext.setVariable("firstActionName", "Review ngay");
-            MailRequest reviewMailRequest = new MailRequest(reviewer.getEmail(), reviewSubject, reviewBody,
-                    reviewContext);
-            sendEmail(reviewMailRequest);
-        });
+        // List<User> reviewers = reviewArticleRepositoryJPA.getReviewer(article.getId());
+        // reviewers.forEach(reviewer -> {
+        //     System.out.println("REVIEWERS " + reviewer.getEmail());
+        //     Context reviewContext = new Context();
+        //     String reviewSubject = "Thông báo review bài báo";
+        //     String reviewBody = String.format("Xin chào %s %s. Bài báo của %s %s đã vào giai đoạn review," +
+        //             " truy cập vào nút bên dưới để tiến hành review bài báo!", reviewer.getLastName(),
+        //             reviewer.getFirstName(),
+        //             correspondingUser.getLastName(), correspondingUser.getFirstName());
+        //     reviewContext.setVariable("subject", reviewSubject);
+        //     reviewContext.setVariable("body", reviewBody);
+        //     reviewContext.setVariable("firstActionLink",
+        //             String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        //     reviewContext.setVariable("firstActionName", "Review ngay");
+        //     MailRequest reviewMailRequest = new MailRequest(reviewer.getEmail(), reviewSubject, reviewBody,
+        //             reviewContext);
+        //     sendEmail(reviewMailRequest);
+        // });
     }
 
     @Override

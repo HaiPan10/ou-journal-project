@@ -9,12 +9,14 @@ import com.ou.journal.pojo.User;
 
 public interface ReviewArticleService {
     ReviewArticle create(User user, Article article) throws Exception;
-    List<ReviewArticle> findByArticle(Article article);
+    List<ReviewArticle> findByArticle(Long articleId);
     ReviewArticle changeReviewStatus(Long reviewArticleId, String status, String email, Long userId) throws Exception;
     boolean checkArticleAvailable(Long reviewArticleId, String email, Long userId) throws Exception;
     ReviewArticle acceptReviewAndCreateAccount(Long reviewArticleId, String email, Long userId, Account account) throws Exception;
     boolean checkResponseRevviewArticleInvitation(Long reviewArticleId, Long userId, String email);
-    List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus, String articleStatus);
+    List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus);
     ReviewArticle doneReview(Long reviewArticle, Long userId) throws Exception;
     ReviewArticle retrieve(Long reviewArticle) throws Exception;
+    ReviewArticle retrieve(Long reviewArticle, Long userId) throws Exception;
+    Integer countReviewArticleByStatus(Long manuscriptId, String status);
 }

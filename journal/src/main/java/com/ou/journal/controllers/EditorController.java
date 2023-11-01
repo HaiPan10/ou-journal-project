@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
@@ -37,60 +39,21 @@ public class EditorController {
     @Autowired
     private WebAppValidator webAppValidator;
 
-    @GetMapping("/editor/deciding-list")
-    public String getDecidingList(Model model) {
-        try {
-            List<Article> articles = articleService.list(ArticleStatus.DECIDING.toString());
-            model.addAttribute("articles", articles);
-        } catch (Exception e) {
-            model.addAttribute("articles", new ArrayList<Article>());
-        }
-
-        return "client/editor/decidingList";
-    }
-
-    @GetMapping("/editor/assign-list")
-    public String getAssignList(Model model) {
-        try {
-            List<Article> articles = articleService.list(ArticleStatus.ASSIGN_EDITOR.toString());
-            model.addAttribute("articles", articles);
-        } catch (Exception e) {
-            model.addAttribute("articles", new ArrayList<Article>());
-        }
-
-        return "client/editor/assignList";
-    }
-
-    @GetMapping("/editor/review/{articleId}")
-    public String getDecidingList(Model model, @PathVariable Long articleId) {
-        try {
-            Article article = articleService.retrieve(articleId);
-            if (!article.getStatus().equals(ArticleStatus.DECIDING.toString())) {
-                return "redirect:/editor/deciding-list";
-            }
-            model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
-            model.addAttribute("article", article);
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
-
-        return "client/editor/assignArticle";
-    }
-
     @GetMapping("/editor/review-articles")
-    public String getReviewList(Model model) {
+    public String getInvitingReviewList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
-        articles = articleService.list(ArticleStatus.INVITING_REVIEWER.toString());
+        articles = articleService.list(ArticleStatus.INVITING_REVIEWER.toString(), currentUser.getId());
         model.addAttribute("articles", articles);
         return "client/editor/invitingReviewList";
     }
 
-    @GetMapping("/editor/review-articles/{articleId}")
-    public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
+    @GetMapping("/editor/review-articles/invite/{articleId}")
+    public String viewReviewer(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
-            Article article = articleService.retrieve(articleId);
-            if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-                List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+            Article article = articleService.retrieve(articleId, currentUser.getId());
+            if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
+            article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
                 model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("article", article);
@@ -101,17 +64,18 @@ public class EditorController {
             } else {
                 model.addAttribute("error", "in valid status");
             }
+            return "client/editor/articleReviewerManager";
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            // model.addAttribute("error", e.getMessage());
+            return "redirect:/editor/review-articles";
         }
-        return "client/editor/articleReviewerManager";
     }
 
     @PostMapping(path = "/editor/review-articles/invite/{articleId}")
     public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
             Model model, BindingResult bindingResult) throws Exception {
         Article article = articleService.retrieve(articleId);
-        List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+        List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
         List<Object[]> users = userService.listUser();
         try {
             webAppValidator.validate(user, bindingResult);
@@ -123,7 +87,7 @@ public class EditorController {
                 return "client/editor/articleReviewerManager";
             }
             reviewArticleService.create(user, article);
-            return "redirect:/admin/review-articles/{articleId}";
+            return "redirect:/editor/review-articles/invite/{articleId}";
         } catch (Exception e) {
             model.addAttribute("article", article);
             model.addAttribute("reviewArticles", reviewArticles);
@@ -142,4 +106,34 @@ public class EditorController {
         return "client/editor/assignEditorList";
     }
     
+    @GetMapping("/editor/deciding-list")
+    public String getDecidingList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+        try {
+            List<Article> articles = articleService.list(ArticleStatus.IN_REVIEW.toString(), currentUser.getId());
+            model.addAttribute("articles", articles);
+        } catch (Exception e) {
+            model.addAttribute("articles", new ArrayList<Article>());
+        }
+        
+        return "client/editor/decidingList";
+    }
+
+    @GetMapping("/editor/review/{articleId}")
+    public String đecideArticle(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+        try {
+            Article article = articleService.retrieve(articleId, currentUser.getId());
+            if (!article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                return "redirect:/editor/deciding-list";
+            }
+            List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
+            model.addAttribute("articleId", articleId);
+            model.addAttribute("reviewArticles", reviewArticles);
+            model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+            model.addAttribute("article", article);
+            return "client/editor/decideArticle";
+        } catch (Exception e) {
+            // model.addAttribute("error", e.getMessage());
+            return "redirect:/editor/deciding-list";
+        }
+    }
 }

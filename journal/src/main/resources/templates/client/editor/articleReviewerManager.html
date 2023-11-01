@@ -41,7 +41,7 @@
         <form th:action="@{/editor/review-articles/invite/{id}(id=${articleId})}" th:object="${user}" method="post"
             class="move-up-anim my-5 p-5 bg-white rounded-lg">
             <div class="grid grid-cols-1 gap-y-5">
-                <h1 class="font-semibold uppercase text-lg text-main">Thông tin reviewer</h1>
+                <h1 class="font-semibold uppercase text-lg text-main">Thông tin phản biện viên</h1>
                 <div th:if="${#fields.hasAnyErrors()}" class="flex flex-col gap-3">
                     <div class="text-red-500 text-sm font-medium w-fit" th:each="err : ${#fields.allErrors()}"
                         th:text="${err}"></div>
@@ -51,7 +51,7 @@
                     <input id="myInput" type="text" th:field="*{email}" class="input-floating peer" placeholder=" " />
                     <label for="myInput" class="label-floating">Email</label>
                 </div>
-                <span class="text-red-500 text-sm font-medium hidden w-fit mt-1" id="notAvailable">Mail của reviewer
+                <span class="text-red-500 text-sm font-medium hidden w-fit mt-1" id="notAvailable">Mail của phản biện viên
                     này
                     chưa có trên hệ thống! Vui lòng nhập họ tên</span>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -122,9 +122,9 @@
                 </tbody>
             </table>
         </div>
-        <button type="button" id="endInvitationBtn"
+        <!-- <button type="button" id="endInvitationBtn"
             class="move-up-anim rounded-md mt-2 bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">
-            Tiến hành review</button>
+            Tiến hành review</button> -->
     </div>
     <script th:inline="javascript">
         
@@ -251,24 +251,24 @@
             }
         }
 
-        document.getElementById('endInvitationBtn').addEventListener('click', (e) => {
-            fetch(`/editor/articles/end-review/[[${article.id}]]`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }).then(res => {
-                if (res.ok) {
-                    window.location.href = `/editor/articles?status=IN_REVIEW`
-                } else {
-                    return res.text().then(errorMessage => {
-                        throw new Error(errorMessage);
-                    });
-                }
-            }).catch(err => {
-                alert(err.message)
-            })
-        })
+        // document.getElementById('endInvitationBtn').addEventListener('click', (e) => {
+        //     fetch(`/editor/articles/end-review/[[${article.id}]]`, {
+        //         method: 'PUT',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //     }).then(res => {
+        //         if (res.ok) {
+        //             window.location.href = `/editor/articles?status=IN_REVIEW`
+        //         } else {
+        //             return res.text().then(errorMessage => {
+        //                 throw new Error(errorMessage);
+        //             });
+        //         }
+        //     }).catch(err => {
+        //         alert(err.message)
+        //     })
+        // })
     </script>
 </section>
 

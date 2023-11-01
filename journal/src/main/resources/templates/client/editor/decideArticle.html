@@ -38,7 +38,72 @@
                 </li>
             </ol>
         </nav>
-        <div>Khu vực xem review của reviewer (Cập nhật sau)</div>
+        <div class="move-up-anim table-container my-6">
+            <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách phản biện viên
+                </h3>
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Mail reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Họ tên reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày mời
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Trạng thái
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="reviewArticle : ${reviewArticles}">
+                        <tr class="table-row">
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.id}">
+                            </td>
+                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                <span th:text="${reviewArticle.user.email}"></span>
+                            </th>
+                            <td class="px-6 py-4"
+                                th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
+                            <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                            <td class="px-6 py-4">
+                                <div th:if="${reviewArticle.status eq 'PENDING'}">
+                                    <span class="badge-danger">Chờ phản hồi</span>
+                                </div>
+                                <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
+                                    <span class="badge-warning">Đồng ý</span>
+                                </div>
+                                <div th:if="${reviewArticle.status eq 'REJECTED'}">
+                                    <span class="badge-danger">Từ chối</span>
+                                </div>
+                                <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                    <span class="badge-success">Đã phản biện</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                    <a th:href="@{#}" class="table-action" >Xem kết quả phản biện</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+
+            <a
+            th:href="@{/editor/review-articles/invite/{id}(id=${articleId})}"
+            class="move-up-anim rounded-md mt-2 bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">
+            Mời thêm phản biện viên</a>
+        </div>
+
         <div class="bg-white rounded-lg p-6">
             <div class="font-semibold text-3xl">
                 <span th:text="${article.title}"> </span>
@@ -57,7 +122,7 @@
             <div>Abstract: <span th:text="${article.abstracts}"></span></div>
             <div>Từ khóa: <span th:text="${article.keywords}"></span></div>
             <div>Nội dung: </div> -->
-            <div class="flex gap-x-3 justify-end mb-5">
+            <div th:if="${article.reviewedReviewer > 0}" class="flex gap-x-3 justify-end mb-5">
                 <button onclick="decideArticle('REJECT')"
                     class="font-semibold flex gap-x-3 text-white items-center bg-gradient-to-r to-rose-500 from-red-400 transition-all duration-300 hover:from-rose-600 hover:to-pink-700 rounded-lg px-5 py-3 shadow-lg hover:shadow-sm">
                     <span> Từ chối </span> <i
