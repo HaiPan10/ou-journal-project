@@ -13,7 +13,7 @@
             </a>
          </li>
          <li class="menu-item" id="accounts">
-            <a href="/admin/accounts" class="menu-item-child group">
+            <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin/accounts" class="menu-item-child group">
                <span class="menu-item-child-icon">
                   <i class="bi bi-people-fill before:text-xl"></i>
                </span>

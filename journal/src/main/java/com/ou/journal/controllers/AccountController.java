@@ -3,7 +3,7 @@ package com.ou.journal.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +14,12 @@ import com.ou.journal.pojo.Account;
 import com.ou.journal.service.interfaces.AccountService;
 
 
-
 @Controller
 public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @Secured("ROLE_ADMIN")
     @GetMapping("/admin/accounts")
     public String list(Model model) {
         List<Account> accounts = accountService.findAll();
@@ -29,7 +28,7 @@ public class AccountController {
     }
 
     // Dẫn ra trang account, nếu account id không tồn tại hiện lỗi (đã đc throw sẵn từ api) ra ngoài front end
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @Secured(value = "hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/accounts/{accountId}")
     public String retrieve(Model model, @PathVariable Long accountId) throws Exception {
         try {

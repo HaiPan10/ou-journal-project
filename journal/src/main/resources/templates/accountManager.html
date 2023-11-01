@@ -4,7 +4,7 @@
 
 <section layout:fragment="content">
     <!-- BREADCRUMB -->
-    <nav class="flex" aria-label="Breadcrumb">
+    <nav class="fade-anim flex" aria-label="Breadcrumb">
         <ol class="breadcum">
             <li class="breadcum-item">
                 <a href="#" class="breadcum-item-link">
@@ -16,15 +16,6 @@
                     <span class="breadcum-item-text ml-0">Bảng điều khiển</span>
                 </a>
             </li>
-            <li class="breadcum-item">
-                <a href="#" class="breadcum-item-link">
-                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 9 4-4-4-4" />
-                    </svg>
-                    <span class="breadcum-item-text">Example</span>
-                </a>
             </li>
             <li class="breadcum-item" aria-current="page">
                 <div class="flex items-center">
@@ -40,7 +31,7 @@
     </nav>
 
     <!-- FILTER -->
-    <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+    <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
         <!-- EXTRA FILTER -->
         <div class="w-fit">
             <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
@@ -100,7 +91,7 @@
     </form>
 
 
-    <div class="table-container">
+    <div class="move-up-anim table-container">
         <table class="table">
             <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
                 Danh sách tài khoản
@@ -159,7 +150,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <a href="#" class="table-action" th:href="@{/accounts/{id}(id=${account.id})}">Xem chi tiết</a>
+                            <a href="#" class="table-action">Xem chi tiết</a>
                         </td>
                     </tr>
                 </th:block>

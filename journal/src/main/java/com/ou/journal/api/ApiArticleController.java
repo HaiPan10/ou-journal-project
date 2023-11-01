@@ -7,6 +7,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,13 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.journal.configs.JwtService;
-import com.ou.journal.enums.RoleName;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.RenderPDFService;
-import com.ou.journal.service.interfaces.UserRoleService;
-import com.ou.journal.service.interfaces.UserService;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -33,17 +31,17 @@ public class ApiArticleController {
     @Autowired
     private RenderPDFService renderPDFService;
 
-    @Autowired
-    private UserRoleService userRoleService;
+    // @Autowired
+    // private UserRoleService userRoleService;
 
     @Autowired
     private JwtService jwtService;
 
     @Autowired
     private Environment environment;
-    
-    @Autowired
-    private UserService userService;
+
+    // @Autowired
+    // private UserService userService;
 
     @GetMapping("/view/{articleId}")
     public ResponseEntity<byte[]> view(@PathVariable Long articleId) {
@@ -54,47 +52,68 @@ public class ApiArticleController {
         }
     }
 
+    @Secured("ROLE_EDITOR")
     @PutMapping("/editor/decide/{articleId}")
     public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status,
-    @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception{
+            @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
-            if (userRoleService.getByUserAndRoleName(userService.retrieve(currentUser.getId()), 
-            RoleName.ROLE_EDITOR.toString()).isPresent()) {
-                return ResponseEntity.ok().body(articleService.editorDecide(articleId, status));
-            } else {
-                return ResponseEntity.badRequest().body("Bạn không có quyền thực hiện hành động này!");
-            }
+            // if
+            // (userRoleService.getByUserAndRoleName(userService.retrieve(currentUser.getId()),
+            // RoleName.ROLE_EDITOR.toString()).isPresent()) {
+            // return ResponseEntity.ok().body(articleService.editorDecide(articleId,
+            // status));
+            // } else {
+            // return ResponseEntity.badRequest().body("Bạn không có quyền thực hiện hành
+            // động này!");
+            // }
+            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @Secured("ROLE_AUTHOR")
     @PutMapping("/author/article/withdraw/{articleId}")
     public ResponseEntity<?> withdrawArticle(@PathVariable Long articleId,
-    @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception{
+            @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
             return ResponseEntity.ok().body(articleService.widthdrawArticle(articleId,
-             currentUser.getId()));
+                    currentUser.getId()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    @Secured("ROLE_AUTHOR")
     @GetMapping("/author/article/withdraw")
-    public ResponseEntity<?> withdrawArticle(@RequestParam String token) throws Exception{
+    public ResponseEntity<?> withdrawArticle(@RequestParam String token) throws Exception {
         try {
             Long id = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
             Long articleId = jwtService.getArticleIdFromToken(token, SecrectType.EMAIL);
 
             articleService.widthdrawArticle(articleId, id);
-            
+
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(String.format("%s/article-action/success?token=%s", environment.getProperty("SERVER_HOSTNAME"), token)));
+            headers.setLocation(URI.create(String.format("%s/article-action/success?token=%s",
+                    environment.getProperty("SERVER_HOSTNAME"), token)));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         } catch (Exception e) {
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(String.format("%s/article-action/failed?token=%s&reason=%s", environment.getProperty("SERVER_HOSTNAME"), token, e.getMessage())));
+            headers.setLocation(URI.create(String.format("%s/article-action/failed?token=%s&reason=%s",
+                    environment.getProperty("SERVER_HOSTNAME"), token, e.getMessage())));
             return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        }
+    }
+
+    @Secured("ROLE_EDITOR")
+    @PutMapping(value = "/editor/assign/{articleId}")
+    public ResponseEntity<?> assignEditor(@AuthenticationPrincipal AuthenticationUser currentUser,
+            @PathVariable Long articleId) {
+        try {
+            articleService.assignEditor(articleId, currentUser.getId());
+            return ResponseEntity.ok().body("Tự gán biên tập viên cho bài báo thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

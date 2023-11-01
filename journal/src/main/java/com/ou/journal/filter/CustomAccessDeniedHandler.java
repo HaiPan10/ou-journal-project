@@ -15,8 +15,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception)
             throws IOException, ServletException {
+                System.out.println("[DEBUG] - INSIDE THE ERROR PAGE");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        response.getWriter().write("Access Denied!");
+        response.setContentType("text/html");
+        // request.getRequestDispatcher("/error/403").forward(request, response);
+        // response.getWriter().write("Access Denied!");
     }
 
 }

@@ -41,9 +41,10 @@ public class ArticleController {
     public String list(Model model, @RequestParam(name="status", required = false, defaultValue = "PENDING") String status) {
         List<Article> articles = new ArrayList<>();
         model.addAttribute("status", status);
-        if (status.equals(ArticleStatus.PENDING.toString()) || status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-            articles = articleService.list(status);
-        }
+        // if (status.equals(ArticleStatus.PENDING.toString()) || status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+        //     articles = articleService.list(status);
+        // }
+        articles = articleService.list(status);
         model.addAttribute("articles", articles);
         return "articleManager";
     }

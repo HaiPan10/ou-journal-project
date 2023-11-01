@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,12 +30,12 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import com.ou.journal.filter.ClientAuthenticationFilter;
 import com.ou.journal.filter.ClientFailureHandler;
 import com.ou.journal.filter.ClientSuccessHandler;
-import com.ou.journal.filter.CustomAccessDeniedHandler;
 import com.ou.journal.filter.CustomAuthenticationEntryPoint;
 import com.ou.journal.filter.JwtTokenFilter;
 
 @EnableWebSecurity
 @Configuration
+@EnableMethodSecurity (securedEnabled = true, prePostEnabled = true)
 public class SpringSecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
@@ -44,8 +45,8 @@ public class SpringSecurityConfig {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private CharacterEncodingFilter filter;
-    @Autowired
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
+    // @Autowired
+    // private CustomAccessDeniedHandler customAccessDeniedHandler;
     @Autowired
     private CustomAuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
@@ -69,10 +70,10 @@ public class SpringSecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
+    // @Bean
+    // public CustomAccessDeniedHandler customAccessDeniedHandler() {
+    //     return new CustomAccessDeniedHandler();
+    // }
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(){
@@ -144,7 +145,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SECRETARY")
                         .anyRequest()
                         .authenticated())
-                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                // .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -191,7 +192,7 @@ public class SpringSecurityConfig {
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
+                // .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(clientAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

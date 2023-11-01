@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +21,12 @@ import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
 
 @Controller
+@Secured("ROLE_EDITOR")
 public class EditorController {
     @Autowired
     private ArticleService articleService;
@@ -36,7 +37,6 @@ public class EditorController {
     @Autowired
     private WebAppValidator webAppValidator;
 
-    
     @GetMapping("/editor/review-articles")
     public String getInvitingReviewList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
@@ -71,7 +71,7 @@ public class EditorController {
 
     @PostMapping(path = "/editor/review-articles/invite/{articleId}")
     public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
-     Model model, BindingResult bindingResult) throws Exception {
+            Model model, BindingResult bindingResult) throws Exception {
         Article article = articleService.retrieve(articleId);
         List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
         List<Object[]> users = userService.listUser();
