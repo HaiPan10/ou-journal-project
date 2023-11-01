@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +24,7 @@ import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
 
 @Controller
+@Secured("ROLE_EDITOR")
 public class EditorController {
     @Autowired
     private ArticleService articleService;
@@ -34,20 +36,31 @@ public class EditorController {
     private WebAppValidator webAppValidator;
 
     @GetMapping("/editor/deciding-list")
-    public String getDecidingList(Model model) {        
+    public String getDecidingList(Model model) {
         try {
             List<Article> articles = articleService.list(ArticleStatus.DECIDING.toString());
             model.addAttribute("articles", articles);
         } catch (Exception e) {
             model.addAttribute("articles", new ArrayList<Article>());
         }
-        
+
         return "client/editor/decidingList";
     }
 
+    @GetMapping("/editor/assign-list")
+    public String getAssignList(Model model) {
+        try {
+            List<Article> articles = articleService.list(ArticleStatus.ASSIGN_EDITOR.toString());
+            model.addAttribute("articles", articles);
+        } catch (Exception e) {
+            model.addAttribute("articles", new ArrayList<Article>());
+        }
+
+        return "client/editor/assignList";
+    }
 
     @GetMapping("/editor/review/{articleId}")
-    public String getDecidingList(Model model, @PathVariable Long articleId) {        
+    public String getDecidingList(Model model, @PathVariable Long articleId) {
         try {
             Article article = articleService.retrieve(articleId);
             if (!article.getStatus().equals(ArticleStatus.DECIDING.toString())) {
@@ -58,13 +71,12 @@ public class EditorController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        
-        return "client/editor/decideArticle";
+
+        return "client/editor/assignArticle";
     }
 
-
     @GetMapping("/editor/review-articles")
-    public String getReviewList(Model model) {        
+    public String getReviewList(Model model) {
         List<Article> articles = new ArrayList<>();
         articles = articleService.list(ArticleStatus.INVITING_REVIEWER.toString());
         model.addAttribute("articles", articles);
@@ -95,11 +107,11 @@ public class EditorController {
 
     @PostMapping(path = "/editor/review-articles/invite/{articleId}")
     public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
-     Model model, BindingResult bindingResult) throws Exception {
+            Model model, BindingResult bindingResult) throws Exception {
         Article article = articleService.retrieve(articleId);
         List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
         List<Object[]> users = userService.listUser();
-        try {            
+        try {
             webAppValidator.validate(user, bindingResult);
             if (bindingResult.hasErrors()) {
                 model.addAttribute("article", article);

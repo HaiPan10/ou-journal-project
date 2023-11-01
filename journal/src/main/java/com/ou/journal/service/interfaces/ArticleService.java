@@ -15,4 +15,5 @@ public interface ArticleService {
     List<Article> findByAuthorId(Long authorId);
     Article editorDecide(Long articleId, String status) throws Exception;
     Article widthdrawArticle(Long articleId, Long userId) throws Exception;
+    void assignEditor(Long articleId, Long userId) throws Exception;
 }

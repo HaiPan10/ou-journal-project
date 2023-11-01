@@ -87,6 +87,13 @@ where not exists(
     from date_type
     where type_name = 'PUBLIC_DATE'
 );
+insert into `date_type`(type_name)
+select 'ASSIGNED_EDITOR_DATE'
+where not exists(
+	select *
+    from date_type
+    where type_name = 'ASSIGNED_EDITOR_DATE'
+);
 
 -- INSERT TYPE OF AUTHOR INTO AUTHOR_TYPE TABLE
 insert into `author_type`(type)

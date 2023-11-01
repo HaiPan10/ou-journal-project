@@ -19,6 +19,7 @@ import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.Manuscript;
+import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
@@ -203,6 +204,24 @@ public class ArticleServiceImpl implements ArticleService {
                 throw new Exception("Bạn không có tên trong danh sách tác giả bài báo này!");
             }
         } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void assignEditor(Long articleId, Long userId) throws Exception {
+        Article article = retrieve(articleId);
+        if(!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString())){
+            throw new Exception("Tình trạng bài viết không hợp lệ");
+        }
+        User user = userService.retrieve(userId);
+        article.setEditorUser(user);
+        article.setStatus(ArticleStatus.INVITING_REVIEWER.toString());
+        try {
+            articleDateService.addOrUpdate(article, DateTypeName.ASSIGNED_EDITOR_DATE.toString());
+            articleRepositoryJPA.save(article);
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
