@@ -55,17 +55,17 @@
                     <th:block th:each="reviewArticle : ${reviewArticles}">
                         <tr class="table-row">
                             <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                                <span th:text="${reviewArticle.article.title}"></span>
+                                <span th:text="${reviewArticle.manuscript.article.title}"></span>
                             </th>
                             <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
-                            <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                            <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
                                     </div>
                                 </th:block>
                             </th:block>
-                            <th:block th:each="authorArticle : ${reviewArticle.article.authorArticles}">
+                            <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 2}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
@@ -73,7 +73,7 @@
                                 </th:block>
                             </th:block>
                             <td class="px-6 py-4">
-                                <a th:href="@{/reviewer/review/{id}(id=${reviewArticle.id})}" class="table-action" >Xem chi tiết</a>
+                                <a th:href="@{/reviewer/review/{id}(id=${reviewArticle.id})}" class="table-action" >Phản biện ngay</a>
                             </td>
                         </tr>
                     </th:block>

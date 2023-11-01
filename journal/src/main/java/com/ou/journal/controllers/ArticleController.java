@@ -93,52 +93,52 @@ public class ArticleController {
     //     return "articleDetail";
     // }
 
-    @GetMapping("/admin/review-articles/{articleId}")
-    public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
-        try {
-            Article article = articleService.retrieve(articleId);
-            if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-                List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
-                model.addAttribute("reviewArticles", reviewArticles);
-                model.addAttribute("articleId", articleId);
-                model.addAttribute("article", article);
-                List<Object[]> users = userService.listUser();
-                model.addAttribute("users", users);
-                User user = new User();
-                model.addAttribute("user", user);
-            } else {
-                model.addAttribute("error", "in valid status");
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
-        }
-        return "articleReviewerManager";
-    }
+    // @GetMapping("/admin/review-articles/{articleId}")
+    // public String viewReviewer(Model model, @PathVariable Long articleId) throws Exception {
+    //     try {
+    //         Article article = articleService.retrieve(articleId);
+    //         if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
+    //             List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+    //             model.addAttribute("reviewArticles", reviewArticles);
+    //             model.addAttribute("articleId", articleId);
+    //             model.addAttribute("article", article);
+    //             List<Object[]> users = userService.listUser();
+    //             model.addAttribute("users", users);
+    //             User user = new User();
+    //             model.addAttribute("user", user);
+    //         } else {
+    //             model.addAttribute("error", "in valid status");
+    //         }
+    //     } catch (Exception e) {
+    //         model.addAttribute("error", e.getMessage());
+    //     }
+    //     return "articleReviewerManager";
+    // }
 
-    @PostMapping(path = "/admin/review-articles/invite/{articleId}")
-    public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
-     Model model, BindingResult bindingResult) throws Exception {
-        Article article = articleService.retrieve(articleId);
-        List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
-        List<Object[]> users = userService.listUser();
-        try {            
-            webAppValidator.validate(user, bindingResult);
-            if (bindingResult.hasErrors()) {
-                model.addAttribute("article", article);
-                model.addAttribute("reviewArticles", reviewArticles);
-                model.addAttribute("articleId", articleId);
-                model.addAttribute("users", users);
-                return "articleReviewerManager";
-            }
-            reviewArticleService.create(user, article);
-            return "redirect:/admin/review-articles/{articleId}";
-        } catch (Exception e) {
-            model.addAttribute("article", article);
-            model.addAttribute("reviewArticles", reviewArticles);
-            model.addAttribute("articleId", articleId);
-            model.addAttribute("users", users);
-            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
-            return "articleReviewerManager";
-        }
-    }
+    // @PostMapping(path = "/admin/review-articles/invite/{articleId}")
+    // public String inviteReviewer(@ModelAttribute("user") User user, @PathVariable Long articleId,
+    //  Model model, BindingResult bindingResult) throws Exception {
+    //     Article article = articleService.retrieve(articleId);
+    //     List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(article);
+    //     List<Object[]> users = userService.listUser();
+    //     try {            
+    //         webAppValidator.validate(user, bindingResult);
+    //         if (bindingResult.hasErrors()) {
+    //             model.addAttribute("article", article);
+    //             model.addAttribute("reviewArticles", reviewArticles);
+    //             model.addAttribute("articleId", articleId);
+    //             model.addAttribute("users", users);
+    //             return "articleReviewerManager";
+    //         }
+    //         reviewArticleService.create(user, article);
+    //         return "redirect:/admin/review-articles/{articleId}";
+    //     } catch (Exception e) {
+    //         model.addAttribute("article", article);
+    //         model.addAttribute("reviewArticles", reviewArticles);
+    //         model.addAttribute("articleId", articleId);
+    //         model.addAttribute("users", users);
+    //         bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
+    //         return "articleReviewerManager";
+    //     }
+    // }
 }

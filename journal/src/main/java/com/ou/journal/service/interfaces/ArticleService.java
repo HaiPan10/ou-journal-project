@@ -9,8 +9,10 @@ import com.ou.journal.pojo.Article;
 public interface ArticleService {
     Article create(Article article, MultipartFile file) throws Exception;
     List<Article> list(String status);
+    List<Article> list(String status, Long editorId);
     Article retrieve(Long articleId) throws Exception;
-    Article endInvitationReview(Long articleId) throws Exception;
+    Article retrieve(Long articleId, Long userId) throws Exception;
+    // Article endInvitationReview(Long articleId) throws Exception;
     void updateArticleStatus(Long articleId, Article article) throws Exception;
     List<Article> findByAuthorId(Long authorId);
     Article editorDecide(Long articleId, String status) throws Exception;

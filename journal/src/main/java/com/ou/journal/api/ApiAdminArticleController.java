@@ -66,13 +66,13 @@ public class ApiAdminArticleController {
         }
     }
 
-    @PutMapping("/end-review/{articleId}")
-    public ResponseEntity<?> endInvitationReview(@PathVariable Long articleId){
-        try {
-            articleService.endInvitationReview(articleId);
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @PutMapping("/end-review/{articleId}")
+    // public ResponseEntity<?> endInvitationReview(@PathVariable Long articleId){
+    //     try {
+    //         // articleService.endInvitationReview(articleId);
+    //         return ResponseEntity.ok().body("Cập nhật thành công");
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 }

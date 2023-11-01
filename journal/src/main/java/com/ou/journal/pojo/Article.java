@@ -69,9 +69,9 @@ public class Article implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
     private ArticleNote articleNote;
 
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
-    private List<ReviewArticle> reviewArticles;
+    // @JsonIgnore
+    // @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
+    // private List<ReviewArticle> reviewArticles;
 
     @Transient
     private Manuscript currentManuscript;
@@ -79,10 +79,21 @@ public class Article implements Serializable {
     @Transient
     private MultipartFile file;
     
-    @Column(name = "total_reviewer")
-    private Integer totalReviewer = 1;
+    // @Column(name = "total_reviewer")
+    // private Integer totalReviewer = 1;
+
+    @Transient
+    private Integer invitedReviewer;
+
+    @Transient
+    private Integer waitingResponseReviewer;
+
+    @Transient
+    private Integer rejectedReviewer;
 
     @Transient
     private Integer acceptedReviewer;
 
+    @Transient
+    private Integer reviewedReviewer;
 }

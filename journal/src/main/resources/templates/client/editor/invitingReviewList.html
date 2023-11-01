@@ -68,7 +68,7 @@
         <div class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài đăng cần mời reviewer
+                    Danh sách bài báo chưa có phản biện viên
                 </h3>
                 <thead class="table-header">
                     <tr>
@@ -81,13 +81,8 @@
                         <th scope="col" class="px-6 py-3">
                             Email tác giả đứng tên
                         </th>
-                        <div>
-                            <th scope="col" class="px-6 py-3">
-                                Số lượng reviewer
-                            </th>
-                        </div>
                         <th scope="col" class="px-6 py-3">
-                            Tình trạng
+                            Trạng thái
                         </th>
                         <th scope="col" class="px-6 py-3">
                         </th>
@@ -108,17 +103,16 @@
                                     </div>
                                 </th:block>
                             </th:block>
-                            <div>
-                                <td class="px-6 py-4" th:text="${article.acceptedReviewer} + '/' + ${article.totalReviewer} "></td>
-                            </div>
                             <td class="px-6 py-4">
                                 <div>
-                                    <span class="badge-success">Chờ mời review</span>
+                                    <span class="badge-success">Đã mời: <span th:text="${article.invitedReviewer}"></span></span>
+                                    <span class="badge-warning">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
+                                    <span class="badge-danger">Đã từ chối: <span th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div>
-                                    <a class="table-action" th:href="@{/editor/review-articles/{id}(id=${article.id})}">Mời review</a>
+                                    <a class="table-action" th:href="@{/editor/review-articles/invite/{id}(id=${article.id})}">Mời phản biện</a>
                                 </div>
                             </td>
                         </tr>

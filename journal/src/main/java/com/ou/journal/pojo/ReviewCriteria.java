@@ -30,10 +30,10 @@ public class ReviewCriteria {
     @ManyToOne
     private ReviewArticle reviewArticle;
 
-    @JsonIgnore
-    @JoinColumn(name = "manuscript_id", referencedColumnName = "id")
-    @ManyToOne
-    private Manuscript manuscript;
+    // @JsonIgnore
+    // @JoinColumn(name = "manuscript_id", referencedColumnName = "id")
+    // @ManyToOne
+    // private Manuscript manuscript;
 
     @Column(name = "criteria_name")
     private String criteriaName;

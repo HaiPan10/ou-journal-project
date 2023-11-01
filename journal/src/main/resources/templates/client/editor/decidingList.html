@@ -23,7 +23,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text current">Danh sách bài báo chờ quyết định</span>
+                        <span class="breadcum-item-text current">Danh sách bài báo đang được phản biện</span>
                     </div>
                 </li>
             </ol>
@@ -32,7 +32,7 @@
         <!-- FILTER -->
         <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
-            <!-- <div class="w-fit">
+            <div class="w-fit">
                 <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
                     Bộ lọc
                     <i class="bi bi-sliders2 text-lg"></i>
@@ -42,19 +42,19 @@
                     <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
                         aria-labelledby="dropdownBgHoverButton">
                         <li>
-                            <h3>Tình trạng</h3>
+                            <h3>Tình trạng phản biện</h3>
                             <div class="filter-container">
                                 <input id="pending-status" name="status" type="radio" class="filter-input rounded-full" value="PENDING" onchange="handleChange(this);" checked>
-                                <label class="filter-label" for="pending-status">Chưa duyệt</label>
+                                <label class="filter-label" for="pending-status">Chưa được phản biện</label>
                             </div>
                             <div class="filter-container">
                                 <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
-                                <label class="filter-label" for="inreview-status">Đang mời review</label>
+                                <label class="filter-label" for="inreview-status">Đã được phản biện</label>
                             </div>
                         </li>
                     </ul>
                 </div>
-            </div> -->
+            </div>
             <!-- INPUT FILTER -->
             <div class="grow relative flex items-center md:mt-0">
                 <span class="absolute pl-3 py-2">
@@ -68,7 +68,7 @@
         <div class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chờ quyết định
+                    Danh sách bài báo đang được phản biện
                 </h3>
                 <thead class="table-header">
                     <tr>
@@ -80,6 +80,9 @@
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Email tác giả liên hệ
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Trạng thái
                         </th>
                         <th scope="col" class="px-6 py-3">
                         </th>
@@ -105,6 +108,13 @@
                                     </div>
                                 </th:block>
                             </th:block>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <span class="badge-danger">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
+                                    <span class="badge-warning">Đã đồng ý: <span th:text="${article.acceptedReviewer}"></span></span>
+                                    <span class="badge-success">Đã phản biện: <span th:text="${article.reviewedReviewer}"></span></span>
+                                </div>
+                            </td>
                             <td class="px-6 py-4">
                                 <a th:href="@{/editor/review/{id}(id=${article.id})}" class="table-action" >Xem chi tiết</a>
                             </td>

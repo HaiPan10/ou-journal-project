@@ -113,13 +113,13 @@ public class ApiTestController {
     //     mailService.sendEmailWithHtmlTemplate(mailRequest.getTo(), mailRequest.getSubject(), "mail/index", context);
     // }
 
-    @GetMapping(path = "/get-reviewers/{articleId}")
-    public ResponseEntity<?> generateEmailToken(@PathVariable Long articleId){
-        try {
-            return ResponseEntity.ok().body(reviewArticleRepositoryJPA.getReviewer(articleId));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    // @GetMapping(path = "/get-reviewers/{articleId}")
+    // public ResponseEntity<?> generateEmailToken(@PathVariable Long articleId){
+    //     try {
+    //         return ResponseEntity.ok().body(reviewArticleRepositoryJPA.getReviewer(articleId));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
         
-    }
+    // }
 }

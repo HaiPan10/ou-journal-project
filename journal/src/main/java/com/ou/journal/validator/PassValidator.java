@@ -30,7 +30,7 @@ public class PassValidator implements Validator {
             }
         } else if (target instanceof User) {
             User user = (User) target;
-            if (!user.getAccount().getPassword().equals(user.getAccount().getConfirmPassword())) {
+            if (user.getAccount() != null && !user.getAccount().getPassword().equals(user.getAccount().getConfirmPassword())) {
                 errors.rejectValue("account.confirmPassword",
                         "{account.password.notMatchMsg}",
                         "Mật khẩu không khớp!");

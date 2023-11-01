@@ -35,7 +35,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
-@ToString(exclude = {"account"})
+// @ToString(exclude = {"account"})
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,4 +92,10 @@ public class User implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<AuthorArticle> authorArticles;
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + ", email="
+                + email + "]";
+    }
 }
