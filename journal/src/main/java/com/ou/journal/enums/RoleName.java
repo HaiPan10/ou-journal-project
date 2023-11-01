@@ -4,7 +4,8 @@ public enum RoleName {
     ROLE_EDITOR ("Biên tập viên"),
     ROLE_REVIEWER ("Phản biện viên"),
     ROLE_AUTHOR ("Tác giả"),
-    ROLE_SECRETARY ("Thư ký");
+    ROLE_SECRETARY ("Thư ký"),
+    ROLE_CHIEF_EDITOR("Tổng biên tập viên");
 
     private final String displayName;
 

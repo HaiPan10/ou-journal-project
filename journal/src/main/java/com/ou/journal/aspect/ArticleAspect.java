@@ -46,4 +46,12 @@ public class ArticleAspect {
     public void sendInReviewStatusChangeMail(Article article) throws Exception {
         mailService.sendInReviewStatusChangeMail(article);
     }
+
+    @AfterReturning(
+        pointcut = "execution(com.ou.journal.pojo.Article com.ou.journal.service.interfaces.ArticleService.assignEditor(Long, String))",
+        returning = "article"
+    )
+    public void sendAssignEditorMail(Article article) throws Exception {
+        mailService.sendAssignEditorMail(article);
+    }
 }

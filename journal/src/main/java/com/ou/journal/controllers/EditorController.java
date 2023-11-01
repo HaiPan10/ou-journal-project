@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
@@ -23,8 +24,9 @@ import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
 
+
 @Controller
-@Secured("ROLE_EDITOR")
+@Secured({"ROLE_EDITOR", "ROLE_CHIEF_EDITOR"})
 public class EditorController {
     @Autowired
     private ArticleService articleService;
@@ -131,4 +133,13 @@ public class EditorController {
             return "client/editor/articleReviewerManager";
         }
     }
+
+    @Secured("ROLE_CHIEF_EDITOR")
+    @GetMapping(path = "/editor/assign-list/{articleId}")
+    public String getMethodName(@PathVariable Long articleId, Model model) {
+        model.addAttribute("editors", userService.findByRoleName(RoleName.ROLE_EDITOR.toString()));
+        model.addAttribute("articleId", articleId);
+        return "client/editor/assignEditorList";
+    }
+    
 }

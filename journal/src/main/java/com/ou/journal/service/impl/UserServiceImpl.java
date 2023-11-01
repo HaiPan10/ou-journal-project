@@ -87,5 +87,10 @@ public class UserServiceImpl implements UserService {
         user.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         return userRepositoryJPA.save(user);
     }
+
+    @Override
+    public List<User> findByRoleName(String roleName) {
+        return userRepositoryJPA.findByRoleName(roleName);
+    }
     
 }

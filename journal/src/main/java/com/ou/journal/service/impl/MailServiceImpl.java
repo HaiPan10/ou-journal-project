@@ -218,4 +218,21 @@ public class MailServiceImpl implements MailService {
 
         // User editor = userService.findByEmail("editor")
     }
+
+    @Override
+    public void sendAssignEditorMail(Article article) {
+        User assignedEditor = article.getEditorUser();
+        System.out.println("[DEBUG] - EDITOR USER: " + assignedEditor.getEmail());
+        Context context = new Context();
+        String subject = "Thông báo bài viết cho biên tập viên";
+        String body = String.format(
+                "Xin chào %s %s! Bạn được tổng biên tập viên mời vào bài báo mới. Truy cập vào hệ thống để theo dõi trạng thái bài báo!",
+                assignedEditor.getLastName(), assignedEditor.getFirstName());
+        context.setVariable("subject", subject);
+        context.setVariable("body", body);
+        context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+        context.setVariable("firstActionName", "Theo dõi bài báo được gán");
+        MailRequest mailRequest = new MailRequest(assignedEditor.getEmail(), subject, body, context);
+        sendEmail(mailRequest);
+    }
 }

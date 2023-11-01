@@ -28,7 +28,7 @@
                 </li>
             </ol>
         </nav>
-
+    
         <!-- FILTER -->
         <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
@@ -63,74 +63,43 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
-
-
+    
+    
         <div class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chờ quyết định
+                    Danh sách biên tập viên
                 </h3>
                 <thead class="table-header">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            Tiêu đề bài báo
+                            Họ Tên
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Từ khóa
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Email tác giả chính
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Email tác giả liên hệ
+                            Email
                         </th>
                         <th scope="col" class="px-6 py-3">
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <th:block th:each="article : ${articles}">
+                    <th:block th:each="editor : ${editors}">
                         <tr class="table-row">
-                            <th scope="row" class="px-6 py-4 gap-3 items-center">
-                                <span th:text="${article.title}"></span>
-                            </th>
-                            <th scope="row" class="px-6 py-4">
-                                <span th:text="${article.keywords}"></span>
-                            </th>
-                            <th:block th:each="authorArticle : ${article.authorArticles}">
-                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
-                                    <div th:if="${authorRole.authorType.id == 1}">
-                                        <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
-                                    </div>
-                                </th:block>
-                            </th:block>
-                            <th:block th:each="authorArticle : ${article.authorArticles}">
-                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
-                                    <div th:if="${authorRole.authorType.id == 2}">
-                                        <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
-                                    </div>
-                                </th:block>
-                            </th:block>
+                            <td class="px-6 py-4" th:text="${editor.lastName + ' ' + editor.firstName}"></td>
+                            <td class="px-6 py-4" th:text="${editor.email}"></td>
                             <td class="px-6 py-4">
-                                <a href="#" class="table-action">Xem chi
-                                    tiết</a>
-                                <br>
-                                <button th:onclick="|assignEditor('${article.id}')|" id="btnAssignSelf"
-                                    class="table-action">Tự gán cho bản thân</button>
-                                <br>
-                                <th:block th:if="${#authorization.expression('hasRole(''ROLE_CHIEF_EDITOR'')')}">
-                                    <a th:href="@{/editor/assign-list/{id}(id=${article.id})}" class="table-action">Chọn biên tập viên</a>
-                                </th:block>
+                                <input type="radio" name="editorEmail" th:value="${editor.email}">
                             </td>
                         </tr>
                     </th:block>
                 </tbody>
             </table>
         </div>
+        <button onclick="assignEditor()">Xác nhận gán biên tập viên</button>
     </div>
 
 
-    <script>
+    <script th:inline="javascript">
         var currentSide = document.getElementById("articles");
         currentSide.classList.add("active");
 
@@ -151,20 +120,26 @@
             window.location.replace(`/admin/articles?status=${src.value}`);
         }
 
-        function assignEditor(articleId) {
-            if (confirm("Xác nhận làm biên tập viên?") === true) {
-                fetch(`/api/articles/editor/assign/${articleId}`, {
-                    method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json'
+        function assignEditor(){
+            var email = document.querySelector('input[name="editorEmail"]:checked').value;
+            fetch(`/api/articles/chief-editor/assign`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'id': "[[${articleId}]]",
+                    "editorUser": {
+                        "email": email
                     }
-                }).then(result => {
-                    return result.text()
-                }).then(text => {
-                    alert(text)
-                    window.location.reload()
                 })
-            }
+            })
+            .then(result => {
+                if(result.ok){
+                    alert("Gán biên tập viên thành công")
+                    window.location.href = "/editor/assign-list"
+                }
+            })
         }
 
     </script>

@@ -209,12 +209,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public synchronized void assignEditor(Long articleId, Long userId) throws Exception {
+    public synchronized Article assignEditor(Long articleId, Long userId) throws Exception {
+        User user = userService.retrieve(userId);
+        return assignEditor(articleId, user);
+    }
+
+    @Override
+    public synchronized Article assignEditor(Long articleId, String email) throws Exception {
+        User user = userService.findByEmail(email);
+        return assignEditor(articleId, user);
+    }
+
+    @Override
+    public synchronized Article assignEditor(Long articleId, User user) throws Exception {
         Article article = retrieve(articleId);
         if(!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString())){
             throw new Exception("Tình trạng bài viết không hợp lệ");
         }
-        User user = userService.retrieve(userId);
         article.setEditorUser(user);
         article.setStatus(ArticleStatus.INVITING_REVIEWER.toString());
         try {
@@ -224,5 +235,6 @@ public class ArticleServiceImpl implements ArticleService {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
+        return article;
     }
 }
