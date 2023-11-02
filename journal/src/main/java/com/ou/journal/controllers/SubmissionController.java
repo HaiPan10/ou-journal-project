@@ -41,7 +41,7 @@ public class SubmissionController {
             System.out.println("[DEBUG] - Catch exception: " + e.getMessage());
         }
 
-        return "client/processingSubmission";
+        return "client/author/processingSubmission";
     }
 
     @GetMapping("/submission/processing/{articleId}")
@@ -55,6 +55,6 @@ public class SubmissionController {
             model.addAttribute("error", e.getMessage());
         }
 
-        return "client/articleDetail";
+        return "client/author/articleDetail";
     }
 }

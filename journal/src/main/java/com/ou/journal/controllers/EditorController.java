@@ -130,7 +130,7 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
-            return "client/editor/decideArticle";
+            return "client/editor/test";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
             return "redirect:/editor/deciding-list";

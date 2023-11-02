@@ -3164,10 +3164,6 @@ input:checked + .toggle-bg {
   width: 1.25rem;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
 .w-64 {
   width: 16rem;
 }
@@ -5386,6 +5382,10 @@ input:checked + .toggle-bg {
 
   .md\:max-w-7xl {
     max-width: 80rem;
+  }
+
+  .md\:max-w-xl {
+    max-width: 36rem;
   }
 
   .md\:translate-x-0 {
