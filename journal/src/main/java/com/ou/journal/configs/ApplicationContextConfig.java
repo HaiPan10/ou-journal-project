@@ -37,6 +37,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.journal.components.DateFormatter;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.UserRole;
@@ -87,6 +88,16 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                 if (!roleName.isEmpty()) {
                     UserRole userRole = userRoleService.findByUserAndRoleName(account.getUser(), roleName);
                     authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
+                    System.out.println("[DEBUG] - GRANTED ROLE");
+                    if (roleName.equals(RoleName.ROLE_EDITOR.toString())) {
+                        try {
+                            UserRole userChiefEditorRole = userRoleService.findByUserAndRoleName(account.getUser(),
+                                RoleName.ROLE_CHIEF_EDITOR.toString());
+                            authorities.add(new SimpleGrantedAuthority(userChiefEditorRole.getRole().getRoleName()));
+                        } catch (Exception e) {
+                            System.out.println("[DEBUG] - Normal Editor");
+                        }
+                    }
                 } else {
                     Set<UserRole> userRoles = account.getUser().getUserRoles();
                     userRoles.forEach(ur -> {
@@ -94,8 +105,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                     });
                 }
 
-                AuthenticationUser authenticationUser = 
-                    new AuthenticationUser(account.getUserName(), account.getPassword(), authorities);
+                AuthenticationUser authenticationUser = new AuthenticationUser(account.getUserName(),
+                        account.getPassword(), authorities);
                 authenticationUser.setId(account.getId());
                 authenticationUser.setFirstName(account.getUser().getFirstName());
                 authenticationUser.setLastName(account.getUser().getLastName());
@@ -166,6 +177,7 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
         ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
         return executor;
     }
+
     @Bean(name = "scheduledExecutorService")
     public ScheduledExecutorService getScheduledService() {
         int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));

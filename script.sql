@@ -36,6 +36,13 @@ where not exists(
     from role
     where role_name = 'ROLE_ADMIN'
 );
+insert into `role`(role_name)
+select 'ROLE_CHIEF_EDITOR'
+where not exists(
+	select *
+    from role
+    where role_name = 'ROLE_CHIEF_EDITOR'
+);
 
 -- INSERT TYPE OF DATE INTO DATE_TYPE TABLE
 insert into `date_type`(type_name)
@@ -169,6 +176,43 @@ begin
 				now() as created_at, 'editor@gmail.com' as email,
                 '$2a$10$WBFsrPYuJz7aAEFpSJFo2OfFKaWiCH2oJW4Y34zr3W9dlr0laNad6' as password,
                 'editor' as user_name;
+    end if;
+
+    if not exists(select 1 from user where email = 'ChiefEditor@gmail.com') then
+        insert into `user`(created_at, dob, email, first_name, last_name)
+			values (now(), '2005-05-16', 'ChiefEditor@gmail.com', 'Mở TP.HCM', 'Tổng biên tập viên trường Đại Học');
+            
+		insert into `user_role`(role_id, user_id)
+			select (select r.id from role r where r.role_name = 'ROLE_CHIEF_EDITOR') as role_id, u.id as user_id
+            from user u
+            where u.email = 'ChiefEditor@gmail.com';
+
+        insert into `user_role`(role_id, user_id)
+			select (select r.id from role r where r.role_name = 'ROLE_EDITOR') as role_id, u.id as user_id
+            from user u
+            where u.email = 'ChiefEditor@gmail.com';
+            
+		insert into `account`(id, created_at, email, password, user_name)
+			select (select u.id from user u where u.email = 'ChiefEditor@gmail.com') as id,
+				now() as created_at, 'ChiefEditor@gmail.com' as email,
+                '$2a$10$WBFsrPYuJz7aAEFpSJFo2OfFKaWiCH2oJW4Y34zr3W9dlr0laNad6' as password,
+                'chief_editor' as user_name;
+    end if;
+
+    if not exists(select 1 from user where email = 'thanhhai18052002@gmail.com') then
+        insert into `user`(created_at, dob, email, first_name, last_name)
+			values (now(), '2005-05-16', 'thanhhai18052002@gmail.com', 'Hải', 'Phan Thanh');
+            
+		insert into `user_role`(role_id, user_id)
+			select (select r.id from role r where r.role_name = 'ROLE_EDITOR') as role_id, u.id as user_id
+            from user u
+            where u.email = 'thanhhai18052002@gmail.com';
+            
+		insert into `account`(id, created_at, email, password, user_name)
+			select (select u.id from user u where u.email = 'thanhhai18052002@gmail.com') as id,
+				now() as created_at, 'thanhhai18052002@gmail.com' as email,
+                '$2a$10$WBFsrPYuJz7aAEFpSJFo2OfFKaWiCH2oJW4Y34zr3W9dlr0laNad6' as password,
+                'haiphan_editor' as user_name;
     end if;
 end //
 delimiter ;

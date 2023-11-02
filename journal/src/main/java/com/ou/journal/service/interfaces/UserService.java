@@ -11,4 +11,5 @@ public interface UserService {
     User retrieve(Long id) throws Exception;
     User findByEmail(String email) throws Exception;
     List<Object[]> listUser();
+    List<User> findByRoleName(String roleName);
 }

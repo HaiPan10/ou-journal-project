@@ -12,12 +12,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
+import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.RenderPDFService;
@@ -112,6 +114,18 @@ public class ApiArticleController {
         try {
             articleService.assignEditor(articleId, currentUser.getId());
             return ResponseEntity.ok().body("Tự gán biên tập viên cho bài báo thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Secured("ROLE_CHIEF_EDITOR")
+    @PutMapping(value = "/chief-editor/assign")
+    public ResponseEntity<?> assignEditor(@RequestBody Article article) {
+        try {
+            System.out.println("[DEBUG] - ARTICLE: " + article.getEditorUser().getEmail());
+            articleService.assignEditor(article.getId(), article.getEditorUser().getEmail());
+            return ResponseEntity.ok().body("Gán biên tập viên cho bài báo thành công!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

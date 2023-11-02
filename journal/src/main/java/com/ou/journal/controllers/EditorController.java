@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.ou.journal.enums.ArticleStatus;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
@@ -25,8 +26,9 @@ import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
 
+
 @Controller
-@Secured("ROLE_EDITOR")
+@Secured({"ROLE_EDITOR", "ROLE_CHIEF_EDITOR"})
 public class EditorController {
     @Autowired
     private ArticleService articleService;
@@ -104,8 +106,16 @@ public class EditorController {
         }
     }
 
+    @Secured("ROLE_CHIEF_EDITOR")
+    @GetMapping(path = "/editor/assign-list/{articleId}")
+    public String getMethodName(@PathVariable Long articleId, Model model) {
+        model.addAttribute("editors", userService.findByRoleName(RoleName.ROLE_EDITOR.toString()));
+        model.addAttribute("articleId", articleId);
+        return "client/editor/assignEditorList";
+    }
+    
     @GetMapping("/editor/in-review-articles")
-    public String getInReviewArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    public String getInReviewArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {      
         try {
             List<Article> articles = articleService.getInReviewArticles(currentUser.getId());
             model.addAttribute("articles", articles);
@@ -140,7 +150,7 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
-            return "client/editor/decideArticle";
+            return "client/editor/test";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
             return "redirect:/main-menu";
