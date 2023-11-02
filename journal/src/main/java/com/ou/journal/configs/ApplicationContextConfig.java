@@ -85,10 +85,9 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 }
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                if (!roleName.isEmpty()) {
+                if (!roleName.isEmpty() && roleName != null) {
                     UserRole userRole = userRoleService.findByUserAndRoleName(account.getUser(), roleName);
                     authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
-                    System.out.println("[DEBUG] - GRANTED ROLE");
                     if (roleName.equals(RoleName.ROLE_EDITOR.toString())) {
                         try {
                             UserRole userChiefEditorRole = userRoleService.findByUserAndRoleName(account.getUser(),
@@ -99,10 +98,20 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                         }
                     }
                 } else {
-                    Set<UserRole> userRoles = account.getUser().getUserRoles();
-                    userRoles.forEach(ur -> {
-                        authorities.add(new SimpleGrantedAuthority(ur.getRole().getRoleName()));
-                    });
+                    // Set<UserRole> userRoles = account.getUser().getUserRoles();
+                    // userRoles.forEach(ur -> {
+                    //     authorities.add(new SimpleGrantedAuthority(ur.getRole().getRoleName()));
+                    // });
+                    UserRole userRole = null;
+                    try {
+                        userRole = userRoleService.findByUserAndRoleName(account.getUser(), RoleName.ROLE_ADMIN.toString());
+                    } catch (UsernameNotFoundException e) {
+                        userRole = userRoleService.findByUserAndRoleName(account.getUser(), RoleName.ROLE_SECRETARY.toString());
+                    }
+                    if(userRole == null){
+                        throw new UsernameNotFoundException("User not found");
+                    }
+                    authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
                 }
 
                 AuthenticationUser authenticationUser = new AuthenticationUser(account.getUserName(),

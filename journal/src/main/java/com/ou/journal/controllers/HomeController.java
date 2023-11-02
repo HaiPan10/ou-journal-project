@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
-import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.service.interfaces.AccountService;
 
@@ -32,7 +31,7 @@ public class HomeController {
 
     @GetMapping("/admin/login")
     public String adminLoginPage() {
-        return "admin_login";
+        return "adminLogin";
     }
 
     @GetMapping("/profile")

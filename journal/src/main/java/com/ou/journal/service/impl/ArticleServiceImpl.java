@@ -308,4 +308,9 @@ public class ArticleServiceImpl implements ArticleService {
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
                     manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
     }
+
+    @Override
+    public String getArticleStatusById(Long articleId) {
+        return articleRepositoryJPA.getArticleStatus(articleId);
+    }
 }

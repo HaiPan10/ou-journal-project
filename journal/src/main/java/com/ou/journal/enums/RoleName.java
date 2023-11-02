@@ -1,6 +1,7 @@
 package com.ou.journal.enums;
 
 public enum RoleName {
+    ROLE_ADMIN("Quản trị viên"),
     ROLE_EDITOR ("Biên tập viên"),
     ROLE_REVIEWER ("Phản biện viên"),
     ROLE_AUTHOR ("Tác giả"),

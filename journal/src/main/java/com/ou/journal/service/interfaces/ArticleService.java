@@ -26,4 +26,5 @@ public interface ArticleService {
     Article assignEditor(Long articleId, Long userId) throws Exception;
     Article assignEditor(Long articleId, String email) throws Exception;
     Article assignEditor(Long articleId, User user) throws Exception;
+    String getArticleStatusById(Long articleId);
 }
