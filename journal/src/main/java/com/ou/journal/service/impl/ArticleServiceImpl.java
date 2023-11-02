@@ -172,13 +172,15 @@ public class ArticleServiceImpl implements ArticleService {
     // }
 
     @Override
-    public Article editorDecide(Long articleId, String status) throws Exception {
+    public Article editorDecide(Long articleId, String status, ArticleNote articleNote) throws Exception {
         Article article = retrieve(articleId);
         if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
             if (status.equals(ArticleStatus.ACCEPT.toString()) || status.equals(ArticleStatus.REJECT.toString())) {
                 article.setStatus(status);
                 articleDateService.addOrUpdate(article, DateTypeName.DECIDED_DATE.toString());
-                return articleRepositoryJPA.save(article);
+                articleRepositoryJPA.save(article);
+                articleNoteService.createOrUpdate(articleNote, article);
+                return article;
             } else {
                 throw new Exception("Trạng thái chuyển đổi không hợp lệ!");
             }
@@ -305,5 +307,10 @@ public class ArticleServiceImpl implements ArticleService {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
                     manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getArticleStatusById(Long articleId) {
+        return articleRepositoryJPA.getArticleStatus(articleId);
     }
 }

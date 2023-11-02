@@ -19,4 +19,6 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
         "WHERE aa.user.id = ?1 "
     )
     List<Article> findByAuthorId(Long authorId);
+    @Query("SELECT a.status FROM Article a WHERE a.id = ?1")
+    String getArticleStatus(Long articleId);
 }

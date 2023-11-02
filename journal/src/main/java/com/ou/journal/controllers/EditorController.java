@@ -123,6 +123,10 @@ public class EditorController {
     @Secured("ROLE_CHIEF_EDITOR")
     @GetMapping(path = "/editor/assign-list/{articleId}")
     public String getMethodName(@PathVariable Long articleId, Model model) {
+        String status = articleService.getArticleStatusById(articleId);
+        if(status == null || !status.equals(ArticleStatus.ASSIGN_EDITOR.toString())){
+            return "redirect:/main-menu";
+        }
         model.addAttribute("editors", userService.findByRoleName(RoleName.ROLE_EDITOR.toString()));
         model.addAttribute("articleId", articleId);
         return "client/editor/assignEditorList";

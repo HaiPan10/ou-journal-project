@@ -16,14 +16,18 @@ public class ArticleNoteServiceImpl implements ArticleNoteService{
 
     @Override
     public ArticleNote createOrUpdate(ArticleNote articleNote, Article article) {
+        System.out.println("ARTICLE NOTE: " + articleNote.getNote());
+        System.out.println("THE ARTICLE ID: " + article.getId());
         ArticleNote persistArticleNote = articleNoteRepositoryJPA.findById(article.getId()).orElse(null);
         if(persistArticleNote != null){
             // update
+            System.out.println("UPDATING!!!");
             persistArticleNote.setNote(articleNote.getNote());
             return articleNoteRepositoryJPA.save(persistArticleNote);
         }
 
         // create
+        System.out.println("CREATING!!!");
         articleNote.setArticle(article);
         return articleNoteRepositoryJPA.save(articleNote);
     }

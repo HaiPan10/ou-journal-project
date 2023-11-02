@@ -31,7 +31,7 @@ public class HomeController {
 
     @GetMapping("/admin/login")
     public String adminLoginPage() {
-        return "admin_login";
+        return "adminLogin";
     }
 
     @GetMapping("/profile")

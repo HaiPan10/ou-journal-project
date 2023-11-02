@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.RenderPDFService;
@@ -56,19 +57,10 @@ public class ApiArticleController {
 
     @Secured("ROLE_EDITOR")
     @PutMapping("/editor/decide/{articleId}")
-    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status,
+    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status, @RequestBody ArticleNote articleNote,
             @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
-            // if
-            // (userRoleService.getByUserAndRoleName(userService.retrieve(currentUser.getId()),
-            // RoleName.ROLE_EDITOR.toString()).isPresent()) {
-            // return ResponseEntity.ok().body(articleService.editorDecide(articleId,
-            // status));
-            // } else {
-            // return ResponseEntity.badRequest().body("Bạn không có quyền thực hiện hành
-            // động này!");
-            // }
-            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status));
+            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, articleNote));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
