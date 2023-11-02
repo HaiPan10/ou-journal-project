@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
-import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.service.interfaces.AccountService;
 

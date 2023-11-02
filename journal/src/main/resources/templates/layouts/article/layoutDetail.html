@@ -4,14 +4,15 @@
 
 <section class="flex justify-center mb-12" layout:fragment="content">
     <div class="container min-h-[800px]">
-         <!-- BREADCUM -->
-         <section layout:fragment="breadcum">
-                
-         </section>
-        <!-- /BREADCUM -->
+        <!-- BREADCUM -->
+        <section layout:fragment="breadcum">
 
+        </section>
+
+        <!-- /BREADCUM -->
         <div th:replace="~{fragments/statusStage :: statusStage (status=${article.status})}"></div>
-        <div class="bg-white rounded-lg p-6">
+
+        <div class="move-up-anim bg-white rounded-lg p-6">
             <div class="font-semibold text-3xl">
                 <span th:text="${article.title}"> </span>
             </div>
@@ -26,20 +27,20 @@
             </div>
             <!-- ACTION -->
             <section layout:fragment="action">
-                
+
             </section>
-           <!-- /ACTION -->
+            <!-- /ACTION -->
             <div>
                 <iframe th:src="${viewUrl}" style="width: 100%; height: 1000px; background-color: white;"></iframe>
             </div>
         </div>
-        
-         <!-- MODAL -->
-         <section layout:fragment="modal">
-                
-         </section>
+
+        <!-- MODAL -->
+        <section layout:fragment="modal">
+
+        </section>
         <!-- /MODAL -->
-       
+
     </div>
 
     <script th:inline="javascript">
@@ -69,7 +70,7 @@
     <th:block layout:fragment="extra-js">
 
     </th:block>
-    
+
 </section>
 
 </html>

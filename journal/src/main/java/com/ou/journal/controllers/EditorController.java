@@ -24,6 +24,7 @@ import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
+import com.ou.journal.utils.EnumUtils;
 import com.ou.journal.validator.WebAppValidator;
 
 
@@ -54,6 +55,8 @@ public class EditorController {
             if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
             article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
+
+                model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
                 model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("article", article);
@@ -98,6 +101,19 @@ public class EditorController {
         }
     }
 
+    @Secured("ROLE_EDITOR")
+    @GetMapping(path = "/editor/assign-list")
+    public String getAssignList(Model model) {
+         try {
+            List<Article> articles = articleService.list(ArticleStatus.ASSIGN_EDITOR.toString());
+            model.addAttribute("articles", articles);
+        } catch (Exception e) {
+            model.addAttribute("articles", new ArrayList<Article>());
+        }
+        
+        return "client/editor/assignList";
+    }
+
     @Secured("ROLE_CHIEF_EDITOR")
     @GetMapping(path = "/editor/assign-list/{articleId}")
     public String getMethodName(@PathVariable Long articleId, Model model) {
@@ -130,6 +146,8 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
+
+            model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
             return "client/editor/test";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());

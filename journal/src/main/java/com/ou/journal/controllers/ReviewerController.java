@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.ReviewArticleStatus;
@@ -15,6 +16,7 @@ import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
+import com.ou.journal.utils.EnumUtils;
 
 @Controller
 public class ReviewerController {
@@ -25,16 +27,16 @@ public class ReviewerController {
     private ArticleService articleService;
 
     @GetMapping("/reviewer/invitation-list")
-    public String getInvitationList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    public String getInvitationList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             List<ReviewArticle> reviewArticles = reviewArticleService.getReviewArticles(
-                currentUser.getId(), 
-                ReviewArticleStatus.PENDING.toString());
+                    currentUser.getId(),
+                    ReviewArticleStatus.PENDING.toString());
             model.addAttribute("reviewArticles", reviewArticles);
         } catch (Exception e) {
             model.addAttribute("reviewArticles", new ArrayList<ReviewArticle>());
         }
-        
+
         return "client/reviewer/invitationList";
     }
 
@@ -42,8 +44,8 @@ public class ReviewerController {
     public String getReviewArticles(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             List<ReviewArticle> reviewArticles = reviewArticleService.getReviewArticles(
-                currentUser.getId(), 
-                ReviewArticleStatus.ACCEPTED.toString());
+                    currentUser.getId(),
+                    ReviewArticleStatus.ACCEPTED.toString());
             model.addAttribute("reviewArticles", reviewArticles);
         } catch (Exception e) {
             model.addAttribute("reviewArticles", new ArrayList<ReviewArticle>());
@@ -52,19 +54,23 @@ public class ReviewerController {
     }
 
     @GetMapping("/reviewer/review/{reviewArticleId}")
-    public String reviewArticle(Model model, @PathVariable Long reviewArticleId, @AuthenticationPrincipal AuthenticationUser currentUser){
+    public String reviewArticle(Model model, @PathVariable Long reviewArticleId,
+            @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             ReviewArticle reviewArticle = reviewArticleService.retrieve(reviewArticleId, currentUser.getId());
             if (!reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString())) {
                 return "redirect:/reviewer/review-list";
             }
-            model.addAttribute("viewUrl", String.format("/api/articles/view/%s", reviewArticle.getManuscript().getArticle().getId()));
+            model.addAttribute("viewUrl",
+                    String.format("/api/articles/view/%s", reviewArticle.getManuscript().getArticle().getId()));
             model.addAttribute("reviewArticle", reviewArticle);
-            return "client//reviewer/reviewArticle";  
+            model.addAttribute("article", reviewArticle.getManuscript().getArticle());
+            model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
+            return "client//reviewer/reviewArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
             return "redirect:/reviewer/review-list";
         }
-        
+
     }
 }
