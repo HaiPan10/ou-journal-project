@@ -1,7 +1,7 @@
 @keyframes move-up {
     0% {
         transform: translateY(100px);
-        opacity: 0.5;
+        opacity: 0;
     }
 
     100% {
@@ -13,7 +13,7 @@
 @keyframes move-right {
     0% {
         transform: translateX(-100px);
-        opacity: 0.5;
+        opacity: 0;
     }
 
     100% {
@@ -25,7 +25,7 @@
 @keyframes move-left {
     0% {
         transform: translateX(100px);
-        opacity: 0.5;
+        opacity: 0;
     }
 
     100% {
@@ -36,7 +36,7 @@
 
 @keyframes fade {
     0% {
-        opacity: 0.5;
+        opacity: 0;
     }
 
     100% {

@@ -40,10 +40,18 @@ public class EditorController {
     @Autowired
     private WebAppValidator webAppValidator;
 
-    @GetMapping("/editor/review-articles")
-    public String getInvitingReviewList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
+    @GetMapping("/editor/invite-reviewer-articles")
+    public String getArticleWaitingForInviteReviewer(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
-        articles = articleService.list(ArticleStatus.INVITING_REVIEWER.toString(), currentUser.getId());
+        articles = articleService.getArticleWaitingForInviteReviewer(currentUser.getId());
+        model.addAttribute("articles", articles);
+        return "client/editor/invitingReviewList";
+    }
+
+    @GetMapping("/editor/waiting-accept-reviewer-articles")
+    public String getArticleWaitingForAcceptFromReviewer(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
+        List<Article> articles = new ArrayList<>();
+        articles = articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId());
         model.addAttribute("articles", articles);
         return "client/editor/invitingReviewList";
     }
@@ -70,7 +78,7 @@ public class EditorController {
             return "client/editor/articleReviewerManager";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
-            return "redirect:/editor/review-articles";
+            return "redirect:/main-menu";
         }
     }
 
@@ -101,16 +109,14 @@ public class EditorController {
         }
     }
 
-    @Secured("ROLE_EDITOR")
-    @GetMapping(path = "/editor/assign-list")
+    @GetMapping("/editor/assign-list")
     public String getAssignList(Model model) {
-         try {
+        try {
             List<Article> articles = articleService.list(ArticleStatus.ASSIGN_EDITOR.toString());
             model.addAttribute("articles", articles);
         } catch (Exception e) {
             model.addAttribute("articles", new ArrayList<Article>());
         }
-        
         return "client/editor/assignList";
     }
 
@@ -122,10 +128,22 @@ public class EditorController {
         return "client/editor/assignEditorList";
     }
     
-    @GetMapping("/editor/deciding-list")
-    public String getDecidingList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    @GetMapping("/editor/in-review-articles")
+    public String getInReviewArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {      
         try {
-            List<Article> articles = articleService.list(ArticleStatus.IN_REVIEW.toString(), currentUser.getId());
+            List<Article> articles = articleService.getInReviewArticles(currentUser.getId());
+            model.addAttribute("articles", articles);
+        } catch (Exception e) {
+            model.addAttribute("articles", new ArrayList<Article>());
+        }
+        
+        return "client/editor/decidingList";
+    }
+
+    @GetMapping("/editor/reviewed-articles")
+    public String getReviewedArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+        try {
+            List<Article> articles = articleService.getReviewedArticles(currentUser.getId());
             model.addAttribute("articles", articles);
         } catch (Exception e) {
             model.addAttribute("articles", new ArrayList<Article>());
@@ -146,12 +164,10 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
-
-            model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
-            return "client/editor/test";
+            return "client/editor/decideArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
-            return "redirect:/editor/deciding-list";
+            return "redirect:/main-menu";
         }
     }
 }

@@ -25,6 +25,25 @@
                 <div class="flex gap-x-3 ml-0 mt-2" id="keywords-box">
                 </div>
             </div>
+
+
+            <div th:if="${article.articleNote.note != null and article.articleNote.note != ''}">
+                <div id="note" class="note note-hidden mt-4 mb-3">
+                    <div class="p-3 flex justify-between items-center">
+                        <p class="text-main font-bold pr-2">Nhận xét</p>
+                        <button id="btn-collapse-note" class="relative w-6 h-6 p-1 flex items-center rounded hover:bg-white/20">
+                            <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4">
+
+                            </div>
+                            <div id="icon-collapse-note" class="transition-all duration-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4 rotate-90">
+
+                            </div>
+                        </button>
+                    </div>
+                    <div id="note-content" class="px-3 pb-3 text-main hidden" th:text="${article.articleNote.note}"></div>
+                </div>
+            </div>
+            
             <!-- ACTION -->
             <section layout:fragment="action">
 
@@ -45,10 +64,19 @@
 
     <script th:inline="javascript">
         const kwBox = document.querySelector("#keywords-box")
+        const note = document.querySelector("#note");
 
+        const btnNote = document.querySelector("#btn-collapse-note");
+        const btnNoteIcon = document.querySelector("#icon-collapse-note");
+        const noteContent = document.querySelector("#note-content");
         function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
         }
+        btnNote.addEventListener('click', function() {
+            note.classList.toggle('note-hidden');
+            btnNoteIcon.classList.toggle('rotate-90');
+            noteContent.classList.toggle('hidden');
+        });
         document.addEventListener('DOMContentLoaded', function () {
             const keywords = /*[[${ article.keywords }]]*/ "";
             if (keywords) {
@@ -66,6 +94,8 @@
                 });
             }
         });
+
+
     </script>
     <th:block layout:fragment="extra-js">
 

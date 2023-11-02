@@ -32,7 +32,7 @@
         <!-- FILTER -->
         <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
-            <div class="w-fit">
+            <!-- <div class="w-fit">
                 <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
                     Bộ lọc
                     <i class="bi bi-sliders2 text-lg"></i>
@@ -54,7 +54,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
             <!-- INPUT FILTER -->
             <div class="grow relative flex items-center md:mt-0">
                 <span class="absolute pl-3 py-2">
@@ -112,7 +112,7 @@
                                 <div>
                                     <span class="badge-danger">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
                                     <span class="badge-warning">Đã đồng ý: <span th:text="${article.acceptedReviewer}"></span></span>
-                                    <span class="badge-success">Đã phản biện: <span th:text="${article.reviewedReviewer}"></span></span>
+                                    <span th:if="${article.reviewedReviewer > 0}" class="badge-success">Đã phản biện: <span th:text="${article.reviewedReviewer}"></span></span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
@@ -127,9 +127,6 @@
 
 
     <script>
-        var currentSide = document.getElementById("articles");
-        currentSide.classList.add("active");
-
         var urlParams = new URLSearchParams(window.location.search);
         var status = urlParams.get('status');
         var radioButtons = document.getElementsByName("status");

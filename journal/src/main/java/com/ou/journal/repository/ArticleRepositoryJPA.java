@@ -19,5 +19,4 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
         "WHERE aa.user.id = ?1 "
     )
     List<Article> findByAuthorId(Long authorId);
-    
 }
