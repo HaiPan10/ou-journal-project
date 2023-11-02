@@ -106,6 +106,18 @@ public class EditorController {
         }
     }
 
+    @GetMapping("/editor/assign-list")
+    public String getAssignList(Model model) {
+        try {
+            List<Article> articles = articleService.list(ArticleStatus.ASSIGN_EDITOR.toString());
+            model.addAttribute("articles", articles);
+        } catch (Exception e) {
+            model.addAttribute("articles", new ArrayList<Article>());
+        }
+
+        return "client/editor/assignList";
+    }
+
     @Secured("ROLE_CHIEF_EDITOR")
     @GetMapping(path = "/editor/assign-list/{articleId}")
     public String getMethodName(@PathVariable Long articleId, Model model) {
@@ -150,7 +162,7 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
-            return "client/editor/test";
+            return "client/editor/decideArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
             return "redirect:/main-menu";
