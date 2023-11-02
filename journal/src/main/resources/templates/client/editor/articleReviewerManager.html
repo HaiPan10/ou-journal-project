@@ -116,6 +116,9 @@
                                 <div th:if="${reviewArticle.status eq 'REJECTED'}">
                                     <span class="badge-danger">Từ chối</span>
                                 </div>
+                                <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                    <span class="badge-success">Đã phản biện</span>
+                                </div>
                             </td>
                         </tr>
                     </th:block>

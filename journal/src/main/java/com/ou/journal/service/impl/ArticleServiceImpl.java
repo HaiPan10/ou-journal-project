@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -215,11 +216,14 @@ public class ArticleServiceImpl implements ArticleService {
         articles.forEach(article -> {
             Manuscript currentManuscript = manuscriptService.getLastestManuscript(article.getId());
             if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-                article.setInvitedReviewer(reviewArticleRepositoryJPA.countReviewArticle(currentManuscript.getId()));
-                article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
-                article.setRejectedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    currentManuscript.getId(), ReviewArticleStatus.REJECTED.toString()));
+                Integer invitedReviewer = reviewArticleRepositoryJPA.countReviewArticle(currentManuscript.getId());
+                article.setInvitedReviewer(invitedReviewer);
+                if (invitedReviewer > 0) {
+                    article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                        currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
+                    article.setRejectedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                        currentManuscript.getId(), ReviewArticleStatus.REJECTED.toString()));
+                }
             } 
             if (status.equals(ArticleStatus.IN_REVIEW.toString())) {
                 article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
@@ -261,5 +265,33 @@ public class ArticleServiceImpl implements ArticleService {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Article> getArticleWaitingForInviteReviewer(Long editorId) {
+        List<Article> articles = list(ArticleStatus.INVITING_REVIEWER.toString(), editorId);
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticle(
+            manuscriptService.getLastestManuscript(article.getId()).getId()) == 0).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Article> getArticleWaitingForAcceptFromReviewer(Long editorId) {
+        List<Article> articles = list(ArticleStatus.INVITING_REVIEWER.toString(), editorId);
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticle(
+            manuscriptService.getLastestManuscript(article.getId()).getId()) > 0).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Article> getInReviewArticles(Long editorId) {
+        List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) == 0).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Article> getReviewedArticles(Long editorId) {
+        List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
+                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
     }
 }

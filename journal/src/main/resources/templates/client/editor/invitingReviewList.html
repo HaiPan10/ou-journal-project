@@ -106,8 +106,8 @@
                             <td class="px-6 py-4">
                                 <div>
                                     <span class="badge-success">Đã mời: <span th:text="${article.invitedReviewer}"></span></span>
-                                    <span class="badge-warning">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
-                                    <span class="badge-danger">Đã từ chối: <span th:text="${article.rejectedReviewer}"></span></span>
+                                    <span th:if="${article.invitedReviewer > 0}" class="badge-warning">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
+                                    <span th:if="${article.invitedReviewer > 0}" class="badge-danger">Đã từ chối: <span th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">

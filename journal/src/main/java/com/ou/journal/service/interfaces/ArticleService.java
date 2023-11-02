@@ -10,6 +10,10 @@ public interface ArticleService {
     Article create(Article article, MultipartFile file) throws Exception;
     List<Article> list(String status);
     List<Article> list(String status, Long editorId);
+    List<Article> getArticleWaitingForInviteReviewer(Long editorId);
+    List<Article> getArticleWaitingForAcceptFromReviewer(Long editorId);
+    List<Article> getInReviewArticles(Long editorId);
+    List<Article> getReviewedArticles(Long editorId);
     Article retrieve(Long articleId) throws Exception;
     Article retrieve(Long articleId, Long userId) throws Exception;
     // Article endInvitationReview(Long articleId) throws Exception;
