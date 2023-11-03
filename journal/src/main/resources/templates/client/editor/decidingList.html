@@ -31,31 +31,6 @@
     
         <!-- FILTER -->
         <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
-            <!-- EXTRA FILTER -->
-            <!-- <div class="w-fit">
-                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
-                    Bộ lọc
-                    <i class="bi bi-sliders2 text-lg"></i>
-                </button>
-    
-                <div id="dropdownBgHover" class="dropdown">
-                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownBgHoverButton">
-                        <li>
-                            <h3>Tình trạng phản biện</h3>
-                            <div class="filter-container">
-                                <input id="pending-status" name="status" type="radio" class="filter-input rounded-full" value="PENDING" onchange="handleChange(this);" checked>
-                                <label class="filter-label" for="pending-status">Chưa được phản biện</label>
-                            </div>
-                            <div class="filter-container">
-                                <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
-                                <label class="filter-label" for="inreview-status">Đã được phản biện</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
-            <!-- INPUT FILTER -->
             <div class="grow relative flex items-center md:mt-0">
                 <span class="absolute pl-3 py-2">
                     <i class="bi bi-search text-gray-400"></i>
@@ -66,7 +41,7 @@
         <div th:if="${#lists.isEmpty(articles)}" class="fade-anim flex justify-center">
             <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
                 <div class="ml-3 font-medium">
-                    Hiện không có bài báo nào <strong class="text-main font-medium">cần ...</strong>.
+                    Hiện không có bài báo nào.
                 </div>
                 <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
                     Quay lại
@@ -77,9 +52,6 @@
     
         <div th:unless="${#lists.isEmpty(articles)}" class="move-up-anim table-container my-6">
             <table class="table">
-                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo đang được phản biện
-                </h3>
                 <thead class="table-header">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -101,9 +73,8 @@
                 <tbody>
                     <th:block th:each="article : ${articles}">
                         <tr class="table-row">
-                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                                <span th:text="${article.title}"></span>
-                            </th>
+                            <td scope="row" class="px-6 py-4 font-semibold" th:text="${article.title}">
+                            </td>
                             <th:block th:each="authorArticle : ${article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
@@ -126,7 +97,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <a th:href="@{/editor/review/{id}(id=${article.id})}" class="table-action" >Xem chi tiết</a>
+                                <a th:href="@{/editor/review/{id}(id=${article.id}, back='editor/in-review-articles')}" class="table-action" >Xem chi tiết</a>
                             </td>
                         </tr>
                     </th:block>

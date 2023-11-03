@@ -23,7 +23,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text current">Danh sách bài báo cần mời phản biệt viên</span>
+                        <span class="breadcum-item-text current">Mời phản biện viên</span>
                     </div>
                 </li>
             </ol>
@@ -31,31 +31,6 @@
 
         <!-- FILTER -->
         <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
-            <!-- EXTRA FILTER -->
-            <!-- <div class="w-fit">
-                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
-                    Bộ lọc
-                    <i class="bi bi-sliders2 text-lg"></i>
-                </button>
-    
-                <div id="dropdownBgHover" class="dropdown">
-                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownBgHoverButton">
-                        <li>
-                            <h3>Tình trạng</h3>
-                            <div class="filter-container">
-                                <input id="pending-status" name="status" type="radio" class="filter-input rounded-full" value="PENDING" onchange="handleChange(this);" checked>
-                                <label class="filter-label" for="pending-status">Chưa duyệt</label>
-                            </div>
-                            <div class="filter-container">
-                                <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
-                                <label class="filter-label" for="inreview-status">Đang mời review</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
-            <!-- INPUT FILTER -->
             <div class="grow relative flex items-center md:mt-0">
                 <span class="absolute pl-3 py-2">
                     <i class="bi bi-search text-gray-400"></i>
@@ -63,11 +38,18 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
-        <div class="move-up-anim table-container my-6">
+        <div th:if="${#lists.isEmpty(articles)}" class="fade-anim flex justify-center">
+            <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
+                <div class="ml-3 font-medium">
+                    Hiện không có bài báo nào.
+                </div>
+                <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
+                    Quay lại
+                </a>
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(articles)}" class="move-up-anim table-container my-6">
             <table class="table">
-                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chưa mời phản biện viên
-                </h3>
                 <thead class="table-header">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -77,7 +59,10 @@
                             Tiêu đề
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Email tác giả đứng tên
+                            Email tác giả chính
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email tác giả liên hệ
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Trạng thái
@@ -91,12 +76,20 @@
                         <tr class="table-row">
                             <td class="px-6 py-4 font-medium text-gray-900" th:text="${article.id}">
                             </td>
-                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                                <span th:text="${article.title}"></span>
-                            </th>
+                            <td scope="row" class="px-6 py-4 font-semibold text-gray-700" th:text="${article.title}">
+                            </td>
                             <th:block th:each="authorArticle : ${article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
+                                        <td class="px-6 py-4">
+                                            <p  th:text="${authorArticle.user.email}"></p>
+                                        </td>
+                                    </div>
+                                </th:block>
+                            </th:block>
+                            <th:block th:each="authorArticle : ${article.authorArticles}">
+                                <th:block th:each="authorRole : ${authorArticle.authorRoles}">
+                                    <div th:if="${authorRole.authorType.id == 2}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
                                     </div>
                                 </th:block>
@@ -111,9 +104,9 @@
                                             th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                                 <div th:if="${article.invitedReviewer == 0}">
-                                    <span class="badge-success">Đã gán:
+                                    <span class="badge-info">Đã gán:
                                         <th:block th:each="articleDate : ${article.articleDates}">
-                                            <span th:if="${articleDate.dateType.typeName eq 'ASSIGNED_EDITOR_DATE'}"
+                                            <span class="dateElement" th:if="${articleDate.dateType.typeName eq 'ASSIGNED_EDITOR_DATE'}"
                                                 th:text="${articleDate.date}">
                                             </span>
                                         </th:block>

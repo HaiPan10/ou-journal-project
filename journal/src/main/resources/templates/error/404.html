@@ -1,73 +1,23 @@
-<!-- Simple 404 Page using HTML & CSS -->
-<!-- Author: Godnon Dsilva -->
-
-<!-- HTML5 -->
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout}">
 
-<head>
-    <!-- Enter your title of the page -->
-    <title>Truy cập không hợp lệ</title>
-    <!-- Link the CSS posted below to this page, change the href -->
-    <!--  Enter your website icon -->
-    <!-- This one is very important, don't skip this part! -->
-    <base href=""> <!-- Enter your website URL here -->
+<section class="flex justify-center items-center min-h-[800px] my-6" layout:fragment="content">
+    <div class="container text-center">
+        <div class="flex justify-center">
+            <div class="w-full max-w-[700px]">
+                <svg th:replace="~{fragments/errors/404 :: svg}"></svg>
 
-    <!-- Just some important metas, you can ignore these -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- If you want to learn more about them then visit https://www.w3schools.com/tags/tag_meta.asp -->
-    <style>
-        /* Imported fonts */
-        @import url('https://fonts.googleapis.com/css?family=Anton');
-        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
-
-        /* CSS */
-        body {
-            background-color: #222;
-            font-family: 'Anton', sans-serif;
-            margin: 0;
-        }
-
-
-        body>main>center>p {
-            color: #ddd;
-            font-family: 'Open Sans', sans-serif !important;
-        }
-
-        body>main>center>h1 {
-            text-transform: uppercase;
-            color: #0077ff;
-            font-size: 48px;
-        }
-
-        body>main>center>h3>a {
-            text-transform: uppercase;
-            font-family: 'Open Sans', sans-serif !important;
-
-            font-size: 18px;
-            color: #000;
-            background-color: #0077ff;
-            text-decoration: none;
-            padding: 5px 10px;
-            border: 1px solid #0077ff;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-
-<body>
-    <main>
-        <center>
-            <br /><br /><br /><br /><br /><br />
-            <h1>404 Not Found Error!</h1>
-            <p>Truy cập này không còn hợp lệ, vui lòng trở lại trang chính!<br />
-                Chúng tôi xin lỗi vì sự bất tiện này :((((<br><br>
-            <h3><a th:href="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SECRETARY'')') ? '/admin/dashboard' : '/'}" >
-                Nhấn vào đây để về trang chủ</a></h3>
-            <br /><br /><br /><br />
-        </center>
-    </main>
-</body>
+            </div>
+        </div>
+        <p class="text-gray-700">Truy cập này không còn hợp lệ, vui lòng trở lại trang chính!<br />
+            Chúng tôi xin lỗi vì sự bất tiện này :((((<br><br>
+        <div class="flex justify-center">
+            <a class="btn-main w-fit"
+                th:href="${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_SECRETARY'')') ? '/admin/dashboard' : '/'}">
+                Nhấn vào đây để về trang chủ</a>
+        </div>
+    </div>
+</section>
 
 </html>

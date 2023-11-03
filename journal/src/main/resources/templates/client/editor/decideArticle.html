@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
@@ -133,11 +133,6 @@
                 <div class="flex gap-x-3 ml-0 mt-2" id="keywords-box">
                 </div>
             </div>
-
-            <!-- <div>Tiêu đề: <span th:text="${article.title}"></span></div>
-            <div>Abstract: <span th:text="${article.abstracts}"></span></div>
-            <div>Từ khóa: <span th:text="${article.keywords}"></span></div>
-            <div>Nội dung: </div> -->
             <div>
                 <iframe th:src="${viewUrl}" style="width: 100%; height: 1000px; background-color: white;"></iframe>
             </div>
@@ -194,5 +189,140 @@
         }
     </script>
 </section>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/article/layoutDetail}">
+
+<section layout:fragment="breadcum">
+    <nav class="flex mb-5" aria-label="Breadcrumb">
+        <ol class="breadcum">
+            <li class="breadcum-item">
+                <a th:href="@{/main-menu}" class="breadcum-item-link">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                    </svg>
+                    <span class="breadcum-item-text ml-0">Main menu</span>
+                </a>
+            </li>
+            <li class="breadcum-item" aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <span class="breadcum-item-text current" th:text="${article.title}"></span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+</section>
+
+<section layout:fragment="action">
+    <div class="flex justify-end my-3 gap-x-3">
+        <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal"
+            class="btn-gradient-main w-fit">Xem phản biên viên</button>
+    </div>
+</section>
+
+
+<section layout:fragment="modal">
+    <div id="reviewer-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-7xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="reviewer-modal">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="sr-only">Close modal</span>
+                </button>
+               
+
+                <div class="p-6">
+                    <h3 class="text-2xl text-center text-main font-semibold mt-6">
+                        Danh sách phản biện viên
+                    </h3>
+                    <div class="table-container my-4">
+                        <table class="table">      
+                            <thead class="table-header">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        #
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Mail reviewer
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Họ tên reviewer
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Ngày mời
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Trạng thái
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <th:block th:each="reviewArticle : ${reviewArticles}">
+                                    <tr class="table-row">
+                                        <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.id}">
+                                        </td>
+                                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                            <span th:text="${reviewArticle.user.email}"></span>
+                                        </th>
+                                        <td class="px-6 py-4"
+                                            th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}">
+                                        </td>
+                                        <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                                        <td class="px-6 py-4">
+                                            <div th:if="${reviewArticle.status eq 'PENDING'}">
+                                                <span class="badge-danger">Chờ phản hồi</span>
+                                            </div>
+                                            <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
+                                                <span class="badge-warning">Đồng ý</span>
+                                            </div>
+                                            <div th:if="${reviewArticle.status eq 'REJECTED'}">
+                                                <span class="badge-danger">Từ chối</span>
+                                            </div>
+                                            <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                                <span class="badge-success">Đã phản biện</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                                <a th:href="@{#}" class="table-action">Xem kết quả phản biện</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div class="flex justify-end my-3 gap-x-3">
+                        <a type="button" th:href="@{/editor/review-articles/invite/{id}(id=${articleId})}"
+                            class="btn-main w-fit">
+                            Mời thêm</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<th:block layout:fragment="extra-js">
+
+</th:block>
 
 </html>

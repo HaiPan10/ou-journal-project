@@ -2037,6 +2037,25 @@ input:checked + .toggle-bg {
   text-decoration-line: underline;
 }
 
+.badge-info {
+  margin-right: 0.5rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(7 89 133 / var(--tw-text-opacity));
+}
+
 .badge-success {
   margin-right: 0.5rem;
   border-radius: 9999px;
@@ -3020,6 +3039,10 @@ input:checked + .toggle-bg {
   margin-bottom: 3rem;
 }
 
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -3321,6 +3344,10 @@ input:checked + .toggle-bg {
 
 .max-w-7xl {
   max-width: 80rem;
+}
+
+.max-w-\[700px\] {
+  max-width: 700px;
 }
 
 .max-w-lg {
@@ -4085,6 +4112,10 @@ input:checked + .toggle-bg {
 .bg-clip-text {
   -webkit-background-clip: text;
           background-clip: text;
+}
+
+.fill-main {
+  fill: #084ac4;
 }
 
 .object-cover {
@@ -5006,10 +5037,6 @@ input:checked + .toggle-bg {
   background-color: rgb(8 74 196 / 0.1);
 }
 
-.hover\:bg-main\/20:hover {
-  background-color: rgb(8 74 196 / 0.2);
-}
-
 .hover\:bg-main\/5:hover {
   background-color: rgb(8 74 196 / 0.05);
 }
@@ -5125,11 +5152,6 @@ input:checked + .toggle-bg {
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
-}
-
-.hover\:text-gray-800:hover {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-900:hover {

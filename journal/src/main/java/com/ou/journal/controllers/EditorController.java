@@ -40,6 +40,11 @@ public class EditorController {
     @Autowired
     private WebAppValidator webAppValidator;
 
+    @ModelAttribute("articleStatusEnum")
+    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
+        return EnumUtils.getArticleStatus();
+    }
+
     @GetMapping("/editor/invite-reviewer-articles")
     public String getArticleWaitingForInviteReviewer(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
@@ -63,8 +68,6 @@ public class EditorController {
             if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
             article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
-
-                model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
                 model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("article", article);

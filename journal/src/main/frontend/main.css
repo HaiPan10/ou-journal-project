@@ -160,6 +160,10 @@
         @apply font-medium text-main hover:underline hover:text-main-action
     }
 
+    .badge-info{
+        @apply bg-sky-100 border border-sky-500 text-sky-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full
+    }
+
     .badge-success{
         @apply bg-emerald-100 border border-emerald-500 text-emerald-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-full
     }

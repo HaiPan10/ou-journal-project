@@ -46,7 +46,7 @@
             
             <!-- ACTION -->
             <section layout:fragment="action">
-
+               
             </section>
             <!-- /ACTION -->
             <div>
@@ -72,11 +72,16 @@
         function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
         }
-        btnNote.addEventListener('click', function() {
-            note.classList.toggle('note-hidden');
-            btnNoteIcon.classList.toggle('rotate-90');
-            noteContent.classList.toggle('hidden');
-        });
+        try {
+            btnNote.addEventListener('click', function() {
+                note.classList.toggle('note-hidden');
+                btnNoteIcon.classList.toggle('rotate-90');
+                noteContent.classList.toggle('hidden');
+            });
+        } catch (e) {
+
+        }
+        
         document.addEventListener('DOMContentLoaded', function () {
             const keywords = /*[[${ article.keywords }]]*/ "";
             if (keywords) {
