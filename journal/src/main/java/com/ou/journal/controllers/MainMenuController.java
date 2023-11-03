@@ -39,6 +39,7 @@ public class MainMenuController {
                 articleService.getInReviewArticles(currentUser.getId()).size());
             model.addAttribute("articleReviewedCount", 
                 articleService.getReviewedArticles(currentUser.getId()).size());
+            model.addAttribute("articleWaitingAssignEditor", articleService.countArticleWaitingAssignEditor());
         }  
         return "client/mainMenu";
     }

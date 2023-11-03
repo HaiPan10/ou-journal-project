@@ -35,8 +35,10 @@
                 <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/assign-list}">
-                            <i class="bi bi-person-gear text-7xl text-gradient-main group-hover:text-white"></i>
+                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Gán biên tập viên</p>
+                            <span class="noti-badge" th:if="${articleWaitingAssignEditor != 0}" 
+                                th:text="${articleWaitingAssignEditor}"></span>
                         </a>
                     </div>
                     <div class="action-item">

@@ -16,6 +16,7 @@ public interface ArticleService {
     List<Article> getArticleWaitingForAcceptFromReviewer(Long editorId);
     List<Article> getInReviewArticles(Long editorId);
     List<Article> getReviewedArticles(Long editorId);
+    Long countArticleWaitingAssignEditor();
     Article retrieve(Long articleId) throws Exception;
     Article retrieve(Long articleId, Long userId) throws Exception;
     // Article endInvitationReview(Long articleId) throws Exception;
