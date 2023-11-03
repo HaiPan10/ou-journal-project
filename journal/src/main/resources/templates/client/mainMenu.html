@@ -8,13 +8,13 @@
             <div th:if="${#authorization.expression('hasRole(''ROLE_AUTHOR'')')}">
                 <div class="flex gap-x-3 items-center">
                     <div class="w-1 h-[30px] bg-main"></div>
-                    <div class="fade-anim text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của tác giả</div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của tác giả</div>
 
                 </div>
-                <div class="move-up-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/submit}">
-                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
+                            <i class="bi bi-journal-arrow-up text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Gửi manuscript mới</p>
                         </a>
 
@@ -28,39 +28,50 @@
                 </div>
             </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
-                <div class="flex gap-x-3 items-center">
+                <div class="flex gap-x-3 gap-y-5 items-center">
                     <div class="w-1 h-[30px] bg-main"></div>
-                    <div class="fade-anim text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của biên tập viên</div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của biên tập viên</div>
                 </div>
-                <div class="move-up-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/assign-list}">
                             <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
-                            <p class="w-full">Danh sách bài báo chờ gán biên tập viên</p><span class="badge-danger" th:text="${articleWaitingAssignEditor}"></span>
+                            <p class="w-full">Gán biên tập viên</p>
+                            <span class="noti-badge" th:if="${articleWaitingAssignEditor != 0}" 
+                                th:text="${articleWaitingAssignEditor}"></span>
                         </a>
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/invite-reviewer-articles}">
-                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
-                            <p class="w-full">Danh sách bài báo chưa mời phản biện viên</p><span class="badge-danger" th:text="${articleWaitingForInviteReviewCount}"></span>
+                            <i class="bi bi-envelope-plus text-7xl text-gradient-main group-hover:text-white"></i>
+                            <p class="w-full">Mời phản biện viên</p>
+                            <span class="noti-badge" th:if="${articleWaitingForInviteReviewCount != 0}"
+                                th:text="${articleWaitingForInviteReviewCount}"></span>
                         </a>
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/waiting-accept-reviewer-articles}">
-                            <i class="bi bi-file-earmark-text text-7xl text-gradient-main group-hover:text-white"></i>
-                            <p class="w-full">Danh sách bài báo chưa có phản biện viên</p><span class="badge-danger" th:text="${articleWaitingForAcceptFromReviewerCount}"></span>
+                            <i class="bi bi-journal-album text-7xl text-gradient-main group-hover:text-white"></i>
+                            <p class="w-full">Bài báo chưa có phản biện viên</p>
+                            <span class="noti-badge" th:if="${articleWaitingForAcceptFromReviewerCount != 0}"
+                                th:text="${articleWaitingForAcceptFromReviewerCount}"></span>
                         </a>
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/in-review-articles}">
                             <i class="bi bi-pencil-square text-7xl text-gradient-main group-hover:text-white"></i>
-                            <p class="w-full">Danh sách bài báo đang được phản biện</p><span class="badge-danger" th:text="${articleInReviewingCount}"></span>
+
+                            <p class="w-full">Bài báo đang được phản biện</p>
+                            <span class="noti-badge" th:if="${articleInReviewingCount != 0}"
+                                th:text="${articleInReviewingCount}"></span>
                         </a>
                     </div>
                     <div class="action-item">
                         <a class="group" th:href="@{/editor/reviewed-articles}">
-                            <i class="bi bi-pencil-square text-7xl text-gradient-main group-hover:text-white"></i>
-                            <p class="w-full">Danh sách bài báo đã ghi nhận phản biện</p><span class="badge-danger" th:text="${articleReviewedCount}"></span>
+                            <i class="bi bi-check2-circle text-7xl text-gradient-main group-hover:text-white"></i>
+                            <p class="w-full">Bài báo đã ghi nhận phản biện</p>
+                            <span class="noti-badge" th:if="${articleReviewedCount != 0}"
+                                th:text="${articleReviewedCount}"></span>
                         </a>
                     </div>
                 </div>
@@ -68,9 +79,9 @@
             <div th:if="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}">
                 <div class="flex gap-x-3 items-center">
                     <div class="w-1 h-[30px] bg-main"></div>
-                    <div class="fade-anim text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của người đánh giá</div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của người đánh giá</div>
                 </div>
-                <div class="move-up-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
                         <a class="group" th:href="@{/reviewer/invitation-list}">
                             <i class="bi bi-envelope text-7xl text-gradient-main group-hover:text-white"></i>
@@ -84,7 +95,7 @@
                             <p class="w-full">Danh sách bài báo chờ phản biện</p>
                         </a>
                     </div>
-                    
+
                 </div>
             </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">

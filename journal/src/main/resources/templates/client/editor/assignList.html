@@ -4,7 +4,7 @@
 
 <section class="flex justify-center" layout:fragment="content">
     <div class="container min-h-[800px]">
-        <nav class="fade-anim flex" aria-label="Breadcrumb">
+        <nav class="flex" aria-label="Breadcrumb">
             <ol class="breadcum">
                 <li class="breadcum-item">
                     <a th:href="@{/main-menu}" class="breadcum-item-link">
@@ -30,7 +30,7 @@
         </nav>
 
         <!-- FILTER -->
-        <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+        <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
             <!-- <div class="w-fit">
                 <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
@@ -64,11 +64,21 @@
             </div>
         </form>
 
-
-        <div class="move-up-anim table-container my-6">
+        <div th:if="${#lists.isEmpty(articles)}" class="fade-anim flex justify-center">
+            <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
+                <div class="ml-3 font-medium">
+                    Hiện không có bài báo nào <strong class="text-main font-medium">cần gán biên tập viên</strong>.
+                </div>
+                <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
+                    Quay lại
+                </a>
+            </div>
+          
+        </div>
+        <div th:unless="${#lists.isEmpty(articles)}" class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chờ quyết định
+                    Danh sách bài báo chờ gán biên tập viên
                 </h3>
                 <thead class="table-header">
                     <tr>
@@ -112,15 +122,15 @@
                                 </th:block>
                             </th:block>
                             <td class="px-6 py-4">
-                                <a href="#" class="table-action">Xem chi
-                                    tiết</a>
-                                <br>
-                                <button th:onclick="|assignEditor('${article.id}')|" id="btnAssignSelf"
-                                    class="table-action">Tự gán cho bản thân</button>
-                                <br>
-                                <th:block th:if="${#authorization.expression('hasRole(''ROLE_CHIEF_EDITOR'')')}">
-                                    <a th:href="@{/editor/assign-list/{id}(id=${article.id})}" class="table-action">Chọn biên tập viên</a>
-                                </th:block>
+                                <div class="flex flex-col gap-y-3">
+                                    <a href="#" class="table-action ml-0 text-start">Xem chi tiết</a>
+                                    <button th:onclick="|assignEditor('${article.id}')|" id="btnAssignSelf"
+                                        class="table-action ml-0 text-start">Tự gán cho bản thân</button>
+                                    <th:block th:if="${#authorization.expression('hasRole(''ROLE_CHIEF_EDITOR'')')}">
+                                        <a th:href="@{/editor/assign-list/{id}(id=${article.id})}" class="table-action ml-0 text-start">Chọn biên tập viên</a>
+                                    </th:block>
+                                </div>
+                               
                             </td>
                         </tr>
                     </th:block>

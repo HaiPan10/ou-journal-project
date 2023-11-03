@@ -4,7 +4,7 @@
 
 <section class="mb-12 flex justify-center" layout:fragment="content">
     <div class="container min-h-[800px]">
-        <nav class="fade-anim flex" aria-label="Breadcrumb">
+        <nav class="flex" aria-label="Breadcrumb">
             <ol class="breadcum">
                 <li class="breadcum-item">
                     <a th:href="@{/main-menu}" class="breadcum-item-link">
@@ -32,40 +32,7 @@
         <!-- <div><button type="button" id="mainMenuBtn">Về menu</button>
         </div> -->
         <!-- FILTER -->
-        <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
-            <!-- EXTRA FILTER -->
-            <div class="w-fit">
-                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main"
-                    type="button">
-                    Bộ lọc
-                    <i class="bi bi-sliders2 text-lg"></i>
-                </button>
-
-                <div id="dropdownBgHover" class="dropdown">
-                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownBgHoverButton">
-                        <li>
-                            <h3>Tình trạng</h3>
-                            <div class="filter-container">
-                                <input id="pending-status rounded-full" name="status" type="radio" class="filter-input"
-                                    value="PENDING" onchange="handleChange(this);" checked>
-                                <label class="filter-label" for="pending-status">Chưa duyệt</label>
-                            </div>
-                            <div class="filter-container">
-                                <input id="inreview-status rounded-full" name="status" type="radio" class="filter-input"
-                                    value="IN_REVIEW" onchange="handleChange(this);">
-                                <label class="filter-label" for="inreview-status">Đang mời review</label>
-                            </div>
-                        </li>
-                        <!-- <li class="flex justify-end gap-2 pt-3">
-                                <button type="button" class="btn-secondary-small">Làm
-                                    mới</button>
-                                <button type="submit" class="btn-main-small">Áp
-                                    dụng</button>
-                            </li> -->
-                    </ul>
-                </div>
-            </div>
+        <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- INPUT FILTER -->
             <div class="grow relative flex items-center md:mt-0">
                 <span class="absolute pl-3 py-2">

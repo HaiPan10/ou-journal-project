@@ -18,7 +18,11 @@
                                 </div>
                             </div>
                             <div th:if="${registrySuccess}" role="alert">
-                                <div class="ml-3 text-sm font-medium" th:text="${registrySuccess}"></div>
+                                <div id="alert-error" class="alert-success" role="alert">
+                                    <div class="ml-3 text-sm font-medium" th:text="${registrySuccess}">
+                                        
+                                    </div>
+                                </div>
                             </div>
                             <label class="font-medium pb-1 block">Tên đăng nhập / Email</label>
                             <input name="username" type="text"

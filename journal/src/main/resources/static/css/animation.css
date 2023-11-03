@@ -1,6 +1,6 @@
 @keyframes move-up {
     0% {
-        transform: translateY(150px);
+        transform: translateY(100px);
         opacity: 0;
     }
 
@@ -12,7 +12,7 @@
 
 @keyframes move-right {
     0% {
-        transform: translateX(-150px);
+        transform: translateX(-100px);
         opacity: 0;
     }
 
@@ -24,7 +24,7 @@
 
 @keyframes move-left {
     0% {
-        transform: translateX(150px);
+        transform: translateX(100px);
         opacity: 0;
     }
 
@@ -47,20 +47,24 @@
 /* Áp dụng animation cho phần tử cần hiển thị */
 .move-up-anim {
     animation-name: move-up;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 .move-left-anim {
     animation-name: move-left;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 .move-right-anim {
     animation-name: move-right;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }
 
 .fade-anim {
     animation-name: fade;
-    animation-duration: 1s;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-in-out;
 }

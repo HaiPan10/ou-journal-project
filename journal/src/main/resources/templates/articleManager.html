@@ -29,10 +29,10 @@
     </nav>
 
     <!-- FILTER -->
-    <form class="fade-anim relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+    <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
         <!-- EXTRA FILTER -->
         <div class="w-fit">
-            <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
+            <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main fade-anim" type="button">
                 Bộ lọc
                 <i class="bi bi-sliders2 text-lg"></i>
             </button>
@@ -61,7 +61,7 @@
             </div>
         </div>
         <!-- INPUT FILTER -->
-        <div class="grow relative flex items-center md:mt-0">
+        <div class="grow relative flex items-center md:mt-0 fade-anim">
             <span class="absolute pl-3 py-2">
                 <i class="bi bi-search text-gray-400"></i>
             </span>
@@ -86,11 +86,6 @@
                     <th scope="col" class="px-6 py-3">
                         Email tác giả đứng tên
                     </th>
-                    <div th:if="${status eq 'INVITING_REVIEWER'}">
-                        <th scope="col" class="px-6 py-3">
-                            Số lượng reviewer
-                        </th>
-                    </div>
                     <th scope="col" class="px-6 py-3">
                         Tình trạng
                     </th>
@@ -113,9 +108,7 @@
                                 </div>
                             </th:block>
                         </th:block>
-                        <div th:if="${article.status eq 'INVITING_REVIEWER'}">
-                            <td class="px-6 py-4" th:text="${article.acceptedReviewer} + '/' + ${article.totalReviewer} "></td>
-                        </div>
+                        
                         <td class="px-6 py-4">
                             <div th:if="${article.status eq 'PENDING'}">
                                 <span class="badge-warning">Chờ duyệt</span>

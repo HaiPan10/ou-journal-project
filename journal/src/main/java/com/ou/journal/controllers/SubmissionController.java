@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.utils.EnumUtils;
 
 @Controller
 public class SubmissionController {
@@ -22,12 +23,12 @@ public class SubmissionController {
 
     @ModelAttribute("articleStatusEnum")
     public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
-        return com.ou.journal.enums.ArticleStatus.values();
+        return EnumUtils.getArticleStatus();
     }
 
     @ModelAttribute("authorTypesEnum")
     public com.ou.journal.enums.AuthorType[] getTypes() {
-        return com.ou.journal.enums.AuthorType.values();
+        return EnumUtils.getAuthorTypes();
     }
     
     @GetMapping("/submission/processing")
