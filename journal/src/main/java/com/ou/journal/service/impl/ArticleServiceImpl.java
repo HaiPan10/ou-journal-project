@@ -264,9 +264,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public synchronized Article assignEditor(Long articleId, User user) throws Exception {
         Article article = retrieve(articleId);
-        if(!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString())){
-            throw new Exception("Tình trạng bài viết không hợp lệ");
+        if(!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString()) || article.getEditorUser() != null){
+            throw new Exception("Tình trạng bài viết không hợp lệ / Bài viết đã có biên tập viên");
         }
+
         article.setEditorUser(user);
         article.setStatus(ArticleStatus.INVITING_REVIEWER.toString());
         try {
@@ -310,5 +311,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public String getArticleStatusById(Long articleId) {
         return articleRepositoryJPA.getArticleStatus(articleId);
+    }
+
+    @Override
+    public Long countArticleWaitingAssignEditor() {
+        return articleRepositoryJPA.countArticleWaitingAssignEditor(ArticleStatus.ASSIGN_EDITOR.toString());
     }
 }
