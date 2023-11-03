@@ -63,26 +63,11 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
-
-        <ul class="flex flex-wrap text-sm font-medium text-start" role="tablist">
-            <li class="mr-2 flex gap-2">
-                <a class="py-2 px-3 rounded-full bg-main/10 text-main uppercase hover:bg-main/20 hover:text-main-action" id="profile-tab">
-                    Chưa mời
-                </a>
-            </li>
-            <li class="mr-2 flex gap-2">
-                <a class="py-2 px-3 rounded-full uppercase text-gray-600 hover:bg-gray-50 hover:text-gray-800" id="profile-tab">
-                    Đã mời
-                </a>
-            </li>
-            <li class="mr-2 flex gap-2">
-                <a class="py-2 px-3 rounded-full uppercase text-gray-600 hover:bg-gray-50 hover:text-gray-800" id="profile-tab">
-                    Đang phản biện
-                </a>
-            </li>
-        </ul>
         <div class="move-up-anim table-container my-6">
             <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách bài báo chưa mời phản biện viên
+                </h3>
                 <thead class="table-header">
                     <tr>
                         <th scope="col" class="px-6 py-3">
