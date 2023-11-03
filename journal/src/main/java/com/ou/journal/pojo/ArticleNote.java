@@ -1,5 +1,7 @@
 package com.ou.journal.pojo;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -18,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "article_note")
 @NoArgsConstructor
-public class ArticleNote {
+public class ArticleNote implements Serializable {
     @Id
     @Column(name = "id")
     private Long id;

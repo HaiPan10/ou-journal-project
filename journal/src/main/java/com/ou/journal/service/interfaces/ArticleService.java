@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.User;
 
 public interface ArticleService {
@@ -21,7 +22,7 @@ public interface ArticleService {
     // Article endInvitationReview(Long articleId) throws Exception;
     void updateArticleStatus(Long articleId, Article article) throws Exception;
     List<Article> findByAuthorId(Long authorId);
-    Article editorDecide(Long articleId, String status) throws Exception;
+    Article editorDecide(Long articleId, String status, ArticleNote articleNote) throws Exception;
     Article widthdrawArticle(Long articleId, Long userId) throws Exception;
     Article assignEditor(Long articleId, Long userId) throws Exception;
     Article assignEditor(Long articleId, String email) throws Exception;
