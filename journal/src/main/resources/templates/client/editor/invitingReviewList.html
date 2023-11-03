@@ -28,7 +28,7 @@
                 </li>
             </ol>
         </nav>
-    
+
         <!-- FILTER -->
         <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
             <!-- EXTRA FILTER -->
@@ -63,13 +63,26 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
-    
-    
+
+        <ul class="flex flex-wrap text-sm font-medium text-start" role="tablist">
+            <li class="mr-2 flex gap-2">
+                <a class="py-2 px-3 rounded-full bg-main/10 text-main uppercase hover:bg-main/20 hover:text-main-action" id="profile-tab">
+                    Chưa mời
+                </a>
+            </li>
+            <li class="mr-2 flex gap-2">
+                <a class="py-2 px-3 rounded-full uppercase text-gray-600 hover:bg-gray-50 hover:text-gray-800" id="profile-tab">
+                    Đã mời
+                </a>
+            </li>
+            <li class="mr-2 flex gap-2">
+                <a class="py-2 px-3 rounded-full uppercase text-gray-600 hover:bg-gray-50 hover:text-gray-800" id="profile-tab">
+                    Đang phản biện
+                </a>
+            </li>
+        </ul>
         <div class="move-up-anim table-container my-6">
             <table class="table">
-                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chưa có phản biện viên
-                </h3>
                 <thead class="table-header">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -105,15 +118,18 @@
                             </th:block>
                             <td class="px-6 py-4">
                                 <div th:if="${article.invitedReviewer > 0}">
-                                    <span class="badge-success">Đã mời: <span th:text="${article.invitedReviewer}"></span></span>
-                                    <span class="badge-warning">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
-                                    <span class="badge-danger">Đã từ chối: <span th:text="${article.rejectedReviewer}"></span></span>
+                                    <span class="badge-success">Đã mời: <span
+                                            th:text="${article.invitedReviewer}"></span></span>
+                                    <span class="badge-warning">Chưa phản hồi: <span
+                                            th:text="${article.waitingResponseReviewer}"></span></span>
+                                    <span class="badge-danger">Đã từ chối: <span
+                                            th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                                 <div th:if="${article.invitedReviewer == 0}">
-                                    <span class="badge-success">Đã gán:  
+                                    <span class="badge-success">Đã gán:
                                         <th:block th:each="articleDate : ${article.articleDates}">
                                             <span th:if="${articleDate.dateType.typeName eq 'ASSIGNED_EDITOR_DATE'}"
-                                            th:text="${articleDate.date}">
+                                                th:text="${articleDate.date}">
                                             </span>
                                         </th:block>
                                     </span>
@@ -121,7 +137,9 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div>
-                                    <a class="table-action" th:href="@{/editor/review-articles/invite/{id}(id=${article.id})}">Mời phản biện</a>
+                                    <a class="table-action"
+                                        th:href="@{/editor/review-articles/invite/{id}(id=${article.id})}">Mời phản
+                                        biện</a>
                                 </div>
                             </td>
                         </tr>

@@ -64,11 +64,21 @@
             </div>
         </form>
 
-
-        <div class="move-up-anim table-container my-6">
+        <div th:if="${#lists.isEmpty(articles)}" class="fade-anim flex justify-center">
+            <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
+                <div class="ml-3 font-medium">
+                    Hiện không có bài báo nào <strong class="text-main font-medium">cần gán biên tập viên</strong>.
+                </div>
+                <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
+                    Quay lại
+                </a>
+            </div>
+          
+        </div>
+        <div th:unless="${#lists.isEmpty(articles)}" class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
-                    Danh sách bài báo chờ quyết định
+                    Danh sách bài báo chờ gán biên tập viên
                 </h3>
                 <thead class="table-header">
                     <tr>

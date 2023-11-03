@@ -63,9 +63,19 @@
                 <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
         </form>
+        <div th:if="${#lists.isEmpty(articles)}" class="fade-anim flex justify-center">
+            <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
+                <div class="ml-3 font-medium">
+                    Hiện không có bài báo nào <strong class="text-main font-medium">cần ...</strong>.
+                </div>
+                <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
+                    Quay lại
+                </a>
+            </div>
+          
+        </div>
     
-    
-        <div class="move-up-anim table-container my-6">
+        <div th:unless="${#lists.isEmpty(articles)}" class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
                     Danh sách bài báo đang được phản biện
@@ -110,8 +120,8 @@
                             </th:block>
                             <td class="px-6 py-4">
                                 <div>
-                                    <span class="badge-danger">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
-                                    <span class="badge-warning">Đã đồng ý: <span th:text="${article.acceptedReviewer}"></span></span>
+                                    <span class="badge-warning">Chưa phản hồi: <span th:text="${article.waitingResponseReviewer}"></span></span>
+                                    <span class="badge-success">Đã đồng ý: <span th:text="${article.acceptedReviewer}"></span></span>
                                     <span th:if="${article.reviewedReviewer > 0}" class="badge-success">Đã phản biện: <span th:text="${article.reviewedReviewer}"></span></span>
                                 </div>
                             </td>
