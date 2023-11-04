@@ -13,6 +13,7 @@ import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.repository.ManuscriptRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.AuthorNoteService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 
 @Service
@@ -22,6 +23,8 @@ public class ManuscriptServiceImpl implements ManuscriptService {
     private ManuscriptRepositoryJPA manuscriptRepositoryJPA;
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private AuthorNoteService authorNoteService;
 
     @Override
     public Manuscript getLastestManuscript(Long articleId) {
@@ -41,7 +44,7 @@ public class ManuscriptServiceImpl implements ManuscriptService {
                 new Date(), 
                 manuscripFile.getContentType(),
                 article);
-            // Tái sử dụng author note
+            authorNoteService.create(authorNote, article);
             return manuscriptRepositoryJPA.save(manuscript);
         } else {
             throw new Exception("Trạng thái bài đăng không hợp lệ!");

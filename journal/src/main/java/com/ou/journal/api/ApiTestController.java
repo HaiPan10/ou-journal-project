@@ -16,12 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthRequest;
+import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ManuscriptService;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,6 +42,9 @@ public class ApiTestController {
 
     @Autowired
     private ArticleDateService articleDateService;
+
+    @Autowired
+    private ManuscriptService manuscriptService;
 
     // @Autowired
     // private JwtService jwtService;
@@ -143,6 +150,16 @@ public class ApiTestController {
     public ResponseEntity<?> getArticleDates(@PathVariable Long articleId) {
         try {
             return ResponseEntity.ok().body(articleDateService.getArticleDates(articleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/articles/re-submit/{articleId}")
+    public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
+     MultipartFile file, AuthorNote authorNote) {
+        try {
+            return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, authorNote));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
