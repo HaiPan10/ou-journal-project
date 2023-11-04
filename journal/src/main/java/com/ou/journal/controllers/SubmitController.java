@@ -23,6 +23,7 @@ import com.ou.journal.pojo.AuthorType;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthorArticle;
+import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
@@ -84,6 +85,10 @@ public class SubmitController {
                 authorArticles.add(authorArticle);
                 Article article = new Article();
                 article.setAuthorArticles(authorArticles);
+
+                //Hai: add new author note
+                AuthorNote authorNote = new AuthorNote();
+                article.setAuthorNote(authorNote);
 
                 return article;
             } catch (Exception e) {

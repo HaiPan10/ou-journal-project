@@ -20,6 +20,7 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthorArticle;
+import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ArticleRepositoryJPA;
@@ -29,6 +30,7 @@ import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.AuthorNoteService;
 import com.ou.journal.service.interfaces.DateTypeService;
 import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.ManuscriptService;
@@ -57,6 +59,8 @@ public class ArticleServiceImpl implements ArticleService {
     private MailService mailService;
     @Autowired
     private ArticleDateService articleDateService;
+    @Autowired
+    private AuthorNoteService authorNoteService;
 
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
@@ -98,7 +102,13 @@ public class ArticleServiceImpl implements ArticleService {
                 });
             });
 
-            return articleRepositoryJPA.save(article);
+            //Hai: save the author note when submit new article
+            AuthorNote authorNote = article.getAuthorNote();
+            article.setAuthorNote(null);
+            Article persistArticle = articleRepositoryJPA.save(article);
+            authorNoteService.create(authorNote, persistArticle);
+
+            return persistArticle;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
