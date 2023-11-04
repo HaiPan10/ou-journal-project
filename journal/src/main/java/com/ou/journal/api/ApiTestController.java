@@ -129,6 +129,15 @@ public class ApiTestController {
         
     // }
 
+    @PostMapping()
+    public ResponseEntity<?> test() throws Exception {
+        try {
+            return ResponseEntity.ok("HEHE");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
     @GetMapping(path = "/article-dates/{articleId}")
     public ResponseEntity<?> getArticleDates(@PathVariable Long articleId) {

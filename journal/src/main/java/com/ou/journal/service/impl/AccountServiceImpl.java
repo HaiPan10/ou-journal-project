@@ -153,7 +153,7 @@ public class AccountServiceImpl implements AccountService {
             Account authenticationAccount = accountOptional.get();
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtService.generateAccessToken(authenticationAccount);
+            String token = jwtService.generateAccessToken(authenticationAccount, account.getRole());
 
             AuthResponse authResponse = new AuthResponse();
             authResponse.setUser(authenticationAccount.getUser());
