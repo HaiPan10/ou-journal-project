@@ -54,9 +54,9 @@
                 <tbody>
                     <th:block th:each="reviewArticle : ${reviewArticles}">
                         <tr class="table-row">
-                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                            <td scope="row" class="px-6 py-4 flex gap-3 items-center font-semibold text-gray-800">
                                 <span th:text="${reviewArticle.manuscript.article.title}"></span>
-                            </th>
+                            </td>
                             <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
                             <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">

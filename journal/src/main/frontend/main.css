@@ -343,7 +343,7 @@
     }
 
     .note {
-        @apply transition-all duration-500 w-full bg-main-light/30 min-h-[100px] shadow after:bg-white before:bg-gradient-to-br before:from-main/50 before:to-main-action/75 before:shadow-lg before:z-10
+        @apply transition-all duration-500 w-full md:w-2/5 bg-main-light/30 min-h-[100px] shadow after:bg-white before:bg-gradient-to-br before:from-main/50 before:to-main-action/75 before:shadow-lg before:z-10
     }
 
     .note-hidden {

@@ -100,7 +100,14 @@
                             <th:block th:each="articleDate : ${article.articleDates}">
                                 <th:block th:if="${articleDate.dateType.typeName.equals('SUBMITTED_DATE')}">
                                     <td class="px-6 py-4">
-                                        <span id="articleDate" th:text="${articleDate.date}"></span>
+                                        
+                                        <span th:data-tooltip-target="${'dateDetail-' + article.id}" data-tooltip-placement="top" type="button" class="dateElement cursor-default" id="articleDate" th:text="${articleDate.date}"></span>
+
+                                        <div th:id="${'dateDetail-' + article.id}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                                            <span class="dateDetailElement" th:text="${articleDate.date}">
+                                            </span>
+                                            <div class="tooltip-arrow" data-popper-arrow></div>
+                                        </div>
                                     </td>
                                 </th:block>
                             </th:block>

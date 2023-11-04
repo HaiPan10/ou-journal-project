@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/layout}">
+    layout:decorate="~{layouts/adminLayout}">
 
-<section class="flex justify-center mb-12" layout:fragment="content">
+<section class="" layout:fragment="content">
     <div class="container min-h-[800px]">
         <!-- BREADCUM -->
         <section layout:fragment="breadcum">
@@ -10,9 +10,7 @@
         </section>
 
         <!-- /BREADCUM -->
-        <div th:replace="~{fragments/statusStage :: statusStage (status=${article.status})}"></div>
-
-        <div class="move-up-anim bg-white rounded-lg p-6">
+        <div class="move-up-anim bg-white mt-6 rounded-lg p-6">
             <div class="font-semibold text-3xl">
                 <span th:text="${article.title}"> </span>
             </div>

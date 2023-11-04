@@ -6,4 +6,12 @@ window.onload = function() {
         var formattedDate = moment(date).fromNow();
         dateElements[i].innerText = formattedDate;
     }
+
+
+    var dateDetailElements = document.getElementsByClassName('dateDetailElement');
+    for (var i = 0; i < dateDetailElements.length; i++) {
+        var date = dateDetailElements[i].lastChild.data;
+        var formattedDate = moment(date).format("DD/MM/YYYY HH:mm");
+        dateDetailElements[i].innerText = formattedDate;
+    }
 }

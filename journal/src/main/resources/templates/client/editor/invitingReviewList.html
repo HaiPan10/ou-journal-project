@@ -104,13 +104,19 @@
                                             th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                                 <div th:if="${article.invitedReviewer == 0}">
-                                    <span class="badge-info">Đã gán:
+                                    <span th:data-tooltip-target="${'dateDetail-' + article.id}" data-tooltip-placement="top" class="badge-info">Đã gán:
                                         <th:block th:each="articleDate : ${article.articleDates}">
                                             <span class="dateElement" th:if="${articleDate.dateType.typeName eq 'ASSIGNED_EDITOR_DATE'}"
                                                 th:text="${articleDate.date}">
                                             </span>
+                                            <div th:id="${'dateDetail-' + article.id}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                                                <span class="dateDetailElement" th:text="${articleDate.date}">
+                                                </span>
+                                                <div class="tooltip-arrow" data-popper-arrow></div>
+                                            </div>
                                         </th:block>
                                     </span>
+                                    
                                 </div>
                             </td>
                             <td class="px-6 py-4">
