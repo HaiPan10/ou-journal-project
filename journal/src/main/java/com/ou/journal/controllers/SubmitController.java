@@ -86,9 +86,8 @@ public class SubmitController {
                 Article article = new Article();
                 article.setAuthorArticles(authorArticles);
 
+                //Hai: add new author note
                 AuthorNote authorNote = new AuthorNote();
-                authorNote.setArticle(article);
-
                 article.setAuthorNote(authorNote);
 
                 return article;

@@ -9,25 +9,28 @@ import com.ou.journal.repository.ArticleNoteRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 
 @Service
-public class ArticleNoteServiceImpl implements ArticleNoteService{
+public class ArticleNoteServiceImpl implements ArticleNoteService {
 
     @Autowired
     private ArticleNoteRepositoryJPA articleNoteRepositoryJPA;
 
     @Override
     public ArticleNote createOrUpdate(ArticleNote articleNote, Article article) {
-        System.out.println("ARTICLE NOTE: " + articleNote.getNote());
-        System.out.println("THE ARTICLE ID: " + article.getId());
+        String note = articleNote.getNote().trim();
+        if (note != null && !note.isEmpty()) {
+            articleNote.setNote(note);
+        } else {
+            return null;
+        }
+
         ArticleNote persistArticleNote = articleNoteRepositoryJPA.findById(article.getId()).orElse(null);
-        if(persistArticleNote != null){
+        if (persistArticleNote != null) {
             // update
-            System.out.println("UPDATING!!!");
             persistArticleNote.setNote(articleNote.getNote());
             return articleNoteRepositoryJPA.save(persistArticleNote);
         }
 
         // create
-        System.out.println("CREATING!!!");
         articleNote.setArticle(article);
         return articleNoteRepositoryJPA.save(articleNote);
     }
@@ -35,7 +38,7 @@ public class ArticleNoteServiceImpl implements ArticleNoteService{
     @Override
     public ArticleNote retrieve(Long id) throws Exception {
         return articleNoteRepositoryJPA.findById(id)
-            .orElseThrow(() -> new Exception("Không tìm thấy Note"));
+                .orElseThrow(() -> new Exception("Không tìm thấy Note"));
     }
-    
+
 }

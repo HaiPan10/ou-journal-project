@@ -143,3 +143,11 @@ For example:
 Including the "@AuthenticationPrincipal AuthenticationUser currentUser" as the
 parameters of the Controller or Restcontroller
 ```
+
+## Re submit manuscript 
+```
+Test endpoint: GET:localhost:8080/api/tests/articles/re-submit/{articleId}
+Body: form-data
+Key: file -> input your file
+Key: note -> input any author note
+```
