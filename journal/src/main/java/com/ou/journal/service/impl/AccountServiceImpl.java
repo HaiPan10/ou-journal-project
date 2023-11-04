@@ -145,7 +145,7 @@ public class AccountServiceImpl implements AccountService {
             if (!accountOptional.isPresent()) {
                 throw new Exception("Email không tồn tại!");
             }
-
+            account.setUsername(String.format("%s,%s", account.getUsername(), account.getRole()));
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             account.getUsername(), account.getPassword()));

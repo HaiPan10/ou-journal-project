@@ -85,7 +85,8 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 }
                 Set<GrantedAuthority> authorities = new HashSet<>();
-                if (!roleName.isEmpty() && roleName != null) {
+                if (!roleName.isEmpty() && roleName != null
+                    && !(roleName.equals(RoleName.ROLE_ADMIN.toString()) || roleName.equals(RoleName.ROLE_SECRETARY.toString()))) {
                     UserRole userRole = userRoleService.findByUserAndRoleName(account.getUser(), roleName);
                     authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
                     if (roleName.equals(RoleName.ROLE_EDITOR.toString())) {
