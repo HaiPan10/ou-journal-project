@@ -1,6 +1,7 @@
 package com.ou.journal.service.impl;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class ArticleDateServiceImpl implements ArticleDateService {
                     article, new Date());
             }
             articleDateRepositoryJPA.save(articleDate);
+    }
+
+    @Override
+    public List<ArticleDate> getArticleDates(Long articleId) {
+        Date submittedDate = articleDateRepositoryJPA.getSubmittedDate(articleId);
+        return articleDateRepositoryJPA.getArticleDates(articleId, submittedDate);
     }
     
 }

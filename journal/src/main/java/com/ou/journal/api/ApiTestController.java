@@ -20,6 +20,7 @@ import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleService;
 import jakarta.validation.Valid;
 
@@ -34,6 +35,9 @@ public class ApiTestController {
 
     @Autowired
     private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
+
+    @Autowired
+    private ArticleDateService articleDateService;
 
     // @Autowired
     // private JwtService jwtService;
@@ -79,14 +83,14 @@ public class ApiTestController {
         }
     }
 
-    // @PostMapping(path = "/generate-token")
-    // public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
-    //     try {
-    //         return ResponseEntity.ok().body(accountService.login(authRequest));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-    // }
+    @PostMapping(path = "/generate-token")
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+        try {
+            return ResponseEntity.ok().body(accountService.login(authRequest));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     // Chỉ dùng cho test để dễ dàng lấy được email token
     // @GetMapping(path = "/get-email-token/{accountId}")
@@ -122,4 +126,14 @@ public class ApiTestController {
     //     }
         
     // }
+
+
+    @GetMapping(path = "/article-dates/{articleId}")
+    public ResponseEntity<?> getArticleDates(@PathVariable Long articleId) {
+        try {
+            return ResponseEntity.ok().body(articleDateService.getArticleDates(articleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
