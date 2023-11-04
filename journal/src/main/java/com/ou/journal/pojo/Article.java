@@ -69,6 +69,9 @@ public class Article implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
     private ArticleNote articleNote;
 
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "article")
+    private AuthorNote authorNote;
+
     // @JsonIgnore
     // @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
     // private List<ReviewArticle> reviewArticles;
