@@ -34,7 +34,6 @@ import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.UserService;
 
-
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ArticleServiceImpl implements ArticleService {
@@ -58,7 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
     private MailService mailService;
     @Autowired
     private ArticleDateService articleDateService;
-    
+
     @Override
     public Article create(Article article, MultipartFile file) throws Exception {
         try {
@@ -80,7 +79,7 @@ public class ArticleServiceImpl implements ArticleService {
                                             new Date(),
                                             file.getContentType(),
                                             article))));
-            
+
             article.getAuthorArticles().forEach(authorArticle -> {
                 authorArticle.setArticle(article);
                 if (authorArticle.getUser().getId() == null) {
@@ -98,7 +97,7 @@ public class ArticleServiceImpl implements ArticleService {
                     authorRole.setAuthorArticle(authorArticle);
                 });
             });
-            
+
             return articleRepositoryJPA.save(article);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -112,8 +111,8 @@ public class ArticleServiceImpl implements ArticleService {
         } else {
             List<Article> articles = articleRepositoryJPA.list(status);
             // if (status.equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-            //     articles.forEach(article -> article.setAcceptedReviewer(
-            //         reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
+            // articles.forEach(article -> article.setAcceptedReviewer(
+            // reviewArticleRepositoryJPA.countAcceptedReview(article.getId())));
             // }
             return articles;
         }
@@ -133,19 +132,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticleStatus(Long articleId, Article article) throws Exception {
+    public void secretaryDecide(Long articleId, Article article) throws Exception {
         Article persistArticle = retrieve(articleId);
         if (persistArticle.getStatus().equals(ArticleStatus.PENDING.toString())) {
             String status = article.getStatus();
             persistArticle.setStatus(status);
             // if(status.equals(ArticleStatus.INVITING_REVIEWER.toString())){
-            //     persistArticle.setTotalReviewer(article.getTotalReviewer());
+            // persistArticle.setTotalReviewer(article.getTotalReviewer());
             // }
-            articleDateService.addOrUpdate(persistArticle, DateTypeName.SECRETARY_VIEWED_DATE.toString());
-            articleRepositoryJPA.save(persistArticle);
-            ArticleNote articleNote = article.getArticleNote();
-            articleNoteService.createOrUpdate(articleNote, persistArticle);
-            mailService.sendSecretaryVerificationmail(persistArticle, articleNote);
+            try {
+                articleDateService.addOrUpdate(persistArticle, DateTypeName.SECRETARY_VIEWED_DATE.toString());
+                articleRepositoryJPA.save(persistArticle);
+                ArticleNote articleNote = article.getArticleNote();
+                articleNoteService.createOrUpdate(articleNote, persistArticle);
+                mailService.sendSecretaryVerificationmail(persistArticle, articleNote);
+            } catch (Exception e) {
+                throw new Exception(e.getMessage());
+            }
         }
     }
 
@@ -156,19 +159,24 @@ public class ArticleServiceImpl implements ArticleService {
 
     // @Override
     // public Article endInvitationReview(Long articleId) throws Exception {
-    //     Article persistArticle = retrieve(articleId);
-    //     if (persistArticle.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString())) {
-    //         Integer acceptedReviewTotal = reviewArticleRepositoryJPA.countAcceptedReview(articleId);
-    //         if (acceptedReviewTotal > 0) {
-    //             persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
-    //             articleDateService.addOrUpdate(persistArticle, DateTypeName.IN_REVIEW_DATE.toString());
-    //             return articleRepositoryJPA.save(persistArticle);
-    //         } else {
-    //             throw new Exception("Bài báo này chưa có reviewer nào!");
-    //         }
-    //     } else {
-    //         throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này! Vui lòng quay về danh sách bài đăng!");
-    //     }
+    // Article persistArticle = retrieve(articleId);
+    // if
+    // (persistArticle.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()))
+    // {
+    // Integer acceptedReviewTotal =
+    // reviewArticleRepositoryJPA.countAcceptedReview(articleId);
+    // if (acceptedReviewTotal > 0) {
+    // persistArticle.setStatus(ArticleStatus.IN_REVIEW.toString());
+    // articleDateService.addOrUpdate(persistArticle,
+    // DateTypeName.IN_REVIEW_DATE.toString());
+    // return articleRepositoryJPA.save(persistArticle);
+    // } else {
+    // throw new Exception("Bài báo này chưa có reviewer nào!");
+    // }
+    // } else {
+    // throw new Exception("Thất bại! Đã có sự cập nhật trạng thái cho bài đăng này!
+    // Vui lòng quay về danh sách bài đăng!");
+    // }
     // }
 
     @Override
@@ -192,11 +200,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article widthdrawArticle(Long articleId, Long userId) throws Exception {
         try {
-            Optional<AuthorArticle> authorArticleOptional = authorArticleRepositoryJPA.findByArticleAndUser(articleId, userId);
+            Optional<AuthorArticle> authorArticleOptional = authorArticleRepositoryJPA.findByArticleAndUser(articleId,
+                    userId);
             if (authorArticleOptional.isPresent()) {
                 AuthorArticle authorArticle = authorArticleOptional.get();
                 if (authorRoleRepositoryJPA.findByAuthorArticleAndAuthorType(authorArticle.getId(),
-                 AuthorType.CORRESPONDING_AUTHOR.toString()).isPresent()) {
+                        AuthorType.CORRESPONDING_AUTHOR.toString()).isPresent()) {
                     Article article = retrieve(articleId);
                     article.setStatus(ArticleStatus.WITHDRAW.toString());
                     articleDateService.addOrUpdate(article, DateTypeName.WITHDRAW_DATE.toString());
@@ -222,18 +231,18 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setInvitedReviewer(invitedReviewer);
                 if (invitedReviewer > 0) {
                     article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                        currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
+                            currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
                     article.setRejectedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                        currentManuscript.getId(), ReviewArticleStatus.REJECTED.toString()));
+                            currentManuscript.getId(), ReviewArticleStatus.REJECTED.toString()));
                 }
-            } 
+            }
             if (status.equals(ArticleStatus.IN_REVIEW.toString())) {
                 article.setWaitingResponseReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
+                        currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
                 article.setAcceptedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    currentManuscript.getId(), ReviewArticleStatus.ACCEPTED.toString()));
+                        currentManuscript.getId(), ReviewArticleStatus.ACCEPTED.toString()));
                 article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    currentManuscript.getId(), ReviewArticleStatus.REVIEWED.toString()));
+                        currentManuscript.getId(), ReviewArticleStatus.REVIEWED.toString()));
             }
         });
         return articles;
@@ -246,7 +255,8 @@ public class ArticleServiceImpl implements ArticleService {
             throw new Exception("Bạn không có quyền để xem bài báo này!");
         } else {
             article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()));
+                    manuscriptService.getLastestManuscript(article.getId()).getId(),
+                    ReviewArticleStatus.REVIEWED.toString()));
             return article;
         }
     }
@@ -266,7 +276,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public synchronized Article assignEditor(Long articleId, User user) throws Exception {
         Article article = retrieve(articleId);
-        if(!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString()) || article.getEditorUser() != null){
+        if (!article.getStatus().equals(ArticleStatus.ASSIGN_EDITOR.toString()) || article.getEditorUser() != null) {
             throw new Exception("Tình trạng bài viết không hợp lệ / Bài viết đã có biên tập viên");
         }
 
@@ -286,28 +296,30 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> getArticleWaitingForInviteReviewer(Long editorId) {
         List<Article> articles = list(ArticleStatus.INVITING_REVIEWER.toString(), editorId);
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticle(
-            manuscriptService.getLastestManuscript(article.getId()).getId()) == 0).collect(Collectors.toList());
+                manuscriptService.getLastestManuscript(article.getId()).getId()) == 0).collect(Collectors.toList());
     }
 
     @Override
     public List<Article> getArticleWaitingForAcceptFromReviewer(Long editorId) {
         List<Article> articles = list(ArticleStatus.INVITING_REVIEWER.toString(), editorId);
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticle(
-            manuscriptService.getLastestManuscript(article.getId()).getId()) > 0).collect(Collectors.toList());
+                manuscriptService.getLastestManuscript(article.getId()).getId()) > 0).collect(Collectors.toList());
     }
 
     @Override
     public List<Article> getInReviewArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) == 0).collect(Collectors.toList());
+                manuscriptService.getLastestManuscript(article.getId()).getId(),
+                ReviewArticleStatus.REVIEWED.toString()) == 0).collect(Collectors.toList());
     }
 
     @Override
     public List<Article> getReviewedArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
         return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    manuscriptService.getLastestManuscript(article.getId()).getId(), ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
+                manuscriptService.getLastestManuscript(article.getId()).getId(),
+                ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
     }
 
     @Override

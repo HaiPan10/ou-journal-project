@@ -24,7 +24,7 @@ public class ApiAdminArticleController {
     public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
         try {
             article.setStatus(ArticleStatus.ASSIGN_EDITOR.toString());
-            articleService.updateArticleStatus(articleId, article);
+            articleService.secretaryDecide(articleId, article);
             return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,7 +35,7 @@ public class ApiAdminArticleController {
     public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
         try {
             article.setStatus(ArticleStatus.SECRETARY_REJECT.toString());
-            articleService.updateArticleStatus(articleId, article);
+            articleService.secretaryDecide(articleId, article);
             return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
