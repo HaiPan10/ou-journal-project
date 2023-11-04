@@ -9,11 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class AuthRequest implements Serializable{
     @NotBlank(message = "{account.email.notBlank}")
     @Email(message = "{account.email.invalid}")
@@ -22,4 +24,6 @@ public class AuthRequest implements Serializable{
     @NotBlank(message = "{account.password.notBlank}")
     @Size(min = 1, message = "{account.password.invalidSize}")
     private String password;
+    
+    private String role;
 }

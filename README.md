@@ -90,7 +90,8 @@ Test endpoint: localhost:8080/api/tests/generate-token
 The json:
 {
     "username": "admin",
-    "password": "123456"
+    "password": "123456",
+    "role": "ROLE_ADMIN"
 }
 The header of each request testing by postman should have:
 Authorization: Bearer <Token>
