@@ -131,7 +131,7 @@ public class SubmitController {
             if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
                 return "redirect:/submit/step2";
         }
-        if (article.getFile() != null && !article.getFile().isEmpty()) {
+        if (article.getFile() != null) {
             String originalFilename = article.getFile().getOriginalFilename();
             String extension = FilenameUtils.getExtension(originalFilename);
             model.addAttribute("extension", extension);

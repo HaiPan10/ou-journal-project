@@ -27,7 +27,7 @@
             </div>
 
 
-            <div th:if="${article.articleNote.note != null and article.articleNote.note != ''}">
+            <div th:if="${article.articleNote != null && article.articleNote.note != null and article.articleNote.note != ''}">
                 <div id="note" class="note note-hidden mt-4 mb-3">
                     <div class="p-3 flex justify-between items-center">
                         <p class="text-main font-bold pr-2">Nhận xét</p>

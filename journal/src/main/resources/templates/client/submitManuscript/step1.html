@@ -27,8 +27,9 @@
                             </div>
 
                             <div class="col-span-full">
-                                <label for="author-note" class="block text-sm font-medium leading-6 text-gray-900">Ghi chú (nếu có)</label>
-                                <textarea id="author-note" name="author-note" rows="6" th:field="*{authorNote.note}"
+                                <label for="author-note" class="block text-sm font-medium leading-6 text-gray-900">
+                                    Ghi chú (nếu có)</label>
+                                <textarea id="author-note" name="author-note" rows="1" th:field="*{authorNote.note}"
                                     class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
                             </div>
 
@@ -106,9 +107,8 @@
                             ${value}
                         </div>
                           <button id="btn-remove-kw-${value}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${value}" aria-label="Close">
-                            <span class="material-symbols-rounded text-sm">
-                                close
-                            </span>
+                            <i class="bi bi-x">
+                            </i>
                         </button>
                       </div>`
                     insertKeywordBox(newKwHTML);
@@ -136,9 +136,8 @@
                                 ${k}
                             </div>
                               <button id="btn-remove-kw-${k}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${k}" aria-label="Close">
-                                <span class="material-symbols-rounded text-sm">
-                                    close
-                                </span>
+                                <i class="bi bi-x">
+                                </i>
                             </button>
                           </div>`
                         insertKeywordBox(newKwHTML);

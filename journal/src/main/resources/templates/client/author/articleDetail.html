@@ -85,7 +85,7 @@
 
     <div id="resubmit-modal" tabindex="-1"
         class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-md max-h-full">
+        <div class="relative w-full max-w-7xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button type="button"
                     class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -116,6 +116,10 @@
                                 <p class="text-xs leading-5 text-gray-600">PDF, DOCX</p>
                             </div>
                         </div>
+                        <div class="col-span-full">
+                            <textarea id="author-note" name="note" required type="text"
+                                placeholder="Ghi chú nội dung đã chỉnh sửa" class="input mt-3 w-full" rows="4"></textarea>
+                        </div>
                     </form>
                     <div class="mt-5 flex justify-end gap-x-3">
                         <button data-modal-hide="resubmit-modal" type="button" class="btn-gradient-secondary w-fit">Hủy
@@ -135,10 +139,11 @@
 <th:block layout:fragment="extra-js">
     <script>
         if (currentStatus.indexOf("REJECT") > -1) {
-            document.querySelector("#btn-resubmit").disabled = true;
+            document.querySelector("#btn-resubmit").disabled = false;
         } else {
             document.querySelector("#btn-resubmit").remove();
         }
     </script>
 </th:block>
+
 </html>

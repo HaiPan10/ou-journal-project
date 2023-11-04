@@ -155,28 +155,10 @@ public class AccountServiceImpl implements AccountService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtService.generateAccessToken(authenticationAccount, account.getRole());
 
-            // if (!authenticationAccount.getStatus().equals("ACTIVE")) {
-            // // EXCEPTION JSON FOR CLIENT
-            // String jsonString = new JSONObject()
-            // .put("id", authenticationAccount.getId())
-            // .put("status", authenticationAccount.getStatus())
-            // .put("accessToken", token)
-            // .toString();
-            // throw new Exception(jsonString);
-            // }
-
-            if (authenticationAccount.getStatus().equals(AccountStatus.EMAIL_VERIFICATION.toString())) {
-                throw new Exception("Chưa xác thực email!");
-            } else if (authenticationAccount.getStatus().equals(AccountStatus.PENDING.toString())) {
-                throw new Exception("Tài khoản đang chờ duyệt!");
-            } else if (authenticationAccount.getStatus().equals(AccountStatus.REJECTED.toString())) {
-                throw new Exception("Tài khoản không được duyệt!");
-            } else {
-                AuthResponse authResponse = new AuthResponse();
-                authResponse.setUser(authenticationAccount.getUser());
-                authResponse.setAccessToken(token);
-                return authResponse;
-            }
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setUser(authenticationAccount.getUser());
+            authResponse.setAccessToken(token);
+            return authResponse;
         } catch (AuthenticationException exception) {
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }
