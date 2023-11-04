@@ -23,6 +23,7 @@ import com.ou.journal.pojo.AuthorType;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthorArticle;
+import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
@@ -85,6 +86,11 @@ public class SubmitController {
                 Article article = new Article();
                 article.setAuthorArticles(authorArticles);
 
+                AuthorNote authorNote = new AuthorNote();
+                authorNote.setArticle(article);
+
+                article.setAuthorNote(authorNote);
+
                 return article;
             } catch (Exception e) {
 
@@ -126,7 +132,7 @@ public class SubmitController {
             if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
                 return "redirect:/submit/step2";
         }
-        if (article.getFile() != null && !article.getFile().isEmpty()) {
+        if (article.getFile() != null) {
             String originalFilename = article.getFile().getOriginalFilename();
             String extension = FilenameUtils.getExtension(originalFilename);
             model.addAttribute("extension", extension);
