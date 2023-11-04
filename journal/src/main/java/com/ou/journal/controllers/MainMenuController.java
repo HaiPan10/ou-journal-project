@@ -29,18 +29,19 @@ public class MainMenuController {
     @GetMapping("main-menu")
     public String mainMenu(@AuthenticationPrincipal AuthenticationUser currentUser, Model model) throws Exception {
         Optional<UserRole> editorUserOptional = userRoleService.getByUserAndRoleName(
-            userService.retrieve(currentUser.getId()), RoleName.ROLE_EDITOR.toString());
+                userService.retrieve(currentUser.getId()), RoleName.ROLE_EDITOR.toString());
         if (editorUserOptional.isPresent()) {
-            model.addAttribute("articleWaitingForInviteReviewCount", 
-                articleService.getArticleWaitingForInviteReviewer(currentUser.getId()).size());
-            model.addAttribute("articleWaitingForAcceptFromReviewerCount", 
-                articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId()).size());  
-            model.addAttribute("articleInReviewingCount", 
-                articleService.getInReviewArticles(currentUser.getId()).size());
-            model.addAttribute("articleReviewedCount", 
-                articleService.getReviewedArticles(currentUser.getId()).size());
+            model.addAttribute("articleWaitingForInviteReviewCount",
+                    articleService.getArticleWaitingForInviteReviewer(currentUser.getId()).size());
+            model.addAttribute("articleWaitingForAcceptFromReviewerCount",
+                    articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId()).size());
+            model.addAttribute("articleInReviewingCount",
+                    articleService.getInReviewArticles(currentUser.getId()).size());
+            model.addAttribute("articleReviewedCount",
+                    articleService.getReviewedArticles(currentUser.getId()).size());
             model.addAttribute("articleWaitingAssignEditor", articleService.countArticleWaitingAssignEditor());
-        }  
+            model.addAttribute("assignedArticleCount", articleService.countAssignedArticleById(currentUser.getId()));
+        }
         return "client/mainMenu";
     }
 }

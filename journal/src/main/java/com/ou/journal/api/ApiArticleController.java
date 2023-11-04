@@ -122,4 +122,7 @@ public class ApiArticleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // @Secured("ROLE_CHIEF_EDITOR")
+    // @PutMapping(value = "/chief-editor/unassign")
 }

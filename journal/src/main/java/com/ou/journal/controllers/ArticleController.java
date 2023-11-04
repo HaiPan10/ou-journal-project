@@ -63,7 +63,7 @@ public class ArticleController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        return "test";
+        return "secretaryDecide";
     }
 
     // @GetMapping("/admin/articles/view/{articleId}")

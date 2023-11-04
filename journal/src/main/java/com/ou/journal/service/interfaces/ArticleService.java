@@ -17,6 +17,7 @@ public interface ArticleService {
     List<Article> getInReviewArticles(Long editorId);
     List<Article> getReviewedArticles(Long editorId);
     Long countArticleWaitingAssignEditor();
+    Long countAssignedArticleById(Long editorId);
     Article retrieve(Long articleId) throws Exception;
     Article retrieve(Long articleId, Long userId) throws Exception;
     // Article endInvitationReview(Long articleId) throws Exception;
@@ -28,4 +29,5 @@ public interface ArticleService {
     Article assignEditor(Long articleId, String email) throws Exception;
     Article assignEditor(Long articleId, User user) throws Exception;
     String getArticleStatusById(Long articleId);
+    List<Article> findByEditorUserId(Long editorId);
 }

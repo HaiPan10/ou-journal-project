@@ -81,7 +81,6 @@
             kws = kws.filter(word => word !== value);
             kw.value = kws.join(' ');
             rmElement.remove();
-
         }
 
         function insertKeywordBox(elementHTML) {
@@ -125,6 +124,34 @@
         }
 
         kwInput.addEventListener("keyup", handleKeyUp)
+
+        kwInput.addEventListener("drop", function(event) {
+            event.preventDefault();
+        });
+          
+
+        kwInput.addEventListener('blur', function () {
+           const kwVal = kwInput.value;
+           kwInput.value = "";
+           if (kwVal.trim()) {
+            let kws = kwVal.split(" ");
+            kws.forEach(word => {
+                if (word && isExisted(word) == false) {
+                    let newKwHTML = ` <div id="kw-${word}" class="kw-box" role="alert">
+                        <div class="kw text-sm font-medium whitespace-nowrap">
+                            ${word}
+                        </div>
+                          <button id="btn-remove-kw-${word}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${kwVal}" aria-label="Close">
+                            <i class="bi bi-x">
+                            </i>
+                        </button>
+                      </div>`
+                    insertKeywordBox(newKwHTML);
+                    kw.value += " " + word;
+                }
+            })
+           }
+        });
 
         document.addEventListener('DOMContentLoaded', function () {
             if (kw.value) {

@@ -23,4 +23,8 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
     String getArticleStatus(Long articleId);
     @Query("SELECT COUNT(*) FROM Article a WHERE a.editorUser IS NULL AND a.status = ?1")
     Long countArticleWaitingAssignEditor(String status);
+    @Query("FROM Article a where a.editorUser.id = ?1")
+    List<Article> findByEditorUserId(Long editorUser);
+    @Query("SELECT COUNT(*) FROM Article a WHERE a.editorUser.id = ?1")
+    Long countAssignedArticleById(Long editorId);
 }
