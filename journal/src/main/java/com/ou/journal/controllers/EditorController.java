@@ -177,4 +177,10 @@ public class EditorController {
             return "redirect:/main-menu";
         }
     }
+
+    @GetMapping("/editor/assigned-list")
+    public String assignedArticle(Model model, @AuthenticationPrincipal AuthenticationUser user){
+        model.addAttribute("articles", articleService.findByEditorUserId(user.getId()));
+        return "client/editor/assignedList";
+    }
 }

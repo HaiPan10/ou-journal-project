@@ -341,4 +341,14 @@ public class ArticleServiceImpl implements ArticleService {
     public Long countArticleWaitingAssignEditor() {
         return articleRepositoryJPA.countArticleWaitingAssignEditor(ArticleStatus.ASSIGN_EDITOR.toString());
     }
+
+    @Override
+    public List<Article> findByEditorUserId(Long editorId) {
+        return articleRepositoryJPA.findByEditorUserId(editorId);
+    }
+
+    @Override
+    public Long countAssignedArticleById(Long editorId) {
+        return articleRepositoryJPA.countAssignedArticleById(editorId);
+    }
 }
