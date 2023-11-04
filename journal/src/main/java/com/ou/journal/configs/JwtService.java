@@ -35,13 +35,13 @@ public class JwtService {
     private static final long EXPIRE_DURATION = HOUR * MINUTE * SECOND * MILISECOND;
     private static final byte[] BYTES = SECRECT.getBytes();
 
-    public String generateAccessToken(Account account) {
+    public String generateAccessToken(Account account, String roleName) {
         String token = null;
         if (account != null) {
             try {
                 JWSSigner signer = new MACSigner(BYTES);
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-                builder.claim("userName", account.getUserName());
+                builder.claim("userName", String.format("%s,%s", account.getUserName(), roleName));
                 builder.claim("id", account.getId());
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
