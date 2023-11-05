@@ -24,12 +24,16 @@ public class RenderPDFServiceImpl implements RenderPDFService{
 
     @Override
     public ResponseEntity<byte[]> view(Long articleId, String version) throws Exception {
-        Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
         Manuscript renderManuscript;
-        if (manuscriptOptional.isPresent()) {
-            renderManuscript = manuscriptOptional.get();
-        } else {
+        if (version == null) {
             renderManuscript = manuscriptService.getLastestManuscript(articleId);
+        } else {
+            Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+            if (manuscriptOptional.isPresent()) {
+                renderManuscript = manuscriptOptional.get();
+            } else {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            }
         }
         byte[] documentData = renderManuscript.getContent();
         HttpHeaders headers = new HttpHeaders();

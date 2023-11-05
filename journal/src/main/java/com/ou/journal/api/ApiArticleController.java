@@ -23,6 +23,7 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.RenderPDFService;
 
 @RestController
@@ -47,7 +48,7 @@ public class ApiArticleController {
     // private UserService userService;
 
     @GetMapping("/view/{articleId}")
-    public ResponseEntity<byte[]> view(@PathVariable Long articleId, @RequestParam String version) {
+    public ResponseEntity<byte[]> view(@PathVariable Long articleId, @RequestParam(required = false) String version) {
         try {
             return renderPDFService.view(articleId, version);
         } catch (Exception e) {
