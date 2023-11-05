@@ -71,7 +71,8 @@
                     <div class="mt-5 flex justify-end gap-x-3">
                         <button data-modal-hide="popup-modal" type="button" class="btn-gradient-secondary w-fit">Hủy
                             yêu cầu</button>
-                        <button data-modal-hide="popup-modal" type="button" class="btn-gradient-main w-fit">
+                        <button th:onclick="'withdraw(' + ${article.id} + ', this' + ')'" type="button"
+                            class="btn-gradient-main w-fit">
                             Xác nhận rút bài
                         </button>
 
@@ -94,10 +95,11 @@
                     <span class="sr-only">Close modal</span>
                 </button>
                 <div class="p-6 text-center">
-                    <h3 class="mt-5 text-lg font-medium text-gray-900">Gửi manuscript mới</h3>
-                    <form name="main" enctype="multipart/form-data" method="post">
+                    <h3 class="mt-5 text-lg font-medium text-gray-900">Gửi lại phiên bản manuscript mới</h3>
+                    <p class="text-gray-500">* Vui lòng xem nhận xét và thực hiện gửi lại manuscript mới đúng yêu cầu và ghi chú phần chỉnh sửa bên dưới.</p>
+                    <form name="resubmit" enctype="multipart/form-data" method="post">
                         <div
-                            class="mt-2 flex bg-white justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                            class="my-2 flex bg-white justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                             <div class="text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
                                     aria-hidden="true">
@@ -109,28 +111,35 @@
                                     <label for="file-upload"
                                         class="relative cursor-pointer rounded-md bg-white font-semibold text-main focus-within:outline-none focus-within:ring-2 focus-within:ring-main/50 focus-within:ring-offset-2 hover:text-main/50">
                                         <span>Tải lên</span>
-                                        <input id="file-upload" name="file" type="file" class="sr-only">
+                                        <input required id="file-upload" name="file" type="file" class="sr-only">
                                     </label>
                                     <p class="pl-1">hoặc kéo thả vào đây</p>
                                 </div>
                                 <p class="text-xs leading-5 text-gray-600">PDF, DOCX</p>
                             </div>
                         </div>
-                        <div class="col-span-full">
+                        <p id="manuscript-errors" class="text-rose-500 font-medium text-sm text-start"></p>
+                        <div class="col-span-full mt-3">
+                            <label for="author-note" class="sr-only">Ghi chú</label>
                             <textarea id="author-note" name="note" required type="text"
-                                placeholder="Ghi chú nội dung đã chỉnh sửa" class="input mt-3 w-full" rows="4"></textarea>
+                                placeholder="Ghi chú nội dung đã chỉnh sửa ở đây" class="input w-full"
+                                rows="4"></textarea>
+                        </div>
+                        <p id="author-note-errors" class="text-rose-500 font-medium text-sm text-start"></p>
+
+                       
+                        <div class="mt-5 flex justify-end gap-x-3">
+                            <button data-modal-hide="resubmit-modal" type="button"
+                                class="btn-gradient-secondary w-fit">Hủy
+                                yêu cầu</button>
+                            <button th:onclick="'reSubmitManuscript(' + ${article.id} + ', this' + ')'" type="button"
+                                class="btn-gradient-main w-fit">
+                                Xác nhận gửi
+                            </button>
+
                         </div>
                     </form>
-                    <div class="mt-5 flex justify-end gap-x-3">
-                        <button data-modal-hide="resubmit-modal" type="button" class="btn-gradient-secondary w-fit">Hủy
-                            yêu cầu</button>
-                        <button data-modal-hide="resubmit-modal" type="button" class="btn-gradient-main w-fit">
-                            Xác nhận gửi
-                        </button>
-
-                    </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -144,6 +153,9 @@
             document.querySelector("#btn-resubmit").remove();
         }
     </script>
+    <script defer th:src="@{/js/author/articleDetail.js}"></script>
+
+
 </th:block>
 
 </html>
