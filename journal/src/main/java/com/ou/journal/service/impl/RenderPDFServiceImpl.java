@@ -1,5 +1,7 @@
 package com.ou.journal.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -8,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.RenderPDFService;
 import com.ou.journal.utils.FileConverterUtils;
 
@@ -16,15 +20,21 @@ import com.ou.journal.utils.FileConverterUtils;
 public class RenderPDFServiceImpl implements RenderPDFService{
 
     @Autowired
-    private ArticleService articleService;
+    private ManuscriptService manuscriptService;
 
     @Override
-    public ResponseEntity<byte[]> view(Long articleId) throws Exception {
-        Article article = articleService.retrieve(Long.valueOf(articleId));
-        byte[] documentData = article.getCurrentManuscript().getContent();
+    public ResponseEntity<byte[]> view(Long articleId, String version) throws Exception {
+        Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+        Manuscript renderManuscript;
+        if (manuscriptOptional.isPresent()) {
+            renderManuscript = manuscriptOptional.get();
+        } else {
+            renderManuscript = manuscriptService.getLastestManuscript(articleId);
+        }
+        byte[] documentData = renderManuscript.getContent();
         HttpHeaders headers = new HttpHeaders();
         // byte[] htmlData;
-        if (article.getCurrentManuscript().getType().equals("application/pdf")) {
+        if (renderManuscript.getType().equals("application/pdf")) {
             // htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
         } else {
             // byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);

@@ -1,6 +1,8 @@
 package com.ou.journal.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,21 @@ public class ManuscriptServiceImpl implements ManuscriptService {
         } else {
             throw new Exception("Trạng thái bài đăng không hợp lệ!");
         }
+    }
+
+    @Override
+    public List<Manuscript> findByArticle(Article article) {
+        return manuscriptRepositoryJPA.findByArticle(article);
+    }
+
+    @Override
+    public Optional<Manuscript> getById(Long id) {
+        return manuscriptRepositoryJPA.findById(id);
+    }
+
+    @Override
+    public Optional<Manuscript> findByArticleAndVersion(Long articleId, String version) {
+        return manuscriptRepositoryJPA.findByArticleAndVersion(articleId, version);
     }
     
 }

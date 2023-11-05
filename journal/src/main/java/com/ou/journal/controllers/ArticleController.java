@@ -2,6 +2,7 @@ package com.ou.journal.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.validator.WebAppValidator;
@@ -37,6 +40,9 @@ public class ArticleController {
     @Autowired
     private ReviewArticleService reviewArticleService;
 
+    @Autowired
+    private ManuscriptService manuscriptService;
+
     @GetMapping("/admin/articles")
     public String list(Model model, @RequestParam(name="status", required = false, defaultValue = "PENDING") String status) {
         List<Article> articles = new ArrayList<>();
@@ -50,12 +56,26 @@ public class ArticleController {
     }
 
     @GetMapping("/admin/articles/{articleId}")
-    public String retrieve(Model model, @PathVariable Long articleId) throws Exception {
+    public String retrieve(Model model, @PathVariable Long articleId, @RequestParam(required = false) String version) throws Exception {
         try {
             Article article = articleService.retrieve(articleId);
             if (article.getStatus().equals(ArticleStatus.PENDING.toString())) {
-                model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
                 model.addAttribute("article", article);
+                model.addAttribute("manuscripts", manuscriptService.findByArticle(article));
+                Manuscript renderManuscript;
+                if (version == null) {
+                    renderManuscript =  manuscriptService.getLastestManuscript(articleId);
+                    model.addAttribute("currentManuscript", renderManuscript.getVersion());
+                } else {
+                    Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+                    if (manuscriptOptional.isPresent()) {
+                        renderManuscript = manuscriptOptional.get();
+                        model.addAttribute("currentManuscript", renderManuscript.getVersion());
+                    } else {
+                        return "redirect:/admin/articles/{articleId}";
+                    }
+                }
+                model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(), renderManuscript.getVersion()));
             } else {
                 model.addAttribute("error", "invalid status");
             }
