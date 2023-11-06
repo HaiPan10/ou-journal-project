@@ -15,4 +15,8 @@ public interface UserRepositoryJPA extends JpaRepository<User, Long> {
     List<Object[]> listUser();
     @Query("SELECT u FROM User u JOIN UserRole ur ON u.id = ur.user.id WHERE ur.role.roleName = ?1")
     List<User> findByRoleName(String roleName);
+    @Query("SELECT u FROM User u JOIN ReviewArticle ra ON u.id = ra.user.id " + 
+        "JOIN Manuscript m ON ra.manuscript.id = m.id WHERE m.article.id = ?1 AND m.id != ?2"
+    )
+    List<User> findReviewerByOlderManuscript(Long articleId, Long manuscriptId);
 }

@@ -69,6 +69,8 @@ public class EditorController {
             article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
                 model.addAttribute("reviewArticles", reviewArticles);
+                List<User> reviewers = userService.findReviewerByOlderManuscript(articleId);
+                model.addAttribute("reviewers", reviewers);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("article", article);
                 List<Object[]> users = userService.listUser();
@@ -104,7 +106,7 @@ public class EditorController {
             return "redirect:/editor/review-articles/invite/{articleId}";
         } catch (Exception e) {
             model.addAttribute("article", article);
-            model.addAttribute("reviewArticles", reviewArticles);
+            // model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("articleId", articleId);
             model.addAttribute("users", users);
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));

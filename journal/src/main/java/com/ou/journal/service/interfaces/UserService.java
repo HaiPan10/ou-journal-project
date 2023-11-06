@@ -12,4 +12,5 @@ public interface UserService {
     User findByEmail(String email) throws Exception;
     List<Object[]> listUser();
     List<User> findByRoleName(String roleName);
+    List<User> findReviewerByOlderManuscript(Long articleId);
 }

@@ -41,7 +41,8 @@
                     <input id="myInput" type="text" th:field="*{email}" class="input-floating peer" placeholder=" " />
                     <label for="myInput" class="label-floating">Email</label>
                 </div>
-                <span class="text-red-500 text-sm font-medium hidden w-fit mt-1" id="notAvailable">Mail của phản biện viên
+                <span class="text-red-500 text-sm font-medium hidden w-fit mt-1" id="notAvailable">Mail của phản biện
+                    viên
                     này
                     chưa có trên hệ thống! Vui lòng nhập họ tên</span>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -78,24 +79,27 @@
                             Họ tên reviewer
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Ngày mời
+                            Version Manuscript từng tham gia
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Trạng thái mời
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hành động
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <th:block th:each="reviewArticle : ${reviewArticles}">
                         <tr class="table-row">
-                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.id}">
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.user.id}">
                             </td>
                             <th scope="row" class="px-6 py-4 flex gap-3 items-center">
                                 <span th:text="${reviewArticle.user.email}"></span>
                             </th>
                             <td class="px-6 py-4"
                                 th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
-                            <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                            <td class="px-6 py-4">Mới nhất - <span th:text="${reviewArticle.manuscript.version}"></span></td>
                             <td class="px-6 py-4">
                                 <div th:if="${reviewArticle.status eq 'PENDING'}">
                                     <span class="badge-warning">Chờ phản hồi</span>
@@ -110,6 +114,31 @@
                                     <span class="badge-success">Đã phản biện</span>
                                 </div>
                             </td>
+                            <th scope="col" class="px-6 py-3">
+                            </th>
+                        </tr>
+                    </th:block>
+                    <th:block th:each="reviewer : ${reviewers}">
+                        <tr class="table-row">
+                            <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewer.id}">
+                            </td>
+                            <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                <span th:text="${reviewer.email}"></span>
+                            </th>
+                            <td class="px-6 py-4"
+                                th:text="${reviewer.lastName} + ' ' + ${reviewer.firstName}"></td>
+                            <td class="px-6 py-4"></td>
+                            <td class="px-6 py-4">
+                                <th:block th:each="reviewArticle : ${reviewer.reviewArticles}">
+                                    <span th:text="${reviewArticle.manuscript.version}"></span>
+                                    <br>
+                                </th:block>
+                            </td>
+                            <td class="px-6 py-4">
+                            </td>
+                            <th scope="col" class="px-6 py-3">
+                                <a href="#">Mời lại reviewer</a>
+                            </th>
                         </tr>
                     </th:block>
                 </tbody>
@@ -120,7 +149,7 @@
             Tiến hành review</button> -->
     </div>
     <script th:inline="javascript">
-        
+
         function autocomplete(inp, arr) {
             var currentFocus;
             inp.addEventListener("input", function (e) {
