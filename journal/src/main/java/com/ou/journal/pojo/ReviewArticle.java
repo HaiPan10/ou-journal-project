@@ -46,6 +46,11 @@ public class ReviewArticle implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date invitedAt;
 
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date updatedAt;
+
     @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "reviewArticle")
     private List<ReviewCriteria> reviewCriterias;
 
