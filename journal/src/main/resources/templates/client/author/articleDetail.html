@@ -43,7 +43,7 @@
     <div class="flex justify-end my-3 gap-x-3">
         <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="btn-gradient-dark w-fit">Rút
             bài</button>
-        <button disabled id="btn-resubmit" data-modal-target="resubmit-modal" data-modal-toggle="resubmit-modal"
+        <button th:if="${article.status == 'SECRETARY_REJECT' || article.status == 'REJECT'}" id="btn-resubmit" data-modal-target="resubmit-modal" data-modal-toggle="resubmit-modal"
             class="btn-gradient-main w-fit">Gửi lại manuscript</button>
     </div>
 </section>
@@ -146,16 +146,7 @@
 </section>
 
 <th:block layout:fragment="extra-js">
-    <script>
-        if (currentStatus.indexOf("REJECT") > -1) {
-            document.querySelector("#btn-resubmit").disabled = false;
-        } else {
-            document.querySelector("#btn-resubmit").remove();
-        }
-    </script>
     <script defer th:src="@{/js/author/articleDetail.js}"></script>
-
-
 </th:block>
 
 </html>

@@ -28,43 +28,35 @@
                 </li>
             </ol>
         </nav>
-    
-        <!-- FILTER -->
-        <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
-            <!-- EXTRA FILTER -->
-            <!-- <div class="w-fit">
-                <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main" type="button">
-                    Bộ lọc
-                    <i class="bi bi-sliders2 text-lg"></i>
-                </button>
-    
-                <div id="dropdownBgHover" class="dropdown">
-                    <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                        aria-labelledby="dropdownBgHoverButton">
-                        <li>
-                            <h3>Tình trạng</h3>
-                            <div class="filter-container">
-                                <input id="pending-status" name="status" type="radio" class="filter-input rounded-full" value="PENDING" onchange="handleChange(this);" checked>
-                                <label class="filter-label" for="pending-status">Chưa duyệt</label>
-                            </div>
-                            <div class="filter-container">
-                                <input id="inreview-status" name="status" type="radio" class="filter-input rounded-full" value="INVITING_REVIEWER"  onchange="handleChange(this);">
-                                <label class="filter-label" for="inreview-status">Đang mời review</label>
-                            </div>
-                        </li>
-                    </ul>
+
+        <div class="bg-white rounded-lg px-12 py-6 my-6 ">
+            <h1 class="mb-5 font-semibold text-lg text-main">Chọn biên tập viên cho bài viết</h1>
+            <div class="mt-5 flex flex-col gap-3">
+                <div class="w-full" th:each="editor : ${editors}">
+                    <input class="hidden peer" th:id="'editor-' + ${editor.id}" type="radio" name="editorEmail"
+                        th:value="${editor.email}" />
+                    <label th:for="'editor-' + ${editor.id}"
+                        class="w-full p-3 rounded-lg flex items-center gap-x-3 bg-white cursor-pointer peer-checked:bg-main/10 ring-1 ring-gray-200 peer-checked:ring-main">
+                        <img class="w-10 h-10 mr-2" th:src="@{/images/avatar.png}" />
+                        <div class="grow">
+                            <p class="font-semibold text-gray-700"
+                                th:text="${editor.lastName + ' ' + editor.firstName}"></p>
+                            <p class="text-gray-700" th:text="${editor.email}"></p>
+                        </div>
+
+                    </label>
                 </div>
-            </div> -->
-            <!-- INPUT FILTER -->
-            <div class="grow relative flex items-center md:mt-0">
-                <span class="absolute pl-3 py-2">
-                    <i class="bi bi-search text-gray-400"></i>
-                </span>
-                <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
             </div>
-        </form>
-    
-    
+            <div class="flex justify-end mt-5">
+                <button id="btn-confirm" class="btn-gradient-main w-fit" onclick="assignEditor()">Xác nhận gán biên tập
+                    viên</button>
+
+            </div>
+
+        </div>
+
+        <!-- 
+
         <div class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
@@ -94,8 +86,7 @@
                     </th:block>
                 </tbody>
             </table>
-        </div>
-        <button onclick="assignEditor()">Xác nhận gán biên tập viên</button>
+        </div> -->
     </div>
 
 
@@ -106,6 +97,8 @@
         var urlParams = new URLSearchParams(window.location.search);
         var status = urlParams.get('status');
         var radioButtons = document.getElementsByName("status");
+
+        const btn = document.querySelector("#btn-confirm");
 
         if (status) {
             for (let i = 0; i < radioButtons.length; i++) {
@@ -120,7 +113,8 @@
             window.location.replace(`/admin/articles?status=${src.value}`);
         }
 
-        function assignEditor(){
+        function assignEditor() {
+            btn.disabled = true;
             var email = document.querySelector('input[name="editorEmail"]:checked').value;
             fetch(`/api/articles/chief-editor/assign`, {
                 method: "PUT",
@@ -134,12 +128,15 @@
                     }
                 })
             })
-            .then(result => {
-                if(result.ok){
-                    alert("Gán biên tập viên thành công")
-                    window.location.href = "/editor/assign-list"
-                }
-            })
+                .then(result => {
+                    if (result.ok) {
+                        alert("Gán biên tập viên thành công")
+                        window.location.href = "/editor/assign-list"
+                    }
+                    else {
+                        btn.disabled = false;
+                    }
+                })
         }
 
     </script>

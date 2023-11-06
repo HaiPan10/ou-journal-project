@@ -1,11 +1,12 @@
-<div th:fragment="statusStage (status)" class="flex justify-center mb-20">
-    <ol id="statusStage" class="flex items-center w-full h-full">
+<div th:fragment="statusStage (status)" class="md:mb-20">
+    <button data-drawer-target="statusStage" data-drawer-toggle="statusStage" aria-controls="statusStage" class="btn-secondary w-fit md:hidden">Xem trạng thái</button>
+    <ol id="statusStage" class="z-40 fixed top-0 left-0 bg-white md:bg-transparent px-5 py-3 md:px-0 md:py-0 md:relative flex flex-col md:flex-row item-start md:items-center w-80 md:w-full h-screen md:h-fit transition-transform -translate-x-full md:translate-x-0">
         <li class="step step-complete">
             <span class="step-child">
                 <i class="bi bi-check-lg">
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 1:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Gửi bài</p>
             </div>
@@ -14,7 +15,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 2:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Thư ký duyệt</p>
             </div>
@@ -23,7 +24,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 3:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Gán biên tập viên</p>
             </div>
@@ -32,16 +33,16 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 4:</p>
-                <p class="stage-title text-sm font-bold text-black-900">Review</p>
+                <p class="stage-title text-sm font-bold text-black-900">Phản biện</p>
             </div>
         </li>
         <li data-stage-index="4" class="step step-pending">
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 5:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Quyết định</p>
             </div>
@@ -50,7 +51,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 6:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Xuất bản</p>
             </div>
@@ -59,10 +60,10 @@
 
         <li class="step-end">
             <span class="step-child relative">
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full rotate-45">
 
                 </div>
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full -rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full -rotate-45">
 
                 </div>
             </span>
