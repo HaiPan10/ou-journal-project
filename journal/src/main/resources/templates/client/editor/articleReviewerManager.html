@@ -79,7 +79,7 @@
                             Họ tên reviewer
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Version Manuscript từng tham gia
+                            Ngày mời
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Trạng thái mời
@@ -99,7 +99,8 @@
                             </th>
                             <td class="px-6 py-4"
                                 th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
-                            <td class="px-6 py-4">Mới nhất - <span th:text="${reviewArticle.manuscript.version}"></span></td>
+                            <td class="px-6 py-4" th:text="${reviewArticle.updatedAt}"></span>
+                            </td>
                             <td class="px-6 py-4">
                                 <div th:if="${reviewArticle.status eq 'PENDING'}">
                                     <span class="badge-warning">Chờ phản hồi</span>
@@ -118,6 +119,33 @@
                             </th>
                         </tr>
                     </th:block>
+                </tbody>
+            </table>
+            <hr>
+            <table class="table">
+                <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
+                    Danh sách reviewer đã mời ở các manuscript trước đó
+                </h3>
+                <thead class="table-header">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Mail reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Họ tên reviewer
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Version Manuscript từng tham gia
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Hành động
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
                     <th:block th:each="reviewer : ${reviewers}">
                         <tr class="table-row">
                             <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewer.id}">
@@ -125,16 +153,12 @@
                             <th scope="row" class="px-6 py-4 flex gap-3 items-center">
                                 <span th:text="${reviewer.email}"></span>
                             </th>
-                            <td class="px-6 py-4"
-                                th:text="${reviewer.lastName} + ' ' + ${reviewer.firstName}"></td>
-                            <td class="px-6 py-4"></td>
+                            <td class="px-6 py-4" th:text="${reviewer.lastName} + ' ' + ${reviewer.firstName}"></td>
                             <td class="px-6 py-4">
                                 <th:block th:each="reviewArticle : ${reviewer.reviewArticles}">
                                     <span th:text="${reviewArticle.manuscript.version}"></span>
                                     <br>
                                 </th:block>
-                            </td>
-                            <td class="px-6 py-4">
                             </td>
                             <th scope="col" class="px-6 py-3">
                                 <a href="#">Mời lại reviewer</a>
