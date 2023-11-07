@@ -84,9 +84,6 @@
                         <th scope="col" class="px-6 py-3">
                             Trạng thái mời
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Hành động
-                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -99,7 +96,7 @@
                             </th>
                             <td class="px-6 py-4"
                                 th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}"></td>
-                            <td class="px-6 py-4" th:text="${reviewArticle.updatedAt}"></span>
+                            <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></span>
                             </td>
                             <td class="px-6 py-4">
                                 <div th:if="${reviewArticle.status eq 'PENDING'}">
@@ -115,8 +112,6 @@
                                     <span class="badge-success">Đã phản biện</span>
                                 </div>
                             </td>
-                            <th scope="col" class="px-6 py-3">
-                            </th>
                         </tr>
                     </th:block>
                 </tbody>
