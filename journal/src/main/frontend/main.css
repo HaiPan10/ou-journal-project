@@ -358,6 +358,22 @@
         @apply w-fit min-h-fit after:hidden before:hidden
     }
 
+    .link {
+        @apply text-main hover:underline
+    }
+
+    .checkbox-input {
+        @apply w-4 h-4 text-main bg-white border-gray-300 rounded focus:ring-main/20 focus:ring-2
+    }
+
+    .list-dot > li{
+        @apply px-1 py-1.5 ml-4 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-main before:mx-3 before:border before:border-main before:inline-block
+    }
+
+    .list-dot > li:first-child{
+        @apply mt-1.5
+    }
+
     [role="tab"] {
         @apply border-b-0 overflow-hidden transition-all relative hover:text-gray-600 after:transition-all after:duration-300 after:content-[''] after:w-full after:h-0.5 after:absolute after:bottom-0 after:-left-full hover:after:left-0 after:bg-gray-100 hover:after:bg-gray-600
     }
