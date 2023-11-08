@@ -97,4 +97,24 @@ public class User implements Serializable {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + ", email="
                 + email + "]";
     }
+
+    @Override
+    public int hashCode() {
+        return this.id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null || this.getClass() != obj.getClass()){
+            return false;
+        }
+
+        User user = (User) obj;
+
+        return this.id.equals(user.getId());
+    }
 }
