@@ -306,16 +306,13 @@
                                                 <span class="badge-warning">Chờ phản hồi</span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
-                                                <span class="badge-warning">Đồng ý <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-warning">Đồng ý <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REJECTED'}">
-                                                <span class="badge-danger">Từ chối <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-danger">Từ chối <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REVIEWED'}">
-                                                <span class="badge-success">Đã phản biện <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-success">Đã phản biện <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                         </td>
                                         <td>

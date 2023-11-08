@@ -1,53 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/adminLayout}">
-
-<head>
-    <style>
-        .dropbtn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
-        }
-    </style>
-</head>
-
 <section class="" layout:fragment="content">
     <div class="container min-h-[800px]">
         <!-- BREADCUM -->
@@ -64,11 +17,12 @@
             <div class="font-medium mt-2 flex flex-wrap gap-1">
                 <span>Tác giả:</span>
                 <th:block th:each="authorArticle : ${article.authorArticles}">
-                    <span class="author" th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
+                    <span class="author"
+                        th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
                 </th:block>
             </div>
-            
-            <hr class="my-5"/>
+
+            <hr class="my-5" />
 
             <div class="my-3">
                 <span class="font-medium">Tóm tắt:</span>
@@ -132,33 +86,90 @@
             <section layout:fragment="action">
 
                 <div layout:fragment="extra-action">
-        
-                </div>
 
-                <div class="flex justify-end my-3 gap-x-3">
+                </div>
+                <div class="flex justify-end my-3 gap-x-3 w-full">
+                    <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
+                        class="btn-gradient-main w-fit">Xem preview</button>
                     <th:block layout:fragment="buttons">
-        
+
                     </th:block>
                 </div>
 
-                
+
+
+
             </section>
-            <!-- /ACTION -->
-            <div class="dropdown">
-                <button class="dropbtn" th:text="'Phiên bản: ' + ${currentManuscript}"></button>
-                <div class="dropdown-content">
-                    <th:block th:each="manuscript : ${manuscripts}">
-                        <a th:href="@{/admin/articles/{id}(id=${article.id}, version=${manuscript.version})}" th:text="${manuscript.version}"></a>
-                    </th:block>
+
+            <div>
+                <hr class="my-5" />
+                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="hover"
+                    class="btn-main w-fit my-3 shadow-md" type="button">
+                    <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
+                    <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+                <div id="dropdown-versions"
+                    class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
+                    <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
+                        <th:block th:each="manuscript : ${manuscripts}">
+                            <li>
+                                <a th:href="@{/admin/articles/{id}(id=${article.id}, version=${manuscript.version})}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    th:text="${manuscript.version}"></a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+
+                <div id="file-display" class="mt-3">
+                    <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                        <div id="file-display-extension"
+                            th:text="${#strings.substring(renderManuscript.type, 'application/'.length)}"
+                            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+
+                        </div>
+                        <p id="file-display-name" class="lowercase"
+                            th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
+                        </p>
+
+                        <button class="btn-gradient-main w-fit ml-auto" id="download-btn">Tải file</button>
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <div>
-            <iframe th:src="${viewUrl}" style="width: 100%; height: 1000px; background-color: white;"></iframe>
+
+            <!-- /ACTION -->
         </div>
     </div>
 
     <!-- MODAL -->
+
+    <div id="preview-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
+        <div class="relative w-full max-h-full m-6 lg:m-12">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="preview-modal">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="sr-only">Close modal</span>
+                </button>
+
+
+                <div class="p-12">
+                    <div>
+                        <iframe th:src="${viewUrl}"
+                            style="width: 100%; height: 1000px; background-color: white;"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <section layout:fragment="modal">
 
     </section>
@@ -179,7 +190,8 @@
         const btnAuthorNoteIcon = document.querySelector("#icon-collapse-author-note");
         const authorNoteContent = document.querySelector("#author-note-content");
 
-        
+        const downloadBtn = document.querySelector("#download-btn");
+
         function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
         }
@@ -217,11 +229,33 @@
             //              </div>`
             //            insertKeywordBox(newKwHTML);
             //        }
-//
+            //
             //    });
             //}
         });
 
+        try {
+            downloadBtn.addEventListener('click', function () {
+                const type = /*[[${ renderManuscript.type }]]*/ "";
+                const name = /*[[${ renderManuscript.article.title }]]*/ "";
+                const byteContent = /*[[${ renderManuscript.content }]]*/ "";
+
+                var binaryString = window.atob(byteContent);
+                var binaryLen = binaryString.length;
+                var bytes = new Uint8Array(binaryLen);
+                for (var i = 0; i < binaryLen; i++) {
+                    var ascii = binaryString.charCodeAt(i);
+                    bytes[i] = ascii;
+                }
+                var blob = new Blob([bytes], { type: `${type}` });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.click();
+            });
+        } catch (e) {
+
+        }
 
     </script>
     <th:block layout:fragment="extra-js">

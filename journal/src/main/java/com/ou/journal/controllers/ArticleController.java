@@ -65,17 +65,17 @@ public class ArticleController {
                 Manuscript renderManuscript;
                 if (version == null) {
                     renderManuscript =  manuscriptService.getLastestManuscript(articleId);
-                    model.addAttribute("currentManuscript", renderManuscript.getVersion());
                 } else {
                     Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
                     if (manuscriptOptional.isPresent()) {
                         renderManuscript = manuscriptOptional.get();
-                        model.addAttribute("currentManuscript", renderManuscript.getVersion());
                     } else {
                         return "redirect:/admin/articles/{articleId}";
                     }
                 }
+                model.addAttribute("renderManuscript", renderManuscript);
                 model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(), renderManuscript.getVersion()));
+                model.addAttribute("downloadUrl", String.format("/api/articles/download/%s?version=%s", article.getId(), renderManuscript.getVersion()));
             } else {
                 model.addAttribute("error", "invalid status");
             }

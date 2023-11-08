@@ -41,10 +41,11 @@ public class FileConverterUtils {
         }
     }
     
-    public static byte[] convertToPDF(byte[] docBytes) throws IOException {
-        try (ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docBytes);
-             ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream()) {
+    public static byte[] convertToPDF(byte[] docBytes) throws Exception {
+        try {
 
+            ByteArrayInputStream docxInputStream = new ByteArrayInputStream(docBytes);
+            ByteArrayOutputStream pdfOutputStream = new ByteArrayOutputStream();
             IConverter converter = LocalConverter.builder().build();
 
             converter.convert(docxInputStream).as(DocumentType.MS_WORD)
@@ -54,6 +55,9 @@ public class FileConverterUtils {
             converter.shutDown();
 
             return pdfOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
     }
 }

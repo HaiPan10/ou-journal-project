@@ -85,11 +85,11 @@
     }
 
     .btn-gradient-secondary {
-        @apply btn text-gray-700 bg-gradient-to-br from-white to-gray-100 hover:from-gray-100 hover:to-gray-200 focus:ring-4 focus:ring-gray-100
+        @apply btn border border-gray-200 text-gray-700 bg-gradient-to-br from-white to-gray-100 hover:from-gray-100 hover:to-gray-200 focus:ring-4 focus:ring-gray-100
     }
 
     .btn-secondary {
-        @apply btn text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-100/25
+        @apply btn border border-gray-200 text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-100/25
     }
 
     .btn-main-small {
