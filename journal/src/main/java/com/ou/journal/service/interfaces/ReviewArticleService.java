@@ -15,6 +15,7 @@ public interface ReviewArticleService {
     ReviewArticle acceptReviewAndCreateAccount(Long reviewArticleId, String email, Long userId, Account account) throws Exception;
     boolean checkResponseRevviewArticleInvitation(Long reviewArticleId, Long userId, String email);
     List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus);
+    Integer countReviewArticles(Long userId, String reviewArticleStatus);
     ReviewArticle doneReview(Long reviewArticle, Long userId) throws Exception;
     ReviewArticle retrieve(Long reviewArticle) throws Exception;
     ReviewArticle retrieve(Long reviewArticle, Long userId) throws Exception;

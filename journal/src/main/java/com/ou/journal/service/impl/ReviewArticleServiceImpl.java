@@ -231,4 +231,9 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
             return returnReviewArticle;
         }
     }
+
+    @Override
+    public Integer countReviewArticles(Long userId, String reviewArticleStatus) {
+        return reviewArticleRepositoryJPA.countReviewArticles(userId, reviewArticleStatus);
+    }
 }
