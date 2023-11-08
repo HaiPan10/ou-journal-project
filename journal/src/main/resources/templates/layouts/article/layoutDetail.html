@@ -2,27 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/layout}">
 
-<section class="flex justify-center mb-12" layout:fragment="content">
-    <div class="container min-h-[800px]">
+<section class="mb-12" layout:fragment="content">
+    <div class="container mx-auto min-h-[800px]">
         <!-- BREADCUM -->
-        <section layout:fragment="breadcum">
+        <section class="mt-2 mb-6" layout:fragment="breadcum">
 
         </section>
 
         <!-- /BREADCUM -->
         <div th:replace="~{fragments/statusStage :: statusStage (status=${article.status})}"></div>
 
-        <div class="move-up-anim bg-white rounded-lg p-6">
+        <div class="mt-2 move-up-anim bg-white rounded-lg p-6">
             <div class="font-semibold text-3xl">
                 <span th:text="${article.title}"> </span>
             </div>
+            <div class="font-medium mt-2 text-gray-800 flex flex-wrap gap-1">
+                <span>Tác giả:</span>
+                <th:block th:each="authorArticle : ${article.authorArticles}">
+                    <span class="author" th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
+                </th:block>
+            </div>
+            
+            <hr class="my-5"/>
 
             <div class="my-3">
                 <div class="text-gray-500" th:text="${article.abstracts}"></div>
             </div>
 
             <div class="my-3">
-                <div class="flex gap-x-3 ml-0 mt-2" id="keywords-box">
+                <div class="flex flex-wrap gap-3 ml-0 mt-2" id="keywords-box">
                 </div>
             </div>
 
@@ -65,7 +73,8 @@
                                 </div>
                             </button>
                         </div>
-                        <div id="author-note-content" class="px-3 pb-3 text-main hidden" th:text="${article.authorNote.note}">
+                        <div id="author-note-content" class="px-3 pb-3 text-main hidden"
+                            th:text="${article.authorNote.note}">
                         </div>
                     </div>
                 </th:block>

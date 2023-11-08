@@ -1,11 +1,28 @@
-<div th:fragment="statusStage (status)" class="flex justify-center mb-20">
-    <ol id="statusStage" class="flex items-center w-full h-full">
+<div th:fragment="statusStage (status)" class="md:mb-20">
+    <div class="bg-white rounded-lg p-3 mb-5 flex items-center justify-between md:hidden">
+        <div class="w-1/4 relative">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+                <circle cx="50" cy="50" r="40" class="stroke-emerald-100" stroke-width="10" fill="none"></circle>
+                <circle id="progress" cx="50" cy="50" r="40" class="stroke-emerald-500" stroke-width="10" fill="none"
+                    stroke-dasharray="251.2" stroke-dashoffset="251.2" transform="rotate(-90 50 50)"></circle>
+            </svg>
+            <p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-800 font-bold" id="progress-num"></p>
+        </div>
+        <div id="progress-title" class="grow flex flex-col pl-5">
+            <p class="stage-index text-sm uppercase font-medium text-gray-500"></p>
+            <p class="stage-title font-bold text-black-900"></p>
+                <button data-drawer-target="statusStage" data-drawer-toggle="statusStage" aria-controls="statusStage"
+                class="rounded text-sm text-gray-700 w-fit px-3 py-2 ml-auto mt-auto hover:bg-gray-100 hover:text-gray-800">Xem chi tiết</button>           
+        </div>
+    </div>
+    <ol id="statusStage"
+        class="z-40 fixed top-0 left-0 bg-white md:bg-transparent px-5 py-3 md:px-0 md:py-0 md:relative flex flex-col md:flex-row item-start md:items-center w-80 md:w-full h-screen md:h-fit transition-transform -translate-x-full md:translate-x-0">
         <li class="step step-complete">
             <span class="step-child">
                 <i class="bi bi-check-lg">
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 1:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Gửi bài</p>
             </div>
@@ -14,7 +31,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 2:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Thư ký duyệt</p>
             </div>
@@ -23,7 +40,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 3:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Gán biên tập viên</p>
             </div>
@@ -32,16 +49,16 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 4:</p>
-                <p class="stage-title text-sm font-bold text-black-900">Review</p>
+                <p class="stage-title text-sm font-bold text-black-900">Phản biện</p>
             </div>
         </li>
         <li data-stage-index="4" class="step step-pending">
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 5:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Quyết định</p>
             </div>
@@ -50,7 +67,7 @@
             <span class="step-child">
 
             </span>
-            <div class="absolute top-full mt-3 w-fit">
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Giai đoạn 6:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Xuất bản</p>
             </div>
@@ -59,10 +76,10 @@
 
         <li class="step-end">
             <span class="step-child relative">
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full rotate-45">
 
                 </div>
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full -rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full -rotate-45">
 
                 </div>
             </span>
@@ -83,11 +100,18 @@
         stages.push("[(${n.stage})]");
         /*[/]*/
 
+        function updateProgress(percent) {
+            var progress = document.getElementById("progress");
+            var circumference = 2 * Math.PI * progress.getAttribute("r");
+            var offset = circumference * (1 - percent / 100);
+            progress.style.strokeDashoffset = offset;
+        }
+
 
         if (currentStatus == "WITHDRAW") {
             document.querySelector("#statusStage").classList.add("hidden");
             //Cần fetch api để biết tình trạng trước khi withdraw ne
-            
+
         } else {
             const index = articleStatusEnum.indexOf(currentStatus);
             const currentStage = parseInt(stages[index]);
@@ -123,10 +147,23 @@
                     el.querySelector(".stage-title").innerText = displayNames[index];
                 }
             });
+
+            if (currentStage > 0) {
+                const totalStage = 6;
+                const percent = currentStage/totalStage * 100;
+                updateProgress(percent);
+                document.querySelector("#progress-num").innerText = currentStage + "/" + totalStage;
+
+                const el = document.querySelector(`li[data-stage-index='${currentStage}']`);
+                const progressTitle = document.querySelector("#progress-title");
+                progressTitle.querySelector(".stage-index").innerText = "Giai đoạn " + (currentStage + 1);
+                progressTitle.querySelector(".stage-title").innerText = el.querySelector(".stage-title").innerText;
+
+            }
         }
 
 
-
+        
     </script>
 
 </div>

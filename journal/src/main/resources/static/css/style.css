@@ -53,3 +53,7 @@ option {
   right: 0;
   clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
 }
+
+.author:not(:last-child)::after {
+  content: ",";
+}

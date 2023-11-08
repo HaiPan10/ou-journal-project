@@ -228,7 +228,16 @@
     <div class="flex justify-end my-3 gap-x-3">
         <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal"
             class="btn-gradient-main w-fit">Xem phản biên viên</button>
+        <div class="flex w-fit gap-x-3" th:if="${article.status == 'DECIDING'}">
+            <button id="rejectBtn" class="btn-gradient-danger">
+                <span> Từ chối </span> <i
+                    class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+            <button data-modal-target="modal" data-modal-toggle="modal" class="btn-gradient-success"><span>
+                    Đồng ý </span> <i
+                    class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
+        </div>
     </div>
+
 </section>
 
 
@@ -243,14 +252,14 @@
                     <i class="bi bi-x-lg"></i>
                     <span class="sr-only">Close modal</span>
                 </button>
-               
+
 
                 <div class="p-6">
                     <h3 class="text-2xl text-center text-main font-semibold mt-6">
                         Danh sách phản biện viên
                     </h3>
                     <div class="table-container my-4">
-                        <table class="table">      
+                        <table class="table">
                             <thead class="table-header">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
@@ -276,25 +285,37 @@
                                     <tr class="table-row">
                                         <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewArticle.id}">
                                         </td>
-                                        <th scope="row" class="px-6 py-4 flex gap-3 items-center">
+                                        <td scope="row" class="px-6 py-4 flex gap-3 items-center">
                                             <span th:text="${reviewArticle.user.email}"></span>
-                                        </th>
+                                        </td>
                                         <td class="px-6 py-4"
                                             th:text="${reviewArticle.user.lastName} + ' ' + ${reviewArticle.user.firstName}">
                                         </td>
-                                        <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
+                                        <td class="px-6 py-4">
+                                            <span th:data-tooltip-target="${'dateDetail-' + reviewArticle.id}"
+                                                data-tooltip-placement="top" type="button"
+                                                class="dateElement cursor-default" th:id="${reviewArticle.id}"
+                                                th:text="${reviewArticle.invitedAt}"></span>
+
+                                            <div th:id="${'dateDetail-' + reviewArticle.id}" role="tooltip"
+                                                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                                                <span class="dateDetailElement" th:text="${reviewArticle.invitedAt}">
+                                                </span>
+                                                <div class="tooltip-arrow" data-popper-arrow></div>
+                                            </div>
+                                        </td>
                                         <td class="px-6 py-4">
                                             <div th:if="${reviewArticle.status eq 'PENDING'}">
-                                                <span class="badge-danger">Chờ phản hồi</span>
+                                                <span class="badge-warning">Chờ phản hồi</span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
-                                                <span class="badge-warning">Đồng ý <span th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-warning">Đồng ý <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REJECTED'}">
-                                                <span class="badge-danger">Từ chối <span th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-danger">Từ chối <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REVIEWED'}">
-                                                <span class="badge-success">Đã phản biện <span th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-success">Đã phản biện <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                         </td>
                                         <td>
