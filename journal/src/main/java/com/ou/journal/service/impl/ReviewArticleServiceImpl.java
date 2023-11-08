@@ -7,9 +7,11 @@ import java.util.Optional;
 import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.enums.ArticleStatus;
@@ -19,11 +21,13 @@ import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.ReviewArticle;
+import com.ou.journal.pojo.ReviewFile;
 import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
+import com.ou.journal.repository.ReviewFileRepositoryJPA;
 import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.RoleService;
@@ -52,7 +56,11 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
     private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
     @Autowired
     private ManuscriptService manuscriptService;
-
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private ReviewFileRepositoryJPA reviewFileRepositoryJPA;
+    
     @Override
     public ReviewArticle create(User user, Article article) throws Exception {
         if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
@@ -64,6 +72,8 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
                 throw new Exception("Reviewer này đã được mời!");
             } else if (user.getId() != null && authorArticleRepositoryJPA.findByArticleAndUser(article.getId(), user.getId()).isPresent()) {
                 throw new Exception("Không thể mời tác giả review bài đăng của mình!");
+            } else if (reviewArticleRepositoryJPA.countReviewedTime(article.getId(), user.getId()) == Integer.parseInt(environment.getProperty("MAX_REVIEW_TIME"))) {
+                throw new Exception(String.format("Một phản biện viên chỉ được tham gia %s vòng!", environment.getProperty("MAX_REVIEW_TIME")));
             }
             ReviewArticle reviewArticle = new ReviewArticle();
             reviewArticle.setUser(user);
@@ -198,7 +208,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
     }
 
     @Override
-    public ReviewArticle doneReview(Long reviewArticleId, Long userId) throws Exception {
+    public ReviewArticle doneReview(Long reviewArticleId, Long userId, MultipartFile reviewFile, String reviewStatus) throws Exception {
         ReviewArticle reviewArticle = retrieve(reviewArticleId);
         if (!reviewArticle.getUser().getId().equals(userId)) {
             throw new Exception("Bạn không có quyền review lượt review này!");
@@ -206,9 +216,18 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         if (!reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString())) {
             throw new Exception("Lượt review này có trạng thái không hợp lệ!");
         }
+        if (!reviewStatus.equals(ReviewArticleStatus.ACCEPT_PUBLISH.toString()) && 
+        !reviewStatus.equals(ReviewArticleStatus.REJECT_PUBLISH.toString())) {
+            throw new Exception("Trạng thái phản biện không hợp lệ!");
+        }
         reviewArticle.setUpdatedAt(new Date());
-        reviewArticle.setStatus(ReviewArticleStatus.REVIEWED.toString());
-        return reviewArticleRepositoryJPA.save(reviewArticle);
+        reviewArticle.setStatus(reviewStatus);
+        reviewArticleRepositoryJPA.save(reviewArticle);
+
+        ReviewFile file = new ReviewFile(reviewFile.getBytes(), reviewFile.getSize(), reviewFile.getContentType(), reviewArticle);
+        reviewFileRepositoryJPA.save(file);
+
+        return reviewArticle;
     }
 
     @Override
@@ -225,5 +244,17 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
             System.out.println("EQUAL");
             return returnReviewArticle;
         }
+    }
+
+    @Override
+    public Integer countReviewArticles(Long userId, String reviewArticleStatus) {
+        return reviewArticleRepositoryJPA.countReviewArticles(userId, reviewArticleStatus);
+    }
+
+    @Override
+    public List<ReviewArticle> findByOlderManuscript(Long articleId) {
+        Manuscript manuscript = manuscriptService.getLastestManuscript(articleId);
+        List<ReviewArticle> reviewArticles = reviewArticleRepositoryJPA.findByOlderManuscript(articleId, manuscript.getId());
+        return reviewArticles;
     }
 }

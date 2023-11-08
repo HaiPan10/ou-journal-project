@@ -1,6 +1,5 @@
 package com.ou.journal.service.impl;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,7 @@ import com.ou.journal.pojo.MailRequest;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
-import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
-import com.ou.journal.service.interfaces.UserService;
-
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -50,12 +46,6 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
-
-    @Autowired
-    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
-
-    @Autowired
-    private UserService userService;
 
     @Override
     public void sendEmail(MailRequest mailRequest) {
@@ -177,25 +167,6 @@ public class MailServiceImpl implements MailService {
         context.setVariable("secondActionName", "Rút bài");
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
-
-        // List<User> reviewers = reviewArticleRepositoryJPA.getReviewer(article.getId());
-        // reviewers.forEach(reviewer -> {
-        //     System.out.println("REVIEWERS " + reviewer.getEmail());
-        //     Context reviewContext = new Context();
-        //     String reviewSubject = "Thông báo review bài báo";
-        //     String reviewBody = String.format("Xin chào %s %s. Bài báo của %s %s đã vào giai đoạn review," +
-        //             " truy cập vào nút bên dưới để tiến hành review bài báo!", reviewer.getLastName(),
-        //             reviewer.getFirstName(),
-        //             correspondingUser.getLastName(), correspondingUser.getFirstName());
-        //     reviewContext.setVariable("subject", reviewSubject);
-        //     reviewContext.setVariable("body", reviewBody);
-        //     reviewContext.setVariable("firstActionLink",
-        //             String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
-        //     reviewContext.setVariable("firstActionName", "Review ngay");
-        //     MailRequest reviewMailRequest = new MailRequest(reviewer.getEmail(), reviewSubject, reviewBody,
-        //             reviewContext);
-        //     sendEmail(reviewMailRequest);
-        // });
     }
 
 //     @Override

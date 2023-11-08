@@ -16,6 +16,7 @@ import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.DateTypeName;
 import com.ou.journal.enums.ReviewArticleStatus;
+import com.ou.journal.pojo.Appendix;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
@@ -27,6 +28,7 @@ import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
+import com.ou.journal.service.interfaces.AppendixService;
 import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleNoteService;
 import com.ou.journal.service.interfaces.ArticleService;
@@ -61,9 +63,11 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDateService articleDateService;
     @Autowired
     private AuthorNoteService authorNoteService;
+    @Autowired
+    private AppendixService appendixService;
 
     @Override
-    public Article create(Article article, MultipartFile file) throws Exception {
+    public Article create(Article article, MultipartFile file, MultipartFile anonymousFile, MultipartFile appendixFile) throws Exception {
         try {
             article.setStatus(ArticleStatus.PENDING.toString());
             article.setArticleDates(
@@ -82,6 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
                                             "1.0",
                                             new Date(),
                                             file.getContentType(),
+                                            article.getCurrentManuscript().getReference(),
                                             article))));
 
             article.getAuthorArticles().forEach(authorArticle -> {
@@ -101,12 +106,23 @@ public class ArticleServiceImpl implements ArticleService {
                     authorRole.setAuthorArticle(authorArticle);
                 });
             });
+            
 
             //Hai: save the author note when submit new article
             AuthorNote authorNote = article.getAuthorNote();
             article.setAuthorNote(null);
             Article persistArticle = articleRepositoryJPA.save(article);
             authorNoteService.create(authorNote, persistArticle);
+
+            //save the appendix
+            Appendix appendix = new Appendix(
+                    appendixFile.getBytes(),
+                    appendixFile.getSize(),
+                    appendixFile.getContentType(),
+                    persistArticle.getManuscripts().get(0)
+            );
+
+            appendixService.create(appendix);
 
             return persistArticle;
         } catch (Exception e) {

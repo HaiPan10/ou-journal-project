@@ -1,7 +1,9 @@
 package com.ou.journal.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -77,9 +79,20 @@ public class EditorController {
             if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
                     article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
-                model.addAttribute("reviewArticles", reviewArticles);
-                List<User> reviewers = userService.findReviewerByOlderManuscript(articleId);
+                List<ReviewArticle> olderReviewArticle = reviewArticleService.findByOlderManuscript(articleId);
+                Map<User, List<ReviewArticle>> reviewers = new HashMap<>();
+                if(olderReviewArticle.size() != 0){
+                    olderReviewArticle.stream().forEach(ra -> {
+                        List<ReviewArticle> ras = reviewers.get(ra.getUser());
+                        if(ras == null){
+                            ras = new ArrayList<>();
+                            reviewers.put(ra.getUser(), ras);
+                        }
+                        ras.add(ra);
+                    });
+                }
                 model.addAttribute("reviewers", reviewers);
+                model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("article", article);
                 List<Object[]> users = userService.listUser();

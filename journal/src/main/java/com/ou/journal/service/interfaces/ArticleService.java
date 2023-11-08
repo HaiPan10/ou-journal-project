@@ -9,7 +9,7 @@ import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.User;
 
 public interface ArticleService {
-    Article create(Article article, MultipartFile file) throws Exception;
+    Article create(Article article, MultipartFile file, MultipartFile anonymousFile, MultipartFile appendixFile) throws Exception;
     List<Article> list(String status);
     List<Article> list(String status, Long editorId);
     List<Article> getArticleWaitingForInviteReviewer(Long editorId);

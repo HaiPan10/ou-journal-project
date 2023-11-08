@@ -1,6 +1,8 @@
 package com.ou.journal.pojo;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -11,6 +13,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "appendix")
 @NoArgsConstructor
-public class Appendix implements Serializable{
+public class Appendix implements Serializable {
     @Id
     @Column(name = "id")
     private Long id;
@@ -40,4 +43,11 @@ public class Appendix implements Serializable{
     @MapsId
     @OneToOne(optional = false)
     private Manuscript manuscript;
+
+    public Appendix(byte[] content, Long size, String type, Manuscript manuscript) {
+        this.content = content;
+        this.size = size;
+        this.type = type;
+        this.manuscript = manuscript;
+    }
 }

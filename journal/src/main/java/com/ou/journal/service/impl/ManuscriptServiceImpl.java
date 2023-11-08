@@ -34,7 +34,7 @@ public class ManuscriptServiceImpl implements ManuscriptService {
     }
 
     @Override
-    public Manuscript reUpManuscript(Long articleId, MultipartFile manuscripFile, AuthorNote authorNote) throws Exception {
+    public Manuscript reUpManuscript(Long articleId, MultipartFile manuscripFile, String reference, AuthorNote authorNote) throws Exception {
         Article article = articleService.retrieve(articleId);
         if (article.getStatus().equals(ArticleStatus.REJECT.toString()) || article.getStatus().equals(ArticleStatus.SECRETARY_REJECT.toString()) ||
         article.getStatus().equals(ArticleStatus.WITHDRAW.toString())) {
@@ -45,6 +45,7 @@ public class ManuscriptServiceImpl implements ManuscriptService {
                 Double.toString(latestVersion + 1), 
                 new Date(), 
                 manuscripFile.getContentType(),
+                reference,
                 article);
             authorNoteService.create(authorNote, article);
             return manuscriptRepositoryJPA.save(manuscript);

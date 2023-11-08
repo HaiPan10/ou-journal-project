@@ -71,7 +71,7 @@ public class Manuscript implements Serializable {
     // private List<ReviewCriteria> reviewCriterias;
 
     @JsonIgnore
-    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "manuscript")
+    @OneToMany(cascade = { CascadeType.REMOVE }, mappedBy = "manuscript")
     private List<ReviewArticle> reviewArticles;
 
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "manuscript")
@@ -89,15 +89,14 @@ public class Manuscript implements Serializable {
     @Transient
     private MultipartFile appendixFile;
 
-
-    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, Article article) {
+    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, String reference, Article article) {
         this.content = content;
         this.size = size;
         this.version = version;
         this.createdDate = createdDate;
         this.type = type;
+        this.reference = reference;
         this.article = article;
     }
 
-    
 }

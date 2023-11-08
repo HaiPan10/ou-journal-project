@@ -136,9 +136,9 @@ public class ApiArticleController {
     @Secured("ROLE_AUTHOR")
     @PostMapping(path = "/re-submit/{articleId}")
     public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
-     MultipartFile file, String note) {
+     MultipartFile file, String reference, String note) {
         try {
-            return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, new AuthorNote(note)));
+            return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, reference, new AuthorNote(note)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

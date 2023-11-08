@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -182,10 +183,6 @@ public class SubmitController {
 
         if (article.getCurrentManuscript().getReference() == null)
             return "redirect:/submit/step4";
-
-        article.getCurrentManuscript().setFile(null);
-        article.getCurrentManuscript().setAnonymousFile(null);
-        article.getCurrentManuscript().setAppendixFile(null);
         return "client/submitManuscript/step5";
     }
 
@@ -225,14 +222,13 @@ public class SubmitController {
     @PostMapping({ "/submit/step5" })
     public String submitPage5(@RequestParam(name = "back", required = false) String back,
             @ModelAttribute("article") Article article,
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("anonymousFile") MultipartFile anonymousFile,
+            @RequestPart("appendixFile") MultipartFile appendixFile,
             SessionStatus sessionStatus) {
-        MultipartFile file = article.getCurrentManuscript().getFile();
-        MultipartFile anonymousFile = article.getCurrentManuscript().getAnonymousFile();
-        MultipartFile appendixFile = article.getCurrentManuscript().getAppendixFile();
-
         if (file != null && anonymousFile != null && appendixFile != null) {
             try {
-                // articleService.create(article, article.getFile());
+                articleService.create(article, file, anonymousFile, appendixFile);
                 sessionStatus.setComplete();
 
                 return "redirect:/";

@@ -143,14 +143,14 @@
                     <tbody>
                         <th:block th:each="reviewer : ${reviewers}">
                             <tr class="table-row">
-                                <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewer.id}">
+                                <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewer.key.id}">
                                 </td>
                                 <th scope="row" class="px-6 py-4 flex gap-3 items-center">
-                                    <span th:text="${reviewer.email}"></span>
+                                    <span th:text="${reviewer.key.email}"></span>
                                 </th>
-                                <td class="px-6 py-4" th:text="${reviewer.lastName} + ' ' + ${reviewer.firstName}"></td>
+                                <td class="px-6 py-4" th:text="${reviewer.key.lastName} + ' ' + ${reviewer.key.firstName}"></td>
                                 <td class="px-6 py-4">
-                                    <th:block th:each="reviewArticle : ${reviewer.reviewArticles}">
+                                    <th:block th:each="reviewArticle : ${reviewer.value}">
                                         <span th:text="${reviewArticle.manuscript.version}"></span>
                                         <br>
                                     </th:block>
