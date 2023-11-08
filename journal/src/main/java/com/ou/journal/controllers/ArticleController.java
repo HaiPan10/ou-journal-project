@@ -75,7 +75,6 @@ public class ArticleController {
                 }
                 model.addAttribute("renderManuscript", renderManuscript);
                 model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(), renderManuscript.getVersion()));
-                model.addAttribute("downloadUrl", String.format("/api/articles/download/%s?version=%s", article.getId(), renderManuscript.getVersion()));
             } else {
                 model.addAttribute("error", "invalid status");
             }

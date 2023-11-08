@@ -28,6 +28,7 @@ public class ManuscriptAspect {
     public void updateSubmitedDate(Manuscript manuscript) throws Exception {
         Article article = manuscript.getArticle();
         article.setStatus(ArticleStatus.PENDING.toString());
+        article.setEditorUser(null);
         articleRepositoryJPA.save(article);
         articleDateService.addOrUpdate(manuscript.getArticle(), DateTypeName.SUBMITTED_DATE.toString());
     }
