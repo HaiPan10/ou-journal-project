@@ -56,6 +56,15 @@ public class ApiArticleController {
         }
     }
 
+    @GetMapping("/download/{articleId}")
+    public ResponseEntity<byte[]> download(@PathVariable Long articleId, @RequestParam(required = false) String version) {
+        try {
+            return renderPDFService.download(articleId, version);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @Secured("ROLE_EDITOR")
     @PutMapping("/editor/decide/{articleId}")
     public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status, @RequestBody ArticleNote articleNote,
