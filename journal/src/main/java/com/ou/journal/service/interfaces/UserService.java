@@ -12,9 +12,4 @@ public interface UserService {
     User findByEmail(String email) throws Exception;
     List<Object[]> listUser();
     List<User> findByRoleName(String roleName);
-    /**
-     * This method will find older manuscripts excluded the lastest manuscript
-     * @author Hai Pan
-     */
-    List<User> findReviewerByOlderManuscript(Long articleId);
 }

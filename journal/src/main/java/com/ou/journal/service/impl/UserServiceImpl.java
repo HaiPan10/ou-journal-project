@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.journal.enums.RoleName;
-import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.Role;
 import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.UserRepositoryJPA;
-import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.RoleService;
 import com.ou.journal.service.interfaces.UserService;
@@ -33,9 +31,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private ManuscriptService manuscriptService;
 
     @Override
     public User create(User user, String roleName) throws Exception {
@@ -96,12 +91,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByRoleName(String roleName) {
         return userRepositoryJPA.findByRoleName(roleName);
-    }
-
-    @Override
-    public List<User> findReviewerByOlderManuscript(Long articleId) {
-        Manuscript lastestManuscript = manuscriptService.getLastestManuscript(articleId);
-        return userRepositoryJPA.findReviewerByOlderManuscript(articleId, lastestManuscript.getId());
     }
     
 }

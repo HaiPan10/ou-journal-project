@@ -20,4 +20,5 @@ public interface ReviewArticleService {
     ReviewArticle retrieve(Long reviewArticle) throws Exception;
     ReviewArticle retrieve(Long reviewArticle, Long userId) throws Exception;
     Integer countReviewArticleByStatus(Long manuscriptId, String status);
+    List<ReviewArticle> findByOlderManuscript(Long articleId);
 }
