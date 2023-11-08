@@ -40,11 +40,14 @@
 </section>
 
 <div layout:fragment="extra-action">
-    <div>Khu vực review (cập nhật sau)</div>
-
+    <form id="review-form" enctype="multipart/form-data" method="post">
+        <label for="review-file">Nhập file phản biện</label>
+        <input id="review-file" type="file" name="reviewFile">
+    </form>
 </div>
 <th:block layout:fragment="buttons">
-    <button class="btn-gradient-main w-fit" onclick="doneReview()">Hoàn tất phản biện</button>
+    <button class="btn-gradient-main w-fit" onclick="doneReview('ACCEPT_PUBLISH')">Đồng ý đăng bài</button>
+    <button class="btn-gradient-main w-fit" onclick="doneReview('REJECT_PUBLISH')">Từ chối đăng bài</button>
 </th:block>
 
 
@@ -53,21 +56,26 @@
 
 <th:block layout:fragment="extra-js">
     <script>
-        function doneReview() {
-            fetch(`/api/review-articles/reviewer/review/[[${reviewArticle.id}]]`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            }).then(res => {
-                if (res.ok) {
-                    window.location.href = "/reviewer/review-list"
-                } else {
-                }
-            }).catch(err => {
-                alert(err);
-                console.error(err);
-            });
+        function doneReview(status) {
+            const form = document.forms.namedItem("review-form");
+            const formData = new FormData(form);
+            formData.append("status", status);
+            const file = formData.get('reviewFile');
+
+            if (file && file.size > 0) {
+                fetch(`/api/review-articles/reviewer/review/[[${reviewArticle.id}]]`, {
+                    method: 'POST',
+                    body: formData
+                }).then(res => {
+                    if (res.ok) {
+                        window.location.reload();
+                    } else {
+                    }
+                }).catch(err => {
+                    alert(err);
+                    console.error(err);
+                });
+            }
         }
     </script>
 </th:block>

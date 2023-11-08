@@ -2,6 +2,8 @@ package com.ou.journal.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
@@ -16,7 +18,7 @@ public interface ReviewArticleService {
     boolean checkResponseRevviewArticleInvitation(Long reviewArticleId, Long userId, String email);
     List<ReviewArticle> getReviewArticles(Long userId, String reviewArticleStatus);
     Integer countReviewArticles(Long userId, String reviewArticleStatus);
-    ReviewArticle doneReview(Long reviewArticle, Long userId) throws Exception;
+    ReviewArticle doneReview(Long reviewArticle, Long userId, MultipartFile reviewFile, String reviewStatus) throws Exception;
     ReviewArticle retrieve(Long reviewArticle) throws Exception;
     ReviewArticle retrieve(Long reviewArticle, Long userId) throws Exception;
     Integer countReviewArticleByStatus(Long manuscriptId, String status);

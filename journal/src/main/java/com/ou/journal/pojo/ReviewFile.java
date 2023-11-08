@@ -41,4 +41,13 @@ public class ReviewFile implements Serializable{
     @MapsId
     @OneToOne(optional = false)
     private ReviewArticle reviewArticle;
+
+    public ReviewFile(byte[] content, Long size, String type, ReviewArticle reviewArticle) {
+        this.content = content;
+        this.size = size;
+        this.type = type;
+        this.reviewArticle = reviewArticle;
+    }
+
+    
 }
