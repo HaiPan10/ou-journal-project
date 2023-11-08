@@ -224,21 +224,19 @@
     </nav>
 </section>
 
+<div layout:fragment="extra-action">
+    <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
+        placeholder="Nhập nhận xét..."></textarea>
+</div>
 <th:block layout:fragment="buttons">
     <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
         phản biên viên</button>
-    <div class="flex w-fit gap-x-3" th:if="${article.reviewedReviewer > 0}">
-        <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
-            placeholder="Nhập nhận xét..."></textarea>
-        <button onclick="decideArticle('REJECT')"
-            id="rejectBtn" class="btn-gradient-danger">
-            <span> Từ chối </span> <i
-                class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
-        <button onclick="decideArticle('ACCEPT')" 
-            data-modal-target="modal" data-modal-toggle="modal" class="btn-gradient-success"><span>
-                Đồng ý </span> <i
-                class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
-    </div>
+    <button onclick="decideArticle('REJECT')" id="rejectBtn" class="btn-gradient-danger w-fit">
+        <span> Từ chối </span> <i class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+    <button onclick="decideArticle('ACCEPT')" data-modal-target="modal" data-modal-toggle="modal"
+        class="btn-gradient-success w-fit"><span>
+            Đồng ý </span> <i class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
+
 </th:block>
 
 
@@ -312,13 +310,16 @@
                                                 <span class="badge-warning">Chờ phản hồi</span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
-                                                <span class="badge-warning">Đồng ý <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-warning">Đồng ý <span class="dateElement"
+                                                        th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REJECTED'}">
-                                                <span class="badge-danger">Từ chối <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-danger">Từ chối <span class="dateElement"
+                                                        th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REVIEWED'}">
-                                                <span class="badge-success">Đã phản biện <span class="dateElement" th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <span class="badge-success">Đã phản biện <span class="dateElement"
+                                                        th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                         </td>
                                         <td>
@@ -345,31 +346,6 @@
     </div>
 
     <script th:inline="javascript">
-        const kwBox = document.querySelector("#keywords-box")
-
-        function insertKeywordBox(elementHTML) {
-            kwBox.insertAdjacentHTML('beforeend', elementHTML);
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            const keywords = /*[[${ article.keywords }]]*/ "";
-            if (keywords) {
-                let kws = keywords.split(" ");
-                kws.forEach(k => {
-                    if (k.trim()) {
-                        let newKwHTML = ` <div id="kw-${k}" class="kw-box ml-0" role="alert">
-                            <div class="kw text-sm font-medium whitespace-nowrap">
-                                ${k}
-                            </div>
-                          </div>`
-                        insertKeywordBox(newKwHTML);
-                    }
-
-                });
-            }
-            document.querySelector("#viewDoc").style.width = (document.querySelector(".page").style.width) + "";
-
-        });
-        
         var commentArticle = document.getElementById('commentArticle');
         function decideArticle(status) {
             var requestBody = {
@@ -396,7 +372,7 @@
 </section>
 
 <th:block layout:fragment="extra-js">
-    
+
 </th:block>
 
 </html>
