@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -20,6 +22,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,6 +79,15 @@ public class Manuscript implements Serializable {
 
     @Column(name = "reference", columnDefinition = "TEXT")
     private String reference;
+
+    @Transient
+    private MultipartFile file;
+
+    @Transient
+    private MultipartFile anonymousFile;
+
+    @Transient
+    private MultipartFile appendixFile;
 
 
     public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, Article article) {

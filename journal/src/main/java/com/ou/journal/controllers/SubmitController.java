@@ -19,7 +19,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.AuthorType;
-
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthorArticle;
@@ -95,6 +95,9 @@ public class SubmitController {
                 AuthorNote authorNote = new AuthorNote();
                 article.setAuthorNote(authorNote);
 
+                Manuscript manuscript = new Manuscript();
+                article.setCurrentManuscript(manuscript);
+
                 return article;
             } catch (Exception e) {
 
@@ -139,27 +142,51 @@ public class SubmitController {
         if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
                 || article.getTitle().isBlank()) {
             return "redirect:/submit/step2";
-        } else {
-            final boolean[] isHasFirstAuthor = { false };
-            final boolean[] isHasCorresponding = { false };
-            article.getAuthorArticles().forEach(authorArticle -> {
-                authorArticle.getAuthorRoles().forEach(role -> {
-                    if (role.getAuthorType().getId() == 1)
-                        isHasFirstAuthor[0] = true;
-                    else if (role.getAuthorType().getId() == 2)
-                        isHasCorresponding[0] = true;
-                });
+        }
+        final boolean[] isHasFirstAuthor = { false };
+        final boolean[] isHasCorresponding = { false };
+        article.getAuthorArticles().forEach(authorArticle -> {
+            authorArticle.getAuthorRoles().forEach(role -> {
+                if (role.getAuthorType().getId() == 1)
+                    isHasFirstAuthor[0] = true;
+                else if (role.getAuthorType().getId() == 2)
+                    isHasCorresponding[0] = true;
             });
-            if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
-                return "redirect:/submit/step3";
-        }
-        if (article.getFile() != null) {
-            String originalFilename = article.getFile().getOriginalFilename();
-            String extension = FilenameUtils.getExtension(originalFilename);
-            model.addAttribute("extension", extension);
-            model.addAttribute("fileName", originalFilename);
-        }
+        });
+        if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
+            return "redirect:/submit/step3";
         return "client/submitManuscript/step4";
+    }
+
+    @GetMapping({ "/submit/step5" })
+    public String getSubmitPage5(@ModelAttribute("article") Article article,
+            @ModelAttribute("termsAccepted") Boolean termsAccepted, Model model) {
+        if (termsAccepted == false)
+            return "redirect:/submit/step1";
+        if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
+                || article.getTitle().isBlank()) {
+            return "redirect:/submit/step2";
+        }
+        final boolean[] isHasFirstAuthor = { false };
+        final boolean[] isHasCorresponding = { false };
+        article.getAuthorArticles().forEach(authorArticle -> {
+            authorArticle.getAuthorRoles().forEach(role -> {
+                if (role.getAuthorType().getId() == 1)
+                    isHasFirstAuthor[0] = true;
+                else if (role.getAuthorType().getId() == 2)
+                    isHasCorresponding[0] = true;
+            });
+        });
+        if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
+            return "redirect:/submit/step3";
+
+        if (article.getCurrentManuscript().getReference() == null)
+            return "redirect:/submit/step4";
+
+        article.getCurrentManuscript().setFile(null);
+        article.getCurrentManuscript().setAnonymousFile(null);
+        article.getCurrentManuscript().setAppendixFile(null);
+        return "client/submitManuscript/step5";
     }
 
     @PostMapping({ "/submit/step1" })
@@ -169,7 +196,8 @@ public class SubmitController {
     }
 
     @PostMapping({ "/submit/step2" })
-    public String submitPage2(@ModelAttribute("article") Article article, @RequestParam(name = "back", required = false) String back) {
+    public String submitPage2(@ModelAttribute("article") Article article,
+            @RequestParam(name = "back", required = false) String back) {
         if (back != null)
             return "redirect:/submit/step1";
         return "redirect:/submit/step3";
@@ -187,23 +215,36 @@ public class SubmitController {
     }
 
     @PostMapping({ "/submit/step4" })
-    public String submitPage4(@RequestParam(name = "back", required = false) String back,
-            @RequestParam("file") MultipartFile file, @ModelAttribute("article") Article article,
-            SessionStatus sessionStatus) {
-        if (file != null && !file.isEmpty())
-            article.setFile(file);
+    public String submitPage4(@ModelAttribute("article") Article article,
+            @RequestParam(name = "back", required = false) String back) {
         if (back != null)
             return "redirect:/submit/step3";
+        return "redirect:/submit/step5";
+    }
 
-        try {
-            articleService.create(article, article.getFile());
-            sessionStatus.setComplete();
+    @PostMapping({ "/submit/step5" })
+    public String submitPage5(@RequestParam(name = "back", required = false) String back,
+            @ModelAttribute("article") Article article,
+            SessionStatus sessionStatus) {
+        MultipartFile file = article.getCurrentManuscript().getFile();
+        MultipartFile anonymousFile = article.getCurrentManuscript().getAnonymousFile();
+        MultipartFile appendixFile = article.getCurrentManuscript().getAppendixFile();
 
-            return "redirect:/";
+        if (file != null && anonymousFile != null && appendixFile != null) {
+            try {
+                // articleService.create(article, article.getFile());
+                sessionStatus.setComplete();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                return "redirect:/";
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return "redirect:/submit/step4";
+        if (back != null) {
+            return "redirect:/submit/step4";
+        }
+
+        return "redirect:/submit/step5";
     }
 }

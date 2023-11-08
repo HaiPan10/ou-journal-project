@@ -3485,6 +3485,10 @@ input:checked + .toggle-bg {
   margin: 0px;
 }
 
+.m-3 {
+  margin: 0.75rem;
+}
+
 .m-6 {
   margin: 1.5rem;
 }
@@ -4052,6 +4056,10 @@ input:checked + .toggle-bg {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.resize-none {
+  resize: none;
 }
 
 .resize {
@@ -4984,6 +4992,11 @@ input:checked + .toggle-bg {
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
 }
 
 .text-7xl {
@@ -6451,6 +6464,10 @@ input:checked + .toggle-bg {
     flex-direction: row;
   }
 
+  .md\:flex-col {
+    flex-direction: column;
+  }
+
   .md\:items-center {
     align-items: center;
   }
@@ -6494,6 +6511,11 @@ input:checked + .toggle-bg {
 
   .md\:text-start {
     text-align: start;
+  }
+
+  .md\:text-7xl {
+    font-size: 4.5rem;
+    line-height: 1;
   }
 
   .md\:after\:ml-3::after {

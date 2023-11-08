@@ -41,6 +41,17 @@
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
+                <p class="text-sm font-bold text-black-900">Trích dẫn</p>
+            </div>
+        </li>
+        <li th:class="${5 == step ? 'step step-in-progress' : 5 > step ? 'step step-pending' : 'step step-complete'}">
+            <span class="step-child">
+                <i th:if="${5 < step}" class="bi bi-check-lg">
+                    
+                </i>
+            </span>
+            <div class="absolute top-full mt-3 w-fit">
+                <p class="text-xs uppercase font-medium text-gray-500">Bước 5:</p>
                 <p class="text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li>
