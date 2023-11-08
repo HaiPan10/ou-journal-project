@@ -106,7 +106,7 @@ public class EditorController {
             return "redirect:/editor/review-articles/invite/{articleId}";
         } catch (Exception e) {
             model.addAttribute("article", article);
-            // model.addAttribute("reviewArticles", reviewArticles);
+            model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("articleId", articleId);
             model.addAttribute("users", users);
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));

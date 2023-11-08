@@ -104,7 +104,7 @@
                                             th:text="${article.rejectedReviewer}"></span></span>
                                 </div>
                                 <div th:if="${article.invitedReviewer == 0}">
-                                    <span th:data-tooltip-target="${'dateDetail-' + article.id}" data-tooltip-placement="top" class="badge-info">Đã gán:
+                                    <span th:data-tooltip-target="${'dateDetail-' + article.id}" data-tooltip-placement="top" class="badge-info">Đã gán 
                                         <th:block th:each="articleDate : ${article.articleDates}">
                                             <span class="dateElement" th:if="${articleDate.dateType.typeName eq 'ASSIGNED_EDITOR_DATE'}"
                                                 th:text="${articleDate.date}">

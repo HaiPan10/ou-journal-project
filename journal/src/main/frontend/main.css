@@ -374,13 +374,32 @@
         @apply mt-1.5
     }
 
-    [role="tab"] {
+    .tab[role="tab"] {
         @apply border-b-0 overflow-hidden transition-all relative hover:text-gray-600 after:transition-all after:duration-300 after:content-[''] after:w-full after:h-0.5 after:absolute after:bottom-0 after:-left-full hover:after:left-0 after:bg-gray-100 hover:after:bg-gray-600
     }
-    [role="tab"][aria-selected="true"] {
+    .tab[role="tab"][aria-selected="true"] {
         @apply border-b-0 text-main after:left-0 after:bg-main hover:text-main font-semibold
     }
-    [role="tab"][aria-selected="false"] {
+    .tab[role="tab"][aria-selected="false"] {
         @apply border-b-0
+    }
+
+    .tab-block-container {
+        @apply text-sm flex font-medium text-center border border-gray-200 divide-x divide-gray-200 rounded-lg bg-white shadow-lg
+    }
+    .tab-block-container li:first-child .tab-block{
+        @apply rounded-l-lg 
+    }
+    .tab-block-container li:last-child .tab-block{
+        @apply rounded-r-lg 
+    }
+    .tab-block{
+        @apply inline-block w-full p-4 bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-700 focus:outline-none
+    }
+    .tab-block[aria-selected="true"] {
+        @apply bg-main/20 text-main-action  hover:bg-main/10 hover:text-main
+    }
+    .tab-block[aria-selected="false"] {
+        @apply bg-white text-gray-600  hover:bg-gray-50 hover:text-gray-700
     }
 }
