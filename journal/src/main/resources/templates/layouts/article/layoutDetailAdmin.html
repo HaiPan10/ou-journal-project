@@ -125,7 +125,7 @@
                     </ul>
                 </div>
 
-                <div id="file-display" class="mt-3">
+                <div id="file-display" class="mt-5">
                     <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
                         <div id="file-display-extension"
                             th:text="${#strings.substring(renderManuscript.type, 'application/'.length)}"
@@ -136,7 +136,9 @@
                             th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
                         </p>
 
-                        <button class="btn-gradient-main w-fit ml-auto" id="download-btn">Tải file</button>
+                        <button class="w-fit p-5 text-main text-2xl ml-auto" id="download-btn">
+                            <i class="bi bi-download"></i>
+                        </button>
                     </div>
 
                 </div>
