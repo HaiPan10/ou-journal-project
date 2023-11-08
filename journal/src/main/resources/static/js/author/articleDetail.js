@@ -42,7 +42,7 @@ async function reSubmitManuscript(articleId, obj) {
             body: formData
         };
     
-        const res = await fetch(`/api/tests/articles/re-submit/${articleId}`, options);
+        const res = await fetch(`/api/articles/re-submit/${articleId}`, options);
         if (res.ok) {
             alert("Gửi lại bài thành công");
             window.location.reload();

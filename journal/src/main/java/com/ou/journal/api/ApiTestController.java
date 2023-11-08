@@ -155,13 +155,13 @@ public class ApiTestController {
         }
     }
 
-    @PostMapping(path = "/articles/re-submit/{articleId}")
-    public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
-     MultipartFile file, AuthorNote authorNote) {
-        try {
-            return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, authorNote));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @PostMapping(path = "/articles/re-submit/{articleId}")
+    // public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
+    //  MultipartFile file, AuthorNote authorNote) {
+    //     try {
+    //         return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, authorNote));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 }

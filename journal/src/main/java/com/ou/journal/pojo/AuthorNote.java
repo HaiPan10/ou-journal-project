@@ -33,4 +33,10 @@ public class AuthorNote implements Serializable{
 
     @Column(name = "note")
     private String note;
+
+    public AuthorNote(String note) {
+        this.note = note;
+    }
+
+    
 }
