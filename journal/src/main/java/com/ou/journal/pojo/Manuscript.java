@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -69,6 +70,13 @@ public class Manuscript implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "manuscript")
     private List<ReviewArticle> reviewArticles;
+
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "manuscript")
+    private Appendix appendix;
+
+    @Column(name = "reference", columnDefinition = "TEXT")
+    private String reference;
+
 
     public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, Article article) {
         this.content = content;
