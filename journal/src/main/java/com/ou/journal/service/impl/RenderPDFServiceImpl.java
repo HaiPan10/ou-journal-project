@@ -35,20 +35,20 @@ public class RenderPDFServiceImpl implements RenderPDFService{
                 renderManuscript = manuscriptService.getLastestManuscript(articleId);
             }
         }
-        byte[] documentData = renderManuscript.getContent();
+        byte[] originData = renderManuscript.getContent();
+        byte[] documentData;
         HttpHeaders headers = new HttpHeaders();
         // byte[] htmlData;
         if (renderManuscript.getType().equals("application/pdf")) {
             // htmlData = FileConverterUtils.generateHTMLFromPDF(documentData);
+            documentData = originData;
         } else {
             // byte[] pdfBytes = FileConverterUtils.convertToPDF(documentData);
             // htmlData = FileConverterUtils.generateHTMLFromPDF(pdfBytes);
-            documentData = FileConverterUtils.convertToPDF(documentData);
+            documentData = FileConverterUtils.convertToPDF(originData);
         }
         // headers.setContentType(MediaType.TEXT_HTML);
         headers.setContentType(MediaType.APPLICATION_PDF);
-
-        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
-    }
-    
+        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);        
+    }    
 }

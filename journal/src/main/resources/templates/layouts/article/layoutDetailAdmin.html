@@ -123,12 +123,17 @@
             </section>
             <!-- /ACTION -->
             <div class="dropdown">
-                <button class="dropbtn" th:text="'Phiên bản: ' + ${currentManuscript}"></button>
+                <button class="dropbtn" th:text="'Phiên bản: ' + ${renderManuscript.version}"></button>
                 <div class="dropdown-content">
                     <th:block th:each="manuscript : ${manuscripts}">
                         <a th:href="@{/admin/articles/{id}(id=${article.id}, version=${manuscript.version})}" th:text="${manuscript.version}"></a>
                     </th:block>
                 </div>
+            </div>
+
+            <div>
+                <button id="view-btn">Xem</button>
+                <button id="download-btn">Tải file gốc</button>
             </div>
         </div>
         <div>
@@ -156,6 +161,8 @@
         const btnAuthorNote = document.querySelector("#btn-collapse-author-note");
         const btnAuthorNoteIcon = document.querySelector("#icon-collapse-author-note");
         const authorNoteContent = document.querySelector("#author-note-content");
+
+        const downloadBtn = document.querySelector("#download-btn");
 
         function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
@@ -198,6 +205,28 @@
             }
         });
 
+        try {
+            downloadBtn.addEventListener('click', function () {
+                const type = /*[[${ renderManuscript.type }]]*/ "";
+                const name = /*[[${ renderManuscript.article.title }]]*/ "";
+                const byteContent = /*[[${ renderManuscript.content }]]*/ "";
+
+                var binaryString = window.atob(byteContent);
+                    var binaryLen = binaryString.length;
+                    var bytes = new Uint8Array(binaryLen);
+                    for (var i = 0; i < binaryLen; i++) {
+                        var ascii = binaryString.charCodeAt(i);
+                        bytes[i] = ascii;
+                }
+                var blob = new Blob([bytes], {type: `${type}`});
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = name;
+                link.click();
+            });
+        } catch (e) {
+
+        }
 
     </script>
     <th:block layout:fragment="extra-js">

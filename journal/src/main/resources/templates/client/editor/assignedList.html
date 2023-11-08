@@ -100,12 +100,12 @@
                 <tbody>
                     <th:block th:each="article : ${articles}">
                         <tr class="table-row">
-                            <th scope="row" class="px-6 py-4 gap-3 items-center">
+                            <td scope="row" class="px-6 py-4 gap-3 items-center font-semibold">
                                 <span th:text="${article.title}"></span>
-                            </th>
-                            <th scope="row" class="px-6 py-4">
+                            </td>
+                            <td scope="row" class="px-6 py-4">
                                 <span th:text="${article.keywords}"></span>
-                            </th>
+                            </td>
                             <th:block th:each="authorArticle : ${article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">

@@ -8,7 +8,7 @@
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="text-xs uppercase font-medium text-gray-500">Bước 1:</p>
-                <p class="text-sm font-bold text-black-900">Thông tin bài báo</p>
+                <p class="text-sm font-bold text-black-900">Điều khoản</p>
             </div>
         </li>
         <li th:class="${2 == step ? 'step step-in-progress' : 2 > step ? 'step step-pending' : 'step step-complete'}">
@@ -19,7 +19,7 @@
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="text-xs uppercase font-medium text-gray-500">Bước 2:</p>
-                <p class="text-sm font-bold text-black-900">Thông tin tác giả</p>
+                <p class="text-sm font-bold text-black-900">Thông tin bài báo</p>
             </div>
         </li>
         <li th:class="${3 == step ? 'step step-in-progress' : 3 > step ? 'step step-pending' : 'step step-complete'}">
@@ -30,6 +30,17 @@
             </span>
             <div class="absolute top-full mt-3 w-fit">
                 <p class="text-xs uppercase font-medium text-gray-500">Bước 3:</p>
+                <p class="text-sm font-bold text-black-900">Thông tin tác giả</p>
+            </div>
+        </li>
+        <li th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
+            <span class="step-child">
+                <i th:if="${4 < step}" class="bi bi-check-lg">
+                    
+                </i>
+            </span>
+            <div class="absolute top-full mt-3 w-fit">
+                <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
                 <p class="text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li>
@@ -48,10 +59,10 @@
 
         <li class="step-end">
             <span class="step-child relative">
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full rotate-45">
 
                 </div>
-                <div class="absolute w-1.5 h-full bg-main-light rounded-full -rotate-45">
+                <div class="absolute w-1 h-full bg-main-light rounded-full -rotate-45">
 
                 </div>
             </span>
