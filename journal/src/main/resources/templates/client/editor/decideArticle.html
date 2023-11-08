@@ -224,25 +224,24 @@
     </nav>
 </section>
 
-<section layout:fragment="action">
-    <div class="flex justify-end my-3 gap-x-3">
-        <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal"
-            class="btn-gradient-main w-fit">Xem phản biên viên</button>
-        <div class="flex w-fit gap-x-3" th:if="${article.reviewedReviewer > 0}">
-            <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
-                placeholder="Nhập nhận xét..."></textarea>
-            <button onclick="decideArticle('REJECT')"
-                id="rejectBtn" class="btn-gradient-danger">
-                <span> Từ chối </span> <i
-                    class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
-            <button onclick="decideArticle('ACCEPT')" 
-                data-modal-target="modal" data-modal-toggle="modal" class="btn-gradient-success"><span>
-                    Đồng ý </span> <i
-                    class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
-        </div>
+<th:block layout:fragment="buttons">
+    <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
+        phản biên viên</button>
+    <div class="flex w-fit gap-x-3" th:if="${article.reviewedReviewer > 0}">
+        <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
+            placeholder="Nhập nhận xét..."></textarea>
+        <button onclick="decideArticle('REJECT')"
+            id="rejectBtn" class="btn-gradient-danger">
+            <span> Từ chối </span> <i
+                class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+        <button onclick="decideArticle('ACCEPT')" 
+            data-modal-target="modal" data-modal-toggle="modal" class="btn-gradient-success"><span>
+                Đồng ý </span> <i
+                class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
     </div>
+</th:block>
 
-</section>
+
 
 
 <section layout:fragment="modal">
