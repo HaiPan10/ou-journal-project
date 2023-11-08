@@ -6,54 +6,51 @@
 <section class="mt-6 mb-3" layout:fragment="content">
     <div class="min-h-[800px]">
         <div th:replace="~{fragments/stepper :: stepper (step=1)}"></div>
-        <form th:object="${article}" th:action="@{'/submit/step1'}" method="post">
+        <form th:action="@{'/submit/step1'}" name="ruleForm" method="post">
             <div class="fade-anim space-y-6 flex flex-col justify-center">
                 <div
                     class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between">
                     <div>
-                        <div class="grid grid-cols-1 gap-x-6 gap-y-3">
-                            <div class="col-span-full">
-                                <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Tiêu
-                                    đề</label>
-                                <input required id="title" name="title" type="text" th:field="*{title}"
-                                    class="input px-3 py-2 mt-1 mb-5 w-full" />
+                        <h1 class="py-2 text-3xl font-semibold">Điều kiện gửi bài viết</h1>
+                        <p class="mb-2 text-lg">Bài báo phải thỏa mãn tất cả các điều kiện dưới đây:</p>
+                        <div class="text-gray-800">
+                            <div class="py-2 flex items-start">
+                                <input th:checked="${termsAccepted == true}" required class="checkbox-input mt-0.5" id="rule1" type="checkbox" name="rule" />
+                                <label class="ml-3 grow" for="rule1">
+                                    Về sự phù hợp với <a href="#" class="link">mục đích - phạm vi</a> của Tạp chí đã được công bố;
+                                </label>
                             </div>
-
-                            <div class="col-span-full">
-                                <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Mô
-                                    tả</label>
-                                <textarea required id="description" name="description" rows="6" th:field="*{abstracts}"
-                                    class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
+                            <div class="py-2 flex items-start">
+                                <input th:checked="${termsAccepted == true}" required class="checkbox-input mt-0.5" id="rule2" type="checkbox" name="rule" />
+                                <label class="ml-3 grow" for="rule2">
+                                    Về sự tuân thủ các <a class="link">chính sách gửi bài, phản biện, biên tập</a> mà Tạp chí đã được công bố;
+                                </label>
                             </div>
-
-                            <div class="col-span-full">
-                                <label for="author-note" class="block text-sm font-medium leading-6 text-gray-900">
-                                    Ghi chú (nếu có)</label>
-                                <textarea id="author-note" name="author-note" rows="1" th:field="*{authorNote.note}"
-                                    class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
+                            <div class="py-2 flex items-start">
+                                <input th:checked="${termsAccepted} == true" required class="checkbox-input mt-0.5" id="rule3" type="checkbox" name="rule" />
+                                <label class="ml-3 grow" for="rule3">
+                                    Về sự phù hợp với <a class="link">thể lệ của bài viết</a> đã được công bố;
+                                    <ul class="list-dot">
+                                        <li>File bản thảo (độ dài, font chữ);</li>
+                                        <li>Tiêu đề, tóm tắt, từ khóa tiếng Anh và tiếng Việt;</li>
+                                        <li>Bảng hình, số liệu;</li>
+                                        <li>Trích dẫn;</li>
+                                        <li>Hình thức và các lỗi chính tả.</li>
+                                    </ul>
+                                </label>
                             </div>
-
-                            <div class="col-span-full">
-                                <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
-                                    khóa</label>
-                                <div
-                                    class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/10 rounded-md mt-1 mb-5 w-full">
-                                    <div id="keywords-box" class="rounded-l-md h-fit flex items-center w-fit bg-white">
-                                    </div>
-                                    <div class="hidden p-0 m-0" id="last-child"></div>
-                                    <input id="keyword-input" style="min-width: 100px" name="keyword-input" type="text"
-                                        class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
-                                </div>
-
-                                <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" />
+                            <div class="py-2 flex items-start">
+                                <input th:checked="${termsAccepted == true}" required class="checkbox-input mt-0.5" id="rule4" type="checkbox" name="rule" />
+                                <label class="ml-3 grow" for="rule4">
+                                   Về các thông tin cần cung cấp của <strong class="font-semibold">Tác giả</strong> (họ tên, học hàm-học vị, nơi công tác, chức vụ, email và số điện thoại), và <strong class="font-semibold">các cam kết khác mà Tạp chí yêu cầu.</strong>
+                                </label>
                             </div>
-
-
                         </div>
+                        
+
                     </div>
 
                     <div class="mt-6 flex items-center justify-end gap-x-6">
-                        <!-- <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Trở về</button> -->
                         <button type="button" id="btnSubmit" onClick="submitForm()"
                             class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                             tục</button>
@@ -65,114 +62,32 @@
     </div>
 
     <script>
-        const kwInput = document.querySelector("#keyword-input")
-        const kw = document.querySelector("#keyword")
-        const kwBox = document.querySelector("#keywords-box")
+        document.addEventListener("DOMContentLoaded", function() {
+            var elements = document.querySelectorAll("input[type='checkbox']");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].oninvalid = function(e) {
+                    e.target.setCustomValidity("");
+                    if (!e.target.validity.valid) {
+                        e.target.setCustomValidity("Vui lòng đồng ý với điều khoản nay để tiếp tục");
+                    }
+                };
+                elements[i].oninput = function(e) {
+                    e.target.setCustomValidity("");
+                };
+            }
+        })
+
 
         function submitForm() {
-            document.querySelector("form").submit();
-        }
-
-        function removeKeyword(obj) {
-            let rmElement = document.querySelector(`${obj.getAttribute("data-dismiss-target")}`)
-            let kwInner = rmElement.querySelector(".kw");
-            const value = kwInner.innerHTML.trim();
-            let kws = kw.value.split(" ");
-            kws = kws.filter(word => word !== value);
-            kw.value = kws.join(' ');
-            rmElement.remove();
-        }
-
-        function insertKeywordBox(elementHTML) {
-            kwBox.insertAdjacentHTML('beforeend', elementHTML);
-        }
-
-        function isExisted(value) {
-            if (!kw.value) return false
-            const currentKeywords = kw.value.split(" ");
-            for (let i = 0; i < currentKeywords.length; i++)
-                if (value == currentKeywords[i])
-                    return true;
-            return false;
-        }
-
-        function handleKeyUp(event) {
-            if (event.key == ' ' || event.code === "Space" || event.key === 'Enter') {
-                let value = event.target.value.toLowerCase().trim();
-                event.target.value = ""
-                if (value && isExisted(value) == false) {
-                    let newKwHTML = ` <div id="kw-${value}" class="kw-box" role="alert">
-                        <div class="kw text-sm font-medium whitespace-nowrap">
-                            ${value}
-                        </div>
-                          <button id="btn-remove-kw-${value}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${value}" aria-label="Close">
-                            <i class="bi bi-x">
-                            </i>
-                        </button>
-                      </div>`
-                    insertKeywordBox(newKwHTML);
-                    kw.value += " " + value;
-                }
-            } else if (!event.target.value && event.key === 'Backspace') {
-                const keywords = document.querySelectorAll(".kw");
-                const lastKw = keywords[keywords.length - 1]
-                const value = lastKw.innerHTML.trim();
-                const del = document.querySelector(`#btn-remove-kw-${value}`)
-                removeKeyword(del);
-                event.target.value = value.slice(0, value.length);
+            const form = document.forms.ruleForm;
+            if (!form.checkValidity()) {
+                form.reportValidity()
+                return;
             }
+            form.submit();
         }
 
-        kwInput.addEventListener("keyup", handleKeyUp)
 
-        kwInput.addEventListener("drop", function(event) {
-            event.preventDefault();
-        });
-          
-
-        kwInput.addEventListener('blur', function () {
-           const kwVal = kwInput.value;
-           kwInput.value = "";
-           if (kwVal.trim()) {
-            let kws = kwVal.split(" ");
-            kws.forEach(word => {
-                if (word && isExisted(word) == false) {
-                    let newKwHTML = ` <div id="kw-${word}" class="kw-box" role="alert">
-                        <div class="kw text-sm font-medium whitespace-nowrap">
-                            ${word}
-                        </div>
-                          <button id="btn-remove-kw-${word}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${kwVal}" aria-label="Close">
-                            <i class="bi bi-x">
-                            </i>
-                        </button>
-                      </div>`
-                    insertKeywordBox(newKwHTML);
-                    kw.value += " " + word;
-                }
-            })
-           }
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            if (kw.value) {
-                let kws = kw.value.split(" ");
-                kws.forEach(k => {
-                    if (k.trim()) {
-                        let newKwHTML = ` <div id="kw-${k}" class="kw-box" role="alert">
-                            <div class="kw text-sm font-medium whitespace-nowrap">
-                                ${k}
-                            </div>
-                              <button id="btn-remove-kw-${k}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${k}" aria-label="Close">
-                                <i class="bi bi-x">
-                                </i>
-                            </button>
-                          </div>`
-                        insertKeywordBox(newKwHTML);
-                    }
-
-                });
-            }
-        });
     </script>
 </section>
 

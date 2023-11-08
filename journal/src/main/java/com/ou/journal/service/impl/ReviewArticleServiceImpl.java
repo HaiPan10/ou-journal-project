@@ -101,6 +101,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
                         userRoleRepositoryJPA.save(userRole);
                     }
                 }
+                reviewArticle.setUpdatedAt(new Date());
                 reviewArticle.setStatus(status);
                 return reviewArticleRepositoryJPA.save(reviewArticle);
             } else {
@@ -205,6 +206,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         if (!reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPTED.toString())) {
             throw new Exception("Lượt review này có trạng thái không hợp lệ!");
         }
+        reviewArticle.setUpdatedAt(new Date());
         reviewArticle.setStatus(ReviewArticleStatus.REVIEWED.toString());
         return reviewArticleRepositoryJPA.save(reviewArticle);
     }

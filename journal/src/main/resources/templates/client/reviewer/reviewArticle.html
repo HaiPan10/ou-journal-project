@@ -39,12 +39,13 @@
     </nav>
 </section>
 
-<section layout:fragment="action">
+<div layout:fragment="extra-action">
     <div>Khu vực review (cập nhật sau)</div>
-    <div class="flex justify-end my-3 gap-x-3">
-        <button class="btn-gradient-main w-fit" onclick="doneReview()">Hoàn tất phản biện</button>
-    </div>
-</section>
+
+</div>
+<th:block layout:fragment="buttons">
+    <button class="btn-gradient-main w-fit" onclick="doneReview()">Hoàn tất phản biện</button>
+</th:block>
 
 
 <section layout:fragment="modal">
@@ -70,4 +71,5 @@
         }
     </script>
 </th:block>
+
 </html>

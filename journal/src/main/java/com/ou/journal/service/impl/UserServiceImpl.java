@@ -100,8 +100,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findReviewerByOlderManuscript(Long articleId) {
-        Manuscript manuscript = manuscriptService.getLastestManuscript(articleId);
-        return userRepositoryJPA.findReviewerByOlderManuscript(articleId, manuscript.getId());
+        Manuscript lastestManuscript = manuscriptService.getLastestManuscript(articleId);
+        return userRepositoryJPA.findReviewerByOlderManuscript(articleId, lastestManuscript.getId());
     }
     
 }

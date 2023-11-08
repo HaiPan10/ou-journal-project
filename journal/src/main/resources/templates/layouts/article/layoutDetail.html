@@ -3,7 +3,7 @@
     layout:decorate="~{layouts/layout}">
 
 <section class="mb-12" layout:fragment="content">
-    <div class="container md:mx-auto min-h-[800px]">
+    <div class="container mx-auto min-h-[800px]">
         <!-- BREADCUM -->
         <section class="mt-2 mb-6" layout:fragment="breadcum">
 
@@ -12,11 +12,12 @@
         <!-- /BREADCUM -->
         <div th:replace="~{fragments/statusStage :: statusStage (status=${article.status})}"></div>
 
-        <div class="mt-2 move-up-anim bg-white rounded-lg p-6">
+        <div class="mt-2 move-up-anim bg-white rounded-lg p-6 text-gray-800">
             <div class="font-semibold text-3xl">
+                <span>Tiêu đề:</span>
                 <span th:text="${article.title}"> </span>
             </div>
-            <div class="font-medium mt-2 text-gray-800 flex flex-wrap gap-1">
+            <div class="font-medium mt-2 flex flex-wrap gap-1">
                 <span>Tác giả:</span>
                 <th:block th:each="authorArticle : ${article.authorArticles}">
                     <span class="author" th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
@@ -26,11 +27,13 @@
             <hr class="my-5"/>
 
             <div class="my-3">
-                <div class="text-gray-500" th:text="${article.abstracts}"></div>
+                <span class="font-medium">Tóm tắt:</span>
+                <div class="mt-1 px-2" th:text="${article.abstracts}"></div>
             </div>
 
             <div class="my-3">
-                <div class="flex flex-wrap gap-3 ml-0 mt-2" id="keywords-box">
+                <span class="font-medium">Từ khóa:</span>
+                <div class="flex flex-wrap gap-3 ml-0 mt-2 px-2" id="keywords-box">
                 </div>
             </div>
 
@@ -84,6 +87,19 @@
             <!-- ACTION -->
             <section layout:fragment="action">
 
+                <div layout:fragment="extra-action">
+        
+                </div>
+
+                <div class="flex justify-end my-3 gap-x-3">
+                    <button class="btn-gradient-main w-fit">Xem preview</button>
+                    <button class="btn-gradient-main w-fit">Tải file</button>
+                    <th:block layout:fragment="buttons">
+        
+                    </th:block>
+                </div>
+
+                
             </section>
             <!-- /ACTION -->
             <div>
@@ -136,21 +152,22 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            const keywords = /*[[${ article.keywords }]]*/ "";
-            if (keywords) {
-                let kws = keywords.split(" ");
-                kws.forEach(k => {
-                    if (k.trim()) {
-                        let newKwHTML = ` <div id="kw-${k}" class="kw-box ml-0" role="alert">
-                            <div class="kw text-sm font-medium whitespace-nowrap">
-                                ${k}
-                            </div>
-                          </div>`
-                        insertKeywordBox(newKwHTML);
-                    }
-
-                });
-            }
+            const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
+            kwBox.innerText = keywords;
+            //if (keywords) {
+            //    let kws = keywords.split(" ");
+            //    kws.forEach(k => {
+            //        if (k.trim()) {
+            //            let newKwHTML = ` <div id="kw-${k}" class="kw-box ml-0" role="alert">
+            //                <div class="kw text-sm font-medium whitespace-nowrap">
+            //                    ${k}
+            //                </div>
+            //              </div>`
+            //            insertKeywordBox(newKwHTML);
+            //        }
+//
+            //    });
+            //}
         });
 
 
