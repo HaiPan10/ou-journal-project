@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
@@ -27,9 +28,8 @@ import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.utils.EnumUtils;
 import com.ou.journal.validator.WebAppValidator;
 
-
 @Controller
-@Secured({"ROLE_EDITOR", "ROLE_CHIEF_EDITOR"})
+@Secured({ "ROLE_EDITOR", "ROLE_CHIEF_EDITOR" })
 public class EditorController {
     @Autowired
     private ArticleService articleService;
@@ -46,27 +46,36 @@ public class EditorController {
     }
 
     @GetMapping("/editor/invite-reviewer-articles")
-    public String getArticleWaitingForInviteReviewer(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
+    public String getArticleWaitingForInviteReviewer(Model model,
+            @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
         articles = articleService.getArticleWaitingForInviteReviewer(currentUser.getId());
         model.addAttribute("articles", articles);
+
+        model.addAttribute("breadcumTitle", "Danh sách bài báo chờ mời phản biện viên");
+
         return "client/editor/invitingReviewList";
     }
 
     @GetMapping("/editor/waiting-accept-reviewer-articles")
-    public String getArticleWaitingForAcceptFromReviewer(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
+    public String getArticleWaitingForAcceptFromReviewer(Model model,
+            @AuthenticationPrincipal AuthenticationUser currentUser) {
         List<Article> articles = new ArrayList<>();
         articles = articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId());
         model.addAttribute("articles", articles);
+
+        model.addAttribute("breadcumTitle", "Danh sách bài báo chờ chưa có phản biện viên");
+
         return "client/editor/invitingReviewList";
     }
 
     @GetMapping("/editor/review-articles/invite/{articleId}")
-    public String viewReviewer(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
+    public String viewReviewer(Model model, @PathVariable Long articleId,
+            @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
             Article article = articleService.retrieve(articleId, currentUser.getId());
             if (article.getStatus().equals(ArticleStatus.INVITING_REVIEWER.toString()) ||
-            article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                    article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
                 model.addAttribute("reviewArticles", reviewArticles);
                 List<User> reviewers = userService.findReviewerByOlderManuscript(articleId);
@@ -129,40 +138,47 @@ public class EditorController {
     @GetMapping(path = "/editor/assign-list/{articleId}")
     public String getMethodName(@PathVariable Long articleId, Model model) {
         String status = articleService.getArticleStatusById(articleId);
-        if(status == null || !status.equals(ArticleStatus.ASSIGN_EDITOR.toString())){
+        if (status == null || !status.equals(ArticleStatus.ASSIGN_EDITOR.toString())) {
             return "redirect:/main-menu";
         }
         model.addAttribute("editors", userService.findByRoleName(RoleName.ROLE_EDITOR.toString()));
         model.addAttribute("articleId", articleId);
         return "client/editor/assignEditorList";
     }
-    
+
     @GetMapping("/editor/in-review-articles")
-    public String getInReviewArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {      
+    public String getInReviewArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             List<Article> articles = articleService.getInReviewArticles(currentUser.getId());
             model.addAttribute("articles", articles);
         } catch (Exception e) {
             model.addAttribute("articles", new ArrayList<Article>());
         }
-        
+
+        model.addAttribute("breadcumTitle", "Danh sách bài báo đang được phản biện");
+
         return "client/editor/decidingList";
     }
 
     @GetMapping("/editor/reviewed-articles")
-    public String getReviewedArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    public String getReviewedArticle(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {
         try {
             List<Article> articles = articleService.getReviewedArticles(currentUser.getId());
             model.addAttribute("articles", articles);
         } catch (Exception e) {
             model.addAttribute("articles", new ArrayList<Article>());
         }
-        
+
+        model.addAttribute("breadcumTitle", "Danh sách bài báo đã phản biện");
+
         return "client/editor/decidingList";
     }
 
     @GetMapping("/editor/review/{articleId}")
-    public String đecideArticle(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    public String decideArticle(Model model,
+            @PathVariable Long articleId,
+            @AuthenticationPrincipal AuthenticationUser currentUser,
+            @RequestParam(name = "back", required = false) String back) {
         try {
             Article article = articleService.retrieve(articleId, currentUser.getId());
             if (!article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
@@ -173,6 +189,35 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
+
+            if (back != null) {
+                switch (back) {
+                    case "assign-list":
+                        model.addAttribute("urlBack", "/editor/assign-list");
+                        model.addAttribute("backTitle", "Danh sách bài báo chờ gán biên tập viên");
+                        break;
+                    case "assigned-list":
+                        model.addAttribute("urlBack", "/editor/assigned-list");
+                        model.addAttribute("backTitle", "Danh sách bài báo được gán biên tập viên");
+                        break;
+                    case "invite-reviewer-articles":
+                        model.addAttribute("urlBack", "/editor/invite-reviewer-articles");
+                        model.addAttribute("backTitle", "Danh sách bài báo chờ mời phản biện viên");
+                        break;
+                    case "waiting-accept-reviewer-articles":
+                        model.addAttribute("urlBack", "/editor/waiting-accept-reviewer-articles");
+                        model.addAttribute("backTitle", "Danh sách bài báo chờ chưa có phản biện viên");
+                        break;
+                    case "in-review-articles":
+                        model.addAttribute("urlBack", "/editor/in-review-articles");
+                        model.addAttribute("backTitle", "Danh sách bài báo đang được phản biện");
+                        break;
+                    case "reviewed-articles":
+                        model.addAttribute("urlBack", "/editor/reviewed-articles");
+                        model.addAttribute("backTitle", "Danh sách bài báo đã phản biện");
+                        break;
+                }
+            }
             return "client/editor/decideArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
@@ -181,7 +226,7 @@ public class EditorController {
     }
 
     @GetMapping("/editor/assigned-list")
-    public String assignedArticle(Model model, @AuthenticationPrincipal AuthenticationUser user){
+    public String assignedArticle(Model model, @AuthenticationPrincipal AuthenticationUser user) {
         model.addAttribute("articles", articleService.findByEditorUserId(user.getId()));
         return "client/editor/assignedList";
     }

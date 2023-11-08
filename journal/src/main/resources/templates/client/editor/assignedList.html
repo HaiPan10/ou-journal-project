@@ -23,7 +23,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text current">Danh sách bài báo đã được gán</span>
+                        <span class="breadcum-item-text current">Danh sách bài báo được gán biên tập viên</span>
                     </div>
                 </li>
             </ol>
@@ -122,7 +122,7 @@
                             </th:block>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col gap-y-3">
-                                    <a href="#" class="table-action ml-0 text-start">Xem chi tiết</a>
+                                    <a th:href="@{/editor/review/{id}(id=${article.id}, back='assigned-list')}" class="table-action ml-0 text-start">Xem chi tiết</a>
                                 </div>
                             </td>
                         </tr>

@@ -23,7 +23,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text current">Danh sách bài báo đang được phản biện</span>
+                        <span class="breadcum-item-text current" th:text="${breadcumTitle}"></span>
                     </div>
                 </li>
             </ol>
@@ -97,7 +97,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <a th:href="@{/editor/review/{id}(id=${article.id}, back='editor/in-review-articles')}" class="table-action" >Xem chi tiết</a>
+                                <a th:href="@{/editor/review/{id}(id=${article.id}, back='in-review-articles')}" class="table-action" >Xem chi tiết</a>
                             </td>
                         </tr>
                     </th:block>
