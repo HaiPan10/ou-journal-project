@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,8 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
     private AuthorArticleRepositoryJPA authorArticleRepositoryJPA;
     @Autowired
     private ManuscriptService manuscriptService;
+    @Autowired
+    private Environment environment;
 
     @Override
     public ReviewArticle create(User user, Article article) throws Exception {
@@ -64,6 +67,8 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
                 throw new Exception("Reviewer này đã được mời!");
             } else if (user.getId() != null && authorArticleRepositoryJPA.findByArticleAndUser(article.getId(), user.getId()).isPresent()) {
                 throw new Exception("Không thể mời tác giả review bài đăng của mình!");
+            } else if (reviewArticleRepositoryJPA.countReviewedTime(article.getId(), user.getId()) == Integer.parseInt(environment.getProperty("MAX_REVIEW_TIME"))) {
+                throw new Exception(String.format("Một phản biện viên chỉ được tham gia %s vòng!", environment.getProperty("MAX_REVIEW_TIME")));
             }
             ReviewArticle reviewArticle = new ReviewArticle();
             reviewArticle.setUser(user);

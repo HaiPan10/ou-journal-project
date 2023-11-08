@@ -162,7 +162,7 @@ public class EditorController {
     }
 
     @GetMapping("/editor/review/{articleId}")
-    public String đecideArticle(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) {        
+    public String decideArticle(Model model, @PathVariable Long articleId, @AuthenticationPrincipal AuthenticationUser currentUser) {        
         try {
             Article article = articleService.retrieve(articleId, currentUser.getId());
             if (!article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
