@@ -9,9 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.Manuscript;
-import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.RenderPDFService;
 import com.ou.journal.utils.FileConverterUtils;

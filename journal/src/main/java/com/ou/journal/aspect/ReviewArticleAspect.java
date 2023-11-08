@@ -11,9 +11,7 @@ import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.repository.ArticleRepositoryJPA;
-import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.ArticleDateService;
-import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.MailService;
 
 @Aspect
@@ -21,10 +19,6 @@ import com.ou.journal.service.interfaces.MailService;
 public class ReviewArticleAspect {
     @Autowired
     private MailService mailService;
-    @Autowired
-    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
-    @Autowired
-    private ArticleService articleService;
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
     @Autowired
@@ -67,20 +61,4 @@ public class ReviewArticleAspect {
             mailService.sendInReviewStatusChangeMail(article);
         }
     }
-
-    // @AfterReturning(
-    //     pointcut = "execution(com.ou.journal.pojo.ReviewArticle com.ou.journal.service.interfaces.ReviewArticleService.doneReview(Long, Long))",
-    //     returning = "reviewArticle"
-    // )
-    // public void autoChangeDecidingStatus(ReviewArticle reviewArticle) throws Exception {
-    //     if (reviewArticleRepositoryJPA.countAcceptedReview(reviewArticle.getArticle().getId()) == 0) {
-    //         Article article = articleService.retrieve(reviewArticle.getArticle().getId());
-    //         if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-    //             article.setStatus(ArticleStatus.DECIDING.toString());
-    //             articleDateService.addOrUpdate(article, DateTypeName.DECIDING_DATE.toString());
-    //             articleRepositoryJPA.save(article);
-    //             mailService.sendDecidingArticleEmail(article);
-    //         }
-    //     }
-    // }
 }

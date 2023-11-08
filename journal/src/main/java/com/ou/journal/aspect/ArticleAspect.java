@@ -8,19 +8,14 @@ import org.springframework.stereotype.Component;
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.service.interfaces.UserRoleService;
-import com.ou.journal.repository.UserRoleRepositoryJPA;
 import com.ou.journal.service.interfaces.MailService;
-import com.ou.journal.service.interfaces.RoleService;
 
 @Aspect
 @Component
 public class ArticleAspect {
     @Autowired
     private UserRoleService userRoleService;
-    @Autowired
-    private UserRoleRepositoryJPA userRoleRepositoryJPA;
-    @Autowired
-    private RoleService roleService;
+
     @Autowired
     private MailService mailService;
 

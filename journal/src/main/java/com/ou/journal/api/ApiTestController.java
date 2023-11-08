@@ -16,16 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthRequest;
-import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.User;
-import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.ArticleDateService;
 import com.ou.journal.service.interfaces.ArticleService;
-import com.ou.journal.service.interfaces.ManuscriptService;
-
 import jakarta.validation.Valid;
 
 @RestController
@@ -38,25 +33,7 @@ public class ApiTestController {
     private ArticleService articleService;
 
     @Autowired
-    private ReviewArticleRepositoryJPA reviewArticleRepositoryJPA;
-
-    @Autowired
     private ArticleDateService articleDateService;
-
-    @Autowired
-    private ManuscriptService manuscriptService;
-
-    // @Autowired
-    // private JwtService jwtService;
-
-    // @Autowired
-    // private UserService userService;
-
-    // @Autowired
-    // private ReviewArticleService reviewArticleService;
-
-    // @Autowired
-    // private MailService mailService;
 
     @PostMapping(path = "/register")
     public ResponseEntity<?> register (@Valid @RequestBody Account account, BindingResult bindingResult) throws Exception {
@@ -101,50 +78,6 @@ public class ApiTestController {
         }
     }
 
-    // Chỉ dùng cho test để dễ dàng lấy được email token
-    // @GetMapping(path = "/get-email-token/{accountId}")
-    // public ResponseEntity<?> generateEmailToken(@PathVariable Long accountId){
-    //     try {
-    //         Account account = accountService.retrieve(accountId);
-    //         String token = jwtService.generateMailToken(account);
-    //         return ResponseEntity.ok().body(token);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-        
-    // }
-
-    // @PostMapping(path = "/mail/send")
-    // public void sendMail () {
-    //     MailRequest mailRequest = new MailRequest("phongvulai96@gmail.com", "subject", "body");
-    //     // mailService.sendEmail(mailRequest.getTo(), mailRequest.getSubject(), mailRequest.getBody());
-
-    //     Context context = new Context();
-    //     context.setVariable("subject", mailRequest.getSubject());
-    //     context.setVariable("body", mailRequest.getBody());
-
-    //     mailService.sendEmailWithHtmlTemplate(mailRequest.getTo(), mailRequest.getSubject(), "mail/index", context);
-    // }
-
-    // @GetMapping(path = "/get-reviewers/{articleId}")
-    // public ResponseEntity<?> generateEmailToken(@PathVariable Long articleId){
-    //     try {
-    //         return ResponseEntity.ok().body(reviewArticleRepositoryJPA.getReviewer(articleId));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-        
-    // }
-
-    @PostMapping()
-    public ResponseEntity<?> test() throws Exception {
-        try {
-            return ResponseEntity.ok("HEHE");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
 
     @GetMapping(path = "/article-dates/{articleId}")
     public ResponseEntity<?> getArticleDates(@PathVariable Long articleId) {
@@ -154,14 +87,4 @@ public class ApiTestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    // @PostMapping(path = "/articles/re-submit/{articleId}")
-    // public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
-    //  MultipartFile file, AuthorNote authorNote) {
-    //     try {
-    //         return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, authorNote));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-    // }
 }
