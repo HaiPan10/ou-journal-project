@@ -235,8 +235,26 @@
 </section>
 
 <div layout:fragment="extra-action">
+    <form id="review-form" enctype="multipart/form-data" method="post">
+        <label for="editor-file" class="btn-dark w-fit cursor-pointer">Tải file edit<i
+                class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+        <input id="editor-file" class="sr-only" type="file" name="editorFile">
+    </form>
+    <div id="file-display" class="hidden my-5">
+        <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+            <div id="file-display-extension"
+                class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+
+            </div>
+            <p id="file-display-name">
+
+            </p>
+        </div>
+    </div>
     <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
         placeholder="Nhập nhận xét..."></textarea>
+
+
 </div>
 <th:block layout:fragment="buttons">
     <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
@@ -327,19 +345,19 @@
                                                 <span class="badge-danger">Từ chối <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
-                                            <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                            <div
+                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
                                                 <span class="badge-success">Đã phản biện <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <button id="btn-download"
-                                                class="btn-gradient-danger"><span>
-                                                    Tải file phản biện gốc </span></button>
-                                                <button id="btn-preview"
-                                                class="btn-gradient-success"><span>
-                                                    Xem kết quả phản biện </span></button>
+                                            <div
+                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <button id="btn-download" class="btn-gradient-danger"><span>
+                                                        Tải file phản biện gốc </span></button>
+                                                <button id="btn-preview" class="btn-gradient-success"><span>
+                                                        Xem kết quả phản biện </span></button>
                                             </div>
                                         </td>
                                     </tr>
