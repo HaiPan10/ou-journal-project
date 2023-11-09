@@ -40,11 +40,11 @@
 </section>
 
 <th:block layout:fragment="buttons">
+    <button th:if="${article.status == 'SECRETARY_REJECT' || article.status == 'REJECT'}" id="btn-resubmit"
+    data-modal-target="resubmit-modal" data-modal-toggle="resubmit-modal" class="btn-gradient-main w-fit">Gửi lại
+    manuscript</button>
     <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="btn-gradient-dark w-fit">Rút
         bài</button>
-    <button th:if="${article.status == 'SECRETARY_REJECT' || article.status == 'REJECT'}" id="btn-resubmit"
-        data-modal-target="resubmit-modal" data-modal-toggle="resubmit-modal" class="btn-gradient-main w-fit">Gửi lại
-        manuscript</button>
 </th:block>
 
 
