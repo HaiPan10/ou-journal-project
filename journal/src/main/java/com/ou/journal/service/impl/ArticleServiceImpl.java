@@ -272,8 +272,7 @@ public class ArticleServiceImpl implements ArticleService {
                         currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
                 article.setAcceptedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
                         currentManuscript.getId(), ReviewArticleStatus.ACCEPTED.toString()));
-                article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                        currentManuscript.getId(), ReviewArticleStatus.REVIEWED.toString()));
+                article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewedArticle(currentManuscript.getId()));
             }
         });
         return articles;
@@ -285,9 +284,8 @@ public class ArticleServiceImpl implements ArticleService {
         if (!article.getEditorUser().getId().equals(userId)) {
             throw new Exception("Bạn không có quyền để xem bài báo này!");
         } else {
-            article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    manuscriptService.getLastestManuscript(article.getId()).getId(),
-                    ReviewArticleStatus.REVIEWED.toString()));
+            article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()));
             return article;
         }
     }
@@ -340,17 +338,15 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getInReviewArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
-        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                manuscriptService.getLastestManuscript(article.getId()).getId(),
-                ReviewArticleStatus.REVIEWED.toString()) == 0).collect(Collectors.toList());
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()) == 0).collect(Collectors.toList());
     }
 
     @Override
     public List<Article> getReviewedArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
-        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                manuscriptService.getLastestManuscript(article.getId()).getId(),
-                ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()) > 0).collect(Collectors.toList());
     }
 
     @Override

@@ -4,7 +4,7 @@ public enum ReviewArticleStatus {
     PENDING,
     ACCEPTED,
     REJECTED,
-    REVIEWED,
+    // REVIEWED,
     ACCEPT_PUBLISH,
     REJECT_PUBLISH
 }

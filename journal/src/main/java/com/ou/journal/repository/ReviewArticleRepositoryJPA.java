@@ -21,6 +21,9 @@ public interface ReviewArticleRepositoryJPA extends JpaRepository<ReviewArticle,
     @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1 AND r.status = ?2")
     Integer countReviewArticleByStatus(Long manuscriptId, String status);
 
+    @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1 AND r.status IN ('ACCEPT_PUBLISH', 'REJECT_PUBLISH')")
+    Integer countReviewedArticle(Long manuscriptId);
+
     @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1")
     Integer countReviewArticle(Long manuscriptId);
 
