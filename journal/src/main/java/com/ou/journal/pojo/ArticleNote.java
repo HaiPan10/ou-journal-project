@@ -33,4 +33,9 @@ public class ArticleNote implements Serializable {
 
     @Column(name = "note")
     private String note;
+
+    public ArticleNote(String note) {
+        this.note = note;
+    }
+
 }

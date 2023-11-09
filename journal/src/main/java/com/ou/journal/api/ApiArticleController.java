@@ -1,6 +1,7 @@
 package com.ou.journal.api;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -65,11 +66,10 @@ public class ApiArticleController {
 
     @Secured("ROLE_EDITOR")
     @PutMapping("/editor/decide/{articleId}")
-    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status,
-            @RequestBody ArticleNote articleNote,
-            @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
+    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, List<MultipartFile> decideFiles,
+     String status, String note, @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
-            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, articleNote));
+            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, new ArticleNote(note)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
