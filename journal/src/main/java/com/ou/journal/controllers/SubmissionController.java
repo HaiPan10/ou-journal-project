@@ -11,16 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.AuthorNote;
-import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.utils.EnumUtils;
