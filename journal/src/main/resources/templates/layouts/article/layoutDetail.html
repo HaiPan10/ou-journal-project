@@ -95,6 +95,8 @@
                 <div class="flex justify-end my-3 gap-x-3">
                     <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
                         class="btn-gradient-main w-fit">Xem preview</button>
+                    <button id="download-file"
+                        class="btn-gradient-main w-fit">Tải file gốc</button>
                     <th:block layout:fragment="buttons">
 
                     </th:block>
@@ -135,6 +137,7 @@
 
     </div>
 
+    <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         const kwBox = document.querySelector("#keywords-box")
         const note = document.querySelector("#note");
@@ -147,6 +150,8 @@
         const btnAuthorNote = document.querySelector("#btn-collapse-author-note");
         const btnAuthorNoteIcon = document.querySelector("#icon-collapse-author-note");
         const authorNoteContent = document.querySelector("#author-note-content");
+
+        const downloadFile = document.querySelector("#download-file");
 
         function insertKeywordBox(elementHTML) {
             kwBox.insertAdjacentHTML('beforeend', elementHTML);
@@ -166,6 +171,14 @@
                 authorNote.classList.toggle('note-hidden');
                 btnAuthorNoteIcon.classList.toggle('rotate-90');
                 authorNoteContent.classList.toggle('hidden');
+            });
+        } catch (e) {
+
+        }
+
+        try {
+            downloadFile.addEventListener('click', function () {
+                console.log("CLICK")
             });
         } catch (e) {
 

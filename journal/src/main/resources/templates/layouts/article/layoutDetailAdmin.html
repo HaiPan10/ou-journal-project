@@ -179,6 +179,7 @@
 
     </div>
 
+    <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         const kwBox = document.querySelector("#keywords-box")
         const note = document.querySelector("#note");
@@ -242,18 +243,7 @@
                 const name = /*[[${ renderManuscript.article.title }]]*/ "";
                 const byteContent = /*[[${ renderManuscript.content }]]*/ "";
 
-                var binaryString = window.atob(byteContent);
-                var binaryLen = binaryString.length;
-                var bytes = new Uint8Array(binaryLen);
-                for (var i = 0; i < binaryLen; i++) {
-                    var ascii = binaryString.charCodeAt(i);
-                    bytes[i] = ascii;
-                }
-                var blob = new Blob([bytes], { type: `${type}` });
-                var link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = name;
-                link.click();
+                downloadFile(type, name, byteContent)
             });
         } catch (e) {
 
@@ -261,7 +251,6 @@
 
     </script>
     <th:block layout:fragment="extra-js">
-
     </th:block>
 
 </section>
