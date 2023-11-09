@@ -257,4 +257,9 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
         List<ReviewArticle> reviewArticles = reviewArticleRepositoryJPA.findByOlderManuscript(articleId, manuscript.getId());
         return reviewArticles;
     }
+
+    @Override
+    public Integer countReviewedArticle(Long manuscriptId) {
+        return reviewArticleRepositoryJPA.countReviewedArticle(manuscriptId);
+    }
 }
