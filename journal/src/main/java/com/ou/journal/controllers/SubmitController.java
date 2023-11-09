@@ -3,7 +3,6 @@ package com.ou.journal.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -181,8 +180,11 @@ public class SubmitController {
         if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
             return "redirect:/submit/step3";
 
-        if (article.getCurrentManuscript().getReference() == null)
+        String reference = article.getCurrentManuscript().getReference().trim();
+
+        if (reference == null || reference.isEmpty())
             return "redirect:/submit/step4";
+        article.getCurrentManuscript().setReference(reference);
         return "client/submitManuscript/step5";
     }
 
@@ -226,7 +228,8 @@ public class SubmitController {
             @RequestPart("anonymousFile") MultipartFile anonymousFile,
             @RequestPart("appendixFile") MultipartFile appendixFile,
             SessionStatus sessionStatus) {
-        if (file != null && anonymousFile != null && appendixFile != null) {
+        if (file != null && file.getSize() > 0 && anonymousFile != null && anonymousFile.getSize() > 0
+                && appendixFile != null) {
             try {
                 articleService.create(article, file, anonymousFile, appendixFile);
                 sessionStatus.setComplete();

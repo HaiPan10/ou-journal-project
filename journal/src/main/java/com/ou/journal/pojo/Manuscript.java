@@ -47,8 +47,15 @@ public class Manuscript implements Serializable {
     @Column(name = "content", columnDefinition = "MEDIUMBLOB")
     private byte[] content;
 
+    @Lob
+    @Column(name = "content_anonymous", columnDefinition = "MEDIUMBLOB")
+    private byte[] contentAnonymous;
+
     @Column(name = "size")
     private Long size;
+
+    @Column(name = "size_anonymous")
+    private Long sizeAnonymous;
 
     @NotNull
     @Column(name = "version")
@@ -60,6 +67,9 @@ public class Manuscript implements Serializable {
 
     @Column(name = "type")
     private String type;
+
+    @Column(name = "type_anonymous")
+    private String typeAnonymous;
 
     @JsonIgnore
     @JoinColumn(name = "article_id", referencedColumnName = "id")
@@ -89,7 +99,23 @@ public class Manuscript implements Serializable {
     @Transient
     private MultipartFile appendixFile;
 
-    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type, String reference, Article article) {
+    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type,
+            byte[] contentAnonymous, Long sizeAnonymous, String typeAnonymous,
+            String reference, Article article) {
+        this.content = content;
+        this.size = size;
+        this.version = version;
+        this.createdDate = createdDate;
+        this.type = type;
+        this.reference = reference;
+        this.article = article;
+        this.contentAnonymous = contentAnonymous;
+        this.sizeAnonymous = sizeAnonymous;
+        this.typeAnonymous = typeAnonymous;
+    }
+
+    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type,
+            String reference, Article article) {
         this.content = content;
         this.size = size;
         this.version = version;
