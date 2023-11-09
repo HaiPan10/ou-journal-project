@@ -21,10 +21,11 @@ public class ManuscriptAspect {
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
 
-    @AfterReturning(
-        pointcut = "execution(com.ou.journal.pojo.Manuscript com.ou.journal.service.interfaces.ManuscriptService.reUpManuscript(Long, org.springframework.web.multipart.MultipartFile, com.ou.journal.pojo.AuthorNote))",
-        returning = "manuscript"
-    )
+    @AfterReturning(pointcut = "execution(com.ou.journal.pojo.Manuscript " +
+            "com.ou.journal.service.interfaces.ManuscriptService.reUpManuscript(" +
+            "Long, org.springframework.web.multipart.MultipartFile, " +
+            "org.springframework.web.multipart.MultipartFile, org.springframework.web.multipart.MultipartFile, " +
+            "String, com.ou.journal.pojo.AuthorNote))", returning = "manuscript")
     public void updateSubmitedDate(Manuscript manuscript) throws Exception {
         Article article = manuscript.getArticle();
         article.setStatus(ArticleStatus.PENDING.toString());

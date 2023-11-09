@@ -352,12 +352,13 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div
-                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <button id="btn-download" class="btn-gradient-danger"><span>
-                                                        Tải file phản biện gốc </span></button>
-                                                <button id="btn-preview" class="btn-gradient-success"><span>
-                                                        Xem kết quả phản biện </span></button>
+                                            <div class="flex gap-2" th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <button th:attr="onclick=|downloadReviewFile('${reviewArticle.manuscript.article.id}', '${reviewArticle.manuscript.id}', '${reviewArticle.id}')|"
+                                                class="btn-gradient-danger w-fit"><span>
+                                                    Tải file phản biện gốc </span></button>
+                                                <button th:onclick="|viewReviewFile('${reviewArticle.id}')|"
+                                                class="btn-gradient-success w-fit"><span>
+                                                    Xem kết quả phản biện </span></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -378,6 +379,7 @@
         </div>
     </div>
 
+    <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         var commentArticle = document.getElementById('commentArticle');
         function decideArticle(status) {
@@ -402,10 +404,27 @@
             });
         }
 
-        var btnPreview = document.getElementById('btn-preview');
-        btnPreview.addEventListener("click", {
+        function viewReviewFile(reviewArticleId) {
+            window.open(`/api/review-articles/view/${reviewArticleId}`, '_blank');
+        }
 
-        });
+        function downloadReviewFile(articleId, manuscriptId, reviewArticleId) {
+            var name = "article-" + articleId + "-manuscript-" + manuscriptId + "-reviewId-" + reviewArticleId + "-RV";
+            fetch(`/api/review-articles/getBytes/${reviewArticleId}`, {
+                method: 'GET',
+            }).then(res => {
+                if (res.ok) {
+                    return res.json()
+                } else {
+                    throw new Error(res.error)
+                }
+            }).then(json => {
+                downloadFile(json.type, name, json.content)
+            }).catch(err => {
+                alert(err);
+                console.log(err);
+            });
+        }
     </script>
 </section>
 

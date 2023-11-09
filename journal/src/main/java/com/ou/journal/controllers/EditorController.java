@@ -81,10 +81,10 @@ public class EditorController {
                 List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
                 List<ReviewArticle> olderReviewArticle = reviewArticleService.findByOlderManuscript(articleId);
                 Map<User, List<ReviewArticle>> reviewers = new HashMap<>();
-                if(olderReviewArticle.size() != 0){
+                if (olderReviewArticle.size() != 0) {
                     olderReviewArticle.stream().forEach(ra -> {
                         List<ReviewArticle> ras = reviewers.get(ra.getUser());
-                        if(ras == null){
+                        if (ras == null) {
                             ras = new ArrayList<>();
                             reviewers.put(ra.getUser(), ras);
                         }
@@ -115,6 +115,18 @@ public class EditorController {
         Article article = articleService.retrieve(articleId);
         List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
         List<Object[]> users = userService.listUser();
+        List<ReviewArticle> olderReviewArticle = reviewArticleService.findByOlderManuscript(articleId);
+        Map<User, List<ReviewArticle>> reviewers = new HashMap<>();
+        if (olderReviewArticle.size() != 0) {
+            olderReviewArticle.stream().forEach(ra -> {
+                List<ReviewArticle> ras = reviewers.get(ra.getUser());
+                if (ras == null) {
+                    ras = new ArrayList<>();
+                    reviewers.put(ra.getUser(), ras);
+                }
+                ras.add(ra);
+            });
+        }
         try {
             webAppValidator.validate(user, bindingResult);
             if (bindingResult.hasErrors()) {
@@ -122,6 +134,7 @@ public class EditorController {
                 model.addAttribute("reviewArticles", reviewArticles);
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("users", users);
+                model.addAttribute("reviewers", reviewers);
                 return "client/editor/articleReviewerManager";
             }
             reviewArticleService.create(user, article);
@@ -131,6 +144,7 @@ public class EditorController {
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("articleId", articleId);
             model.addAttribute("users", users);
+            model.addAttribute("reviewers", reviewers);
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "client/editor/articleReviewerManager";
         }

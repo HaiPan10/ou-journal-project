@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.enums.SecrectType;
+import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
+import com.ou.journal.pojo.User;
+import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.pojo.ReviewFile;
+import com.ou.journal.service.interfaces.RenderPDFService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +45,12 @@ public class ApiReviewArticleController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private ArticleService articleService;
+
+    @Autowired
+    private RenderPDFService renderPDFService;
 
     @GetMapping("/response")
     public ResponseEntity<?> responseReview(@RequestParam String status, @RequestParam String token, HttpServletRequest httpServletRequest) throws Exception{
@@ -88,6 +100,35 @@ public class ApiReviewArticleController {
             return ResponseEntity.ok().body(reviewArticleService.doneReview(reviewArticleId, currentUser.getId(), reviewFile, status));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reviewer/reinvite/{articleId}")
+    public ResponseEntity<?> reinviteReviewer(@PathVariable Long articleId, @RequestBody User user){
+        try {
+            Article article = articleService.retrieve(articleId);
+            return ResponseEntity.ok().body(reviewArticleService.create(user, article));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    @GetMapping("/view/{reviewArticleId}")
+    public ResponseEntity<byte[]> view(@PathVariable Long reviewArticleId) {
+        try {
+            return renderPDFService.view(reviewArticleId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/getBytes/{reviewArticleId}")
+    public ResponseEntity<?> getByte(@PathVariable Long reviewArticleId) {
+        try {
+            ReviewFile reviewFile = reviewArticleService.retrieve(reviewArticleId).getReviewFile();
+            return ResponseEntity.ok().body(reviewFile);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }
