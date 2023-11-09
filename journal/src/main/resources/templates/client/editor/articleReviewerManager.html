@@ -4,7 +4,7 @@
 
 <section class="flex justify-center mb-12" layout:fragment="content">
     <div class="container min-h-[800px]">
-        <a  href="javascript:history.back();" class="text-gray-600 flex items-center gap-x-3 mb-5">
+        <a href="javascript:history.back();" class="text-gray-600 flex items-center gap-x-3 mb-5">
             <i class="bi bi-arrow-left"></i> <span>Quay lại</span>
         </a>
         <form th:action="@{/editor/review-articles/invite/{id}(id=${articleId})}" th:object="${user}" method="post"
@@ -42,7 +42,8 @@
             </div>
         </form>
 
-        <ul class="move-up-anim tab-block-container w-fit mt-5" id="tabs" data-tabs-toggle="#tab-contents" role="tablist">
+        <ul class="move-up-anim tab-block-container w-fit mt-5" id="tabs" data-tabs-toggle="#tab-contents"
+            role="tablist">
             <li class="w-fit" role="presentation">
                 <button role="tab" class="tab-block" id="current-reviewer-tab" data-tabs-target="#current-reviewer"
                     type="button" aria-controls="current-reviewer" aria-selected="true">Danh sách đã
@@ -105,7 +106,8 @@
                                     <div th:if="${reviewArticle.status eq 'REJECTED'}">
                                         <span class="badge-danger">Từ chối</span>
                                     </div>
-                                    <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                    <div
+                                        th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
                                         <span class="badge-success">Đã phản biện</span>
                                     </div>
                                 </td>
@@ -148,15 +150,19 @@
                                 <th scope="row" class="px-6 py-4 flex gap-3 items-center">
                                     <span th:text="${reviewer.key.email}"></span>
                                 </th>
-                                <td class="px-6 py-4" th:text="${reviewer.key.lastName} + ' ' + ${reviewer.key.firstName}"></td>
+                                <td class="px-6 py-4"
+                                    th:text="${reviewer.key.lastName} + ' ' + ${reviewer.key.firstName}"></td>
                                 <td class="px-6 py-4">
                                     <th:block th:each="reviewArticle : ${reviewer.value}">
-                                        <span th:text="${reviewArticle.manuscript.version + ' - Vòng ' + iStat.index + 1}"></span>
+                                        <span
+                                            th:text="${reviewArticle.manuscript.version + ' - Vòng ' + iStat.index + 1}"></span>
                                         <br>
                                     </th:block>
                                 </td>
                                 <th scope="col" class="px-6 py-3">
-                                    <a href="#">Mời lại reviewer</a>
+                                    <!-- <a href="#">Mời lại reviewer</a> -->
+                                    <button th:attr="onclick=|reinvite('${reviewer.key.email}', ${reviewer.key.id}, ${articleId})|"
+                                        type="button">Mời lại phản biện viên</button>
                                 </th>
                             </tr>
                         </th:block>
@@ -313,6 +319,26 @@
         //         alert(err.message)
         //     })
         // })
+
+        function reinvite(reviewerEmail, reviewerId, articleId) {
+            fetch(`/api/review-articles/reviewer/reinvite/${articleId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: reviewerId,
+                    email: reviewerEmail
+                })
+            }).then(res => {
+                if(res.ok){
+                    alert('Mời lại phản biện viên thành công')
+                    window.location.reload()
+                } else {
+                    alert('Oops! Something wrongs')
+                }
+            })
+        }
     </script>
 </section>
 
