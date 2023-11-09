@@ -23,52 +23,54 @@ async function withdraw(articleId, obj) {
     }
 }
 
-async function reSubmitManuscript(articleId, obj) {
-    obj.disabled = true;
-    const errorManuscript = document.querySelector("#manuscript-errors");
-    const errorAuthorNote = document.querySelector("#author-note-errors");
-    const form = document.forms.namedItem("resubmit");
+// async function reSubmitManuscript(articleId, obj) {
+//     obj.disabled = true;
+//     const errorManuscript = document.querySelector("#manuscript-errors");
+//     const errorAuthorNote = document.querySelector("#author-note-errors");
+//     const errorReference = document.querySelector("#reference-errors");
+//     const errorAnonymousFile = document.querySelector("#anonymous-file-errors");
+//     const form = document.forms.namedItem("resubmit");
 
-    const formData = new FormData(form);
+//     const formData = new FormData(form);
 
-    const file = formData.get('file');
-    const authorNote = formData.get('note');
-    if (file && file.size > 0 && authorNote) {
+//     const file = formData.get('file');
+//     const authorNote = formData.get('note');
+//     const fileAnonymous = formData.get('file-anonymous');
+//     const reference = formData.get('reference').trim();
 
-        formData.set('id', articleId);
+//     if (file && file.size > 0 && authorNote && fileAnonymous && fileAnonymous.size > 0 && reference.length > 0) {
 
-        const options = {
-            method: 'POST',
-            body: formData
-        };
-    
-        const res = await fetch(`/api/articles/re-submit/${articleId}`, options);
-        if (res.ok) {
-            alert("Gửi lại bài thành công");
-            window.location.reload();
-            obj.disabled = false;
+//         formData.set('id', articleId);
 
-        } else {
-            alert("Đã có lỗi xảy ra")
-            const error = await res.json();
-            console.log(error);
-            obj.disabled = false;
+//         const options = {
+//             method: 'POST',
+//             body: formData
+//         };
 
-        }
-        
-    } else {
-        obj.disabled = false;
-        if (!file || file.size <= 0) {
-            errorManuscript.innerText = "Vui lòng gửi manuscript mới.";
-        } else {
-            errorManuscript.innerText = "";
-        }
+//         const res = await fetch(`/api/articles/resubmit/${articleId}`, options);
+//         if (res.ok) {
+//             alert("Gửi lại bài thành công");
+//             window.location.reload();
+//             obj.disabled = false;
 
-        if (!authorNote) {
-            errorAuthorNote.innerText = "Vui lòng nhập ghi chú phần đã chính sửa.";
-        } else {
-            errorAuthorNote.innerText = "";
-        }
-    }
-}
+//         } else {
+//             alert("Đã có lỗi xảy ra")
+//             const error = await res.json();
+//             console.log(error);
+//             obj.disabled = false;
+
+//         }
+
+//     } else {
+//         obj.disabled = false;
+
+//         !file || file.size <= 0 ? errorManuscript.innerText = "Vui lòng gửi manuscript mới." : errorManuscript.innerText = "";
+
+//         !authorNote ? errorAuthorNote.innerText = "Vui lòng nhập ghi chú phần đã chính sửa." : errorAuthorNote.innerText = "";
+
+//         !reference || reference.length === 0 ? errorReference.innerText = "Vui lòng nhập trích dẫn" : errorReference.innerText = "";
+
+//         !fileAnonymous || fileAnonymous.size <= 0 ? errorAnonymousFile.innerText = "Vui lòng gửi tệp nặc danh mới." : errorAnonymousFile.innerText = "";
+//     }
+// }
 

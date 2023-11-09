@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,7 +65,8 @@ public class ApiArticleController {
 
     @Secured("ROLE_EDITOR")
     @PutMapping("/editor/decide/{articleId}")
-    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status, @RequestBody ArticleNote articleNote,
+    public ResponseEntity<?> decideArticle(@PathVariable Long articleId, @RequestParam String status,
+            @RequestBody ArticleNote articleNote,
             @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
             return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, articleNote));
@@ -134,11 +136,14 @@ public class ApiArticleController {
     // @PutMapping(value = "/chief-editor/unassign")
 
     @Secured("ROLE_AUTHOR")
-    @PostMapping(path = "/re-submit/{articleId}")
+    @PostMapping(path = "/resubmit/{articleId}")
     public ResponseEntity<?> reSubmitManuscript(@PathVariable Long articleId,
-     MultipartFile file, String reference, String note) {
+            @RequestPart("file") MultipartFile file, @RequestPart("file-anonymous") MultipartFile fileAnonymous,
+            @RequestPart("file-appendix") MultipartFile fileAppendix, String reference, String note) {
         try {
-            return ResponseEntity.ok().body(manuscriptService.reUpManuscript(articleId, file, reference, new AuthorNote(note)));
+            return ResponseEntity.ok()
+                    .body(manuscriptService.reUpManuscript(articleId, file, fileAnonymous, fileAppendix, reference,
+                            new AuthorNote(note)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
