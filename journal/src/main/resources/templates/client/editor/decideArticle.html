@@ -235,7 +235,7 @@
 </section>
 
 <div layout:fragment="extra-action">
-    <form id="review-form" enctype="multipart/form-data" method="post">
+    <form id="decide-form" enctype="multipart/form-data" method="post">
         <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
         <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
         <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
@@ -385,7 +385,7 @@
                 note: commentArticle.value
             }
             fetch(`/api/articles/editor/decide/[[${article.id}]]?status=${status}`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },

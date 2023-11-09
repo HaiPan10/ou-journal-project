@@ -65,7 +65,7 @@ public class ApiArticleController {
     }
 
     @Secured("ROLE_EDITOR")
-    @PutMapping("/editor/decide/{articleId}")
+    @PostMapping("/editor/decide/{articleId}")
     public ResponseEntity<?> decideArticle(@PathVariable Long articleId, List<MultipartFile> decideFiles,
      String status, String note, @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
