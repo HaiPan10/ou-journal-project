@@ -11,8 +11,13 @@ import com.ou.journal.pojo.Manuscript;
 
 public interface ManuscriptService {
     Manuscript getLastestManuscript(Long articleId);
-    Manuscript reUpManuscript(Long articleId, MultipartFile manuscripFile, String reference, AuthorNote authorNote) throws Exception;
+
+    Manuscript reUpManuscript(Long articleId, MultipartFile manuscripFile, MultipartFile anonymousFile,
+            MultipartFile appendixFile, String reference, AuthorNote authorNote) throws Exception;
+
     List<Manuscript> findByArticle(Article article);
+
     Optional<Manuscript> getById(Long id);
+
     Optional<Manuscript> findByArticleAndVersion(Long articleId, String version);
 }
