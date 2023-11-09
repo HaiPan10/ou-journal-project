@@ -67,7 +67,8 @@ public class ArticleServiceImpl implements ArticleService {
     private AppendixService appendixService;
 
     @Override
-    public Article create(Article article, MultipartFile file, MultipartFile anonymousFile, MultipartFile appendixFile) throws Exception {
+    public Article create(Article article, MultipartFile file, MultipartFile anonymousFile, MultipartFile appendixFile)
+            throws Exception {
         try {
             article.setStatus(ArticleStatus.PENDING.toString());
             article.setArticleDates(
@@ -86,8 +87,12 @@ public class ArticleServiceImpl implements ArticleService {
                                             "1.0",
                                             new Date(),
                                             file.getContentType(),
+                                            anonymousFile.getBytes(),
+                                            anonymousFile.getSize(),
+                                            anonymousFile.getContentType(),
                                             article.getCurrentManuscript().getReference(),
                                             article))));
+            
 
             article.getAuthorArticles().forEach(authorArticle -> {
                 authorArticle.setArticle(article);
@@ -106,23 +111,23 @@ public class ArticleServiceImpl implements ArticleService {
                     authorRole.setAuthorArticle(authorArticle);
                 });
             });
-            
 
-            //Hai: save the author note when submit new article
+            // Hai: save the author note when submit new article
             AuthorNote authorNote = article.getAuthorNote();
             article.setAuthorNote(null);
             Article persistArticle = articleRepositoryJPA.save(article);
             authorNoteService.create(authorNote, persistArticle);
 
-            //save the appendix
-            Appendix appendix = new Appendix(
-                    appendixFile.getBytes(),
-                    appendixFile.getSize(),
-                    appendixFile.getContentType(),
-                    persistArticle.getManuscripts().get(0)
-            );
+            //Ngan: save the appendix with validate
+            if (appendixFile != null && !appendixFile.isEmpty() && appendixFile.getSize() > 0) {
+                Appendix appendix = new Appendix(
+                        appendixFile.getBytes(),
+                        appendixFile.getSize(),
+                        appendixFile.getContentType(),
+                        persistArticle.getManuscripts().get(0));
 
-            appendixService.create(appendix);
+                appendixService.create(appendix);
+            }
 
             return persistArticle;
         } catch (Exception e) {
@@ -267,8 +272,7 @@ public class ArticleServiceImpl implements ArticleService {
                         currentManuscript.getId(), ReviewArticleStatus.PENDING.toString()));
                 article.setAcceptedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
                         currentManuscript.getId(), ReviewArticleStatus.ACCEPTED.toString()));
-                article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                        currentManuscript.getId(), ReviewArticleStatus.REVIEWED.toString()));
+                article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewedArticle(currentManuscript.getId()));
             }
         });
         return articles;
@@ -280,9 +284,8 @@ public class ArticleServiceImpl implements ArticleService {
         if (!article.getEditorUser().getId().equals(userId)) {
             throw new Exception("Bạn không có quyền để xem bài báo này!");
         } else {
-            article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                    manuscriptService.getLastestManuscript(article.getId()).getId(),
-                    ReviewArticleStatus.REVIEWED.toString()));
+            article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()));
             return article;
         }
     }
@@ -335,17 +338,15 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getInReviewArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
-        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                manuscriptService.getLastestManuscript(article.getId()).getId(),
-                ReviewArticleStatus.REVIEWED.toString()) == 0).collect(Collectors.toList());
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()) == 0).collect(Collectors.toList());
     }
 
     @Override
     public List<Article> getReviewedArticles(Long editorId) {
         List<Article> articles = list(ArticleStatus.IN_REVIEW.toString(), editorId);
-        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewArticleByStatus(
-                manuscriptService.getLastestManuscript(article.getId()).getId(),
-                ReviewArticleStatus.REVIEWED.toString()) > 0).collect(Collectors.toList());
+        return articles.stream().filter(article -> reviewArticleRepositoryJPA.countReviewedArticle(
+                manuscriptService.getLastestManuscript(article.getId()).getId()) > 0).collect(Collectors.toList());
     }
 
     @Override

@@ -327,14 +327,19 @@
                                                 <span class="badge-danger">Từ chối <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
-                                            <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                            <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
                                                 <span class="badge-success">Đã phản biện <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div th:if="${reviewArticle.status eq 'REVIEWED'}">
-                                                <a th:href="@{#}" class="table-action">Xem kết quả phản biện</a>
+                                            <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <button id="btn-download"
+                                                class="btn-gradient-danger"><span>
+                                                    Tải file phản biện gốc </span></button>
+                                                <button id="btn-preview"
+                                                class="btn-gradient-success"><span>
+                                                    Xem kết quả phản biện </span></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -378,6 +383,11 @@
                 console.log(err);
             });
         }
+
+        var btnPreview = document.getElementById('btn-preview');
+        btnPreview.addEventListener("click", {
+
+        });
     </script>
 </section>
 

@@ -21,6 +21,9 @@ public interface ReviewArticleRepositoryJPA extends JpaRepository<ReviewArticle,
     @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1 AND r.status = ?2")
     Integer countReviewArticleByStatus(Long manuscriptId, String status);
 
+    @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1 AND r.status IN ('ACCEPT_PUBLISH', 'REJECT_PUBLISH')")
+    Integer countReviewedArticle(Long manuscriptId);
+
     @Query("SELECT COUNT(*) FROM ReviewArticle r WHERE r.manuscript.id = ?1")
     Integer countReviewArticle(Long manuscriptId);
 
@@ -42,7 +45,7 @@ public interface ReviewArticleRepositoryJPA extends JpaRepository<ReviewArticle,
     Integer countReviewArticles(Long userId, String reviewArticleStatus);
 
     @Query("SELECT ra FROM ReviewArticle ra JOIN Manuscript m ON ra.manuscript.id = m.id " +
-        "WHERE m.article.id = ?1 AND ra.manuscript.id != ?2 AND ra.status = 'REVIEWED'"
+        "WHERE m.article.id = ?1 AND ra.manuscript.id != ?2 AND ra.status IN ('ACCEPT_PUBLISH', 'REJECT_PUBLISH')"
     )
     List<ReviewArticle> findByOlderManuscript(Long articleId, Long manuscriptId);
 }

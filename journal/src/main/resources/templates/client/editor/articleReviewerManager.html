@@ -105,7 +105,7 @@
                                     <div th:if="${reviewArticle.status eq 'REJECTED'}">
                                         <span class="badge-danger">Từ chối</span>
                                     </div>
-                                    <div th:if="${reviewArticle.status eq 'REVIEWED'}">
+                                    <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
                                         <span class="badge-success">Đã phản biện</span>
                                     </div>
                                 </td>
@@ -141,7 +141,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <th:block th:each="reviewer : ${reviewers}">
+                        <th:block th:each="reviewer, iStat : ${reviewers}">
                             <tr class="table-row">
                                 <td class="px-6 py-4 font-medium text-gray-900" th:text="${reviewer.key.id}">
                                 </td>
@@ -151,7 +151,7 @@
                                 <td class="px-6 py-4" th:text="${reviewer.key.lastName} + ' ' + ${reviewer.key.firstName}"></td>
                                 <td class="px-6 py-4">
                                     <th:block th:each="reviewArticle : ${reviewer.value}">
-                                        <span th:text="${reviewArticle.manuscript.version}"></span>
+                                        <span th:text="${reviewArticle.manuscript.version + ' - Vòng ' + iStat.index + 1}"></span>
                                         <br>
                                     </th:block>
                                 </td>

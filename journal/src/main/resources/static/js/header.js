@@ -25,7 +25,7 @@ function callChangeRoleApi(obj) {
       })
     }).then(response => {
       if (response.status === 204) {
-        window.location.reload()
+        window.location.href = "/main-menu"
       } else if (response.status === 403) {
         alert("Không có vai trò đó")
       } else {
