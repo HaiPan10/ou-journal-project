@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,9 +23,11 @@ import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
+import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
 import com.ou.journal.utils.EnumUtils;
@@ -35,6 +38,8 @@ import com.ou.journal.validator.WebAppValidator;
 public class EditorController {
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private ManuscriptService manuscriptService;
     @Autowired
     private ReviewArticleService reviewArticleService;
     @Autowired
@@ -203,19 +208,34 @@ public class EditorController {
 
     @GetMapping("/editor/review/{articleId}")
     public String decideArticle(Model model,
+            @RequestParam(required = false) String version,
             @PathVariable Long articleId,
             @AuthenticationPrincipal AuthenticationUser currentUser,
             @RequestParam(name = "back", required = false) String back) {
         try {
             Article article = articleService.retrieve(articleId, currentUser.getId());
             if (!article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-                return "redirect:/editor/deciding-list";
+                return "redirect:/main-menu";
             }
             List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
             model.addAttribute("articleId", articleId);
             model.addAttribute("reviewArticles", reviewArticles);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
+
+            model.addAttribute("manuscripts", manuscriptService.findByArticle(article));
+            Manuscript renderManuscript;
+            if (version == null) {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            } else {
+                Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+                if (manuscriptOptional.isPresent()) {
+                    renderManuscript = manuscriptOptional.get();
+                } else {
+                    return "redirect:/admin/articles/{articleId}";
+                }
+            }
+            model.addAttribute("renderManuscript", renderManuscript);
 
             if (back != null) {
                 switch (back) {

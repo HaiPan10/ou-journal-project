@@ -133,7 +133,7 @@
 
                         </div>
                         <p id="file-display-name" class="lowercase"
-                            th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
+                            th:text="${#strings.replace(article.title, ' ', '_')} + '.' + ${#strings.substring(renderManuscript.type, 'application/'.length)}">
                         </p>
 
                         <button class="w-fit p-5 text-main text-2xl ml-auto" id="download-btn">

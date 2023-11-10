@@ -105,6 +105,49 @@
 
             </section>
             <!-- /ACTION -->
+
+            <div th:if="${renderManuscript}">
+                <hr class="my-5" />
+                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="hover"
+                    class="btn-main w-fit my-3 shadow-md" type="button">
+                    <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
+                    <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+                <div id="dropdown-versions"
+                    class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
+                    <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
+                        <th:block th:each="manuscript : ${manuscripts}">
+                            <li>
+                                <a th:href="@{/admin/articles/{id}(id=${article.id}, version=${manuscript.version})}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                                    th:text="${manuscript.version}"></a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </div>
+
+                <div id="file-display" class="mt-5">
+                    <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                        <div id="file-display-extension"
+                            th:text="${#strings.substring(renderManuscript.type, 'application/'.length)}"
+                            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+
+                        </div>
+                        <p id="file-display-name" class="lowercase"
+                            th:text="${#strings.replace(article.title, ' ', '_')} + '.' + ${#strings.substring(renderManuscript.type, 'application/'.length)}">
+                        </p>
+
+                        <button class="w-fit p-5 text-main text-2xl ml-auto" id="download-btn">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div id="preview-modal" tabindex="-1"
