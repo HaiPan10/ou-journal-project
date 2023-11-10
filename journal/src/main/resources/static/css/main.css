@@ -2369,6 +2369,7 @@ input:checked + .toggle-bg {
 }
 
 .table-action {
+  white-space: nowrap;
   font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(8 74 196 / var(--tw-text-opacity));
@@ -2380,14 +2381,10 @@ input:checked + .toggle-bg {
   text-decoration-line: underline;
 }
 
-.badge-info {
+.badge {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(14 165 233 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2395,18 +2392,32 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+}
+
+.badge-info {
+  margin-right: 0.5rem;
+  white-space: nowrap;
+  border-radius: 9999px;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(7 89 133 / var(--tw-text-opacity));
 }
 
 .badge-success {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(16 185 129 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 250 229 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2414,18 +2425,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(16 185 129 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 250 229 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(6 95 70 / var(--tw-text-opacity));
 }
 
 .badge-warning {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(245 158 11 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 243 199 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2433,18 +2445,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(245 158 11 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 243 199 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(146 64 14 / var(--tw-text-opacity));
 }
 
 .badge-danger {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(244 63 94 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 228 230 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2452,6 +2465,11 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(244 63 94 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 228 230 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(159 18 57 / var(--tw-text-opacity));
 }
@@ -2492,6 +2510,7 @@ input:checked + .toggle-bg {
     margin-left: 0.75rem;
     height: 0.25rem;
     width: 100%;
+    min-width: 84px;
     content: var(--tw-content);
     border-width: 2px;
   }
@@ -2785,12 +2804,8 @@ input:checked + .toggle-bg {
 
 .badge-FIRST_AUTHOR {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(139 92 246 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(237 233 254 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2798,18 +2813,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(139 92 246 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 233 254 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(91 33 182 / var(--tw-text-opacity));
 }
 
 .badge-AUTHOR {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(14 165 233 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2817,18 +2833,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(7 89 133 / var(--tw-text-opacity));
 }
 
 .badge-CORRESPONDING_AUTHOR {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(6 148 162 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(213 245 246 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2836,6 +2853,11 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(6 148 162 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(213 245 246 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(5 80 92 / var(--tw-text-opacity));
 }
@@ -2844,12 +2866,8 @@ input:checked + .toggle-bg {
 
 .badge-PENDING {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(245 158 11 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 243 199 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2857,18 +2875,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(245 158 11 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 243 199 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(146 64 14 / var(--tw-text-opacity));
 }
 
 .badge-SECRETARY_REJECT {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(231 70 148 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 232 243 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2876,18 +2895,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(231 70 148 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 232 243 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(153 21 75 / var(--tw-text-opacity));
 }
 
 .badge-INVITING_REVIEWER {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(132 204 22 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(236 252 203 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2895,18 +2915,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(132 204 22 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(236 252 203 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(63 98 18 / var(--tw-text-opacity));
 }
 
 .badge-IN_REVIEW {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(14 165 233 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2914,18 +2935,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(7 89 133 / var(--tw-text-opacity));
 }
 
 .badge-DECIDING {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(144 97 249 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(237 235 254 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2933,18 +2955,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(144 97 249 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 235 254 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(85 33 181 / var(--tw-text-opacity));
 }
 
 .badge-ACCEPT {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(16 185 129 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 250 229 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2952,18 +2975,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(16 185 129 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 250 229 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(6 95 70 / var(--tw-text-opacity));
 }
 
 .badge-REJECT {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(240 82 82 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(253 232 232 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2971,18 +2995,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(240 82 82 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 232 232 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(155 28 28 / var(--tw-text-opacity));
 }
 
 .badge-WITHDRAW {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(100 116 139 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -2990,18 +3015,19 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(100 116 139 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(30 41 59 / var(--tw-text-opacity));
 }
 
 .badge-PUBLIC {
   margin-right: 0.5rem;
+  white-space: nowrap;
   border-radius: 9999px;
-  border-width: 1px;
-  --tw-border-opacity: 1;
-  border-color: rgb(28 100 242 / var(--tw-border-opacity));
-  --tw-bg-opacity: 1;
-  background-color: rgb(195 221 253 / var(--tw-bg-opacity));
   padding-left: 0.625rem;
   padding-right: 0.625rem;
   padding-top: 0.125rem;
@@ -3009,6 +3035,11 @@ input:checked + .toggle-bg {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(28 100 242 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(195 221 253 / var(--tw-bg-opacity));
   --tw-text-opacity: 1;
   color: rgb(30 66 159 / var(--tw-text-opacity));
 }
@@ -6660,6 +6691,11 @@ input:checked + .toggle-bg {
   .md\:after\:w-full::after {
     content: var(--tw-content);
     width: 100%;
+  }
+
+  .md\:after\:min-w-\[84px\]::after {
+    content: var(--tw-content);
+    min-width: 84px;
   }
 
   .md\:after\:border-2::after {

@@ -214,17 +214,30 @@ public class EditorController {
             @AuthenticationPrincipal AuthenticationUser currentUser,
             @RequestParam(name = "back", required = false) String back) {
         try {
+
+            // Truy vấn article theo id (articleId)
             Article article = articleService.retrieve(articleId, currentUser.getId());
-            if (!article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
-                return "redirect:/main-menu";
+
+            // Truy vấn reviewArticles nếu status = IN_REVIEW
+            if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
+                List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
+                model.addAttribute("reviewArticles", reviewArticles);
+
+                // Kiểm tra phản biện đã được thực hiện
+                boolean isReviewed = reviewArticles.stream()
+                        .anyMatch(reviewArticle -> "ACCEPT_PUBLISH".equals(reviewArticle.getStatus()) ||
+                                "REJECT_PUBLISH".equals(reviewArticle.getStatus()));
+                model.addAttribute("isReviewed", isReviewed);
+
             }
-            List<ReviewArticle> reviewArticles = reviewArticleService.findByArticle(articleId);
-            model.addAttribute("articleId", articleId);
-            model.addAttribute("reviewArticles", reviewArticles);
+            // preview file
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+
             model.addAttribute("article", article);
 
+            // truy vấn manuscript theo phiên bản
             model.addAttribute("manuscripts", manuscriptService.findByArticle(article));
+
             Manuscript renderManuscript;
             if (version == null) {
                 renderManuscript = manuscriptService.getLastestManuscript(articleId);
@@ -238,22 +251,22 @@ public class EditorController {
             }
             model.addAttribute("renderManuscript", renderManuscript);
 
+            // trả về nơi truy cập trước đó
             if (back != null) {
                 try {
                     String[] values = EditorURL.BACK_MAP.get(back);
-                if (values != null) {
-                    model.addAttribute("urlBack", values[0]);
-                    model.addAttribute("backTitle", values[1]);
-                }
+                    if (values != null) {
+                        model.addAttribute("urlBack", values[0]);
+                        model.addAttribute("backTitle", values[1]);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                
+
             }
-            
+
             return "client/editor/decideArticle";
         } catch (Exception e) {
-            // model.addAttribute("error", e.getMessage());
             return "redirect:/main-menu";
         }
     }

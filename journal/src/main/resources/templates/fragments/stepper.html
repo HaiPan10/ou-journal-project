@@ -1,5 +1,5 @@
 <div th:fragment="stepper (step)" class="flex justify-center mb-20">
-    <ol class="max-w-7xl flex items-center w-full h-full">
+    <ol class="max-w-7xl z-40 fixed top-0 left-0 bg-white md:bg-transparent px-5 py-3 md:px-0 md:py-0 md:relative flex flex-col md:flex-row item-start md:items-center w-80 md:w-full h-screen md:h-fit transition-transform -translate-x-full md:translate-x-0">
         <li th:class="${1 == step ? 'step step-in-progress' : 1 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${1 < step}" class="bi bi-check-lg">

@@ -234,14 +234,11 @@
     </nav>
 </section>
 
-<div layout:fragment="extra-action">
-    
-
-</div>
 <th:block layout:fragment="buttons">
     <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
         phản biên viên</button>
-    <button data-modal-target="decide-modal" data-modal-toggle="decide-modal" class="btn-gradient-main w-fit">Quyết
+    <button th:if="${isReviewed}" data-modal-target="decide-modal" data-modal-toggle="decide-modal"
+        class="btn-gradient-main w-fit">Quyết
         định</button>
 </th:block>
 
@@ -265,7 +262,9 @@
                     <h3 class="text-2xl text-center text-main font-semibold mt-6">
                         Danh sách phản biện viên
                     </h3>
-                    <div class="table-container my-4">
+                    <p class="text-gray-500 text-center font-medium mt-5" th:if="${#lists.isEmpty(reviewArticles)}">Chưa
+                        có phản biện viên nào được mời.</p>
+                    <div th:unless="${#lists.isEmpty(reviewArticles)}" class="table-container my-4">
                         <table class="table">
                             <thead class="table-header">
                                 <tr>
@@ -316,7 +315,7 @@
                                                 <span class="badge-warning">Chờ phản hồi</span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'ACCEPTED'}">
-                                                <span class="badge-warning">Đồng ý <span class="dateElement"
+                                                <span class="badge-success">Đồng ý <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div th:if="${reviewArticle.status eq 'REJECTED'}">
@@ -324,29 +323,32 @@
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div
-                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <!-- <span class="badge-success">Đã phản biện <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span> -->
-                                                <span class="badge-success">Đã phản biện: 
-                                                    <span th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
-                                                        Đồng ý đăng bài
+                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
+                                                <span class="badge-success">Đã phản biện:
+                                                    <span>
+                                                        Đồng ý
                                                     </span>
-                                                    <span th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                        Từ chối đăng bài
+                                                </span>
+                                            </div>
+                                            <div
+                                                th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <span class="badge-danger">Đã phản biện:
+                                                    <span>
+                                                        Từ chối
                                                     </span>
                                                 </span>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="flex gap-2"
+                                            <div class="flex gap-3"
                                                 th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
                                                 <button
                                                     th:attr="onclick=|downloadReviewFile('${reviewArticle.manuscript.article.id}', '${reviewArticle.manuscript.id}', '${reviewArticle.id}')|"
-                                                    class="btn-gradient-danger w-fit"><span>
-                                                        Tải file phản biện gốc </span></button>
+                                                    class="link text-sm font-medium"><span>
+                                                        Tải file phản biện</span></button>
                                                 <button th:onclick="|viewReviewFile('${reviewArticle.id}')|"
-                                                    class="btn-gradient-success w-fit"><span>
-                                                        Xem kết quả phản biện </span></button>
+                                                    class="link text-sm font-medium"><span>
+                                                        Preview</span></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -357,7 +359,7 @@
 
                     </div>
                     <div class="flex justify-end my-3 gap-x-3">
-                        <a type="button" th:href="@{/editor/review-articles/invite/{id}(id=${articleId})}"
+                        <a type="button" th:href="@{/editor/review-articles/invite/{id}(id=${article.id})}"
                             class="btn-main w-fit">
                             Mời thêm</a>
                     </div>
@@ -366,7 +368,7 @@
             </div>
         </div>
     </div>
-    <div id="decide-modal" tabindex="-1"
+    <div th:if="${isReviewed}" id="decide-modal" tabindex="-1"
         class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-7xl max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -385,27 +387,21 @@
                         <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
                         <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
-                        <div id="file-display" class="hidden my-5">
-                            <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                                <div id="file-display-extension"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-                    
-                                </div>
-                                <p id="file-display-name">
-                    
-                                </p>
-                            </div>
+                        <div id="editor-file-display" class="hidden my-5">
+
                         </div>
-                        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60" rows="5"
-                            placeholder="Nhập nhận xét..."></textarea>
+                        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60"
+                            rows="5" placeholder="Nhập nhận xét..."></textarea>
                     </form>
-                    
+
                     <div class="flex justify-end my-3 gap-x-3">
                         <button onclick="decideArticle('REJECT')" id="rejectBtn" class="btn-gradient-danger w-fit">
-                            <span> Từ chối bài viết </span> <i class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+                            <span> Từ chối bài viết </span> <i
+                                class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
                         <button onclick="decideArticle('ACCEPT')" data-modal-target="modal" data-modal-toggle="modal"
                             class="btn-gradient-success w-fit"><span>
-                                Đồng ý bài viết</span> <i class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
+                                Đồng ý bài viết</span> <i
+                                class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
                     </div>
                 </div>
 
@@ -415,8 +411,6 @@
 </section>
 
 <th:block layout:fragment="extra-js">
-
-    <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         const articleId = /*[[${article.id}]]*/ "";
     </script>
