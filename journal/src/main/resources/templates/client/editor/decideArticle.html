@@ -325,8 +325,16 @@
                                             </div>
                                             <div
                                                 th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <span class="badge-success">Đã phản biện <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span>
+                                                <!-- <span class="badge-success">Đã phản biện <span class="dateElement"
+                                                        th:text="${reviewArticle.updatedAt}"></span></span> -->
+                                                <span class="badge-success">Đã phản biện: 
+                                                    <span th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
+                                                        Đồng ý đăng bài
+                                                    </span>
+                                                    <span th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                        Từ chối đăng bài
+                                                    </span>
+                                                </span>
                                             </div>
                                         </td>
                                         <td>

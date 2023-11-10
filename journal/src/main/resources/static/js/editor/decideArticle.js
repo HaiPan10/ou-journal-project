@@ -34,7 +34,7 @@ function viewReviewFile(reviewArticleId) {
 
 function downloadReviewFile(articleId, manuscriptId, reviewArticleId) {
     var name = "article-" + articleId + "-manuscript-" + manuscriptId + "-reviewId-" + reviewArticleId + "-RV";
-    fetch(`/api/review-articles/getBytes/${reviewArticleId}`, {
+    fetch(`/api/review-articles/${reviewArticleId}`, {
         method: 'GET',
     }).then(res => {
         if (res.ok) {

@@ -27,7 +27,7 @@ public class ReviewFile implements Serializable{
     private Long id;
 
     @Lob
-    @Column(name = "content", columnDefinition = "MEDIUMBLOB")
+    @Column(name = "content", columnDefinition = "LONGBLOB")
     private byte[] content;
 
     @Column(name = "size")

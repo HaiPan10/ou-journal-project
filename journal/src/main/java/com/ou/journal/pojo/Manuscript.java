@@ -44,11 +44,11 @@ public class Manuscript implements Serializable {
     // private String url;
 
     @Lob
-    @Column(name = "content", columnDefinition = "MEDIUMBLOB")
+    @Column(name = "content", columnDefinition = "LONGBLOB")
     private byte[] content;
 
     @Lob
-    @Column(name = "content_anonymous", columnDefinition = "MEDIUMBLOB")
+    @Column(name = "content_anonymous", columnDefinition = "LONGBLOB")
     private byte[] contentAnonymous;
 
     @Column(name = "size")

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.AuthorNote;
@@ -60,6 +61,9 @@ public class SubmissionController {
             Article article = articleService.retrieve(articleId);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
+            if (article.getStatus().equals(ArticleStatus.REJECT.toString())) {
+                model.addAttribute("editorFiles", manuscriptService.getLastestManuscript(article.getId()).getEditorFiles());
+            }
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }

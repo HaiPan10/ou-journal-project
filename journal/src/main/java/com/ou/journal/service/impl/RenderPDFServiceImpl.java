@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ou.journal.enums.ReviewArticleStatus;
+import com.ou.journal.pojo.EditorFile;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.ReviewArticle;
+import com.ou.journal.service.interfaces.EditorFileService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.RenderPDFService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
@@ -26,8 +28,11 @@ public class RenderPDFServiceImpl implements RenderPDFService{
     @Autowired
     private ReviewArticleService reviewArticleService;
 
+    @Autowired
+    private EditorFileService editorFileService;
+
     @Override
-    public ResponseEntity<byte[]> view(Long articleId, String version) throws Exception {
+    public ResponseEntity<byte[]> viewAuthorFile(Long articleId, String version) throws Exception {
         Manuscript renderManuscript;
         if (version == null) {
             renderManuscript = manuscriptService.getLastestManuscript(articleId);
@@ -57,7 +62,7 @@ public class RenderPDFServiceImpl implements RenderPDFService{
     }
 
     @Override
-    public ResponseEntity<byte[]> view(Long reviewArticleId) throws Exception {
+    public ResponseEntity<byte[]> viewReviewerFile(Long reviewArticleId) throws Exception {
         ReviewArticle reviewArticle = reviewArticleService.retrieve(reviewArticleId);
         if (!reviewArticle.getStatus().equals(ReviewArticleStatus.ACCEPT_PUBLISH.toString()) &&
         !reviewArticle.getStatus().equals(ReviewArticleStatus.REJECT_PUBLISH.toString())) {
@@ -67,6 +72,22 @@ public class RenderPDFServiceImpl implements RenderPDFService{
         byte[] documentData;
         HttpHeaders headers = new HttpHeaders();
         if (reviewArticle.getReviewFile().getType().equals("application/pdf")) {
+            documentData = originData;
+        } else {
+            documentData = FileConverterUtils.convertToPDF(originData);
+        }
+
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> viewEditorFile(Long editorFileId) throws Exception {
+        EditorFile editorFile = editorFileService.retrieve(editorFileId);
+        byte[] originData = editorFile.getContent();
+        byte[] documentData;
+        HttpHeaders headers = new HttpHeaders();
+        if (editorFile.getType().equals("application/pdf")) {
             documentData = originData;
         } else {
             documentData = FileConverterUtils.convertToPDF(originData);

@@ -58,7 +58,7 @@ public class ApiArticleController {
     @GetMapping("/view/{articleId}")
     public ResponseEntity<byte[]> view(@PathVariable Long articleId, @RequestParam(required = false) String version) {
         try {
-            return renderPDFService.view(articleId, version);
+            return renderPDFService.viewAuthorFile(articleId, version);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

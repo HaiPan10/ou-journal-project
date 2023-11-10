@@ -46,7 +46,35 @@
         bài</button>
 </th:block>
 
-
+<div layout:fragment="extra-action">
+    <div th:if="${article.status eq 'REJECT'}">
+        <h1>Kết quả phản biện</h1>
+        <th:block th:each="editorFile : ${editorFiles}">
+            <div class="mt-5">
+                <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                    <div id="file-display-extension"
+                        th:text="ED"
+                        class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+    
+                    </div>
+                    <p id="file-display-name" class="lowercase"
+                        th:text="${editorFile.name}">
+                    </p>
+    
+                    <button class="w-fit p-5 text-main text-2xl ml-auto"
+                        th:attr="onclick=|viewEditorFile('${editorFile.id}')|" >
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="w-fit p-5 text-main text-2xl ml-auto"
+                        th:attr="onclick=|downloadEditorFile('${editorFile.id}')|" >
+                        <i class="bi bi-download"></i>
+                    </button>
+                </div>
+            </div>
+        </th:block>
+    </div>
+    
+</div>
 
 <section layout:fragment="modal">
     <div id="popup-modal" tabindex="-1"
@@ -96,7 +124,30 @@
 </section>
 
 <th:block layout:fragment="extra-js">
+    <script src="/js/utils.js"></script>
     <script defer th:src="@{/js/author/articleDetail.js}"></script>
+    <script>
+        function downloadEditorFile(editorFileId) {
+            fetch(`/api/editor-files/${editorFileId}`, {
+                method: 'GET',
+            }).then(res => {
+                if (res.ok) {
+                    return res.json()
+                } else {
+                    throw new Error(res.error)
+                }
+            }).then(json => {
+                downloadFile(json.type, json.name, json.content)
+            }).catch(err => {
+                alert(err);
+                console.log(err);
+            });
+        }
+
+        function viewEditorFile(editorFileId) {
+            window.open(`/api/editor-files/view/${editorFileId}`, '_blank');
+        }
+    </script>
 </th:block>
 
 </html>

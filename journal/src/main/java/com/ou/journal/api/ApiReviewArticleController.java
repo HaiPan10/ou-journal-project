@@ -114,21 +114,21 @@ public class ApiReviewArticleController {
     }
     
     @GetMapping("/view/{reviewArticleId}")
-    public ResponseEntity<byte[]> view(@PathVariable Long reviewArticleId) {
+    public ResponseEntity<?> view(@PathVariable Long reviewArticleId) {
         try {
-            return renderPDFService.view(reviewArticleId);
+            return renderPDFService.viewReviewerFile(reviewArticleId);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/getBytes/{reviewArticleId}")
+    @GetMapping("{reviewArticleId}")
     public ResponseEntity<?> getByte(@PathVariable Long reviewArticleId) {
         try {
             ReviewFile reviewFile = reviewArticleService.retrieve(reviewArticleId).getReviewFile();
             return ResponseEntity.ok().body(reviewFile);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
