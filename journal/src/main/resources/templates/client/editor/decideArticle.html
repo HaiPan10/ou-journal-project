@@ -237,7 +237,8 @@
 <th:block layout:fragment="buttons">
     <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
         phản biên viên</button>
-    <button th:if="${isReviewed}" data-modal-target="decide-modal" data-modal-toggle="decide-modal" class="btn-gradient-main w-fit">Quyết
+    <button th:if="${isReviewed}" data-modal-target="decide-modal" data-modal-toggle="decide-modal"
+        class="btn-gradient-main w-fit">Quyết
         định</button>
 </th:block>
 
@@ -261,7 +262,8 @@
                     <h3 class="text-2xl text-center text-main font-semibold mt-6">
                         Danh sách phản biện viên
                     </h3>
-                    <p class="text-gray-500 text-center font-medium mt-5" th:if="${#lists.isEmpty(reviewArticles)}">Chưa có phản biện viên nào được mời.</p>
+                    <p class="text-gray-500 text-center font-medium mt-5" th:if="${#lists.isEmpty(reviewArticles)}">Chưa
+                        có phản biện viên nào được mời.</p>
                     <div th:unless="${#lists.isEmpty(reviewArticles)}" class="table-container my-4">
                         <table class="table">
                             <thead class="table-header">
@@ -321,9 +323,20 @@
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
                                             <div
-                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <span class="badge-info">Đã phản biện <span class="dateElement"
-                                                        th:text="${reviewArticle.updatedAt}"></span></span>
+                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
+                                                <span class="badge-success">Đã phản biện:
+                                                    <span>
+                                                        Đồng ý
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            <div
+                                                th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <span class="badge-danger">Đã phản biện:
+                                                    <span>
+                                                        Từ chối
+                                                    </span>
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
@@ -375,18 +388,20 @@
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
                         <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
                         <div id="editor-file-display" class="hidden my-5">
-                            
+
                         </div>
-                        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60" rows="5"
-                            placeholder="Nhập nhận xét..."></textarea>
+                        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60"
+                            rows="5" placeholder="Nhập nhận xét..."></textarea>
                     </form>
-                    
+
                     <div class="flex justify-end my-3 gap-x-3">
                         <button onclick="decideArticle('REJECT')" id="rejectBtn" class="btn-gradient-danger w-fit">
-                            <span> Từ chối bài viết </span> <i class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+                            <span> Từ chối bài viết </span> <i
+                                class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
                         <button onclick="decideArticle('ACCEPT')" data-modal-target="modal" data-modal-toggle="modal"
                             class="btn-gradient-success w-fit"><span>
-                                Đồng ý bài viết</span> <i class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
+                                Đồng ý bài viết</span> <i
+                                class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
                     </div>
                 </div>
 
