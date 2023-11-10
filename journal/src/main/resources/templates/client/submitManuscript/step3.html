@@ -42,7 +42,7 @@
 </head>
 
 <section class="mt-6 mb-3" layout:fragment="content">
-    <div class="min-h-[800px]">
+    <div class="min-h-[800px] px-6 md:p-0">
         <div th:replace="~{fragments/stepper :: stepper (step=3)}"></div>
         <section name="main">
             <div class="fade-anim space-y-6 flex flex-col justify-center">
@@ -260,17 +260,17 @@
                 <div>
                     <hr/>
 
-                    <div class="p-3 author flex justify-between items-center" data-user-id="${authorEl.user.id}">
-                        <div class="flex grow gap-x-4">
-                            <div>
+                    <div class="p-3 author flex gap-4 flex-col md:flex-row justify-between items-center" data-user-id="${authorEl.user.id}">
+                        <div class="w-full md:w-fit flex flex-col md:flex-row grow gap-4">
+                            <div class="w-full md:w-fit">
                                 <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
                                 <p class="text-gray-500 author-email">${authorEl.user.email}</p>
                             </div>
                        
-                            <div class="flex gap-x-2" id="authorRolesContainer${authorEl.user.email}">
+                            <div class="flex gap-2 w-full md:w-fit" id="authorRolesContainer${authorEl.user.email}">
                             </div>
                         </div>  
-                        <div class="flex gap-x-3">
+                        <div class="flex flex-wrap gap-3 w-full md:w-fit">
                             <a role="button" onclick="chooseFirstAuthor(this)" class="block underline-none text-main hover:underline">Chọn làm tác giả chính</a>
                             <a role="button" onclick="delAuthor(this)" class="block underline-none text-main hover:underline">Xóa</a>
                         </div>

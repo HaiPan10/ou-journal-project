@@ -1,69 +1,90 @@
-<div th:fragment="stepper (step)" class="flex justify-center mb-20">
-    <ol class="max-w-7xl z-40 fixed top-0 left-0 bg-white md:bg-transparent px-5 py-3 md:px-0 md:py-0 md:relative flex flex-col md:flex-row item-start md:items-center w-80 md:w-full h-screen md:h-fit transition-transform -translate-x-full md:translate-x-0">
-        <li th:class="${1 == step ? 'step step-in-progress' : 1 > step ? 'step step-pending' : 'step step-complete'}">
+<div th:fragment="stepper (step)" class="flex justify-center md:mb-20">
+
+    <div class="bg-white w-full max-w-7xl rounded-lg p-3 mb-5 flex items-center justify-between md:hidden">
+        <div class="w-1/4 relative">
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+                <circle cx="50" cy="50" r="40" class="stroke-emerald-100" stroke-width="10" fill="none"></circle>
+                <circle id="progress" cx="50" cy="50" r="40" class="stroke-emerald-500" stroke-width="10" fill="none"
+                    stroke-dasharray="251.2" stroke-dashoffset="251.2" transform="rotate(-90 50 50)"></circle>
+            </svg>
+            <p class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-800 font-bold"
+                id="progress-num"></p>
+        </div>
+        <div id="progress-title" class="grow flex flex-col pl-5">
+            <p class="stage-index text-sm uppercase font-medium text-gray-500"></p>
+            <p class="stage-title font-bold text-black-900"></p>
+            <button data-drawer-target="stepperBar" data-drawer-toggle="stepperBar" aria-controls="stepperBar"
+                class="rounded text-sm text-gray-700 w-fit px-3 py-2 ml-auto mt-auto hover:bg-gray-100 hover:text-gray-800">Xem
+                chi tiết</button>
+        </div>
+    </div>
+
+    <ol id="stepperBar"
+        class="max-w-7xl z-40 fixed top-0 left-0 bg-white md:bg-transparent px-5 py-3 md:px-0 md:py-0 md:relative flex flex-col md:flex-row item-start md:items-center w-80 md:w-full h-screen md:h-fit transition-transform -translate-x-full md:translate-x-0">
+        <li data-stage-index='1' th:class="${1 == step ? 'step step-in-progress' : 1 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${1 < step}" class="bi bi-check-lg">
-                    
+
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 1:</p>
-                <p class="text-sm font-bold text-black-900">Điều khoản</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 1:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Điều khoản</p>
             </div>
         </li>
-        <li th:class="${2 == step ? 'step step-in-progress' : 2 > step ? 'step step-pending' : 'step step-complete'}">
+        <li data-stage-index='2' th:class="${2 == step ? 'step step-in-progress' : 2 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${2 < step}" class="bi bi-check-lg">
-                    
+
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 2:</p>
-                <p class="text-sm font-bold text-black-900">Thông tin bài báo</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 2:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Thông tin bài báo</p>
             </div>
         </li>
-        <li th:class="${3 == step ? 'step step-in-progress' : 3 > step ? 'step step-pending' : 'step step-complete'}">
+        <li data-stage-index='3' th:class="${3 == step ? 'step step-in-progress' : 3 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${3 < step}" class="bi bi-check-lg">
-                    
+
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 3:</p>
-                <p class="text-sm font-bold text-black-900">Thông tin tác giả</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 3:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Thông tin tác giả</p>
             </div>
         </li>
-        <li th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
+        <li data-stage-index='4' th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${4 < step}" class="bi bi-check-lg">
-                    
+
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
-                <p class="text-sm font-bold text-black-900">Trích dẫn</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 4:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Trích dẫn</p>
             </div>
         </li>
-        <li th:class="${5 == step ? 'step step-in-progress' : 5 > step ? 'step step-pending' : 'step step-complete'}">
+        <li data-stage-index='5' th:class="${5 == step ? 'step step-in-progress' : 5 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${5 < step}" class="bi bi-check-lg">
-                    
+
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 5:</p>
-                <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 5:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li>
-        <!-- <li th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
+        <!-- <li data-stage-index='6' th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
             <span class="step-child">
                 <i th:if="${4 < step}" class="bi bi-check-lg">
                     
                 </i>
             </span>
-            <div class="absolute top-full mt-3 w-fit">
-                <p class="text-xs uppercase font-medium text-gray-500">Bước 4:</p>
-                <p class="text-sm font-bold text-black-900">Nhập tệp</p>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 4:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li> -->
 
@@ -80,4 +101,27 @@
         </li>
     </ol>
 
+    <script th:inline="javascript">
+        const step = /*[[${step}]]*/"";
+
+        function updateProgress(percent) {
+            var progress = document.getElementById("progress");
+            var circumference = 2 * Math.PI * progress.getAttribute("r");
+            var offset = circumference * (1 - percent / 100);
+            progress.style.strokeDashoffset = offset;
+        }
+
+        const total = 5;
+        const percent = (step*1) / total * 100;
+        updateProgress(percent);
+
+        document.querySelector("#progress-num").innerText = step + "/" + total;
+
+        const el = document.querySelector(`li[data-stage-index='${step}']`);
+        const progressTitle = document.querySelector("#progress-title");
+        progressTitle.querySelector(".stage-index").innerText = "Giai đoạn " + (step);
+        progressTitle.querySelector(".stage-title").innerText = el.querySelector(".stage-title").innerText;
+
+
+    </script>
 </div>
