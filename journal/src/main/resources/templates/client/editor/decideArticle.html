@@ -238,7 +238,7 @@
     <form id="decide-form" enctype="multipart/form-data" method="post">
         <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
         <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
-        <textarea class="input px-4 py-2 w-full mt-3 mb-0" id="commentArticle" maxlength="255" cols="60" rows="5"
+        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60" rows="5"
         placeholder="Nhập nhận xét..."></textarea>
     </form>
     <div id="file-display" class="hidden my-5">
@@ -379,27 +379,27 @@
 
     <script src="/js/utils.js"></script>
     <script th:inline="javascript">
-        var commentArticle = document.getElementById('commentArticle');
+        const form = document.forms.namedItem("decide-form");
         function decideArticle(status) {
-            var requestBody = {
-                note: commentArticle.value
-            }
-            fetch(`/api/articles/editor/decide/[[${article.id}]]?status=${status}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-            }).then(res => {
-                if (res.ok) {
-                    window.location.href = "/editor/reviewed-articles"
-                } else {
-                    throw new Error(res.error)
+            const formData = new FormData(form);
+            formData.append("status", status);
+            const file = formData.get('decideFiles');
+
+            if (file && file.size > 0) {
+                fetch(`/api/articles/editor/decide/[[${article.id}]]`, {
+                    method: 'POST',
+                    body: formData
+                }).then(res => {
+                    if (res.ok) {
+                        window.location.href = "/editor/reviewed-articles"
+                    } else {
+                        throw new Error(res.error)
+                    }
+                }).catch(err => {
+                    alert(err);
+                    console.log(err);
+                });
                 }
-            }).catch(err => {
-                alert(err);
-                console.log(err);
-            });
         }
 
         function viewReviewFile(reviewArticleId) {

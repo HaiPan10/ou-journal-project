@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Article;
-import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.service.interfaces.ArticleService;
@@ -69,7 +68,13 @@ public class ApiArticleController {
     public ResponseEntity<?> decideArticle(@PathVariable Long articleId, List<MultipartFile> decideFiles,
      String status, String note, @AuthenticationPrincipal AuthenticationUser currentUser) throws Exception {
         try {
-            return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, new ArticleNote(note)));
+            System.out.println("STATUS: " + status);
+            System.out.println("NOTE: " + note);
+            decideFiles.forEach(decideFile -> {
+                System.out.println("FILES NAME: " + decideFile.getOriginalFilename());
+            });
+            return ResponseEntity.badRequest().body("NCC");
+            // return ResponseEntity.ok().body(articleService.editorDecide(articleId, status, new ArticleNote(note)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

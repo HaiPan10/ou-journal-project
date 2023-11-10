@@ -90,6 +90,10 @@ public class Manuscript implements Serializable {
     @Column(name = "reference", columnDefinition = "TEXT")
     private String reference;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "manuscript")
+    private List<EditorFile> editorFiles;
+
     @Transient
     private MultipartFile file;
 
