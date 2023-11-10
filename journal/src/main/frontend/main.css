@@ -194,7 +194,7 @@
     
 
     .step {
-        @apply relative flex flex-col md:flex-row w-fit md:w-full h-full items-center mt-3 after:mt-3 md:mt-0 md:after:mt-0 md:ml-3 md:after:ml-3 inline-block after:content-[''] after:w-1 md:after:w-full after:h-full md:after:h-1 after:border-b after:border-2 md:after:border-2 after:inline-block
+        @apply relative flex flex-col md:flex-row w-fit md:w-full h-full items-center mt-3 after:mt-3 md:mt-0 md:after:mt-0 md:ml-3 md:after:ml-3 inline-block after:content-[''] after:w-1 md:after:w-full md:after:min-w-[84px] after:h-full md:after:h-1 after:border-b after:border-2 md:after:border-2 after:inline-block
     }
 
     .step-end {

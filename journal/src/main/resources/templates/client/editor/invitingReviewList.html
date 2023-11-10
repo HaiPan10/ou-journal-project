@@ -95,7 +95,7 @@
                                 </th:block>
                             </th:block>
                             <td class="px-6 py-4">
-                                <div th:if="${article.invitedReviewer > 0}">
+                                <div class="flex flex-wrap gap-2" th:if="${article.invitedReviewer > 0}">
                                     <span class="badge-success">Đã mời: <span
                                             th:text="${article.invitedReviewer}"></span></span>
                                     <span class="badge-warning">Chưa phản hồi: <span

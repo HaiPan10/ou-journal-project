@@ -108,7 +108,7 @@
 
             <div th:if="${renderManuscript}">
                 <hr class="my-5" />
-                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="hover"
+                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
                     class="btn-main w-fit my-3 shadow-md" type="button">
                     <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
                     <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -117,35 +117,51 @@
                             d="m1 1 4 4 4-4" />
                     </svg>
                 </button>
-                <div id="dropdown-versions"
+                <form id="dropdown-versions"
                     class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
+                    <input th:if="${param.back}" name="back" th:value="${param.back}" type="hidden" />
                     <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
                         <th:block th:each="manuscript : ${manuscripts}">
                             <li>
-                                <a th:href="@{/admin/articles/{id}(id=${article.id}, version=${manuscript.version})}"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    th:text="${manuscript.version}"></a>
+                                <button type="submit" name="version" th:value="${manuscript.version}"
+                                    class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
+                                    th:text="${manuscript.version}"></button>
                             </li>
                         </th:block>
                     </ul>
-                </div>
+                </form>
 
                 <div id="file-display" class="mt-5">
                     <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                        <div id="file-display-extension"
-                            th:text="${#strings.substring(renderManuscript.type, 'application/'.length)}"
-                            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                        <th:block th:switch="${renderManuscript.type}">
+                            <th:block th:case="'application/pdf'">
+                                <div id="file-display-extension" th:text="'pdf'"
+                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
 
-                        </div>
-                        <p id="file-display-name" class="lowercase"
-                            th:text="${#strings.replace(article.title, ' ', '_')} + '.' + ${#strings.substring(renderManuscript.type, 'application/'.length)}">
-                        </p>
+                                </div>
+                                <p id="file-display-name" class="lowercase"
+                                    th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
+                                </p>
+                            </th:block>
+                            <th:block
+                                th:case="'application/vnd.openxmlformats-officedocument.wordprocessingml.document'">
+                                <div id="file-display-extension" th:text="'docx'"
+                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
 
-                        <button class="w-fit p-5 text-main text-2xl ml-auto" id="download-btn">
+                                </div>
+                                <p id="file-display-name" class="lowercase"
+                                    th:text="${#strings.replace(article.title, ' ', '_')} + '.docx'">
+                                </p>
+                            </th:block>
+
+                        </th:block>
+
+
+
+                        <button class="w-fit p-5 text-main text-2xl ml-auto" id="btn-download-file">
                             <i class="bi bi-download"></i>
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -165,7 +181,7 @@
                     <div class="p-12">
                         <div>
                             <iframe id="article-iframe"
-                            style="width: 100%; height: 1000px; background-color: white;"></iframe>
+                                style="width: 100%; height: 1000px; background-color: white;"></iframe>
                         </div>
                     </div>
 
@@ -183,22 +199,28 @@
     <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
-        const btnDownloadFile = document.querySelector("#btn-download-file");
+        async function loadView() {
+            document.querySelector('#article-iframe').src = /*[[${viewUrl}]]*/ "";
+        }
+        window.addEventListener('DOMContentLoaded', (event) => {
+            loadView();
+        });
 
+    </script>
+
+    <script th:if="${renderManuscript}" th:inline="javascript">
+        const btnDownloadFile = document.querySelector("#btn-download-file");
         try {
             btnDownloadFile.addEventListener('click', function () {
-                console.log("CLICK")
+                const type = /*[[${ renderManuscript.type }]]*/ "";
+                const name = /*[[${ renderManuscript.article.title }]]*/ "";
+                const byteContent = /*[[${ renderManuscript.content }]]*/ "";
+
+                downloadFile(type, name, byteContent)
             });
         } catch (e) {
 
         }
-
-        async function loadView() {
-            document.querySelector('#article-iframe').src = /*[[${viewUrl}]]*/ "";
-        }        
-        window.addEventListener('DOMContentLoaded', (event) => {
-            loadView();
-        });
 
     </script>
     <script th:src="@{/js/article/keyword.js}"></script>

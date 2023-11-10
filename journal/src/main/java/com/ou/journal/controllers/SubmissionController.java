@@ -2,6 +2,7 @@ package com.ou.journal.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.AuthorNote;
+import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.utils.EnumUtils;
@@ -55,11 +58,29 @@ public class SubmissionController {
     }
 
     @GetMapping("/submission/processing/{articleId}")
-    public String processedSubmissionDetail(Model model, @PathVariable Long articleId) {
+    public String processedSubmissionDetail(Model model, @PathVariable Long articleId,
+            @RequestParam(required = false) String version) {
         try {
             Article article = articleService.retrieve(articleId);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
             model.addAttribute("article", article);
+
+            // truy vấn manuscript theo phiên bản
+            model.addAttribute("manuscripts", manuscriptService.findByArticle(article));
+
+            Manuscript renderManuscript;
+            if (version == null) {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            } else {
+                Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+                if (manuscriptOptional.isPresent()) {
+                    renderManuscript = manuscriptOptional.get();
+                } else {
+                    return "redirect:/admin/articles/{articleId}";
+                }
+            }
+            model.addAttribute("renderManuscript", renderManuscript);
+
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
@@ -77,6 +98,7 @@ public class SubmissionController {
 
             model.addAttribute("article", article);
             model.addAttribute("authorNote", new AuthorNote());
+
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
