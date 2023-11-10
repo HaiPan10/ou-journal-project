@@ -95,8 +95,8 @@
                 <div class="flex justify-end my-3 gap-x-3">
                     <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
                         class="btn-gradient-main w-fit">Xem preview</button>
-                    <button id="btn-download-file"
-                        class="btn-gradient-main w-fit">Tải file gốc</button>
+                    <!-- <button id="btn-download-file"
+                        class="btn-gradient-main w-fit">Tải file gốc</button> -->
                     <th:block layout:fragment="buttons">
 
                     </th:block>
@@ -139,42 +139,8 @@
 
     <script src="/js/utils.js"></script>
     <script th:inline="javascript">
-        const kwBox = document.querySelector("#keywords-box")
-        const note = document.querySelector("#note");
-        const authorNote = document.querySelector("#author-note");
-
-        const btnNote = document.querySelector("#btn-collapse-note");
-        const btnNoteIcon = document.querySelector("#icon-collapse-note");
-        const noteContent = document.querySelector("#note-content");
-
-        const btnAuthorNote = document.querySelector("#btn-collapse-author-note");
-        const btnAuthorNoteIcon = document.querySelector("#icon-collapse-author-note");
-        const authorNoteContent = document.querySelector("#author-note-content");
-
+        const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
         const btnDownloadFile = document.querySelector("#btn-download-file");
-
-        function insertKeywordBox(elementHTML) {
-            kwBox.insertAdjacentHTML('beforeend', elementHTML);
-        }
-        try {
-            btnNote.addEventListener('click', function () {
-                note.classList.toggle('note-hidden');
-                btnNoteIcon.classList.toggle('rotate-90');
-                noteContent.classList.toggle('hidden');
-            });
-        } catch (e) {
-
-        }
-
-        try {
-            btnAuthorNote.addEventListener('click', function () {
-                authorNote.classList.toggle('note-hidden');
-                btnAuthorNoteIcon.classList.toggle('rotate-90');
-                authorNoteContent.classList.toggle('hidden');
-            });
-        } catch (e) {
-
-        }
 
         try {
             btnDownloadFile.addEventListener('click', function () {
@@ -184,29 +150,9 @@
 
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
-            kwBox.innerText = keywords;
-            //if (keywords) {
-            //    let kws = keywords.split(" ");
-            //    kws.forEach(k => {
-            //        if (k.trim()) {
-            //            let newKwHTML = ` <div id="kw-${k}" class="kw-box ml-0" role="alert">
-            //                <div class="kw text-sm font-medium whitespace-nowrap">
-            //                    ${k}
-            //                </div>
-            //              </div>`
-            //            insertKeywordBox(newKwHTML);
-            //        }
-            //
-            //    });
-            //}
-        });
-
-        
-
-
     </script>
+    <script th:src="@{/js/article/keyword.js}"></script>
+    <script th:src="@{/js/article/note.js}"></script>
     <th:block layout:fragment="extra-js">
 
     </th:block>

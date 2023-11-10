@@ -235,34 +235,14 @@
 </section>
 
 <div layout:fragment="extra-action">
-    <form id="decide-form" enctype="multipart/form-data" method="post">
-        <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
-        <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
-        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60" rows="5"
-        placeholder="Nhập nhận xét..."></textarea>
-    </form>
-    <div id="file-display" class="hidden my-5">
-        <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-            <div id="file-display-extension"
-                class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-            </div>
-            <p id="file-display-name">
-
-            </p>
-        </div>
-    </div>
+    
 
 </div>
 <th:block layout:fragment="buttons">
     <button data-modal-target="reviewer-modal" data-modal-toggle="reviewer-modal" class="btn-gradient-main w-fit">Xem
         phản biên viên</button>
-    <button onclick="decideArticle('REJECT')" id="rejectBtn" class="btn-gradient-danger w-fit">
-        <span> Từ chối </span> <i class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
-    <button onclick="decideArticle('ACCEPT')" data-modal-target="modal" data-modal-toggle="modal"
-        class="btn-gradient-success w-fit"><span>
-            Đồng ý </span> <i class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
-
+    <button data-modal-target="decide-modal" data-modal-toggle="decide-modal" class="btn-gradient-main w-fit">Quyết
+        định</button>
 </th:block>
 
 
@@ -350,13 +330,15 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="flex gap-2" th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
-                                                <button th:attr="onclick=|downloadReviewFile('${reviewArticle.manuscript.article.id}', '${reviewArticle.manuscript.id}', '${reviewArticle.id}')|"
-                                                class="btn-gradient-danger w-fit"><span>
-                                                    Tải file phản biện gốc </span></button>
+                                            <div class="flex gap-2"
+                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH' || reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                                <button
+                                                    th:attr="onclick=|downloadReviewFile('${reviewArticle.manuscript.article.id}', '${reviewArticle.manuscript.id}', '${reviewArticle.id}')|"
+                                                    class="btn-gradient-danger w-fit"><span>
+                                                        Tải file phản biện gốc </span></button>
                                                 <button th:onclick="|viewReviewFile('${reviewArticle.id}')|"
-                                                class="btn-gradient-success w-fit"><span>
-                                                    Xem kết quả phản biện </span></button>
+                                                    class="btn-gradient-success w-fit"><span>
+                                                        Xem kết quả phản biện </span></button>
                                             </div>
                                         </td>
                                     </tr>
@@ -376,57 +358,61 @@
             </div>
         </div>
     </div>
+    <div id="decide-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-7xl max-h-full">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="decide-modal">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="sr-only">Close modal</span>
+                </button>
 
-    <script src="/js/utils.js"></script>
-    <script th:inline="javascript">
-        const form = document.forms.namedItem("decide-form");
-        function decideArticle(status) {
-            const formData = new FormData(form);
-            formData.append("status", status);
-            const file = formData.get('decideFiles');
 
-            if (file && file.size > 0) {
-                fetch(`/api/articles/editor/decide/[[${article.id}]]`, {
-                    method: 'POST',
-                    body: formData
-                }).then(res => {
-                    if (res.ok) {
-                        window.location.href = "/editor/reviewed-articles"
-                    } else {
-                        throw new Error(res.error)
-                    }
-                }).catch(err => {
-                    alert(err);
-                    console.log(err);
-                });
-                }
-        }
+                <div class="p-12">
+                    <h1 class="text-2xl font-semibold my-2">Gửi quyết định của biên tập viên</h1>
+                    <p class="mb-5 text-gray-500">*Vui lòng gửi file quyết định và kèm nhận xét nếu có</p>
+                    <form id="decide-form" enctype="multipart/form-data" method="post">
+                        <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i
+                                class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+                        <input id="decide-files" class="sr-only" type="file" multiple name="decideFiles">
+                        <div id="file-display" class="hidden my-5">
+                            <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                                <div id="file-display-extension"
+                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                    
+                                </div>
+                                <p id="file-display-name">
+                    
+                                </p>
+                            </div>
+                        </div>
+                        <textarea class="input px-4 py-2 w-full mt-3 mb-0" name="note" maxlength="255" cols="60" rows="5"
+                            placeholder="Nhập nhận xét..."></textarea>
+                    </form>
+                    
+                    <div class="flex justify-end my-3 gap-x-3">
+                        <button onclick="decideArticle('REJECT')" id="rejectBtn" class="btn-gradient-danger w-fit">
+                            <span> Từ chối bài viết </span> <i class="bi bi-x-circle-fill transition-all duration-300 text-white"></i></button>
+                        <button onclick="decideArticle('ACCEPT')" data-modal-target="modal" data-modal-toggle="modal"
+                            class="btn-gradient-success w-fit"><span>
+                                Đồng ý bài viết </span> <i class="bi bi-check-circle-fill transition-all duration-300 text-white"></i></button>
+                    </div>
+                </div>
 
-        function viewReviewFile(reviewArticleId) {
-            window.open(`/api/review-articles/view/${reviewArticleId}`, '_blank');
-        }
-
-        function downloadReviewFile(articleId, manuscriptId, reviewArticleId) {
-            var name = "article-" + articleId + "-manuscript-" + manuscriptId + "-reviewId-" + reviewArticleId + "-RV";
-            fetch(`/api/review-articles/getBytes/${reviewArticleId}`, {
-                method: 'GET',
-            }).then(res => {
-                if (res.ok) {
-                    return res.json()
-                } else {
-                    throw new Error(res.error)
-                }
-            }).then(json => {
-                downloadFile(json.type, name, json.content)
-            }).catch(err => {
-                alert(err);
-                console.log(err);
-            });
-        }
-    </script>
+            </div>
+        </div>
+    </div>
 </section>
 
 <th:block layout:fragment="extra-js">
+
+    <script src="/js/utils.js"></script>
+    <script th:inline="javascript">
+        const articleId = /*[[${article.id}]]*/ "";
+    </script>
+    <script src="/js/editor/decideArticle.js"></script>
 
 </th:block>
 
