@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ou.journal.constants.EditorURL;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Article;
@@ -238,33 +239,18 @@ public class EditorController {
             model.addAttribute("renderManuscript", renderManuscript);
 
             if (back != null) {
-                switch (back) {
-                    case "assign-list":
-                        model.addAttribute("urlBack", "/editor/assign-list");
-                        model.addAttribute("backTitle", "Danh sách bài báo chờ gán biên tập viên");
-                        break;
-                    case "assigned-list":
-                        model.addAttribute("urlBack", "/editor/assigned-list");
-                        model.addAttribute("backTitle", "Danh sách bài báo được gán biên tập viên");
-                        break;
-                    case "invite-reviewer-articles":
-                        model.addAttribute("urlBack", "/editor/invite-reviewer-articles");
-                        model.addAttribute("backTitle", "Danh sách bài báo chờ mời phản biện viên");
-                        break;
-                    case "waiting-accept-reviewer-articles":
-                        model.addAttribute("urlBack", "/editor/waiting-accept-reviewer-articles");
-                        model.addAttribute("backTitle", "Danh sách bài báo chờ chưa có phản biện viên");
-                        break;
-                    case "in-review-articles":
-                        model.addAttribute("urlBack", "/editor/in-review-articles");
-                        model.addAttribute("backTitle", "Danh sách bài báo đang được phản biện");
-                        break;
-                    case "reviewed-articles":
-                        model.addAttribute("urlBack", "/editor/reviewed-articles");
-                        model.addAttribute("backTitle", "Danh sách bài báo đã phản biện");
-                        break;
+                try {
+                    String[] values = EditorURL.BACK_MAP.get(back);
+                if (values != null) {
+                    model.addAttribute("urlBack", values[0]);
+                    model.addAttribute("backTitle", values[1]);
                 }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
             }
+            
             return "client/editor/decideArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());
