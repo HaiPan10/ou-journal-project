@@ -91,7 +91,7 @@ public class Manuscript implements Serializable {
     private String reference;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "manuscript")
+    @OneToMany(cascade = { CascadeType.REMOVE}, mappedBy = "manuscript")
     private List<EditorFile> editorFiles;
 
     @Transient

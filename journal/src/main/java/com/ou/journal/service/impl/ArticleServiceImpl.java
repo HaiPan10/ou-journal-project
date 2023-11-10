@@ -1,5 +1,6 @@
 package com.ou.journal.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -22,11 +23,13 @@ import com.ou.journal.pojo.ArticleDate;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.AuthorNote;
+import com.ou.journal.pojo.EditorFile;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.User;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
+import com.ou.journal.repository.EditorFileRepositoryJPA;
 import com.ou.journal.repository.ReviewArticleRepositoryJPA;
 import com.ou.journal.service.interfaces.AppendixService;
 import com.ou.journal.service.interfaces.ArticleDateService;
@@ -65,6 +68,8 @@ public class ArticleServiceImpl implements ArticleService {
     private AuthorNoteService authorNoteService;
     @Autowired
     private AppendixService appendixService;
+    @Autowired
+    private EditorFileRepositoryJPA editorFileRepositoryJPA;
 
     @Override
     public Article create(Article article, MultipartFile file, MultipartFile anonymousFile, MultipartFile appendixFile)
@@ -211,7 +216,7 @@ public class ArticleServiceImpl implements ArticleService {
     // }
 
     @Override
-    public Article editorDecide(Long articleId, String status, ArticleNote articleNote) throws Exception {
+    public Article editorDecide(Long articleId, String status, ArticleNote articleNote, List<MultipartFile> decideFiles) throws Exception {
         Article article = retrieve(articleId);
         if (article.getStatus().equals(ArticleStatus.IN_REVIEW.toString())) {
             if (status.equals(ArticleStatus.ACCEPT.toString()) || status.equals(ArticleStatus.REJECT.toString())) {
@@ -219,6 +224,16 @@ public class ArticleServiceImpl implements ArticleService {
                 articleDateService.addOrUpdate(article, DateTypeName.DECIDED_DATE.toString());
                 articleRepositoryJPA.save(article);
                 articleNoteService.createOrUpdate(articleNote, article);
+                Manuscript manuscript = manuscriptService.getLastestManuscript(articleId);
+                decideFiles.forEach(decideFile -> {
+                    try {
+                        editorFileRepositoryJPA.save(new EditorFile(
+                            decideFile.getBytes(), decideFile.getContentType(), decideFile.getOriginalFilename(), manuscript
+                        ));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 return article;
             } else {
                 throw new Exception("Trạng thái chuyển đổi không hợp lệ!");

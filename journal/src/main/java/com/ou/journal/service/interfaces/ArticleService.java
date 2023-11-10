@@ -23,7 +23,7 @@ public interface ArticleService {
     // Article endInvitationReview(Long articleId) throws Exception;
     void secretaryDecide(Long articleId, Article article) throws Exception;
     List<Article> findByAuthorId(Long authorId);
-    Article editorDecide(Long articleId, String status, ArticleNote articleNote) throws Exception;
+    Article editorDecide(Long articleId, String status, ArticleNote articleNote, List<MultipartFile> decideFiles) throws Exception;
     Article widthdrawArticle(Long articleId, Long userId) throws Exception;
     Article assignEditor(Long articleId, Long userId) throws Exception;
     Article assignEditor(Long articleId, String email) throws Exception;

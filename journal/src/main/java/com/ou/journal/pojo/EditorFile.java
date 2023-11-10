@@ -24,7 +24,7 @@ public class EditorFile {
     private Long id;
 
     @Lob
-    @Column(name = "content", columnDefinition = "MEDIUMBLOB")
+    @Column(name = "content", columnDefinition = "LONGBLOB")
     private byte[] content;
 
     @Column(name = "type")
@@ -35,4 +35,13 @@ public class EditorFile {
 
     @ManyToOne
     private Manuscript manuscript;
+
+    public EditorFile(byte[] content, String type, String name, Manuscript manuscript) {
+        this.content = content;
+        this.type = type;
+        this.name = name;
+        this.manuscript = manuscript;
+    }
+
+    
 }

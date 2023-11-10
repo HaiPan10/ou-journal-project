@@ -93,5 +93,4 @@ public class ManuscriptServiceImpl implements ManuscriptService {
     public Optional<Manuscript> findByArticleAndVersion(Long articleId, String version) {
         return manuscriptRepositoryJPA.findByArticleAndVersion(articleId, version);
     }
-
 }
