@@ -91,14 +91,13 @@
 
 
     <script th:inline="javascript">
-        var currentSide = document.getElementById("articles");
-        currentSide.classList.add("active");
 
         var urlParams = new URLSearchParams(window.location.search);
         var status = urlParams.get('status');
         var radioButtons = document.getElementsByName("status");
 
         const btn = document.querySelector("#btn-confirm");
+        // var btn = document.getElementById("btn-confirm")
 
         if (status) {
             for (let i = 0; i < radioButtons.length; i++) {
