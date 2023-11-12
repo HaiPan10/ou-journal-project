@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ou.journal.pojo.AuthorType;
 import com.ou.journal.pojo.Manuscript;
@@ -227,14 +228,17 @@ public class SubmitController {
             @RequestPart("file") MultipartFile file,
             @RequestPart("anonymousFile") MultipartFile anonymousFile,
             @RequestPart("appendixFile") MultipartFile appendixFile,
+            RedirectAttributes redirectAttrs,
             SessionStatus sessionStatus) {
         if (file != null && file.getSize() > 0 && anonymousFile != null && anonymousFile.getSize() > 0
                 && appendixFile != null) {
             try {
-                articleService.create(article, file, anonymousFile, appendixFile);
+                Article persistArticle = articleService.create(article, file, anonymousFile, appendixFile);
+                redirectAttrs.addFlashAttribute("successMsg", "Gửi bài thành công");
+
                 sessionStatus.setComplete();
 
-                return "redirect:/";
+                return "redirect:/submission/processing/" + persistArticle.getId().toString();
 
             } catch (Exception e) {
                 e.printStackTrace();

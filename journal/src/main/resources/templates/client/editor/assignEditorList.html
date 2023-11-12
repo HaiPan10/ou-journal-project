@@ -31,12 +31,12 @@
 
         <div class="bg-white rounded-lg px-12 py-6 my-6 ">
             <h1 class="mb-5 font-semibold text-lg text-main">Chọn biên tập viên cho bài viết</h1>
-            <div class="mt-5 flex flex-col gap-3">
+            <div class="mt-5 flex flex-col gap-5">
                 <div class="w-full" th:each="editor : ${editors}">
                     <input class="hidden peer" th:id="'editor-' + ${editor.id}" type="radio" name="editorEmail"
                         th:value="${editor.email}" />
                     <label th:for="'editor-' + ${editor.id}"
-                        class="w-full p-3 rounded-lg flex items-center gap-x-3 bg-white cursor-pointer peer-checked:bg-main/10 ring-1 ring-gray-200 peer-checked:ring-main">
+                        class="transition-all w-full p-3 rounded-lg flex items-center gap-x-3 bg-white cursor-pointer border border-gray-200 peer-checked:bg-main/10 peer-checked:border-main/50 peer-checked:ring peer-checked:ring-main/20">
                         <img class="w-10 h-10 mr-2" th:src="@{/images/avatar.png}" />
                         <div class="grow">
                             <p class="font-semibold text-gray-700"
@@ -91,9 +91,6 @@
 
 
     <script th:inline="javascript">
-        var currentSide = document.getElementById("articles");
-        currentSide.classList.add("active");
-
         var urlParams = new URLSearchParams(window.location.search);
         var status = urlParams.get('status');
         var radioButtons = document.getElementsByName("status");
