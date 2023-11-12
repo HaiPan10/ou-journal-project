@@ -44,8 +44,8 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepositoryJPA accountRepositoryJPA;
 
-    // @Autowired
-    // private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private JwtService jwtService;
@@ -138,31 +138,31 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    // @Override
-    // public AuthResponse login(AuthRequest account) throws Exception {
-    //     try {
-    //         Optional<Account> accountOptional = accountRepositoryJPA.findByUserName(account.getUsername());
-    //         if (!accountOptional.isPresent()) {
-    //             throw new Exception("Email không tồn tại!");
-    //         }
-    //         account.setUsername(String.format("%s,%s", account.getUsername(), account.getRole()));
-    //         Authentication authentication = authenticationManager.authenticate(
-    //                 new UsernamePasswordAuthenticationToken(
-    //                         account.getUsername(), account.getPassword()));
+    @Override
+    public AuthResponse login(AuthRequest account) throws Exception {
+        try {
+            Optional<Account> accountOptional = accountRepositoryJPA.findByUserName(account.getUsername());
+            if (!accountOptional.isPresent()) {
+                throw new Exception("Email không tồn tại!");
+            }
+            account.setUsername(String.format("%s,%s", account.getUsername(), account.getRole()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            account.getUsername(), account.getPassword()));
 
-    //         Account authenticationAccount = accountOptional.get();
+            Account authenticationAccount = accountOptional.get();
 
-    //         SecurityContextHolder.getContext().setAuthentication(authentication);
-    //         String token = jwtService.generateAccessToken(authenticationAccount, account.getRole());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtService.generateAccessToken(authenticationAccount, account.getRole());
 
-    //         AuthResponse authResponse = new AuthResponse();
-    //         authResponse.setUser(authenticationAccount.getUser());
-    //         authResponse.setAccessToken(token);
-    //         return authResponse;
-    //     } catch (AuthenticationException exception) {
-    //         throw new Exception("Email hoặc mật khẩu không đúng.");
-    //     }
-    // }
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setUser(authenticationAccount.getUser());
+            authResponse.setAccessToken(token);
+            return authResponse;
+        } catch (AuthenticationException exception) {
+            throw new Exception("Email hoặc mật khẩu không đúng.");
+        }
+    }
 
     @Override
     public Account findByUserName(String userName) throws Exception {

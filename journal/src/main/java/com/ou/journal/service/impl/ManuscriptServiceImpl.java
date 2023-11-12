@@ -52,12 +52,12 @@ public class ManuscriptServiceImpl implements ManuscriptService {
             double latestVersion = Double.parseDouble(manuscriptRepositoryJPA.getLastestVersion(articleId));
             Manuscript manuscript = new Manuscript(
                     manuscripFile.getBytes(),
-                    manuscripFile.getSize(),
+                    manuscripFile.getName(),
                     Double.toString(latestVersion + 1),
                     new Date(),
                     manuscripFile.getContentType(),
                     anonymousFile.getBytes(),
-                    anonymousFile.getSize(),
+                    anonymousFile.getName(),
                     anonymousFile.getContentType(),
                     reference.trim(),
                     article);

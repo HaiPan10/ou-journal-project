@@ -19,7 +19,7 @@ public interface AccountService {
     boolean changeAccountStatus(Long accountId, String status) throws Exception;
     List<Account> findAll();
     Account retrieve(Long accountId) throws Exception;
-    // AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
+    AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     Account findByUserName(String userName) throws Exception;
     boolean verifyEmail(Long accountId, String verificationCode) throws Exception;
     Optional<Account> getAccount(Long accountId);

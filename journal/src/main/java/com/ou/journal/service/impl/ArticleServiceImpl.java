@@ -40,6 +40,7 @@ import com.ou.journal.service.interfaces.DateTypeService;
 import com.ou.journal.service.interfaces.MailService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.UserService;
+import org.apache.commons.io.FilenameUtils;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -88,12 +89,12 @@ public class ArticleServiceImpl implements ArticleService {
                             Arrays.asList(
                                     new Manuscript(
                                             file.getBytes(),
-                                            file.getSize(),
+                                            FilenameUtils.removeExtension(file.getOriginalFilename()),
                                             "1.0",
                                             new Date(),
                                             file.getContentType(),
                                             anonymousFile.getBytes(),
-                                            anonymousFile.getSize(),
+                                            String.format("%s_anonymous", FilenameUtils.removeExtension(file.getOriginalFilename())),
                                             anonymousFile.getContentType(),
                                             article.getCurrentManuscript().getReference(),
                                             article))));

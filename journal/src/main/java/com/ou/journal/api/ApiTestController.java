@@ -73,16 +73,16 @@ public class ApiTestController {
         }
     }
 
-    // @PostMapping(path = "/generate-token")
-    // public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
-    //     try {
-    //         System.out.println("[DEBUG] - " + authRequest);
-    //         return ResponseEntity.ok().body(accountService.login(authRequest));
-    //     } catch (Exception e) {
-    //         System.out.println("[DEBUG] - EXCEPTION: " + e.getMessage());
-    //         return ResponseEntity.badRequest().body(e.getMessage());
-    //     }
-    // }
+    @PostMapping(path = "/generate-token")
+    public ResponseEntity<?> generateToken(@RequestBody AuthRequest authRequest) {
+        try {
+            System.out.println("[DEBUG] - " + authRequest);
+            return ResponseEntity.ok().body(accountService.login(authRequest));
+        } catch (Exception e) {
+            System.out.println("[DEBUG] - EXCEPTION: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @GetMapping(path = "/article-dates/{articleId}")
     public ResponseEntity<?> getArticleDates(@PathVariable Long articleId) {

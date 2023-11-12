@@ -106,6 +106,35 @@
             </section>
             <!-- /ACTION -->
 
+            <h1 class="text-2xl font-semibold my-2">File ẩn danh (FOR EDITOR ONLY)</h1>
+            <div class="mt-5">
+                <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                    <div id="file-display-extension" th:text="PDF"
+                        class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                    </div>
+                    <p id="file-display-name" class="lowercase" th:text="abc">
+                    </p>
+                    <div class="grow flex justify-end items-center gap-4">
+                        <button class="w-fit text-main text-2xl">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="w-fit text-main text-2xl">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>
+    
+                </div>
+            </div>
+
+            <form id="decide-form" enctype="multipart/form-data" method="post">
+                <label for="anonymous-file" class="btn-dark w-fit cursor-pointer">Đăng file ẩn danh mới<i
+                        class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+                <input id="anonymous-file" class="sr-only" type="file" name="anonymousFile">
+                <div id="anonymous-file-display" class="hidden my-5">
+    
+                </div>
+            </form>
+
             <div th:if="${renderManuscript}">
                 <hr class="my-5" />
                 <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
