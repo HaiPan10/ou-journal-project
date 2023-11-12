@@ -41,6 +41,27 @@
                     Mời reviewer</button>
             </div>
         </form>
+        <div data-accordion="collapse" class="move-up-anim transition-all rounded-lg bg-white px-5 py-3 my-1"
+            data-active-classes="bg-white text-main font-medium">
+            <h2 data-accordion-target="#temp-hide" aria-expanded="true" aria-controls="temp-hide">
+
+            </h2>
+            <h2 id="dropdown-heading">
+                <button data-accordion-target="#file-anonymous-view" aria-expanded="true" aria-controls="file-anonymous-view"
+                    class="transition-all w-full flex gap-x-2 items-center py-1 text-main hover:text-main hover:font-medium"
+                    type="button">File ẩn danh của bài viêt<i data-accordion-icon
+                        class="bi bi-chevron-down rolate-180 transition-all flex justify-center shrink-0"></i>
+                </button>
+            </h2>
+
+            <div id="temp-hide"></div>
+            <!-- Dropdown menu -->
+            <div id="file-anonymous-view" class="transition-all hidden">
+                <th:block th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}"
+                    th:replace="~{fragments/editor/anonymousFile :: anonymousFile}"></th:block>
+
+            </div>
+        </div>
 
         <ul class="move-up-anim tab-block-container w-fit mt-5" id="tabs" data-tabs-toggle="#tab-contents"
             role="tablist">
@@ -161,7 +182,8 @@
                                 </td>
                                 <th scope="col" class="px-6 py-3">
                                     <!-- <a href="#">Mời lại reviewer</a> -->
-                                    <button th:attr="onclick=|reinvite('${reviewer.key.email}', ${reviewer.key.id}, ${articleId})|"
+                                    <button
+                                        th:attr="onclick=|reinvite('${reviewer.key.email}', ${reviewer.key.id}, ${articleId})|"
                                         type="button">Mời lại phản biện viên</button>
                                 </th>
                             </tr>
@@ -331,7 +353,7 @@
                     email: reviewerEmail
                 })
             }).then(res => {
-                if(res.ok){
+                if (res.ok) {
                     alert('Mời lại phản biện viên thành công')
                     window.location.reload()
                 } else {
