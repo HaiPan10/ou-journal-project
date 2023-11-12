@@ -132,7 +132,7 @@ create procedure insert_default_admin()
 begin
 	if not exists(select 1 from user where email = 'admin@gmail.com') then
 		insert into `user`(created_at, dob, email, first_name, last_name)
-			values (now(), '2002-05-18', 'admin@gmail.com', 'Mở TP.HCM', 'Tổng biên tập viên trường Đại Học');
+			values (now(), '2002-05-18', 'admin@gmail.com', 'Mở TP.HCM', 'Quản trị viên trường Đại Học');
             
 		insert into `user_role`(role_id, user_id)
 			select (select r.id from role r where r.role_name = 'ROLE_ADMIN') as role_id, u.id as user_id
