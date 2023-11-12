@@ -68,16 +68,16 @@
                         <h1 class="text-2xl font-semibold my-2">Gửi kết quả phản biện</h1>
                         <p class="text-gray-500 text-sm mb-5">*Vui lòng gửi file phản biện bằng cách bấm nút bên dưới. Sau cùng, bấm nút "đồng ý đăng bài" nếu cảm thấy bài viết đã có thể đăng hoặc ngược lại bấm nút "từ chối đăng bài"</p>
                         <form id="review-form" enctype="multipart/form-data" method="post">
-                            <label for="review-file" class="btn-dark w-fit cursor-pointer">Nhập file phản biện <i class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
-                            <input id="review-file" class="sr-only" type="file" name="reviewFile">
+                            <label for="review-file" class="btn-dark w-fit cursor-pointer">Gửi file phản biện <i class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+                            <input data-file-display="file-display" id="review-file" class="sr-only" type="file" name="reviewFile">
                         </form>
                         <div id="file-display" class="hidden my-5">
                             <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                                <div id="file-display-extension"
+                                <div data-file-display-extension id="file-display-extension"
                                     class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
                     
                                 </div>
-                                <p id="file-display-name">
+                                <p data-file-display-name id="file-display-name">
                     
                                 </p>
                             </div>

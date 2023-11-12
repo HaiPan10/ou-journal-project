@@ -93,8 +93,6 @@
                 </div>
 
                 <div class="flex justify-end my-3 gap-x-3">
-                    <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
-                        class="btn-gradient-main w-fit">Xem preview</button>
                     <!-- <button id="btn-download-file"
                         class="btn-gradient-main w-fit">Tải file gốc</button> -->
                     <th:block layout:fragment="buttons">
@@ -106,31 +104,38 @@
             </section>
             <!-- /ACTION -->
 
+
+
+
             <div th:if="${renderManuscript}">
                 <hr class="my-5" />
-                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
-                    class="btn-main w-fit my-3 shadow-md" type="button">
-                    <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
-                    <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-                <form id="dropdown-versions"
-                    class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
-                    <input th:if="${param.back}" name="back" th:value="${param.back}" type="hidden" />
-                    <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
-                        <th:block th:each="manuscript : ${manuscripts}">
-                            <li>
-                                <button type="submit" name="version" th:value="${manuscript.version}"
-                                    class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
-                                    th:text="${manuscript.version}"></button>
-                            </li>
-                        </th:block>
-                    </ul>
-                </form>
+                <div class="flex justify-between items-center">
+                    <h2 class="font-semibold text-2xl">File bài viết</h2>
+                    <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
+                        class="btn-secondary w-fit my-3 shadow-md" type="button">
+                        <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
+                        <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <form id="dropdown-versions"
+                        class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
+                        <input th:if="${param.back}" name="back" th:value="${param.back}" type="hidden" />
+                        <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
+                            <th:block th:each="manuscript : ${manuscripts}">
+                                <li>
+                                    <button type="submit" name="version" th:value="${manuscript.version}"
+                                        class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
+                                        th:text="${manuscript.version}"></button>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </form>
+                </div>
 
+                <!-- File gốc -->
                 <div id="file-display" class="mt-5">
                     <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
                         <th:block th:switch="${renderManuscript.type}">
@@ -157,12 +162,45 @@
                         </th:block>
 
 
+                        <div class="grow flex justify-end items-center gap-4">
+                            <button  data-modal-target="preview-modal" data-modal-toggle="preview-modal" class="w-fit text-main text-2xl">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="w-fit text-main text-2xl" id="btn-download-file">
+                                <i class="bi bi-download"></i>
+                            </button>
+                        </div>
 
-                        <button class="w-fit p-5 text-main text-2xl ml-auto" id="btn-download-file">
-                            <i class="bi bi-download"></i>
-                        </button>
                     </div>
                 </div>
+
+                <!-- File ẩn danh -->
+                <div class="mt-5">
+                    <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                        <div th:text="PDF"
+                            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                        </div>
+                        <p class="lowercase" th:text="abc">
+                        </p>
+                        <div class="grow flex justify-end items-center gap-4">
+                            <button data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal" class="w-fit text-main text-2xl">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+
+                            <button class="w-fit text-main text-2xl">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                         
+                            <button class="w-fit text-main text-2xl">
+                                <i class="bi bi-download"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+               
             </div>
         </div>
 
@@ -183,6 +221,40 @@
                             <iframe id="article-iframe"
                                 style="width: 100%; height: 1000px; background-color: white;"></iframe>
                         </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-anonymous-modal" tabindex="-1"
+            class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
+            <div class="relative w-full max-w-5xl max-h-full m-6 lg:m-12">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <button type="button"
+                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="edit-anonymous-modal">
+                        <i class="bi bi-x-lg"></i>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+
+
+                    <div class="p-12">
+                        <form id="decide-form" enctype="multipart/form-data" method="post">
+                            <label for="anonymous-file" class="btn-dark w-fit cursor-pointer">Đăng file ẩn danh mới<i
+                                    class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+                            <input data-file-display="anonymous-file-display" id="anonymous-file" class="sr-only" type="file" name="anonymousFile">
+                            <div class="mt-5">
+                                <div id="anonymous-file-display" class="hidden w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                                    <div data-file-display-extension
+                                        class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                                    </div>
+                                    <p data-file-display-name class="lowercase">
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                        
                     </div>
 
                 </div>

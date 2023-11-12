@@ -12,15 +12,3 @@ function downloadFile(type, name, byteContent) {
     link.download = name;
     link.click();
 }
-
-function showFile(e, displayEl, extensionEl, nameEl) {
-    if (e.target.files && e.target.files[0]) {
-        var fileName = e.target.files[0].name;
-        var fileExtension = fileName.split('.').pop();
-        displayEl.classList.remove("hidden");
-        extensionEl.innerHTML = fileExtension;
-        nameEl.innerHTML = fileName
-    } else {
-        displayEl.classList.add("hidden");
-    }
-}

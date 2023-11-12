@@ -89,7 +89,7 @@
     }
 
     .btn-secondary {
-        @apply btn border border-gray-200 text-gray-700 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-100/25
+        @apply btn border border-gray-200 text-gray-700 bg-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-100/25
     }
 
     .btn-main-small {

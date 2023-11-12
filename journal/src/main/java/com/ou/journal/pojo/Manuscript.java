@@ -51,11 +51,11 @@ public class Manuscript implements Serializable {
     @Column(name = "content_anonymous", columnDefinition = "LONGBLOB")
     private byte[] contentAnonymous;
 
-    @Column(name = "size")
-    private Long size;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "size_anonymous")
-    private Long sizeAnonymous;
+    @Column(name = "name_anonymous")
+    private String nameAnonymous;
 
     @NotNull
     @Column(name = "version")
@@ -103,25 +103,25 @@ public class Manuscript implements Serializable {
     @Transient
     private MultipartFile appendixFile;
 
-    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type,
-            byte[] contentAnonymous, Long sizeAnonymous, String typeAnonymous,
+    public Manuscript(byte[] content, String name, @NotNull String version, Date createdDate, String type,
+            byte[] contentAnonymous, String nameAnonymous, String typeAnonymous,
             String reference, Article article) {
         this.content = content;
-        this.size = size;
+        this.name = name;
         this.version = version;
         this.createdDate = createdDate;
         this.type = type;
         this.reference = reference;
         this.article = article;
         this.contentAnonymous = contentAnonymous;
-        this.sizeAnonymous = sizeAnonymous;
+        this.nameAnonymous = nameAnonymous;
         this.typeAnonymous = typeAnonymous;
     }
 
-    public Manuscript(byte[] content, Long size, @NotNull String version, Date createdDate, String type,
+    public Manuscript(byte[] content, String name, @NotNull String version, Date createdDate, String type,
             String reference, Article article) {
         this.content = content;
-        this.size = size;
+        this.name = name;
         this.version = version;
         this.createdDate = createdDate;
         this.type = type;

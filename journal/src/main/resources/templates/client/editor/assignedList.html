@@ -84,9 +84,9 @@
                         <th scope="col" class="px-6 py-3">
                             Tiêu đề bài báo
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <!-- <th scope="col" class="px-6 py-3">
                             Từ khóa
-                        </th>
+                        </th> -->
                         <th scope="col" class="px-6 py-3">
                             Email tác giả chính
                         </th>
@@ -103,9 +103,9 @@
                             <td scope="row" class="px-6 py-4 gap-3 items-center font-semibold">
                                 <span th:text="${article.title}"></span>
                             </td>
-                            <td scope="row" class="px-6 py-4">
+                            <!-- <td scope="row" class="px-6 py-4">
                                 <span th:text="${article.keywords}"></span>
-                            </td>
+                            </td> -->
                             <th:block th:each="authorArticle : ${article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
