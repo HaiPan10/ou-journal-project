@@ -108,23 +108,23 @@
         @apply btn text-white bg-main hover:bg-main/75 focus:ring-4 focus:outline-none focus:ring-main/25 rounded-lg text-sm px-5 py-2.5 text-center
     }
 
-    .breadcum {
+    .breadcrumb {
         @apply inline-flex items-center space-x-1 md:space-x-3
     }
 
-    .breadcum-item {
+    .breadcrumb-item {
         @apply inline-flex items-center
     }
 
-    .breadcum-item-link {
+    .breadcrumb-item-link {
         @apply inline-flex items-center text-gray-700 hover:text-main
     }
 
-    .breadcum-item-text {
+    .breadcrumb-item-text {
         @apply ml-1 text-sm font-medium md:ml-2
     }
 
-    .breadcum-item-text.current {
+    .breadcrumb-item-text.current {
         @apply text-gray-500
     }
 

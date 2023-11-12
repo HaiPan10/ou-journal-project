@@ -13,11 +13,13 @@ function showFile(e, displayEl, extensionEl, nameEl) {
 
 const inputsFileHaveDisplayComponent = document.querySelectorAll("input[type=file][data-file-display]");
 inputsFileHaveDisplayComponent.forEach(input => {
-    let dataFileDislay = input.getAttribute("data-file-display");
-    input.addEventListener('change', function (e) {
-        const fileDislay = document.querySelector(`#${dataFileDislay}`);
-        const fileDisplayExtension = fileDislay.querySelector("[data-file-display-extension]");
-        const fileDisplayName = fileDislay.querySelector("[data-file-display-name]");
-        showFile(e, fileDislay, fileDisplayExtension, fileDisplayName);
-    });
+    try {
+        let dataFileDislay = input.getAttribute("data-file-display");
+        input.addEventListener('change', function (e) {
+            const fileDislay = document.querySelector(`#${dataFileDislay}`);
+            const fileDisplayExtension = fileDislay.querySelector("[data-file-display-extension]");
+            const fileDisplayName = fileDislay.querySelector("[data-file-display-name]");
+            showFile(e, fileDislay, fileDisplayExtension, fileDisplayName);
+        });
+    } catch (e) {}
 })

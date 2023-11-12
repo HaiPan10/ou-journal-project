@@ -1,0 +1,66 @@
+<<!-- File ẩn danh -->
+<th:block th:fragment="anonymousFile">
+    <div class="mt-5 w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+        <div th:text="PDF"
+            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+        </div>
+        <p class="lowercase" th:text="anonymous_file">
+        </p>
+        <div class="grow flex justify-end items-center gap-4">
+            <button data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
+                class="w-fit text-main text-2xl">
+                <i class="bi bi-pencil-square"></i>
+            </button>
+    
+            <button class="w-fit text-main text-2xl">
+                <i class="bi bi-eye"></i>
+            </button>
+    
+            <button class="w-fit text-main text-2xl">
+                <i class="bi bi-download"></i>
+            </button>
+        </div>
+    
+    </div>
+    
+    <div id="edit-anonymous-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
+        <div class="relative w-full max-w-5xl max-h-full m-6 lg:m-12">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="edit-anonymous-modal">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="sr-only">Close modal</span>
+                </button>
+    
+    
+                <div class="p-12">
+                    <h2 class="font-semibold text-2xl my-2">Chỉnh sửa file ẩn danh cho bài viết</h2>
+                    <p class="text-gray-500 mb-5">* Vui lòng gửi file ẩn danh đã chỉnh sửa</p>
+                    <form id="decide-form" enctype="multipart/form-data" method="post">
+                        <label for="editorAnonymousFile" class="btn-dark w-fit cursor-pointer">Đăng file ẩn danh mới<i
+                                class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
+                        <input required accept=".pdf,.docx,.tex" id="editorAnonymousFile" data-file-display="edit-anonymous-file-display"
+                            class="sr-only" type="file" name="editorAnonymousFile">
+                        <div class="mt-5">
+                            <div id="edit-anonymous-file-display"
+                                class="hidden w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
+                                <div data-file-display-extension
+                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+                                </div>
+                                <p data-file-display-name class="lowercase">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="mt-5 flex justify-end gap-3">
+                            <button type="submit" class="btn-gradient-main w-fit">Xác nhận</button>
+                        </div>
+                    </form>
+    
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</th:block>

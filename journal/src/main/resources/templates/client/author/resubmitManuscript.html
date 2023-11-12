@@ -5,45 +5,45 @@
 <section class="mb-12 flex justify-center" layout:fragment="content">
     <div class="container mx-auto min-h-[800px]">
         <nav class="flex mb-5" aria-label="Breadcrumb">
-            <ol class="breadcum">
-                <li class="breadcum-item">
-                    <a th:href="@{/main-menu}" class="breadcum-item-link">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/main-menu}" class="breadcrumb-item-link">
                         <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="currentColor" viewBox="0 0 20 20">
                             <path
                                 d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                         </svg>
-                        <span class="breadcum-item-text ml-0">Main menu</span>
+                        <span class="breadcrumb-item-text ml-0">Main menu</span>
                     </a>
                 </li>
-                <li class="breadcum-item">
-                    <a th:href="@{/submission/processing}" class="breadcum-item-link">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/submission/processing}" class="breadcrumb-item-link">
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text">Bài đăng</span>
+                        <span class="breadcrumb-item-text">Bài đăng</span>
                     </a>
                 </li>
-                <li class="breadcum-item">
-                    <a th:href="@{/submission/processing/{id}(id=${article.id})}" class="breadcum-item-link">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/submission/processing/{id}(id=${article.id})}" class="breadcrumb-item-link">
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text" th:text="${article.title}"></span>
+                        <span class="breadcrumb-item-text" th:text="${article.title}"></span>
                     </a>
                 </li>
-                <li class="breadcum-item" aria-current="page">
+                <li class="breadcrumb-item" aria-current="page">
                     <div class="flex items-center">
                         <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="m1 9 4-4-4-4" />
                         </svg>
-                        <span class="breadcum-item-text current">Gửi lại manuscript</span>
+                        <span class="breadcrumb-item-text current">Gửi lại manuscript</span>
                     </div>
                 </li>
             </ol>
@@ -60,7 +60,7 @@
                     <p class="font-medium text-sm text-gray-700 m-3">Gửi file bài viết bản gốc <span
                             class="text-main">*</span></p>
                     <label for="file-upload" class="btn-main-md w-fit">Tải lên</label>
-                    <input data-file-display="file-display" class="sr-only ml-auto" id="file-upload" name="file" type="file">
+                    <input data-file-display="file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="file-upload" name="file" type="file">
                 </div>
 
                 <div
@@ -69,7 +69,7 @@
                     <p class="font-medium text-sm text-gray-700 m-3">Gửi file bài viết ẩn danh <span
                             class="text-main">*</span></p>
                     <label for="anonymous-file-upload" class="btn-main-md w-fit">Tải lên</label>
-                    <input data-file-display="anonymous-file-display" class="sr-only ml-auto" id="anonymous-file-upload" name="anonymousFile" type="file">
+                    <input data-file-display="anonymous-file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="anonymous-file-upload" name="anonymousFile" type="file">
                 </div>
 
                 <div
@@ -77,7 +77,7 @@
                     <i class="text-5xl md:text-7xl text-gradient-main bi bi-cloud-upload"></i>
                     <p class="font-medium text-sm text-gray-700 m-3">Gửi file phụ lục</p>
                     <label for="appendix-file-upload" class="btn-main-md w-fit">Tải lên</label>
-                    <input data-file-display="appendix-file-display" class="sr-only ml-auto" id="appendix-file-upload" name="appendixFile" type="file">
+                    <input data-file-display="appendix-file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="appendix-file-upload" name="appendixFile" type="file">
                 </div>
             </div>
 

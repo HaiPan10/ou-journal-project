@@ -60,7 +60,7 @@ public class EditorController {
         articles = articleService.getArticleWaitingForInviteReviewer(currentUser.getId());
         model.addAttribute("articles", articles);
 
-        model.addAttribute("breadcumTitle", "Danh sách bài báo chờ mời phản biện viên");
+        model.addAttribute("breadcrumbTitle", "Danh sách bài báo chờ mời phản biện viên");
 
         return "client/editor/invitingReviewList";
     }
@@ -72,7 +72,7 @@ public class EditorController {
         articles = articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId());
         model.addAttribute("articles", articles);
 
-        model.addAttribute("breadcumTitle", "Danh sách bài báo chờ chưa có phản biện viên");
+        model.addAttribute("breadcrumbTitle", "Danh sách bài báo chờ chưa có phản biện viên");
 
         return "client/editor/invitingReviewList";
     }
@@ -188,7 +188,7 @@ public class EditorController {
             model.addAttribute("articles", new ArrayList<Article>());
         }
 
-        model.addAttribute("breadcumTitle", "Danh sách bài báo đang được phản biện");
+        model.addAttribute("breadcrumbTitle", "Danh sách bài báo đang được phản biện");
 
         return "client/editor/decidingList";
     }
@@ -202,7 +202,7 @@ public class EditorController {
             model.addAttribute("articles", new ArrayList<Article>());
         }
 
-        model.addAttribute("breadcumTitle", "Danh sách bài báo đã phản biện");
+        model.addAttribute("breadcrumbTitle", "Danh sách bài báo đã phản biện");
 
         return "client/editor/decidingList";
     }
