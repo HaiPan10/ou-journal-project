@@ -104,6 +104,10 @@ public class EditorController {
                 model.addAttribute("users", users);
                 User user = new User();
                 model.addAttribute("user", user);
+
+                Manuscript renderManuscript = manuscriptService.getLastestManuscript(articleId);
+                model.addAttribute("renderManuscript", renderManuscript);
+                model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", article.getId()));
             } else {
                 model.addAttribute("error", "in valid status");
             }
@@ -140,6 +144,9 @@ public class EditorController {
                 model.addAttribute("articleId", articleId);
                 model.addAttribute("users", users);
                 model.addAttribute("reviewers", reviewers);
+                Manuscript renderManuscript = manuscriptService.getLastestManuscript(articleId);
+                model.addAttribute("renderManuscript", renderManuscript);
+                model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", article.getId()));
                 return "client/editor/articleReviewerManager";
             }
             reviewArticleService.create(user, article);
@@ -150,6 +157,9 @@ public class EditorController {
             model.addAttribute("articleId", articleId);
             model.addAttribute("users", users);
             model.addAttribute("reviewers", reviewers);
+            Manuscript renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            model.addAttribute("renderManuscript", renderManuscript);
+            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", article.getId()));
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "client/editor/articleReviewerManager";
         }
