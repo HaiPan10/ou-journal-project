@@ -177,8 +177,10 @@
 
                     </div>
                 </div>
+                <th:block>
+                    <th:block  th:replace="~{fragments/editor/anonymousFile :: anonymousFile}"></th:block>
 
-                <th:block th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}" th:replace="~{fragments/editor/anonymousFile :: anonymousFile}"></th:block>
+                </th:block>
 
             </div>
         </div>
