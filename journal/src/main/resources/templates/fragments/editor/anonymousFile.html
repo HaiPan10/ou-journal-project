@@ -8,7 +8,7 @@
         </p>
         <b>(file ẩn danh cho phản biện viên)</b>
         <div class="grow flex justify-end items-center gap-4">
-            <button data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
+            <button th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}" data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
                 class="w-fit text-main text-2xl">
                 <i class="bi bi-pencil-square"></i>
             </button>
@@ -24,7 +24,7 @@
     
     </div>
     
-    <div id="edit-anonymous-modal" tabindex="-1"
+    <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}" id="edit-anonymous-modal" tabindex="-1"
         class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
         <div class="relative w-full max-w-5xl max-h-full m-6 lg:m-12">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
