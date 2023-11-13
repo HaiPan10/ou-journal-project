@@ -42,11 +42,11 @@
                             Ngày mời
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Email tác giả chính
+                            Email biên tập viên
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <!-- <th scope="col" class="px-6 py-3">
                             Email tác giả liên hệ
-                        </th>
+                        </th> -->
                         <th scope="col" class="px-6 py-3">
                         </th>
                     </tr>
@@ -58,20 +58,21 @@
                                 <span th:text="${reviewArticle.manuscript.article.title}"></span>
                             </td>
                             <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
-                            <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
+                            <td class="px-6 py-4" th:text="${reviewArticle.manuscript.article.editorUser.email}"></td>
+                            <!-- <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
                                     </div>
                                 </th:block>
-                            </th:block>
-                            <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
+                            </th:block> -->
+                            <!-- <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 2}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
                                     </div>
                                 </th:block>
-                            </th:block>
+                            </th:block> -->
                             <td class="px-6 py-4">
                                 <button class="table-action" th:onclick="'responseInvitation(\'ACCEPTED\', ' + ${reviewArticle.id} + ')'" style="margin-right: 20px;">Đồng ý</button>
                                 <button class="table-action" th:onclick="'responseInvitation(\'REJECTED\', ' + ${reviewArticle.id} + ')'">Từ chối</button>

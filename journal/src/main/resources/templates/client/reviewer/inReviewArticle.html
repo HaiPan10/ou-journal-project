@@ -42,11 +42,11 @@
                             Ngày mời
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Email tác giả chính
+                            Email biên tập viên
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <!-- <th scope="col" class="px-6 py-3">
                             Email tác giả liên hệ
-                        </th>
+                        </th> -->
                         <th scope="col" class="px-6 py-3">
                         </th>
                     </tr>
@@ -58,7 +58,8 @@
                                 <span th:text="${reviewArticle.manuscript.article.title}"></span>
                             </th>
                             <td class="px-6 py-4" th:text="${reviewArticle.invitedAt}"></td>
-                            <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
+                            <td class="px-6 py-4" th:text="${reviewArticle.manuscript.article.editorUser.email}"></td>
+                            <!-- <th:block th:each="authorArticle : ${reviewArticle.manuscript.article.authorArticles}">
                                 <th:block th:each="authorRole : ${authorArticle.authorRoles}">
                                     <div th:if="${authorRole.authorType.id == 1}">
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
@@ -71,7 +72,7 @@
                                         <td class="px-6 py-4" th:text="${authorArticle.user.email}"></td>
                                     </div>
                                 </th:block>
-                            </th:block>
+                            </th:block> -->
                             <td class="px-6 py-4">
                                 <a th:href="@{/reviewer/review/{id}(id=${reviewArticle.id})}" class="table-action" >Phản biện ngay</a>
                             </td>

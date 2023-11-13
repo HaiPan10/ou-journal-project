@@ -64,6 +64,7 @@ public class SubmissionController {
         try {
             Article article = articleService.retrieve(articleId);
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", article.getId()));
             model.addAttribute("article", article);
             if (article.getStatus().equals(ArticleStatus.REJECT.toString())) {
                 model.addAttribute("editorFiles", manuscriptService.getLastestManuscript(article.getId()).getEditorFiles());
