@@ -1,5 +1,6 @@
 package com.ou.journal.service.impl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -92,5 +93,13 @@ public class ManuscriptServiceImpl implements ManuscriptService {
     @Override
     public Optional<Manuscript> findByArticleAndVersion(Long articleId, String version) {
         return manuscriptRepositoryJPA.findByArticleAndVersion(articleId, version);
+    }
+
+    @Override
+    public Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException {
+        Manuscript manuscript = getLastestManuscript(articleId);
+        manuscript.setContentAnonymous(anonymousFile.getBytes());
+        manuscript.setTypeAnonymous(anonymousFile.getContentType());
+        return manuscriptRepositoryJPA.save(manuscript);
     }
 }

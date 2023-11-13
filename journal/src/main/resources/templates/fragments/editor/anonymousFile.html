@@ -1,22 +1,23 @@
-<<!-- File ẩn danh -->
+<!-- File ẩn danh -->
 <th:block th:fragment="anonymousFile">
     <div class="mt-5 w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
         <div th:text="PDF"
             class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
         </div>
-        <p class="lowercase" th:text="anonymous_file">
+        <p class="lowercase" th:text="${renderManuscript.nameAnonymous}">
         </p>
+        <b>(file ẩn danh cho phản biện viên)</b>
         <div class="grow flex justify-end items-center gap-4">
             <button data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
                 class="w-fit text-main text-2xl">
                 <i class="bi bi-pencil-square"></i>
             </button>
     
-            <button class="w-fit text-main text-2xl">
+            <button id="view-btn" class="w-fit text-main text-2xl">
                 <i class="bi bi-eye"></i>
             </button>
     
-            <button class="w-fit text-main text-2xl">
+            <button id="download-btn" class="w-fit text-main text-2xl">
                 <i class="bi bi-download"></i>
             </button>
         </div>
@@ -38,11 +39,11 @@
                 <div class="p-12">
                     <h2 class="font-semibold text-2xl my-2">Chỉnh sửa file ẩn danh cho bài viết</h2>
                     <p class="text-gray-500 mb-5">* Vui lòng gửi file ẩn danh đã chỉnh sửa</p>
-                    <form id="decide-form" enctype="multipart/form-data" method="post">
+                    <form id="update-anonymous-form" enctype="multipart/form-data" method="put">
                         <label for="editorAnonymousFile" class="btn-dark w-fit cursor-pointer">Đăng file ẩn danh mới<i
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
                         <input required accept=".pdf,.docx,.tex" id="editorAnonymousFile" data-file-display="edit-anonymous-file-display"
-                            class="sr-only" type="file" name="editorAnonymousFile">
+                            class="sr-only" type="file" name="anonymousFile">
                         <div class="mt-5">
                             <div id="edit-anonymous-file-display"
                                 class="hidden w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
@@ -63,4 +64,37 @@
             </div>
         </div>
     </div>
+
+    <script th:inline="javascript">
+        document.getElementById("view-btn").addEventListener("click", function() {
+            window.open(/*[[${anonymousUrl}]]*/ "", '_blank');
+        });
+
+        document.getElementById("download-btn").addEventListener("click", function() {
+            const type = /*[[${ renderManuscript.typeAnonymous }]]*/ "";
+            const name = /*[[${ renderManuscript.nameAnonymous }]]*/ "";
+            const byteContent = /*[[${ renderManuscript.contentAnonymous }]]*/ "";
+
+            downloadFile(type, name, byteContent)
+        });
+
+        const form = document.getElementById("update-anonymous-form");
+        form.addEventListener('submit', function(evt) {
+            evt.preventDefault()
+            const articleId = /*[[${ articleId }]]*/ ""
+            fetch(`/api/articles/anonymous/${articleId}`, {
+                method: 'PUT',
+                body: new FormData(form)
+            }).then(res => {
+                if (res.ok) {
+                    window.location.reload()
+                } else {
+                    throw new Error(res.error)
+                }
+            }).catch(err => {
+                alert(err);
+                console.log(err);
+            });
+        })
+    </script>
 </th:block>

@@ -1,5 +1,6 @@
 package com.ou.journal.service.interfaces;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface ManuscriptService {
     Optional<Manuscript> getById(Long id);
 
     Optional<Manuscript> findByArticleAndVersion(Long articleId, String version);
+
+    Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException;
 }

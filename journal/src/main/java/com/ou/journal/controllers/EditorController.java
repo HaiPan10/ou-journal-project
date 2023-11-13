@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.ou.journal.constants.EditorURL;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
@@ -232,6 +231,7 @@ public class EditorController {
             }
             // preview file
             model.addAttribute("viewUrl", String.format("/api/articles/view/%s", article.getId()));
+            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", article.getId()));
 
             model.addAttribute("article", article);
 

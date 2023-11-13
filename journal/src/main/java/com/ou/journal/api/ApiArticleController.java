@@ -58,7 +58,16 @@ public class ApiArticleController {
     @GetMapping("/view/{articleId}")
     public ResponseEntity<byte[]> view(@PathVariable Long articleId, @RequestParam(required = false) String version) {
         try {
-            return renderPDFService.viewAuthorFile(articleId, version);
+            return renderPDFService.viewArticle(articleId, version);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/view-anonymous/{articleId}")
+    public ResponseEntity<byte[]> viewAnonymous(@PathVariable Long articleId, @RequestParam(required = false) String version) {
+        try {
+            return renderPDFService.viewAnonymous(articleId, version);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
@@ -150,6 +159,17 @@ public class ApiArticleController {
             return ResponseEntity.ok()
                     .body(manuscriptService.reUpManuscript(articleId, file, fileAnonymous, fileAppendix, reference,
                             new AuthorNote(note)));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Secured("ROLE_EDITOR")
+    @PutMapping("/anonymous/{articleId}")
+    public ResponseEntity<?> reSubmitAnonymousFile(@PathVariable Long articleId, MultipartFile anonymousFile) {
+        try {
+            return ResponseEntity.ok()
+                    .body(manuscriptService.updateAnonymousFile(anonymousFile, articleId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

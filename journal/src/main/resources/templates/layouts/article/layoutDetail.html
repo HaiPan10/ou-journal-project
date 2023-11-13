@@ -144,8 +144,11 @@
                                     class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
 
                                 </div>
-                                <p id="file-display-name" class="lowercase"
+                                <!-- <p id="file-display-name" class="lowercase"
                                     th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
+                                </p> -->
+                                <p id="file-display-name" class="lowercase"
+                                    th:text="${renderManuscript.name}">
                                 </p>
                             </th:block>
                             <th:block

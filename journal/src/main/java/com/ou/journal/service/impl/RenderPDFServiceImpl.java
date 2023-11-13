@@ -32,7 +32,7 @@ public class RenderPDFServiceImpl implements RenderPDFService{
     private EditorFileService editorFileService;
 
     @Override
-    public ResponseEntity<byte[]> viewAuthorFile(Long articleId, String version) throws Exception {
+    public ResponseEntity<byte[]> viewArticle(Long articleId, String version) throws Exception {
         Manuscript renderManuscript;
         if (version == null) {
             renderManuscript = manuscriptService.getLastestManuscript(articleId);
@@ -93,6 +93,31 @@ public class RenderPDFServiceImpl implements RenderPDFService{
             documentData = FileConverterUtils.convertToPDF(originData);
         }
 
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> viewAnonymous(Long articleId, String version) throws Exception {
+        Manuscript renderManuscript;
+        if (version == null) {
+            renderManuscript = manuscriptService.getLastestManuscript(articleId);
+        } else {
+            Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+            if (manuscriptOptional.isPresent()) {
+                renderManuscript = manuscriptOptional.get();
+            } else {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            }
+        }
+        byte[] originData = renderManuscript.getContentAnonymous();
+        byte[] documentData;
+        HttpHeaders headers = new HttpHeaders();
+        if (renderManuscript.getTypeAnonymous().equals("application/pdf")) {
+            documentData = originData;
+        } else {
+            documentData = FileConverterUtils.convertToPDF(originData);
+        }
         headers.setContentType(MediaType.APPLICATION_PDF);
         return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
     }
