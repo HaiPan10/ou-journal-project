@@ -4105,6 +4105,10 @@ input:checked + .toggle-bg {
   flex-shrink: 0;
 }
 
+.shrink {
+  flex-shrink: 1;
+}
+
 .shrink-0 {
   flex-shrink: 0;
 }
@@ -5043,6 +5047,10 @@ input:checked + .toggle-bg {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.pb-0 {
+  padding-bottom: 0px;
 }
 
 .pb-1 {
@@ -6259,6 +6267,10 @@ input:checked + .toggle-bg {
   padding-right: 2.75rem;
 }
 
+:is([dir="rtl"] .rtl\:text-right) {
+  text-align: right;
+}
+
 :is(.dark .dark\:border-blue-500) {
   --tw-border-opacity: 1;
   border-color: rgb(63 131 248 / var(--tw-border-opacity));
@@ -6478,6 +6490,10 @@ input:checked + .toggle-bg {
 
   .md\:mt-3 {
     margin-top: 0.75rem;
+  }
+
+  .md\:block {
+    display: block;
   }
 
   .md\:flex {

@@ -73,6 +73,15 @@ public class ApiArticleController {
         }
     }
 
+    @GetMapping("/view-appendix/{articleId}")
+    public ResponseEntity<byte[]> viewAppendix(@PathVariable Long articleId, @RequestParam(required = false) String version) {
+        try {
+            return renderPDFService.viewAppendix(articleId, version);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @Secured("ROLE_EDITOR")
     @PostMapping("/editor/decide/{articleId}")
     public ResponseEntity<?> decideArticle(@PathVariable Long articleId, List<MultipartFile> decideFiles,
