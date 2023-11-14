@@ -28,16 +28,16 @@ document.getElementById('decide-files').addEventListener('change', function (e) 
     showFiles(e, fileDislay);
 });
 
-const form = document.forms.namedItem("decide-form");
+const decideForm = document.forms.namedItem("decide-form");
 function decideArticle(status) {
-    const formData = new FormData(form);
-    formData.append("status", status);
-    const file = formData.get('decideFiles');
+    const decideFormData = new FormData(decideForm);
+    decideFormData.append("status", status);
+    const file = decideFormData.get('decideFiles');
 
     if (file && file.size > 0) {
         fetch(`/api/articles/editor/decide/${articleId}`, {
             method: 'POST',
-            body: formData
+            body: decideFormData
         }).then(res => {
             if (res.ok) {
                 window.location.href = "/editor/reviewed-articles"
