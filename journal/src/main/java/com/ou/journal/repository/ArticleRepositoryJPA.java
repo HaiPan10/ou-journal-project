@@ -27,4 +27,8 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
     List<Article> findByEditorUserId(Long editorUser);
     @Query("SELECT COUNT(*) FROM Article a WHERE a.editorUser.id = ?1")
     Long countAssignedArticleById(Long editorId);
+    @Query("SELECT COUNT(*) FROM AuthorArticle aa " + 
+        "WHERE aa.user.id = ?1 "
+    )
+    Long countProcessingArticleByAuthorId(Long authorId);
 }

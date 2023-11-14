@@ -384,4 +384,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Long countAssignedArticleById(Long editorId) {
         return articleRepositoryJPA.countAssignedArticleById(editorId);
     }
+
+    @Override
+    public Long countProcessingArticleByAuthorId(Long authorId) {
+        return articleRepositoryJPA.countProcessingArticleByAuthorId(authorId);
+    }
 }

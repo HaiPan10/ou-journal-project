@@ -104,111 +104,105 @@
             </section>
             <!-- /ACTION -->
 
-
-
-
-            <div th:if="${renderManuscript}">
-                <hr class="my-5" />
-                <div class="flex justify-between items-center">
-                    <h2 class="font-semibold text-2xl">File bài viết</h2>
-                    <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
-                        class="btn-secondary w-fit my-3 shadow-md" type="button">
-                        <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
-                        <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    <form id="dropdown-versions"
-                        class="z-50 hidden bg-white border border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
-                        <input th:if="${param.back}" name="back" th:value="${param.back}" type="hidden" />
-                        <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
-                            <th:block th:each="manuscript : ${manuscripts}">
-                                <li>
-                                    <button type="submit" name="version" th:value="${manuscript.version}"
-                                        class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
-                                        th:text="${manuscript.version}"></button>
-                                </li>
-                            </th:block>
-                        </ul>
-                    </form>
-                </div>
-
-                <!-- File gốc -->
-                <div id="file-display" class="mt-5">
-                    <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                        <th:block th:switch="${renderManuscript.type}">
-                            <th:block th:case="'application/pdf'">
-                                <div id="file-display-extension" th:text="'pdf'"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-                                </div>
-                                <!-- <p id="file-display-name" class="lowercase"
-                                    th:text="${#strings.replace(article.title, ' ', '_')} + '.pdf'">
-                                </p> -->
-                                <p id="file-display-name" class="lowercase"
-                                    th:text="${renderManuscript.name}">
-                                </p>
-                            </th:block>
-                            <th:block
-                                th:case="'application/vnd.openxmlformats-officedocument.wordprocessingml.document'">
-                                <div id="file-display-extension" th:text="'docx'"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-                                </div>
-                                <p id="file-display-name" class="lowercase"
-                                    th:text="${#strings.replace(article.title, ' ', '_')} + '.docx'">
-                                </p>
-                            </th:block>
-
+            <hr class="my-5" />
+            <div th:if="${manuscripts}" class="flex justify-between items-center">
+                <button id="btn-version" data-dropdown-toggle="dropdown-versions" data-dropdown-trigger="click"
+                    class="btn-secondary w-fit my-3 shadow-md" type="button">
+                    <span th:text="'Phiên bản: ' + ${renderManuscript.version}"></span>
+                    <svg class="w-2.5 h-2.5 ml-2.5" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+                <form id="dropdown-versions"
+                    class="z-50 hidden bg-white border-b border-gray-200 divide-y divide-gray-100 rounded-lg shadow w-44">
+                    <input th:if="${param.back}" name="back" th:value="${param.back}" type="hidden" />
+                    <ul class="py-2 text-sm shadow-lg text-gray-700" aria-labelledby="btn-version">
+                        <th:block th:each="manuscript : ${manuscripts}">
+                            <li>
+                                <button type="submit" name="version" th:value="${manuscript.version}"
+                                    class="block px-4 py-2 hover:bg-gray-100 w-full text-start"
+                                    th:text="${manuscript.version}"></button>
+                            </li>
                         </th:block>
+                    </ul>
+                </form>
+            </div>
 
-
-                        <div class="grow flex justify-end items-center gap-4">
-                            <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
-                                class="w-fit text-main text-2xl">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button class="w-fit text-main text-2xl" id="btn-download-file">
-                                <i class="bi bi-download"></i>
-                            </button>
+            <!-- ORTHER INFO -->
+            <div id="accordion-article" data-accordion="open"
+                data-active-classes="bg-white pb-0 text-gray-800 border-b-0">
+                <th:block th:if="${renderManuscript}">
+                    <h2 th:unless="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}"
+                        id="accordion-article-heading-1">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                            data-accordion-target="#accordion-article-body-1" aria-controls="accordion-article-body-1">
+                            <span class="flex items-center">Tệp gốc của bài viết</span>
+                            <i data-accordion-icon class="bi bi-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </h2>
+                    <div id="accordion-article-body-1" class="hidden" aria-labelledby="accordion-article-heading-1">
+                        <div th:unless="${#authorization.expression('hasRole(''ROLE_REVIEWER'')')}" id="file-display"
+                            class="p-5 border-b border-gray-200">
+                            <th:block th:replace="~{fragments/files/originFile :: originFile}"></th:block>
                         </div>
-
                     </div>
-                </div>
-                <th:block>
-                    <th:block  th:replace="~{fragments/editor/anonymousFile :: anonymousFile}"></th:block>
+                    <h2 id="accordion-article-heading-2">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                            data-accordion-target="#accordion-article-body-2" aria-expanded="false"
+                            aria-controls="accordion-article-body-2">
+                            <span class="flex items-center">Tệp ẩn danh của bài viết</span>
+                            <i data-accordion-icon class="bi bi-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </h2>
+                    <div id="accordion-article-body-2" class="hidden" aria-labelledby="accordion-article-heading-2">
+                        <div th:if="${renderManuscript}" class="p-5 border-b border-gray-200">
 
+                            <!-- File gốc -->
+                            <th:block th:replace="~{fragments/files/anonymousFile :: anonymousFile}"></th:block>
+
+                        </div>
+                    </div>
+                    <th:block th:if="${renderManuscript.appendix}">
+                        <h2 id="accordion-article-heading-3">
+                            <button type="button"
+                                class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 gap-3"
+                                data-accordion-target="#accordion-article-body-3" aria-expanded="false"
+                                aria-controls="accordion-article-body-3">
+                                <span class="flex items-center">Tệp phụ lục</span>
+                                <i data-accordion-icon class="bi bi-chevron-up" aria-hidden="true"></i>
+
+                            </button>
+                        </h2>
+                        <div id="accordion-article-body-3" class="hidden" aria-labelledby="accordion-article-heading-3">
+                            <div class="p-5 border-b border-gray-200">
+                                <th:block th:replace="~{fragments/files/appendixFile :: appendixFile}"></th:block>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <h2 id="accordion-article-heading-4">
+                        <button type="button"
+                            class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 gap-3"
+                            data-accordion-target="#accordion-article-body-4" aria-expanded="false"
+                            aria-controls="accordion-article-body-4">
+                            <span class="flex items-center">Trích dẫn</span>
+                            <i data-accordion-icon class="bi bi-chevron-up" aria-hidden="true"></i>
+                        </button>
+                    </h2>
+                    <div id="accordion-article-body-4" class="hidden" aria-labelledby="accordion-article-heading-4">
+                        <div class="p-5">
+                            <p class="" th:text="${renderManuscript.reference}"></p>
+                        </div>
+                    </div>
                 </th:block>
 
             </div>
         </div>
 
-        <div id="preview-modal" tabindex="-1"
-            class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
-            <div class="relative w-full max-h-full m-6 lg:m-12">
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                    <button type="button"
-                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="preview-modal">
-                        <i class="bi bi-x-lg"></i>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-
-
-                    <div class="p-12">
-                        <div>
-                            <iframe id="article-iframe"
-                                style="width: 100%; height: 1000px; background-color: white;"></iframe>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        
         <!-- MODAL -->
         <section layout:fragment="modal">
 
@@ -232,29 +226,6 @@
     <script src="/js/utils.js"></script>
     <script th:inline="javascript">
         const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
-        async function loadView() {
-            document.querySelector('#article-iframe').src = /*[[${viewUrl}]]*/ "";
-        }
-        window.addEventListener('DOMContentLoaded', (event) => {
-            loadView();
-        });
-
-    </script>
-
-    <script th:if="${renderManuscript}" th:inline="javascript">
-        const btnDownloadFile = document.querySelector("#btn-download-file");
-        try {
-            btnDownloadFile.addEventListener('click', function () {
-                const type = /*[[${ renderManuscript.type }]]*/ "";
-                const name = /*[[${ renderManuscript.article.title }]]*/ "";
-                const byteContent = /*[[${ renderManuscript.content }]]*/ "";
-
-                downloadFile(type, name, byteContent)
-            });
-        } catch (e) {
-
-        }
-
     </script>
     <script th:src="@{/js/article/keyword.js}"></script>
     <script th:src="@{/js/article/note.js}"></script>

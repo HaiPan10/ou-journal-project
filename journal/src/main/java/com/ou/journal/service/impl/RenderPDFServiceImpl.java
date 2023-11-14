@@ -121,4 +121,29 @@ public class RenderPDFServiceImpl implements RenderPDFService{
         headers.setContentType(MediaType.APPLICATION_PDF);
         return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<byte[]> viewAppendix(Long articleId, String version) throws Exception {
+        Manuscript renderManuscript;
+        if (version == null) {
+            renderManuscript = manuscriptService.getLastestManuscript(articleId);
+        } else {
+            Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+            if (manuscriptOptional.isPresent()) {
+                renderManuscript = manuscriptOptional.get();
+            } else {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            }
+        }
+        byte[] originData = renderManuscript.getAppendix().getContent();
+        byte[] documentData;
+        HttpHeaders headers = new HttpHeaders();
+        if (renderManuscript.getAppendix().getType().equals("application/pdf")) {
+            documentData = originData;
+        } else {
+            documentData = FileConverterUtils.convertToPDF(originData);
+        }
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        return new ResponseEntity<>(documentData, headers, HttpStatus.OK);
+    }
 }

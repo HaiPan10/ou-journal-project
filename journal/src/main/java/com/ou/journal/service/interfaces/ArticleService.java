@@ -30,4 +30,5 @@ public interface ArticleService {
     Article assignEditor(Long articleId, User user) throws Exception;
     String getArticleStatusById(Long articleId);
     List<Article> findByEditorUserId(Long editorId);
+    Long countProcessingArticleByAuthorId(Long authorId);
 }

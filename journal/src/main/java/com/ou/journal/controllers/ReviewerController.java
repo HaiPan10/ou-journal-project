@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
@@ -59,8 +61,13 @@ public class ReviewerController {
             model.addAttribute("reviewArticle", reviewArticle);
             model.addAttribute("article", reviewArticle.getManuscript().getArticle());
             model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
+
             model.addAttribute("renderManuscript", reviewArticle.getManuscript());
-            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s", reviewArticle.getManuscript().getArticle().getId()));
+            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s",
+                    reviewArticle.getManuscript().getArticle().getId()));
+            model.addAttribute("appendixUrl", String.format("/api/articles/view-appendix/%s",
+                    reviewArticle.getManuscript().getArticle().getId()));
+
             return "client//reviewer/reviewArticle";
         } catch (Exception e) {
             // model.addAttribute("error", e.getMessage());

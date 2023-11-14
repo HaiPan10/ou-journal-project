@@ -2,27 +2,28 @@
 <th:block th:if="${renderManuscript}" th:fragment="anonymousFile">
     <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
         <div th:text="PDF"
-            class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
+            class="shrink-0 uppercase bg-white relative text-xs font-semibold hidden md:flex w-14 h-14 rounded shadow justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
         </div>
-        <p class="lowercase" th:text="${renderManuscript.nameAnonymous}">
+        <p class="shrink truncate lowercase" th:text="${renderManuscript.nameAnonymous}">
         </p>
         <div class="grow flex justify-end items-center gap-4">
-            <button th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}" data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
+            <button th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}"
+                data-modal-target="edit-anonymous-modal" data-modal-toggle="edit-anonymous-modal"
                 class="w-fit text-main text-2xl">
                 <i class="bi bi-pencil-square"></i>
             </button>
-    
-            <button id="view-btn" class="w-fit text-main text-2xl">
+
+            <button data-modal-target="preview-anonymous-modal" data-modal-toggle="preview-anonymous-modal" id="view-btn" class="w-fit text-main text-2xl">
                 <i class="bi bi-eye"></i>
             </button>
-    
+
             <button id="btn-download-anonymous-file" class="w-fit text-main text-2xl">
                 <i class="bi bi-download"></i>
             </button>
         </div>
-    
+
     </div>
-    
+
     <div th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}" id="edit-anonymous-modal" tabindex="-1"
         class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
         <div class="relative w-full max-w-5xl max-h-full m-6 lg:m-12">
@@ -33,16 +34,17 @@
                     <i class="bi bi-x-lg"></i>
                     <span class="sr-only">Close modal</span>
                 </button>
-    
-    
+
+
                 <div class="p-12">
                     <h2 class="font-semibold text-2xl my-2">Chỉnh sửa file ẩn danh cho bài viết</h2>
                     <p class="text-gray-500 mb-5">* Vui lòng gửi file ẩn danh đã chỉnh sửa</p>
                     <form id="update-anonymous-form" enctype="multipart/form-data" method="put">
                         <label for="editorAnonymousFile" class="btn-dark w-fit cursor-pointer">Đăng file ẩn danh mới<i
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
-                        <input required accept=".pdf,.docx,.tex" id="editorAnonymousFile" data-file-display="edit-anonymous-file-display"
-                            class="sr-only" type="file" name="anonymousFile">
+                        <input required accept=".pdf,.docx,.tex" id="editorAnonymousFile"
+                            data-file-display="edit-anonymous-file-display" class="sr-only" type="file"
+                            name="anonymousFile">
                         <div class="mt-5">
                             <div id="edit-anonymous-file-display"
                                 class="hidden w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
@@ -57,28 +59,56 @@
                             <button type="submit" class="btn-gradient-main w-fit">Xác nhận</button>
                         </div>
                     </form>
-    
+
                 </div>
-    
+
             </div>
         </div>
     </div>
 
-    <script th:inline="javascript">
-        document.getElementById("view-btn").addEventListener("click", function() {
-            window.open(/*[[${anonymousUrl}]]*/ "", '_blank');
+    <div id="preview-anonymous-modal" tabindex="-1"
+        class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full shadow-lg">
+        <div class="relative w-full max-h-full m-6 lg:m-12">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <button type="button"
+                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="preview-anonymous-modal">
+                    <i class="bi bi-x-lg"></i>
+                    <span class="sr-only">Close modal</span>
+                </button>
+
+
+                <div class="p-12">
+                    <div>
+                        <iframe id="article-anonymous-iframe"
+                            style="width: 100%; height: 1000px; background-color: white;"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script defer th:inline="javascript">
+        async function loadAnonymousView() {
+            document.querySelector('#article-anonymous-iframe').src = /*[[${anonymousUrl}]]*/ "";
+        }
+        window.addEventListener('DOMContentLoaded', (event) => {
+            loadAnonymousView();
         });
 
-        document.getElementById("btn-download-anonymous-file").addEventListener("click", function() {
+
+        document.getElementById("btn-download-anonymous-file").addEventListener("click", function () {
             const type = /*[[${ renderManuscript.typeAnonymous }]]*/ "";
             const name = /*[[${ renderManuscript.nameAnonymous }]]*/ "";
             const byteContent = /*[[${ renderManuscript.contentAnonymous }]]*/ "";
 
             downloadFile(type, name, byteContent)
         });
-
+    </script>
+    <script th:inline="javascript" th:if="${#authorization.expression('hasRole(''ROLE_EDITOR'')')}">
         const form = document.getElementById("update-anonymous-form");
-        form.addEventListener('submit', function(evt) {
+        form.addEventListener('submit', function (evt) {
             evt.preventDefault()
             const articleId = /*[[${ articleId }]]*/ ""
             fetch(`/api/articles/anonymous/${articleId}`, {
