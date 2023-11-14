@@ -39,22 +39,34 @@ public class MainMenuController {
             model.addAttribute("articleWaitingForInviteReviewCount",
                     articleService.getArticleWaitingForInviteReviewer(currentUser.getId()).size());
             model.addAttribute("articleWaitingForAcceptFromReviewerCount",
-                    articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId()).size());
+                    articleService.getArticleWaitingForAcceptFromReviewer(currentUser.getId())
+                            .size());
             model.addAttribute("articleInReviewingCount",
                     articleService.getInReviewArticles(currentUser.getId()).size());
             model.addAttribute("articleReviewedCount",
                     articleService.getReviewedArticles(currentUser.getId()).size());
-            model.addAttribute("articleWaitingAssignEditor", articleService.countArticleWaitingAssignEditor());
-            model.addAttribute("assignedArticleCount", articleService.countAssignedArticleById(currentUser.getId()));
+            model.addAttribute("articleWaitingAssignEditor",
+                    articleService.countArticleWaitingAssignEditor());
+            model.addAttribute("assignedArticleCount",
+                    articleService.countAssignedArticleById(currentUser.getId()));
         }
 
         Optional<UserRole> reviewerUserOptional = userRoleService.getByUserAndRoleName(
                 userService.retrieve(currentUser.getId()), RoleName.ROLE_REVIEWER.toString());
         if (reviewerUserOptional.isPresent()) {
             model.addAttribute("invitationCount",
-                    reviewArticleService.countReviewArticles(currentUser.getId(), ReviewArticleStatus.PENDING.toString()));
+                    reviewArticleService.countReviewArticles(currentUser.getId(),
+                            ReviewArticleStatus.PENDING.toString()));
             model.addAttribute("reviewCount",
-                    reviewArticleService.countReviewArticles(currentUser.getId(), ReviewArticleStatus.ACCEPTED.toString()));
+                    reviewArticleService.countReviewArticles(currentUser.getId(),
+                            ReviewArticleStatus.ACCEPTED.toString()));
+        }
+
+        Optional<UserRole> authorUserOptional = userRoleService.getByUserAndRoleName(
+                userService.retrieve(currentUser.getId()), RoleName.ROLE_AUTHOR.toString());
+        if (authorUserOptional.isPresent()) {
+            model.addAttribute("processingArticleCount",
+                    articleService.countProcessingArticleByAuthorId(currentUser.getId()));
         }
         return "client/mainMenu";
     }
