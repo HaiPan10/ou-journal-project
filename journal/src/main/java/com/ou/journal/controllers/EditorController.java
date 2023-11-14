@@ -240,9 +240,9 @@ public class EditorController {
 
             }
             // preview file
-            model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%", article.getId(),version));
-            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s?version=%", article.getId(),version));
-            model.addAttribute("appendixUrl", String.format("/api/articles/view-appendix/%s?version=%", article.getId(),version));
+            model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(),version));
+            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s?version=%s", article.getId(),version));
+            model.addAttribute("appendixUrl", String.format("/api/articles/view-appendix/%s?version=%s", article.getId(),version));
 
             model.addAttribute("article", article);
 
