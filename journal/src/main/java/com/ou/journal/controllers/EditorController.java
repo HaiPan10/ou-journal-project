@@ -278,6 +278,7 @@ public class EditorController {
 
             return "client/editor/decideArticle";
         } catch (Exception e) {
+            e.printStackTrace();
             return "redirect:/main-menu";
         }
     }
