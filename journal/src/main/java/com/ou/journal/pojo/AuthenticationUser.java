@@ -6,9 +6,11 @@ import org.springframework.security.core.GrantedAuthority;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class AuthenticationUser extends org.springframework.security.core.userdetails.User{
 
     private Long id;

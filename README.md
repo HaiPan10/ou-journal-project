@@ -151,3 +151,17 @@ Body: form-data
 Key: file -> input your file
 Key: note -> input any author note
 ```
+
+## Login from email 
+```
+Test endpoint: GET:localhost:8080/api/accounts/login?token={token}
+This GET api will authenticate user by login with JWT Token as the request parameters.
+After that, It'll redirect user to the target endpoint by response with status code 301 MOVED_PERMANENTLY.
+To use this api simply call the JwtService method in order to generate a token:
+public String generateArticleMailActionToken(User user, Article article, String roleName, String targetEndpoint);
+And put this token into the api request paramaters (token).
+Note:
+- This api only work with a url included in a email sent to user.
+- Must declare the roleName param otherwise this token is invalid.
+- The targetEndpoint param can be null.
+```

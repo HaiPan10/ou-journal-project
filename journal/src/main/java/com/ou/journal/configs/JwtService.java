@@ -59,7 +59,8 @@ public class JwtService {
         return token;
     }
 
-    public String generateArticleMailActionToken(User user, Article article) {
+    public String generateArticleMailActionToken(User user, Article article, String roleName,
+            String targetEndpoint) {
         String token = null;
         if (user != null) {
             try {
@@ -68,6 +69,8 @@ public class JwtService {
                 builder.claim("id", user.getId());
                 builder.claim("email", user.getEmail());
                 builder.claim("articleId", article.getId());
+                builder.claim("roleName", roleName);
+                builder.claim("targetEndpoint", targetEndpoint);
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
 
@@ -112,7 +115,7 @@ public class JwtService {
     public String generateToken(String email) {
         String token = null;
         try {
-            
+
             JWSSigner signer = new MACSigner(REGISTER_SECRECT.getBytes());
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
             builder.claim("email", email);
@@ -128,16 +131,16 @@ public class JwtService {
 
         } catch (JOSEException e) {
             System.out.println("[ERROR] - " + e.getMessage());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return token;
     }
 
-    public String generateToken(User user){
+    public String generateToken(User user) {
         String token = null;
         try {
-            
+
             JWSSigner signer = new MACSigner(MAIL_SECRECT.getBytes());
             JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
             builder.claim("email", user.getEmail());
@@ -154,7 +157,7 @@ public class JwtService {
 
         } catch (JOSEException e) {
             System.out.println("[ERROR] - " + e.getMessage());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }
         return token;
@@ -167,9 +170,9 @@ public class JwtService {
             JWSVerifier verifier = null;
             if (secrectType.equals(SecrectType.DEFAULT)) {
                 verifier = new MACVerifier(BYTES);
-            } else if(secrectType.equals(SecrectType.EMAIL)){
+            } else if (secrectType.equals(SecrectType.EMAIL)) {
                 verifier = new MACVerifier(MAIL_SECRECT);
-            } else if(secrectType.equals(SecrectType.REGISTER)){
+            } else if (secrectType.equals(SecrectType.REGISTER)) {
                 verifier = new MACVerifier(REGISTER_SECRECT);
             }
 
@@ -204,8 +207,8 @@ public class JwtService {
         return !(userName == null || userName.isEmpty() || id == null || expirationDate.before(new Date()));
     }
 
-    public boolean isValidAccessToken(String token, SecrectType secrectType){
-        if(SecrectType.DEFAULT.equals(secrectType)){
+    public boolean isValidAccessToken(String token, SecrectType secrectType) {
+        if (SecrectType.DEFAULT.equals(secrectType)) {
             return isValidAccessToken(token);
         }
 
@@ -284,6 +287,28 @@ public class JwtService {
         Long value = null;
         try {
             value = claimsSet.getLongClaim("articleId");
+        } catch (ParseException | NullPointerException e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+        }
+        return value;
+    }
+
+    public String getRoleNameFromToken(String token, SecrectType secrectType){
+        JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
+        String value = null;
+        try {
+            value = claimsSet.getStringClaim("roleName");
+        } catch (ParseException | NullPointerException e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+        }
+        return value;
+    }
+
+    public String getTargetEndpointFromToken(String token, SecrectType secrectType){
+        JWTClaimsSet claimsSet = getClaimsSet(token, secrectType);
+        String value = null;
+        try {
+            value = claimsSet.getStringClaim("targetEndpoint");
         } catch (ParseException | NullPointerException e) {
             System.out.println("[ERROR] - " + e.getMessage());
         }

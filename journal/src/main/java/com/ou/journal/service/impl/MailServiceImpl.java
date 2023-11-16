@@ -15,6 +15,7 @@ import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.AuthorType;
 import com.ou.journal.enums.ReviewArticleStatus;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleNote;
@@ -74,7 +75,8 @@ public class MailServiceImpl implements MailService {
         context.setVariable("subject", subject);
         context.setVariable("body", body);
         context.setVariable("actionLink", String.format("%s/api/mail/verify/%s/%s",
-                environment.getProperty("SERVER_HOSTNAME"), account.getId(), account.getVerificationCode()));
+                environment.getProperty("SERVER_HOSTNAME"), account.getId(),
+                account.getVerificationCode()));
         context.setVariable("actionName", "Xác thực ngay");
         MailRequest mailRequest = new MailRequest(account.getEmail(), subject, body, context);
         sendEmail(mailRequest);
@@ -88,11 +90,15 @@ public class MailServiceImpl implements MailService {
         context.setVariable("subject", subject);
         context.setVariable("body", body);
         String token = jwtService.generateReviewerInvitationToken(reviewArticle.getUser(), reviewArticle);
-        context.setVariable("firstActionLink", String.format("%s/api/review-articles/response?status=%s&token=%s",
-                environment.getProperty("SERVER_HOSTNAME"), ReviewArticleStatus.ACCEPTED.toString(), token));
+        context.setVariable("firstActionLink",
+                String.format("%s/api/review-articles/response?status=%s&token=%s",
+                        environment.getProperty("SERVER_HOSTNAME"),
+                        ReviewArticleStatus.ACCEPTED.toString(), token));
         context.setVariable("firstActionName", "Đồng ý");
-        context.setVariable("secondActionLink", String.format("%s/api/review-articles/response?status=%s&token=%s",
-                environment.getProperty("SERVER_HOSTNAME"), ReviewArticleStatus.REJECTED.toString(), token));
+        context.setVariable("secondActionLink",
+                String.format("%s/api/review-articles/response?status=%s&token=%s",
+                        environment.getProperty("SERVER_HOSTNAME"),
+                        ReviewArticleStatus.REJECTED.toString(), token));
         context.setVariable("secondActionName", "Từ chối");
         MailRequest mailRequest = new MailRequest(reviewArticle.getUser().getEmail(), subject, body, context);
         sendEmail(mailRequest);
@@ -116,13 +122,17 @@ public class MailServiceImpl implements MailService {
         context.setVariable("body", body);
 
         User correspondingUser = authorArticleRepositoryJPA
-                .findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
-
-        String token = jwtService.generateArticleMailActionToken(correspondingUser, article);
-        context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
+                .findByAnyRoleInAuthourArticle(article.getId(),
+                        AuthorType.CORRESPONDING_AUTHOR.toString())
+                .get();
+        String targetEndpoint = String.format("submission/processing/%s", String.valueOf(article.getId()));
+        String token = jwtService.generateArticleMailActionToken(correspondingUser, article,
+                RoleName.ROLE_AUTHOR.toString(), targetEndpoint);
+        context.setVariable("firstActionLink", String.format("%s/api/accounts/login?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
         context.setVariable("firstActionName", "Theo dõi trạng thái");
-        context.setVariable("secondActionLink", String.format("%s/api/articles/author/article/withdraw?token=%s",
-                environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionLink",
+                String.format("%s/api/articles/author/article/withdraw?token=%s",
+                        environment.getProperty("SERVER_HOSTNAME"), token));
         context.setVariable("secondActionName", "Rút bài");
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
@@ -148,7 +158,9 @@ public class MailServiceImpl implements MailService {
     public void sendInReviewStatusChangeMail(Article article) {
         System.out.println("SENDING INREVIEW MAIL");
         User correspondingUser = authorArticleRepositoryJPA
-                .findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
+                .findByAnyRoleInAuthourArticle(article.getId(),
+                        AuthorType.CORRESPONDING_AUTHOR.toString())
+                .get();
         System.out.println("CORS USER " + correspondingUser.getEmail());
         Context context = new Context();
         String subject = "Thông báo trạng thái bài báo";
@@ -159,36 +171,43 @@ public class MailServiceImpl implements MailService {
                 correspondingUser.getLastName(), correspondingUser.getFirstName());
         context.setVariable("subject", subject);
         context.setVariable("body", body);
-        String token = jwtService.generateArticleMailActionToken(correspondingUser, article);
+        String token = jwtService.generateArticleMailActionToken(correspondingUser, article,
+            RoleName.ROLE_AUTHOR.toString(), "homepage");
         context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
         context.setVariable("firstActionName", "Theo dõi trạng thái");
-        context.setVariable("secondActionLink", String.format("%s/api/articles/author/article/withdraw?token=%s",
-                environment.getProperty("SERVER_HOSTNAME"), token));
+        context.setVariable("secondActionLink",
+                String.format("%s/api/articles/author/article/withdraw?token=%s",
+                        environment.getProperty("SERVER_HOSTNAME"), token));
         context.setVariable("secondActionName", "Rút bài");
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
     }
 
-//     @Override
-//     public void sendDecidingArticleEmail(Article article) {
-//         System.out.println("[DEBUG] - SEND DECIDING EMAIL TO EDITOR AND AUTHOR");
-//         User correspondingUser = authorArticleRepositoryJPA
-//                 .findByAnyRoleInAuthourArticle(article.getId(), AuthorType.CORRESPONDING_AUTHOR.toString()).get();
-//         System.out.println("CORS USER " + correspondingUser.getEmail());
-//         Context context = new Context();
-//         String subject = "Thông báo trạng thái bài báo";
-//         String body = String.format(
-//                 "Xin chào %s %s! Bài báo của bạn đã review xong và đang tiến vào giai đoạn biên tập viên quyết định. Truy cập vào hệ thống để theo dõi trạng thái bài báo!",
-//                 correspondingUser.getLastName(), correspondingUser.getFirstName());
-//         context.setVariable("subject", subject);
-//         context.setVariable("body", body);
-//         context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
-//         context.setVariable("firstActionName", "Theo dõi trạng thái");
-//         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
-//         sendEmail(mailRequest);
+    // @Override
+    // public void sendDecidingArticleEmail(Article article) {
+    // System.out.println("[DEBUG] - SEND DECIDING EMAIL TO EDITOR AND AUTHOR");
+    // User correspondingUser = authorArticleRepositoryJPA
+    // .findByAnyRoleInAuthourArticle(article.getId(),
+    // AuthorType.CORRESPONDING_AUTHOR.toString()).get();
+    // System.out.println("CORS USER " + correspondingUser.getEmail());
+    // Context context = new Context();
+    // String subject = "Thông báo trạng thái bài báo";
+    // String body = String.format(
+    // "Xin chào %s %s! Bài báo của bạn đã review xong và đang tiến vào giai đoạn
+    // biên tập viên quyết định. Truy cập vào hệ thống để theo dõi trạng thái bài
+    // báo!",
+    // correspondingUser.getLastName(), correspondingUser.getFirstName());
+    // context.setVariable("subject", subject);
+    // context.setVariable("body", body);
+    // context.setVariable("firstActionLink", String.format("%s",
+    // environment.getProperty("SERVER_HOSTNAME")));
+    // context.setVariable("firstActionName", "Theo dõi trạng thái");
+    // MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(),
+    // subject, body, context);
+    // sendEmail(mailRequest);
 
-//         // User editor = userService.findByEmail("editor")
-//     }
+    // // User editor = userService.findByEmail("editor")
+    // }
 
     @Override
     public void sendAssignEditorMail(Article article) {

@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.session.ChangeSessionIdAu
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -44,7 +45,7 @@ public class SpringSecurityConfig {
     @Autowired
     private AuthenticationProvider authenticationProvider;
     @Autowired
-    private CharacterEncodingFilter filter;
+    private CharacterEncodingFilter encodingFilter;
     // @Autowired
     // private CustomAccessDeniedHandler customAccessDeniedHandler;
     @Autowired
@@ -98,7 +99,7 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public HttpSessionSecurityContextRepository httpContextRepository() {
+    public SecurityContextRepository httpContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
 
@@ -146,7 +147,7 @@ public class SpringSecurityConfig {
                         .anyRequest()
                         .authenticated())
                 // .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(encodingFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -188,12 +189,13 @@ public class SpringSecurityConfig {
                                 "/api/accounts/reviewer/verify",
                                 "/api/articles/author/article/withdraw",
                                 "/api/accounts/create",
-                                "/error-page")
+                                "/error-page",
+                                "/api/accounts/login")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
                 // .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(encodingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(clientAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

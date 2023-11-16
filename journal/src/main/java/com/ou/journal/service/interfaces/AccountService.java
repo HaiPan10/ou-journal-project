@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContext;
 
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
@@ -20,6 +21,7 @@ public interface AccountService {
     List<Account> findAll();
     Account retrieve(Long accountId) throws Exception;
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
+    SecurityContext login(String token) throws AccountNotFoundException, Exception;
     Account findByUserName(String userName) throws Exception;
     boolean verifyEmail(Long accountId, String verificationCode) throws Exception;
     Optional<Account> getAccount(Long accountId);
