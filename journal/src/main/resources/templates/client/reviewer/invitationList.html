@@ -28,7 +28,17 @@
                 </li>
             </ol>
         </nav>
-        <div class="move-up-anim table-container my-6">
+        <div th:if="${#lists.isEmpty(reviewArticles)}" class="fade-anim flex justify-center">
+            <div class="w-fit my-6 bg-white rounded-lg p-10 flex flex-col items-center gap-4">
+                <div class="ml-3 font-medium">
+                    Hiện không có lời mời nào.
+                </div>
+                <a th:href="@{/main-menu}" class="w-fit px-10 btn-main text-sm">
+                    Quay lại
+                </a>
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(reviewArticles)}" class="move-up-anim table-container my-6">
             <table class="table">
                 <h3 class="table-header text-lg text-main font-semibold py-5 px-6">
                     Danh sách lời mời
