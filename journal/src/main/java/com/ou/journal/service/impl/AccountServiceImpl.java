@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,7 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.AccountStatus;
 import com.ou.journal.enums.RoleName;
+import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.AuthResponse;
@@ -62,6 +68,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private UserRoleService userRoleService;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Override
     // đăng ký cho Author User
     public Account create(Account account, User user) throws Exception {
@@ -96,8 +105,9 @@ public class AccountServiceImpl implements AccountService {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-        Optional<UserRole> userRole = userRoleService.getByUserAndRoleName(persistUser, RoleName.ROLE_AUTHOR.toString());
-        if(!userRole.isPresent()){
+        Optional<UserRole> userRole = userRoleService.getByUserAndRoleName(persistUser,
+                RoleName.ROLE_AUTHOR.toString());
+        if (!userRole.isPresent()) {
             userRoleService.addUserRole(persistUser, RoleName.ROLE_AUTHOR.toString());
         }
         account.setUser(persistUser);
@@ -162,6 +172,28 @@ public class AccountServiceImpl implements AccountService {
         } catch (AuthenticationException exception) {
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }
+    }
+
+    @Override
+    public SecurityContext login(String token) throws AccountNotFoundException, Exception {
+        String roleName = jwtService.getRoleNameFromToken(token, SecrectType.EMAIL);
+        if (roleName == null || roleName.trim().isEmpty()) {
+            throw new Exception("Invalid Role Name");
+        }
+        String email = jwtService.getEmailFromToken(token, SecrectType.EMAIL);
+        Optional<Account> accountOptional = accountRepositoryJPA.findByEmail(email);
+        if (!accountOptional.isPresent()) {
+            throw new AccountNotFoundException("Email không tồn tại");
+        }
+
+        String unauthenticatedUsername = String.format("%s,%s", accountOptional.get().getUserName(), roleName);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(unauthenticatedUsername);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
+                null, userDetails.getAuthorities());
+        SecurityContext securityContext = SecurityContextHolder.getContextHolderStrategy().createEmptyContext();
+        securityContext.setAuthentication(authenticationToken);
+        SecurityContextHolder.getContextHolderStrategy().setContext(securityContext);
+        return securityContext;
     }
 
     @Override
