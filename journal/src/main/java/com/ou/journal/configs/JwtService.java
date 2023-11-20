@@ -41,8 +41,9 @@ public class JwtService {
             try {
                 JWSSigner signer = new MACSigner(BYTES);
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-                builder.claim("userName", String.format("%s,%s", account.getUserName(), roleName));
+                builder.claim("userName", account.getUserName());
                 builder.claim("id", account.getId());
+                builder.claim("roleName", roleName);
                 builder.issueTime(new Date(System.currentTimeMillis()));
                 builder.expirationTime(new Date(System.currentTimeMillis() + EXPIRE_DURATION));
 

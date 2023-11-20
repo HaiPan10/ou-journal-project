@@ -22,7 +22,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,12 +34,14 @@ import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.AuthRequest;
 import com.ou.journal.pojo.AuthResponse;
+import com.ou.journal.pojo.CustomAuthenticationToken;
 import com.ou.journal.pojo.Role;
 import com.ou.journal.pojo.User;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.repository.AccountRepositoryJPA;
 import com.ou.journal.repository.UserRepositoryJPA;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.CustomUserDetailsService;
 import com.ou.journal.service.interfaces.UserRoleService;
 import com.ou.journal.service.interfaces.UserService;
 
@@ -69,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
     private UserRoleService userRoleService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     // đăng ký cho Author User
@@ -155,10 +156,10 @@ public class AccountServiceImpl implements AccountService {
             if (!accountOptional.isPresent()) {
                 throw new Exception("Email không tồn tại!");
             }
-            account.setUsername(String.format("%s,%s", account.getUsername(), account.getRole()));
+            // account.setUsername(String.format("%s,%s", account.getUsername(), account.getRole()));
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            account.getUsername(), account.getPassword()));
+                    new CustomAuthenticationToken(
+                            account.getUsername(), account.getPassword(), account.getRole()));
 
             Account authenticationAccount = accountOptional.get();
 
@@ -186,8 +187,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountNotFoundException("Email không tồn tại");
         }
 
-        String unauthenticatedUsername = String.format("%s,%s", accountOptional.get().getUserName(), roleName);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(unauthenticatedUsername);
+        UserDetails userDetails = userDetailsService.loadUserByUsernameAndRoleName(email, roleName);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,
                 null, userDetails.getAuthorities());
         SecurityContext securityContext = SecurityContextHolder.getContextHolderStrategy().createEmptyContext();
@@ -242,8 +242,9 @@ public class AccountServiceImpl implements AccountService {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Set<GrantedAuthority> authorities = new HashSet<>();
             authorities.add(new SimpleGrantedAuthority(userRole.getRole().getRoleName()));
-            Authentication changedRoleAuth = new UsernamePasswordAuthenticationToken(
-                    authentication.getPrincipal(), authentication.getCredentials(), authorities);
+            Authentication changedRoleAuth = new CustomAuthenticationToken(
+                    authentication.getPrincipal(), authentication.getCredentials(), authorities,
+                    userRole.getRole().getRoleName());
             SecurityContextHolder.getContext().setAuthentication(changedRoleAuth);
         } catch (UsernameNotFoundException e) {
             throw new AccessDeniedException("User don't have specific role");

@@ -8,17 +8,25 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
 
-public class ClientSuccessHandler implements AuthenticationSuccessHandler {
+@Getter
+@Setter
+public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
-    private String targetUrl = "/homepage";
+    private String targetEndpoint;
+
+    public AuthenticationSuccessHandlerImpl(String targetEndpoint){
+        this.targetEndpoint = targetEndpoint;
+    }
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        redirectStrategy.sendRedirect(request, response, targetEndpoint);
     }
 
 }

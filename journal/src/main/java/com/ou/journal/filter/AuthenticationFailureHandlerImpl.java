@@ -10,17 +10,25 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
 
-public class ClientFailureHandler implements AuthenticationFailureHandler {
+@Getter
+@Setter
+public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
 
-    private String targetUrl = "/login?error";
+    private String targetEndpoint;
+
+    public AuthenticationFailureHandlerImpl(String targetEndpoint){
+        this.targetEndpoint = targetEndpoint;
+    }
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        redirectStrategy.sendRedirect(request, response, targetEndpoint);
     }
 
 }
