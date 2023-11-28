@@ -17,7 +17,8 @@ public class AuthenticationUser extends org.springframework.security.core.userde
     private String firstName;
     private String lastName;
     private String email;
-    private String userName;
+    // private String userName;
+    private String roleName;
 
     public AuthenticationUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

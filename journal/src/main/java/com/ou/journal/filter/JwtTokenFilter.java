@@ -2,16 +2,16 @@ package com.ou.journal.filter;
 
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.SecrectType;
+import com.ou.journal.service.interfaces.CustomUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,10 +24,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    @Qualifier("getUserDetail")
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
-    private void setAuthenticationContext(String token, HttpServletRequest request) {
+    private void setAuthenticationContext(String token, HttpServletRequest request)
+            throws UsernameNotFoundException, Exception {
         UserDetails account = getAccount(token);
         if (account != null) {
 
@@ -41,31 +41,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     // Re-create the user with given token
-    private UserDetails getAccount(String token) {
+    private UserDetails getAccount(String token) throws UsernameNotFoundException, Exception {
         String userName = jwtService.getUserNameFromToken(token, SecrectType.DEFAULT);
-        Long id = jwtService.getIdFromToken(token, SecrectType.DEFAULT);
-        // Account account = new Account();
-        System.out.println("[User ID] - " + id);
-        System.out.println("[userName] - " + userName);
-        System.out.println("[INFO] - Load the user detail");
-        // account.setId(Integer.parseInt(claims[0]));
-        // account.setuserName(claims[1]);
-        return userDetailsService.loadUserByUsername(userName);
+        String roleName = jwtService.getRoleNameFromToken(token, SecrectType.DEFAULT);
+        return userDetailsService.loadUserByUsernameAndRoleName(userName, roleName);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
+
         if (request.getRequestURI().equals("/api/accounts/register")) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        // HttpServletRequest request = (HttpServletRequest) servletRequest;
-
-        // DEBUG header
-        // System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
 
         String header = jwtService.getAuthorization(request);
         request.setCharacterEncoding("UTF-8");
@@ -88,7 +77,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         System.out.println("[DEBUG] - Given token is valid");
 
-        setAuthenticationContext(token, request);
+        try {
+            setAuthenticationContext(token, request);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         filterChain.doFilter(request, response);
     }
 }
