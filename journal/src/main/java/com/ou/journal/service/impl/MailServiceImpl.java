@@ -86,7 +86,10 @@ public class MailServiceImpl implements MailService {
     public void sendInvitationMail(ReviewArticle reviewArticle) {
         Context context = new Context();
         String subject = "Thư mời review bài báo";
-        String body = "OU JOURNAL kính mời bạn review cho bài báo của chúng tôi!";
+        String body = String.format("Xin chào %s! Bạn có một lời mời phản biện bài báo từ OU Journal."
+        + " Để biết thêm thông tin chi tiết, vui lòng liên hệ cho biên tập viên của bài báo này thông qua email %s.",
+         reviewArticle.getUser().getFirstName(),
+         reviewArticle.getManuscript().getArticle().getEditorUser().getEmail());
         context.setVariable("subject", subject);
         context.setVariable("body", body);
         String token = jwtService.generateReviewerInvitationToken(reviewArticle.getUser(), reviewArticle);
@@ -126,14 +129,14 @@ public class MailServiceImpl implements MailService {
                         AuthorType.CORRESPONDING_AUTHOR.toString())
                 .get();
         String targetEndpoint = String.format("submission/processing/%s", String.valueOf(article.getId()));
-        String token = jwtService.generateArticleMailActionToken(correspondingUser, article,
+        String token = jwtService.generateMailLoginToken(correspondingUser, "articleId", article.getId(),
                 RoleName.ROLE_AUTHOR.toString(), targetEndpoint);
         context.setVariable("firstActionLink", String.format("%s/api/accounts/login?token=%s", environment.getProperty("SERVER_HOSTNAME"), token));
         context.setVariable("firstActionName", "Theo dõi trạng thái");
-        context.setVariable("secondActionLink",
-                String.format("%s/api/articles/author/article/withdraw?token=%s",
-                        environment.getProperty("SERVER_HOSTNAME"), token));
-        context.setVariable("secondActionName", "Rút bài");
+        // context.setVariable("secondActionLink",
+        //         String.format("%s/api/articles/author/article/withdraw?token=%s",
+        //                 environment.getProperty("SERVER_HOSTNAME"), token));
+        // context.setVariable("secondActionName", "Rút bài");
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
     }
@@ -171,14 +174,14 @@ public class MailServiceImpl implements MailService {
                 correspondingUser.getLastName(), correspondingUser.getFirstName());
         context.setVariable("subject", subject);
         context.setVariable("body", body);
-        String token = jwtService.generateArticleMailActionToken(correspondingUser, article,
+        String token = jwtService.generateMailLoginToken(correspondingUser, "articleId", article.getId(),
             RoleName.ROLE_AUTHOR.toString(), "homepage");
         context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
         context.setVariable("firstActionName", "Theo dõi trạng thái");
-        context.setVariable("secondActionLink",
-                String.format("%s/api/articles/author/article/withdraw?token=%s",
-                        environment.getProperty("SERVER_HOSTNAME"), token));
-        context.setVariable("secondActionName", "Rút bài");
+        // context.setVariable("secondActionLink",
+        //         String.format("%s/api/articles/author/article/withdraw?token=%s",
+        //                 environment.getProperty("SERVER_HOSTNAME"), token));
+        // context.setVariable("secondActionName", "Rút bài");
         MailRequest mailRequest = new MailRequest(correspondingUser.getEmail(), subject, body, context);
         sendEmail(mailRequest);
     }

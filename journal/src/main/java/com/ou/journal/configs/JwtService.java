@@ -16,7 +16,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
-import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 
@@ -59,7 +58,7 @@ public class JwtService {
         return token;
     }
 
-    public String generateArticleMailActionToken(User user, Article article, String roleName,
+    public String generateMailLoginToken(User user, String targetObj, Long targetId, String roleName,
             String targetEndpoint) {
         String token = null;
         if (user != null) {
@@ -68,7 +67,7 @@ public class JwtService {
                 JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
                 builder.claim("id", user.getId());
                 builder.claim("email", user.getEmail());
-                builder.claim("articleId", article.getId());
+                builder.claim(targetObj, targetId);
                 builder.claim("roleName", roleName);
                 builder.claim("targetEndpoint", targetEndpoint);
                 builder.issueTime(new Date(System.currentTimeMillis()));

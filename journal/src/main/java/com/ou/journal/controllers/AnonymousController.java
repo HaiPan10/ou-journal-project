@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.journal.configs.JwtService;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
@@ -82,8 +84,11 @@ public class AnonymousController {
                     environment.getProperty("SERVER_HOSTNAME"), token));
                 return "anonymous/accountInfo";
             }
-            reviewArticleService.acceptReviewAndCreateAccount(reviewArticleId, email, id, account);
-            return String.format("redirect:/reviewer-invite/success?token=%s", token);
+            ReviewArticle reviewArticle = reviewArticleService.acceptReviewAndCreateAccount(reviewArticleId, email, id, account);
+            String targetEndpoint = String.format("reviewer/review/%s", reviewArticleId);
+            String loginToken = jwtService.generateMailLoginToken(reviewArticle.getUser(), "reviewArticleId", reviewArticleId,
+            RoleName.ROLE_REVIEWER.toString(), targetEndpoint);
+            return String.format("redirect:/api/accounts/login?token=%s", loginToken);
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             model.addAttribute("token", token);
@@ -101,7 +106,7 @@ public class AnonymousController {
                 model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
                 User user = userService.retrieve(userId);
                 model.addAttribute("user", String.format("%s %s", user.getLastName(), user.getLastName()));
-                model.addAttribute("action", "kết quả phản hồi lời mời");
+                model.addAttribute("action", "TỪ CHỐI lời mời phản biện bài báo");
                 return "anonymous/responseConfirmation";
             } else {
                 model.addAttribute("home", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
