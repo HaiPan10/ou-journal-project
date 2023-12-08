@@ -16,4 +16,5 @@ public interface MailService {
     void sendInReviewStatusChangeMail(Article article);
     // void sendDecidingArticleEmail(Article article);
     void sendAssignEditorMail(Article article);
+    void sendDecideEmail(Article article);
 }

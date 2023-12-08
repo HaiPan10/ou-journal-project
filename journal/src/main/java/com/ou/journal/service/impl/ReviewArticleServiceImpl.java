@@ -166,7 +166,7 @@ public class ReviewArticleServiceImpl implements ReviewArticleService {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(new Date());
             account.setUpdatedAt(new Date());
-            account.setStatus(AccountStatus.ACCEPTED.toString());
+            // account.setStatus(AccountStatus.ACCEPTED.toString());
             account.setEmail(email);
             accountRepositoryJPA.save(account);
             return changeReviewStatus(reviewArticleId, ReviewArticleStatus.ACCEPTED.toString(), email, userId);
