@@ -50,8 +50,8 @@ public class Account implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "status")
-    private String status;
+    // @Column(name = "status")
+    // private String status;
 
     @Transient
     private String confirmPassword;
@@ -72,7 +72,7 @@ public class Account implements Serializable {
     @Column(name = "avatar", length = 300)
     private String avatar;
 
-    @Size(max = 64)
-    @Column(name = "verification_code")
-    private String verificationCode;
+    // @Size(max = 64)
+    // @Column(name = "verification_code")
+    // private String verificationCode;
 }

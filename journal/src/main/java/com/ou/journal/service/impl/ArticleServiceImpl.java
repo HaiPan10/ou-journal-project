@@ -235,6 +235,7 @@ public class ArticleServiceImpl implements ArticleService {
                         e.printStackTrace();
                     }
                 });
+                mailService.sendDecideEmail(article);
                 return article;
             } else {
                 throw new Exception("Trạng thái chuyển đổi không hợp lệ!");

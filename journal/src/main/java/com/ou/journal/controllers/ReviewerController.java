@@ -2,21 +2,15 @@ package com.ou.journal.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.AuthenticationUser;
-import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.ReviewArticle;
-import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.utils.EnumUtils;
 
@@ -24,9 +18,6 @@ import com.ou.journal.utils.EnumUtils;
 public class ReviewerController {
     @Autowired
     private ReviewArticleService reviewArticleService;
-
-    @Autowired
-    private ManuscriptService manuscriptService;
 
     @GetMapping("/reviewer/invitation-list")
     public String getInvitationList(Model model, @AuthenticationPrincipal AuthenticationUser currentUser) {

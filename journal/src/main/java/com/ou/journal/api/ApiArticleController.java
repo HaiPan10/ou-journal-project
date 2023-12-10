@@ -111,26 +111,26 @@ public class ApiArticleController {
         }
     }
 
-    @Secured("ROLE_AUTHOR")
-    @GetMapping("/author/article/withdraw")
-    public ResponseEntity<?> withdrawArticle(@RequestParam String token) throws Exception {
-        try {
-            Long id = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
-            Long articleId = jwtService.getArticleIdFromToken(token, SecrectType.EMAIL);
+    // @Secured("ROLE_AUTHOR")
+    // @GetMapping("/author/article/withdraw")
+    // public ResponseEntity<?> withdrawArticle(@RequestParam String token) throws Exception {
+    //     try {
+    //         Long id = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
+    //         Long articleId = jwtService.getArticleIdFromToken(token, SecrectType.EMAIL);
 
-            articleService.widthdrawArticle(articleId, id);
+    //         articleService.widthdrawArticle(articleId, id);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(String.format("%s/article-action/success?token=%s",
-                    environment.getProperty("SERVER_HOSTNAME"), token)));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-        } catch (Exception e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create(String.format("%s/article-action/failed?token=%s&reason=%s",
-                    environment.getProperty("SERVER_HOSTNAME"), token, e.getMessage())));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-        }
-    }
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.setLocation(URI.create(String.format("%s/article-action/success?token=%s",
+    //                 environment.getProperty("SERVER_HOSTNAME"), token)));
+    //         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    //     } catch (Exception e) {
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.setLocation(URI.create(String.format("%s/article-action/failed?token=%s&reason=%s",
+    //                 environment.getProperty("SERVER_HOSTNAME"), token, e.getMessage())));
+    //         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    //     }
+    // }
 
     @Secured("ROLE_EDITOR")
     @PutMapping(value = "/editor/assign/{articleId}")

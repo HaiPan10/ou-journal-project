@@ -23,9 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.configs.JwtService;
 import com.ou.journal.enums.ReviewArticleStatus;
+import com.ou.journal.enums.RoleName;
 import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.AuthenticationUser;
+import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.pojo.ReviewFile;
@@ -59,10 +61,18 @@ public class ApiReviewArticleController {
                 Long id = jwtService.getUserIdFromToken(token, SecrectType.EMAIL);
                 String email = jwtService.getEmailFromToken(token, SecrectType.EMAIL);
                 Long reviewArticleId = jwtService.getReviewArticleIdFromToken(token, SecrectType.EMAIL);
-                reviewArticleService.changeReviewStatus(reviewArticleId, status, email, id);
+                ReviewArticle reviewArticle = reviewArticleService.changeReviewStatus(reviewArticleId, status, email, id);
                 
                 HttpHeaders headers = new HttpHeaders();
-                headers.setLocation(URI.create(String.format("%s/reviewer-invite/success?token=%s", environment.getProperty("SERVER_HOSTNAME"), token)));
+                if (status.equals(ReviewArticleStatus.ACCEPTED.toString())) {
+                    String targetEndpoint = String.format("reviewer/review/%s", reviewArticleId);
+                    String loginToken = jwtService.generateMailLoginToken(reviewArticle.getUser(), "reviewArticleId", reviewArticleId,
+                    RoleName.ROLE_REVIEWER.toString(), targetEndpoint);
+                    headers.setLocation(URI.create(String.format("%s/api/accounts/login?token=%s", environment.getProperty("SERVER_HOSTNAME"), loginToken)));
+                } else {
+                    headers.setLocation(URI.create(String.format("%s/reviewer-invite/success?token=%s", environment.getProperty("SERVER_HOSTNAME"), token)));
+                }
+                
                 return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
             } catch (AccountNotFoundException e) {
                 HttpHeaders headers = new HttpHeaders();

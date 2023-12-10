@@ -88,9 +88,9 @@ public class AccountServiceImpl implements AccountService {
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-            account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
+            // account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
             // account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
-            account.setStatus(AccountStatus.ACCEPTED.toString());
+            // account.setStatus(AccountStatus.ACCEPTED.toString());
             accountRepositoryJPA.save(account);
             return account;
         } catch (Exception e) {
@@ -115,9 +115,8 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         account.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-        account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
+        // account.setVerificationCode(RandomStringUtils.randomAlphanumeric(64));
         // account.setStatus(AccountStatus.EMAIL_VERIFICATION.toString());
-        account.setStatus(AccountStatus.ACCEPTED.toString());
         accountRepositoryJPA.save(account);
         return account;
     }
@@ -126,7 +125,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean changeAccountStatus(Long accountId, String status) throws Exception {
         try {
             Account account = retrieve(accountId);
-            account.setStatus(status);
+            // account.setStatus(status);
             accountRepositoryJPA.save(account);
             return true;
         } catch (Exception e) {
@@ -210,16 +209,17 @@ public class AccountServiceImpl implements AccountService {
     public boolean verifyEmail(Long accountId, String verificationCode) throws Exception {
         try {
             Account account = retrieve(accountId);
-            if (!account.getStatus().equals(AccountStatus.EMAIL_VERIFICATION.toString())) {
-                throw new Exception("This account can't not be verified");
-            }
-            if (account.getVerificationCode().equals(verificationCode)) {
-                account.setStatus(AccountStatus.PENDING.toString());
-                accountRepositoryJPA.save(account);
-                return true;
-            } else {
-                throw new Exception("Verification code doesn't match!");
-            }
+            // if (!account.getStatus().equals(AccountStatus.EMAIL_VERIFICATION.toString())) {
+            //     throw new Exception("This account can't not be verified");
+            // }
+            // if (account.getVerificationCode().equals(verificationCode)) {
+            //     account.setStatus(AccountStatus.PENDING.toString());
+            //     accountRepositoryJPA.save(account);
+            //     return true;
+            // } else {
+            //     throw new Exception("Verification code doesn't match!");
+            // }
+            return true;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
