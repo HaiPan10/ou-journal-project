@@ -41,7 +41,7 @@ server:
     include-message: always
   servlet:
     session:
-      timeout: 30s
+      timeout: 30m
       # cookie:
       #   max-age: 30s
   #   context-path: /social_network
