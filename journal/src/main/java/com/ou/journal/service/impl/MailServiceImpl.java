@@ -218,12 +218,18 @@ public class MailServiceImpl implements MailService {
                 Context context = new Context();
                 String subject = "Thông báo bài viết cho biên tập viên";
                 String body = String.format(
-                                "Xin chào %s %s! Bạn được tổng biên tập viên mời vào bài báo mới. Truy cập vào hệ thống để theo dõi trạng thái bài báo!",
+                                "Xin chào %s %s! Bạn được tổng biên tập viên mời vào bài báo mới. Truy cập vào hệ thống để tiến hành mời phản biện viên cho bài báo!",
                                 assignedEditor.getLastName(), assignedEditor.getFirstName());
                 context.setVariable("subject", subject);
                 context.setVariable("body", body);
-                context.setVariable("firstActionLink", String.format("%s", environment.getProperty("SERVER_HOSTNAME")));
-                context.setVariable("firstActionName", "Theo dõi bài báo được gán");
+
+                String targetEndpoint = String.format("editor/review-articles/invite/%s", String.valueOf(article.getId()));
+                String token = jwtService.generateMailLoginToken(assignedEditor, "articleId", article.getId(),
+                                RoleName.ROLE_EDITOR.toString(), targetEndpoint);
+                context.setVariable("firstActionLink", String.format("%s/api/accounts/login?token=%s",
+                                environment.getProperty("SERVER_HOSTNAME"), token));
+                                
+                context.setVariable("firstActionName", "Gán phản biện viên");
                 MailRequest mailRequest = new MailRequest(assignedEditor.getEmail(), subject, body, context);
                 sendEmail(mailRequest);
         }

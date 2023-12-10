@@ -223,6 +223,11 @@ begin
 			select (select r.id from role r where r.role_name = 'ROLE_AUTHOR') as role_id, u.id as user_id
             from user u
             where u.email = 'phongvulai96@gmail.com';
+        
+        insert into `user_role`(role_id, user_id)
+			select (select r.id from role r where r.role_name = 'ROLE_EDITOR') as role_id, u.id as user_id
+            from user u
+            where u.email = 'phongvulai96@gmail.com';
             
 		insert into `account`(id, created_at, email, password, user_name)
 			select (select u.id from user u where u.email = 'phongvulai96@gmail.com') as id,
