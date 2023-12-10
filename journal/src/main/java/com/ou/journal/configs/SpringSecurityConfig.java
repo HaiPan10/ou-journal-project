@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -35,6 +36,9 @@ import com.ou.journal.filter.AuthenticationSuccessHandlerImpl;
 import com.ou.journal.filter.CustomAuthenticationEntryPoint;
 import com.ou.journal.filter.JwtTokenFilter;
 import com.ou.journal.service.interfaces.CustomUserDetailsService;
+import com.ou.journal.service.interfaces.UserRoleService;
+
+import jakarta.annotation.Resource;
 
 @EnableWebSecurity
 @Configuration
@@ -69,8 +73,8 @@ public class SpringSecurityConfig {
     private ClientAuthenticationFilter adminAuthenticationFilter;
     @Autowired
     private RememberMeServices rememberMeServices;
-    // @Autowired
-    // private RememberMeAuthenticationFilter rememberMeAuthenticationFilter;
+    @Resource
+    private Environment env;
 
     @Bean
     public JwtTokenFilter jwtTokenFilter() throws Exception {
@@ -115,7 +119,7 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public CustomAuthenticationProvider customAuthenticationProvider(){
+    public CustomAuthenticationProvider customAuthenticationProvider() {
         CustomAuthenticationProvider provider = new CustomAuthenticationProvider(passwordEncoder);
         provider.setUserDetailsService(userDetailsService);
         return provider;
@@ -151,22 +155,27 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public RememberMeServices rememberMeServices() {
-        CustomRememberServices services = new CustomRememberServices(REMEMBER_ME_SECRECT_KEY, userDetailsService);
-        services.setTokenValiditySeconds(86400);
+    public RememberMeServices rememberMeServices(UserRoleService userRoleService) {
+        CustomRememberServices services = new CustomRememberServices(REMEMBER_ME_SECRECT_KEY, userDetailsService,
+                userRoleService);
+        services.setTokenValiditySeconds(Integer.parseInt(env.getProperty("COOKIE_MAX_AGE")));
+        services.setUserRoleService(userRoleService);
+        services.setAlwaysRemember(true);
         return services;
     }
 
     // @Bean
     // public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-    //     RememberMeAuthenticationProvider provider = new RememberMeAuthenticationProvider(REMEMBER_ME_SECRECT_KEY);
-    //     return provider;
+    // RememberMeAuthenticationProvider provider = new
+    // RememberMeAuthenticationProvider(REMEMBER_ME_SECRECT_KEY);
+    // return provider;
     // }
 
     // @Bean
     // public RememberMeAuthenticationFilter rememberMeAuthenticationFilter(){
-    //     RememberMeAuthenticationFilter filter = new RememberMeAuthenticationFilter(authenticationManager, rememberMeServices);
-    //     return filter;
+    // RememberMeAuthenticationFilter filter = new
+    // RememberMeAuthenticationFilter(authenticationManager, rememberMeServices);
+    // return filter;
     // }
 
     @Bean
@@ -195,7 +204,7 @@ public class SpringSecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/admin/logout")
                         .logoutSuccessUrl("/admin/login")
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("JSESSIONID", "ROLE")
                         .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SECRETARY")
@@ -225,7 +234,7 @@ public class SpringSecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("JSESSIONID", "ROLE")
                         .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers(
@@ -255,7 +264,6 @@ public class SpringSecurityConfig {
                 // handling.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(encodingFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(clientAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                // .addFilterBefore(rememberMeAuthenticationFilter, ClientAuthenticationFilter.class)
                 .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

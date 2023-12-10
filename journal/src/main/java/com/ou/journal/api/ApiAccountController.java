@@ -26,6 +26,7 @@ import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
 import com.ou.journal.service.interfaces.UserService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -52,11 +53,17 @@ public class ApiAccountController {
 
     @PostMapping("change-role")
     public ResponseEntity<?> changeRole(@RequestBody Role roleName,
-            @AuthenticationPrincipal AuthenticationUser currentUser) {
+            @AuthenticationPrincipal AuthenticationUser currentUser, HttpServletResponse response) {
         try {
             Long id = currentUser.getId();
             User user = userService.retrieve(id);
             accountService.changeRole(roleName, user);
+            Cookie cookie = new Cookie("ROLE", roleName.getRoleName());
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setMaxAge(Integer.parseInt(environment.getProperty("COOKIE_MAX_AGE")));
+            cookie.setPath("/");
+            response.addCookie(cookie);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -74,6 +81,19 @@ public class ApiAccountController {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
+    /**
+     * This is the login API by using the token as the request paramerter
+     * calling the API won't invoke the remember me service. If the {@link SecurityContext}
+     * have already stored the Authentication then the API will return the 301 MOVE PERMANENTLY
+     * @param token A JWT token string
+     * @param httpServletRequest HttpServletRequest
+     * @param response HttpServletResponse
+     * @param user The currently authenticated user
+     * @return ResponseEntity with status 404 NOT FOUND if the token is invalid
+     * and status 301 MOVE PERMANENTLY if the token is valid and authenticate
+     * user information within the token successfully
+     * @author Hai Phan
+     */
     @GetMapping("login")
     public ResponseEntity<?> login(@RequestParam(required = false, name = "token") String token,
             HttpServletRequest httpServletRequest, HttpServletResponse response,

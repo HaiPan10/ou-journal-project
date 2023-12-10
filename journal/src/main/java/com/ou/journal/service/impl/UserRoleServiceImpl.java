@@ -45,6 +45,11 @@ public class UserRoleServiceImpl implements UserRoleService{
         userRole.setUser(user);
         userRoleRepositoryJPA.save(userRole);
     }
+
+    @Override
+    public Optional<UserRole> getByUserNameAndRoleName(String userName, String roleName) {
+        return userRoleRepositoryJPA.findByUserNameAndRoleName(userName, roleName);
+    }
     
     
 }
