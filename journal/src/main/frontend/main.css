@@ -194,7 +194,7 @@
     
 
     .step {
-        @apply relative flex flex-col md:flex-row w-fit md:w-full h-full items-center mt-3 after:mt-3 md:mt-0 md:after:mt-0 md:ml-3 md:after:ml-3 inline-block after:content-[''] after:w-1 md:after:w-full md:after:min-w-[84px] after:h-full md:after:h-1 after:border-b after:border-2 md:after:border-2 after:inline-block
+        @apply relative flex flex-col md:flex-row w-fit md:w-full h-full items-center mt-3 after:mt-3 md:mt-0 md:after:mt-0 md:ml-3 md:after:ml-3 inline-block after:content-[''] after:w-1 md:after:w-full md:after:min-w-[84px] after:h-full md:after:h-1 after:inline-block
     }
 
     .step-end {
@@ -203,23 +203,23 @@
 
 
     .step-complete{
-        @apply after:border-emerald-500
+        @apply after:border-emerald-500 after:bg-emerald-500
     }
 
     .step-failure{
-        @apply after:border-rose-600
+        @apply after:border-rose-600 after:bg-rose-600
     }
 
     .step-withdraw{
-        @apply after:border-gray-900
+        @apply after:border-gray-900 after:bg-gray-900
     }
 
     .step-in-progress{
-        @apply after:border-main
+        @apply after:border-main after:bg-main
     }
 
     .step-pending {
-        @apply after:border-main/25
+        @apply after:border-main/25 after:bg-main/25
     }
 
     .step-child {

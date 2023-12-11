@@ -100,7 +100,6 @@
         /*[# th:each="n : ${articleStatusEnum}"]*/
         stages.push("[(${n.stage})]");
         /*[/]*/
-
         function updateProgress(percent) {
             var progress = document.getElementById("progress");
             var circumference = 2 * Math.PI * progress.getAttribute("r");
