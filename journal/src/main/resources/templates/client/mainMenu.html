@@ -36,6 +36,12 @@
                 </div>
                 <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
                     <div class="action-item">
+                        <a class="group" th:href="@{/editor/articles}">
+                            <i class="bi bi-journal-check text-7xl text-gradient-main group-hover:text-white"></i>
+                            <p class="w-full">Danh sách bài báo chờ duyệt</p>
+                        </a>
+                    </div>
+                    <div class="action-item">
                         <a class="group" th:href="@{/editor/assign-list}">
                             <i class="bi bi-person-gear text-7xl text-gradient-main group-hover:text-white"></i>
                             <p class="w-full">Gán biên tập viên</p>
@@ -113,7 +119,21 @@
                 </div>
             </div>
             <div th:if="${#authorization.expression('hasRole(''ROLE_SECRETARY'')')}">
-                <!-- THƯ KÝ -->
+                <div class="flex gap-x-3 items-center">
+                    <div class="w-1 h-[30px] bg-main"></div>
+                    <div class="text-gray-700 uppercase text-lg font-semibold">Bảng điều khiển của thư ký</div>
+                </div>
+                <div class="move-left-anim grid grid-cols-1 lg:grid-cols-4 lg:gap-x-12">
+                    <div class="action-item">
+                        <a class="group" th:href="@{/secretary/articles}">
+                            <i class="bi bi-journal-check text-7xl text-gradient-main group-hover:text-white"></i>
+                            <p class="w-full">Danh sách bài đăng chờ duyết</p>
+                            <!-- <span class="noti-badge" th:if="${invitationCount != 0}" 
+                                th:text="${invitationCount}"></span> -->
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
