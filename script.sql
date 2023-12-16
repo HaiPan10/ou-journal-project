@@ -239,3 +239,54 @@ end //
 delimiter ;
 
 CALL insert_default_admin();
+
+-- CREATE PROCEDURE FOR INSERT ARTICLE'S CATEGORIES
+drop procedure if exists insert_article_category;
+delimiter //
+create procedure insert_article_category()
+begin
+    if not exists (select 1 from article_category where category_name = "SOCIAL SCIENCES") then
+        insert into article_category(category_name, cover_image)
+        values ("SOCIAL SCIENCES",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734614/prrgn2coflfjqsurz2us.jpg");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "KHOA HỌC XÃ HỘI") then
+        insert into article_category(category_name, cover_image)
+        values ("KHOA HỌC XÃ HỘI",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734614/vcfp8sdkjdojy7zeaoso.png");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "KINH TẾ VÀ QUẢN TRỊ KINH DOANH") then
+        insert into article_category(category_name, cover_image)
+        values ("KINH TẾ VÀ QUẢN TRỊ KINH DOANH",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734614/ea1piah2seue6rh0ypzv.png");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "ADVANCES IN COMPUTATIONAL STRUCTURES") then
+        insert into article_category(category_name, cover_image)
+        values ("ADVANCES IN COMPUTATIONAL STRUCTURES",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734614/dhomyt1yyk9ensvrj7aa.jpg");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "ENGINEERING AND TECHNOLOGY") then
+        insert into article_category(category_name, cover_image)
+        values ("ENGINEERING AND TECHNOLOGY",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734614/diok5lu5zsk7akfqnadb.jpg");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "KỸ THUẬT VÀ CÔNG NGHỆ") then
+        insert into article_category(category_name, cover_image)
+        values ("KỸ THUẬT VÀ CÔNG NGHỆ",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734615/efrzploprhzxx4rolsqr.png");
+    end if;
+
+    if not exists (select 1 from article_category where category_name = "ECONOMICS AND BUSINESS ADMINISTRATION") then
+        insert into article_category(category_name, cover_image)
+        values ("ECONOMICS AND BUSINESS ADMINISTRATION",
+                "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1702734616/in7fzbvrwthvgzt0ycm8.jpg");
+    end if;
+end //
+delimiter ;
+
+call insert_article_category();

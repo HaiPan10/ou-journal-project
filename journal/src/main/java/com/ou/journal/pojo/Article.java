@@ -74,6 +74,10 @@ public class Article implements Serializable {
     // @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "article")
     // private List<ReviewArticle> reviewArticles;
 
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private ArticleCategory articleCategory;
+
     @Transient
     private Manuscript currentManuscript;
     
