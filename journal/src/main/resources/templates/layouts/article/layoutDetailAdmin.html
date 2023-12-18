@@ -23,7 +23,10 @@
             </div>
 
             <hr class="my-5" />
-
+            <div class="my-3">
+                <span class="font-medium">Danh mục:</span>
+                <div class="mt-1 px-2" th:text="${article.articleCategory.categoryName}"></div>
+            </div>
             <div class="my-3">
                 <span class="font-medium">Tóm tắt:</span>
                 <div class="mt-1 px-2" th:text="${article.abstracts}"></div>
@@ -89,8 +92,6 @@
 
                 </div>
                 <div class="flex justify-end my-3 gap-x-3 w-full">
-                    <button data-modal-target="preview-modal" data-modal-toggle="preview-modal"
-                        class="btn-gradient-main w-fit">Xem preview</button>
                     <th:block layout:fragment="buttons">
 
                     </th:block>

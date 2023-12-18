@@ -23,11 +23,13 @@ import com.ou.journal.pojo.AuthorType;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
+import com.ou.journal.pojo.ArticleCategory;
 import com.ou.journal.pojo.AuthorArticle;
 import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.AuthorRole;
 import com.ou.journal.pojo.User;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleCategoryService;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.UserService;
 
@@ -40,6 +42,9 @@ public class SubmitController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ArticleCategoryService articleCategoryService;
 
     @Autowired
     private UserService userService;
@@ -114,24 +119,19 @@ public class SubmitController {
     }
 
     @GetMapping({ "/submit/step2" })
-    public String getSubmitPage2(@ModelAttribute("article") Article article,
-            @ModelAttribute("termsAccepted") Boolean termsAccepted) {
-        if (termsAccepted == false)
-            return "redirect:/submit/step1";
+    public String test(Model model) {
+        List<ArticleCategory> cates = articleCategoryService.findAll();
+        model.addAttribute("cates", cates);
         return "client/submitManuscript/step2";
     }
 
     @GetMapping({ "/submit/step3" })
     public String getSubmitPage3(@ModelAttribute("article") Article article,
-            @ModelAttribute("termsAccepted") Boolean termsAccepted, Model model) {
+            @ModelAttribute("termsAccepted") Boolean termsAccepted) {
         if (termsAccepted == false)
             return "redirect:/submit/step1";
-        if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
-                || article.getTitle().isBlank()) {
+        if (article.getArticleCategory() == null)
             return "redirect:/submit/step2";
-        }
-        List<Object[]> users = userService.listUser();
-        model.addAttribute("users", users);
         return "client/submitManuscript/step3";
     }
 
@@ -140,22 +140,14 @@ public class SubmitController {
             @ModelAttribute("termsAccepted") Boolean termsAccepted, Model model) {
         if (termsAccepted == false)
             return "redirect:/submit/step1";
+        if (article.getArticleCategory() == null)
+            return "redirect:/submit/step2";
         if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
                 || article.getTitle().isBlank()) {
-            return "redirect:/submit/step2";
-        }
-        final boolean[] isHasFirstAuthor = { false };
-        final boolean[] isHasCorresponding = { false };
-        article.getAuthorArticles().forEach(authorArticle -> {
-            authorArticle.getAuthorRoles().forEach(role -> {
-                if (role.getAuthorType().getId() == 1)
-                    isHasFirstAuthor[0] = true;
-                else if (role.getAuthorType().getId() == 2)
-                    isHasCorresponding[0] = true;
-            });
-        });
-        if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
             return "redirect:/submit/step3";
+        }
+        List<Object[]> users = userService.listUser();
+        model.addAttribute("users", users);
         return "client/submitManuscript/step4";
     }
 
@@ -164,9 +156,11 @@ public class SubmitController {
             @ModelAttribute("termsAccepted") Boolean termsAccepted, Model model) {
         if (termsAccepted == false)
             return "redirect:/submit/step1";
+        if (article.getArticleCategory() == null)
+            return "redirect:/submit/step2";
         if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
                 || article.getTitle().isBlank()) {
-            return "redirect:/submit/step2";
+            return "redirect:/submit/step3";
         }
         final boolean[] isHasFirstAuthor = { false };
         final boolean[] isHasCorresponding = { false };
@@ -179,18 +173,44 @@ public class SubmitController {
             });
         });
         if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
+            return "redirect:/submit/step4";
+        return "client/submitManuscript/step5";
+    }
+
+    @GetMapping({ "/submit/step6" })
+    public String getSubmitPage6(@ModelAttribute("article") Article article,
+            @ModelAttribute("termsAccepted") Boolean termsAccepted, Model model) {
+        if (termsAccepted == false)
+            return "redirect:/submit/step1";
+        if (article.getArticleCategory() == null)
+            return "redirect:/submit/step2";
+        if (article.getAbstracts() == null || article.getAbstracts().isBlank() || article.getTitle() == null
+                || article.getTitle().isBlank()) {
             return "redirect:/submit/step3";
+        }
+        final boolean[] isHasFirstAuthor = { false };
+        final boolean[] isHasCorresponding = { false };
+        article.getAuthorArticles().forEach(authorArticle -> {
+            authorArticle.getAuthorRoles().forEach(role -> {
+                if (role.getAuthorType().getId() == 1)
+                    isHasFirstAuthor[0] = true;
+                else if (role.getAuthorType().getId() == 2)
+                    isHasCorresponding[0] = true;
+            });
+        });
+        if (!isHasFirstAuthor[0] || !isHasCorresponding[0])
+            return "redirect:/submit/step4";
 
         String reference = article.getCurrentManuscript().getReference().trim();
 
         if (reference == null || reference.isEmpty())
-            return "redirect:/submit/step4";
+            return "redirect:/submit/step5";
         article.getCurrentManuscript().setReference(reference);
-        return "client/submitManuscript/step5";
+        return "client/submitManuscript/step6";
     }
 
     @PostMapping({ "/submit/step1" })
-    public String submitPage2(Model model) {
+    public String submitPage1(Model model) {
         model.addAttribute("termsAccepted", true);
         return "redirect:/submit/step2";
     }
@@ -204,26 +224,34 @@ public class SubmitController {
     }
 
     @PostMapping({ "/submit/step3" })
-    public String submitPage3(
-            @ModelAttribute("article") Article article,
-            @RequestParam(name = "back", required = false) String back,
-            @RequestBody List<AuthorArticle> authorArticles) {
-        article.setAuthorArticles(authorArticles);
+    public String submitPage3(@ModelAttribute("article") Article article,
+            @RequestParam(name = "back", required = false) String back) {
         if (back != null)
             return "redirect:/submit/step2";
         return "redirect:/submit/step4";
     }
 
     @PostMapping({ "/submit/step4" })
-    public String submitPage4(@ModelAttribute("article") Article article,
-            @RequestParam(name = "back", required = false) String back) {
+    public String submitPage4(
+            @ModelAttribute("article") Article article,
+            @RequestParam(name = "back", required = false) String back,
+            @RequestBody List<AuthorArticle> authorArticles) {
+        article.setAuthorArticles(authorArticles);
         if (back != null)
             return "redirect:/submit/step3";
         return "redirect:/submit/step5";
     }
 
     @PostMapping({ "/submit/step5" })
-    public String submitPage5(@RequestParam(name = "back", required = false) String back,
+    public String submitPage5(@ModelAttribute("article") Article article,
+            @RequestParam(name = "back", required = false) String back) {
+        if (back != null)
+            return "redirect:/submit/step4";
+        return "redirect:/submit/step6";
+    }
+
+    @PostMapping({ "/submit/step6" })
+    public String submitPage6(@RequestParam(name = "back", required = false) String back,
             @ModelAttribute("article") Article article,
             @RequestPart("file") MultipartFile file,
             @RequestPart("anonymousFile") MultipartFile anonymousFile,
@@ -245,9 +273,9 @@ public class SubmitController {
             }
         }
         if (back != null) {
-            return "redirect:/submit/step4";
+            return "redirect:/submit/step5";
         }
 
-        return "redirect:/submit/step5";
+        return "redirect:/submit/step6";
     }
 }

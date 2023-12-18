@@ -26,6 +26,7 @@ import com.ou.journal.pojo.AuthorNote;
 import com.ou.journal.pojo.EditorFile;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.pojo.User;
+import com.ou.journal.repository.ArticleCategoryRepositoryJPA;
 import com.ou.journal.repository.ArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorArticleRepositoryJPA;
 import com.ou.journal.repository.AuthorRoleRepositoryJPA;
@@ -47,6 +48,8 @@ import org.apache.commons.io.FilenameUtils;
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private ArticleRepositoryJPA articleRepositoryJPA;
+    @Autowired
+    private ArticleCategoryRepositoryJPA articleCategoryRepositoryJPA;
     @Autowired
     private DateTypeService dateTypeService;
     @Autowired
@@ -121,6 +124,9 @@ public class ArticleServiceImpl implements ArticleService {
             // Hai: save the author note when submit new article
             AuthorNote authorNote = article.getAuthorNote();
             article.setAuthorNote(null);
+
+
+            article.setArticleCategory(articleCategoryRepositoryJPA.findById(article.getArticleCategory().getId()).orElse(null));
             Article persistArticle = articleRepositoryJPA.save(article);
             authorNoteService.create(authorNote, persistArticle);
 

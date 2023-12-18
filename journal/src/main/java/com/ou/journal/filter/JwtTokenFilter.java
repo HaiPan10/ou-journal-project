@@ -37,9 +37,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
     }
 
+    
     // Re-create the user with given token
     private UserDetails getAccount(String token) throws UsernameNotFoundException, Exception {
         String userName = jwtService.getUserNameFromToken(token, SecrectType.DEFAULT);

@@ -40,7 +40,7 @@
             </span>
             <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 2:</p>
-                <p class="stage-title text-sm font-bold text-black-900">Thông tin bài báo</p>
+                <p class="stage-title text-sm font-bold text-black-900">Chọn danh mục</p>
             </div>
         </li>
         <li data-stage-index='3' th:class="${3 == step ? 'step step-in-progress' : 3 > step ? 'step step-pending' : 'step step-complete'}">
@@ -51,7 +51,7 @@
             </span>
             <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 3:</p>
-                <p class="stage-title text-sm font-bold text-black-900">Thông tin tác giả</p>
+                <p class="stage-title text-sm font-bold text-black-900">Thông tin bài báo</p>
             </div>
         </li>
         <li data-stage-index='4' th:class="${4 == step ? 'step step-in-progress' : 4 > step ? 'step step-pending' : 'step step-complete'}">
@@ -62,7 +62,7 @@
             </span>
             <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 4:</p>
-                <p class="stage-title text-sm font-bold text-black-900">Trích dẫn</p>
+                <p class="stage-title text-sm font-bold text-black-900">Thông tin tác giả</p>
             </div>
         </li>
         <li data-stage-index='5' th:class="${5 == step ? 'step step-in-progress' : 5 > step ? 'step step-pending' : 'step step-complete'}">
@@ -73,6 +73,17 @@
             </span>
             <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
                 <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 5:</p>
+                <p class="stage-title text-sm font-bold text-black-900">Trích dẫn</p>
+            </div>
+        </li>
+        <li data-stage-index='6' th:class="${6 == step ? 'step step-in-progress' : 6 > step ? 'step step-pending' : 'step step-complete'}">
+            <span class="step-child">
+                <i th:if="${6 < step}" class="bi bi-check-lg">
+
+                </i>
+            </span>
+            <div class="absolute left-full ml-3 md:left-0 md:ml-0 md:top-full md:mt-3 w-fit whitespace-nowrap">
+                <p class="stage-index text-xs uppercase font-medium text-gray-500">Bước 6:</p>
                 <p class="stage-title text-sm font-bold text-black-900">Nhập tệp</p>
             </div>
         </li>
@@ -111,7 +122,7 @@
             progress.style.strokeDashoffset = offset;
         }
 
-        const total = 5;
+        const total = 6;
         const percent = (step*1) / total * 100;
         updateProgress(percent);
 

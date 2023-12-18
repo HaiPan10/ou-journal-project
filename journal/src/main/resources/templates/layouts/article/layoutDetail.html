@@ -12,79 +12,94 @@
         <!-- /BREADCRUMB -->
         <div th:replace="~{fragments/statusStage :: statusStage (status=${article.status})}"></div>
 
-        <div class="mt-2 move-up-anim bg-white rounded-lg p-6 text-gray-800">
-            <div class="font-semibold text-3xl">
-                <span>Tiêu đề:</span>
-                <span th:text="${article.title}"> </span>
-            </div>
-            <div layout:fragment="authorName" class="font-medium mt-2 flex flex-wrap gap-1">
-                <span>Tác giả:</span>
-                <th:block th:each="authorArticle : ${article.authorArticles}">
-                    <span class="author"
-                        th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
-                </th:block>
-            </div>
+        <div class="mt-2 move-up-anim bg-white rounded-lg p-8 text-gray-800">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div class="col-span-full md:col-span-1">
+                    <div class="w-full">
+                        <img class="w-full" th:src="${article.articleCategory.coverImage}" />
+                    </div>
+                </div>
+                <div class="col-span-full md:col-span-2 lg:col-span-3">
+                    <div class="font-semibold text-3xl">
+                        <span>Tiêu đề:</span>
+                        <span th:text="${article.title}"> </span>
+                    </div>
+                    <div layout:fragment="authorName" class="font-medium mt-2 flex flex-wrap gap-1">
+                        <span>Tác giả:</span>
+                        <th:block th:each="authorArticle : ${article.authorArticles}">
+                            <span class="author"
+                                th:text="${authorArticle.user.lastName} + ' ' + ${authorArticle.user.firstName}"></span>
+                        </th:block>
+                    </div>
 
-            <hr class="my-5" />
+                    <hr class="my-5" />
+                    <div class="my-3">
+                        <span class="font-medium">Danh mục:</span>
+                        <div class="mt-1 px-2" th:text="${article.articleCategory.categoryName}"></div>
+                    </div>
 
-            <div class="my-3">
-                <span class="font-medium">Tóm tắt:</span>
-                <div class="mt-1 px-2" th:text="${article.abstracts}"></div>
-            </div>
+                    <div class="my-3">
+                        <span class="font-medium">Tóm tắt:</span>
+                        <div class="mt-1 px-2" th:text="${article.abstracts}"></div>
+                    </div>
 
-            <div class="my-3">
-                <span class="font-medium">Từ khóa:</span>
-                <div class="flex flex-wrap gap-3 ml-0 mt-2 px-2" id="keywords-box">
+                    <div class="my-3">
+                        <span class="font-medium">Từ khóa:</span>
+                        <div class="flex flex-wrap gap-3 ml-0 mt-2 px-2" id="keywords-box">
+                        </div>
+                    </div>
+
+
+                    <div class="flex gap-x-3 flex-wrap">
+                        <th:block
+                            th:if="${article.articleNote != null && article.articleNote.note != null and article.articleNote.note != ''}">
+                            <div id="note" class="note note-hidden mt-4 mb-3">
+                                <div class="p-3 flex justify-between items-center">
+                                    <p class="text-main font-bold pr-2">Nhận xét</p>
+                                    <button id="btn-collapse-note"
+                                        class="relative w-6 h-6 p-1 flex items-center rounded hover:bg-white/20">
+                                        <div
+                                            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4">
+
+                                        </div>
+                                        <div id="icon-collapse-note"
+                                            class="transition-all duration-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4 rotate-90">
+
+                                        </div>
+                                    </button>
+                                </div>
+                                <div id="note-content" class="px-3 pb-3 text-main hidden"
+                                    th:text="${article.articleNote.note}">
+                                </div>
+                            </div>
+                        </th:block>
+
+                        <th:block
+                            th:if="${article.authorNote != null && article.authorNote.note != null and article.authorNote.note != ''}">
+                            <div id="author-note" class="note note-hidden mt-4 mb-3">
+                                <div class="p-3 flex justify-between items-center">
+                                    <p class="text-main font-bold pr-2">Ghi chú</p>
+                                    <button id="btn-collapse-author-note"
+                                        class="relative w-6 h-6 p-1 flex items-center rounded hover:bg-white/20">
+                                        <div
+                                            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4">
+                                        </div>
+                                        <div id="icon-collapse-author-note"
+                                            class="transition-all duration-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4 rotate-90">
+                                        </div>
+                                    </button>
+                                </div>
+                                <div id="author-note-content" class="px-3 pb-3 text-main hidden"
+                                    th:text="${article.authorNote.note}">
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+
+
+
                 </div>
             </div>
-
-
-            <div class="flex gap-x-3 flex-wrap">
-                <th:block
-                    th:if="${article.articleNote != null && article.articleNote.note != null and article.articleNote.note != ''}">
-                    <div id="note" class="note note-hidden mt-4 mb-3">
-                        <div class="p-3 flex justify-between items-center">
-                            <p class="text-main font-bold pr-2">Nhận xét</p>
-                            <button id="btn-collapse-note"
-                                class="relative w-6 h-6 p-1 flex items-center rounded hover:bg-white/20">
-                                <div
-                                    class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4">
-
-                                </div>
-                                <div id="icon-collapse-note"
-                                    class="transition-all duration-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4 rotate-90">
-
-                                </div>
-                            </button>
-                        </div>
-                        <div id="note-content" class="px-3 pb-3 text-main hidden" th:text="${article.articleNote.note}">
-                        </div>
-                    </div>
-                </th:block>
-
-                <th:block
-                    th:if="${article.authorNote != null && article.authorNote.note != null and article.authorNote.note != ''}">
-                    <div id="author-note" class="note note-hidden mt-4 mb-3">
-                        <div class="p-3 flex justify-between items-center">
-                            <p class="text-main font-bold pr-2">Ghi chú</p>
-                            <button id="btn-collapse-author-note"
-                                class="relative w-6 h-6 p-1 flex items-center rounded hover:bg-white/20">
-                                <div
-                                    class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4">
-                                </div>
-                                <div id="icon-collapse-author-note"
-                                    class="transition-all duration-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-0.5 rounded bg-main w-4 rotate-90">
-                                </div>
-                            </button>
-                        </div>
-                        <div id="author-note-content" class="px-3 pb-3 text-main hidden"
-                            th:text="${article.authorNote.note}">
-                        </div>
-                    </div>
-                </th:block>
-            </div>
-
-
             <!-- ACTION -->
             <section layout:fragment="action">
 
@@ -93,8 +108,7 @@
                 </div>
 
                 <div class="flex justify-end my-3 gap-x-3">
-                    <!-- <button id="btn-download-file"
-                        class="btn-gradient-main w-fit">Tải file gốc</button> -->
+
                     <th:block layout:fragment="buttons">
 
                     </th:block>

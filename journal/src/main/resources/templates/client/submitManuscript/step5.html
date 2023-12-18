@@ -6,87 +6,45 @@
 <section class="mt-6 mb-3" layout:fragment="content">
     <div class="min-h-[800px] px-6 md:p-0">
         <div th:replace="~{fragments/stepper :: stepper (step=5)}"></div>
-        <form name="main" enctype="multipart/form-data" th:action="@{'/submit/step5'}" method="post">
+        <form th:object="${article}" th:action="@{'/submit/step5'}" method="post">
             <div class="fade-anim space-y-6 flex flex-col justify-center">
-                <div class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between"
-                    style="min-height: 600px">
-                    <div class="col-span-full">
-                        <h1 class="py-2 text-3xl font-semibold">Các tệp quan trọng</h1>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-3">
-                            <div
-                                class="col-span-1 flex md:flex-col justify-between items-center border border-dashed border-gray-900/25 px-6 py-10">
-                                <i class="text-5xl md:text-7xl text-gradient-main bi bi-cloud-upload"></i>
-                                <p class="font-medium text-sm text-gray-700 m-3">Gửi file bài viết bản gốc <span class="text-main">*</span></p>
-                                <label for="file-upload" class="btn-main-md w-fit">Tải lên</label>
-                                <input data-file-display="file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="file-upload" name="file" type="file">
-                            </div>
-
-                            <div
-                                class="col-span-1 flex md:flex-col justify-between items-center border border-dashed border-gray-900/25 px-6 py-10">
-                                <i class="text-5xl md:text-7xl text-gradient-main bi bi-cloud-upload"></i>
-                                <p class="font-medium text-sm text-gray-700 m-3">Gửi file bài viết ẩn danh <span class="text-main">*</span></p>
-                                <label for="anonymous-file-upload" class="btn-main-md w-fit">Tải lên</label>
-                                <input data-file-display="anonymous-file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="anonymous-file-upload" name="anonymousFile" type="file">
-                            </div>
-
-                            <div
-                                class="col-span-1 flex md:flex-col justify-between items-center border border-dashed border-gray-900/25 px-6 py-10">
-                                <i class="text-5xl md:text-7xl text-gradient-main bi bi-cloud-upload"></i>
-                                <p class="font-medium text-sm text-gray-700 m-3">Gửi file phụ lục</p>
-                                <label for="appendix-file-upload" class="btn-main-md w-fit">Tải lên</label>
-                                <input data-file-display="appendix-file-display" accept=".pdf,.docx,.tex" class="sr-only ml-auto" id="appendix-file-upload" name="appendixFile" type="file">
-                            </div>
-                        </div>
-                        <div id="file-display" class="hidden mt-5">
-                            <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                                <div data-file-display-extension id="file-display-extension"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-                                </div>
-                                <p data-file-display-name id="file-display-name">
-
-                                </p>
-                            </div>
-                        </div>
-
-                        <div id="anonymous-file-display" class="hidden mt-5">
-                            <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                                <div data-file-display-extension id="anonymous-file-display-extension"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-                                </div>
-                                <p data-file-display-name id="anonymous-file-display-name">
-
-                                </p>
-                            </div>
-                        </div>
-
-                        <div id="appendix-file-display" class="hidden mt-5">
-                            <div class="w-full flex gap-x-3 p-3 shadow flex items-center rounded-lg bg-main/10">
-                                <div data-file-display-extension id="appendix-file-display-extension"
-                                    class="uppercase bg-white relative text-xs font-semibold w-14 h-14 rounded shadow flex justify-center items-center overflow-hidden after:content-[''] after:w-full after:h-1 after:absolute after:bottom-0 after:left-0 after:bg-main">
-
-                                </div>
-                                <p data-file-display-name id="appendix-file-display-name">
-
-                                </p>
+                <div
+                    class="bg-white shadow-lg rounded-lg px-10 py-6 xs:p-0 mx-auto w-full md:max-w-7xl border-b border-gray-900/10 mb-12 flex flex-col justify-between">
+                    <div>
+                        <div class="grid grid-cols-1 gap-x-6 gap-y-3">
+                            <div class="col-span-full">
+                                <label for="reference" class="block text-sm font-medium leading-6 text-gray-900">Trích dẫn <span class="text-main">*</span></label>
+                                <textarea required id="reference" type="text" th:field="*{currentManuscript.reference}" rows=20
+                                    class="textarea-scale input px-3 py-2 mt-1 mb-5 w-full resize-none"></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-6 flex items-center justify-end gap-x-6">
-                        <button type="submit" name="back" value="2"
-                            class="text-sm font-semibold leading-6 text-gray-900">Trở
-                            về</button>
-                        <button type="submit"
+                        <button type="button" class="text-sm font-semibold leading-6 text-gray-900" onclick="goBackStep()">Trở về</button>
+                        <button type="button" id="btnSubmit" onclick="submitForm()"
                             class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                             tục</button>
                     </div>
                 </div>
             </div>
+
         </form>
     </div>
+
+    <script>
+        const form = document.querySelector("form");
+        function goBackStep() {
+            form.action = '/submit/step5?back=4'
+            form.submit();
+        }
+
+        function submitForm() {
+            form.submit();
+        }
+    </script>
+    <script defer th:src="@{/js/textareaScale.js}"></script>
+
 </section>
 
 </html>
