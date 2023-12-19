@@ -58,8 +58,6 @@ public class ReviewerController {
                     String.format("/api/articles/view/%s", reviewArticle.getManuscript().getArticle().getId()));
             model.addAttribute("reviewArticle", reviewArticle);
             model.addAttribute("article", reviewArticle.getManuscript().getArticle());
-            model.addAttribute("articleStatusEnum", EnumUtils.getArticleStatus());
-
             model.addAttribute("renderManuscript", reviewArticle.getManuscript());
             model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s",
                     reviewArticle.getManuscript().getArticle().getId()));

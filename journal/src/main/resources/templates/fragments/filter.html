@@ -1,0 +1,36 @@
+<div th:fragment="filter" class="">
+    <form class="relative left-0 my-6 flex flex-col-reverse md:flex-row gap-2">
+        <!-- EXTRA FILTER -->
+        <div class="w-fit">
+            <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover" class="btn-main fade-anim" type="button">
+                Bộ lọc
+                <i class="bi bi-sliders2 text-lg"></i>
+            </button>
+    
+            <div id="dropdownBgHover" class="dropdown">
+                <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                    aria-labelledby="dropdownBgHoverButton">
+                    <li>
+                        <h3>Tình trạng</h3>
+                        <div th:each="statusEnum : ${articleStatusEnum}" class="filter-container">
+                            <input th:id="${statusEnum}" name="status" type="radio" class="filter-input rounded-full" th:value="${statusEnum}" onchange="this.form.submit();" th:checked="${param.status}">
+                            <label class="filter-label" th:for="${statusEnum}" th:text="${statusEnum.displayName}"></label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- INPUT FILTER -->
+        <div class="grow relative flex items-center md:mt-0 fade-anim">
+            <span class="absolute pl-3 py-2">
+                <i class="bi bi-search text-gray-400"></i>
+            </span>
+            <input name="kw" th:value="${param.kw}" type="text" placeholder="Tìm kiếm" class="input-icon-left">
+        </div>
+    </form>
+
+    <script>
+
+    </script>
+</div>
+

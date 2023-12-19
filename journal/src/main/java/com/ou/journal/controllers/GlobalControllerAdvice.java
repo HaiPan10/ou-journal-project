@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.ou.journal.utils.EnumUtils;
+
 @ControllerAdvice
 @Controller
 @PropertySources({
@@ -68,6 +70,11 @@ public class GlobalControllerAdvice {
     @ModelAttribute("emailEditorialSecretary")
     public String[] getEmailEditorialSecretary() {
         return emailEditorialSecretary.split(",");
+    }
+
+    @ModelAttribute("articleStatusEnum")
+    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
+        return EnumUtils.getArticleStatus();
     }
 
 }

@@ -34,11 +34,6 @@ public class SubmissionController {
     @Autowired
     private ManuscriptService manuscriptService;
 
-    @ModelAttribute("articleStatusEnum")
-    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
-        return EnumUtils.getArticleStatus();
-    }
-
     @ModelAttribute("authorTypesEnum")
     public com.ou.journal.enums.AuthorType[] getTypes() {
         return EnumUtils.getAuthorTypes();

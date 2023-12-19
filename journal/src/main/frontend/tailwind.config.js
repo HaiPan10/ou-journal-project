@@ -4,11 +4,11 @@ module.exports = {
   theme: {
     container: {
       padding: {
-        DEFAULT: '1rem',
-        sm: '2rem',
-        lg: '4rem',
-        xl: '5rem',
-        '2xl': '6rem',
+        DEFAULT: '0.5rem',
+        sm: '0rem',
+        lg: '0rem',
+        xl: '0rem',
+        '2xl': '0rem',
       },
     },
     extend: {

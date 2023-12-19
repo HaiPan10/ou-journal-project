@@ -47,11 +47,6 @@ public class EditorController {
     @Autowired
     private WebAppValidator webAppValidator;
 
-    @ModelAttribute("articleStatusEnum")
-    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
-        return EnumUtils.getArticleStatus();
-    }
-
     @GetMapping("/editor/invite-reviewer-articles")
     public String getArticleWaitingForInviteReviewer(Model model,
             @AuthenticationPrincipal AuthenticationUser currentUser) {

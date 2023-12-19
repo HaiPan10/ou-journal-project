@@ -346,6 +346,10 @@
     .bg-gradient-main {
         @apply bg-gradient-to-br from-main-light to-main
     }
+
+    .bg-gradient-main2 {
+        @apply bg-gradient-to-br from-main to-main-light
+    }
     .autocomplete-items{
         @apply bg-white shadow-lg cursor-pointer absolute top-full z-40 w-full
     } 
@@ -425,4 +429,25 @@
     .toast-success-br > .close-container {
         @apply ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8
     }
+
+    .book {
+        @apply transition-all absolute top-1/2 -translate-y-1/2 shadow-2xl
+    }
+
+    .book-first{
+        @apply book z-30 left-[20%] w-[40%]
+    }
+
+    .book-secondary{
+        @apply book z-20 right-[20%] w-[35%]
+    }
+
+    .book-container:hover .book-secondary:hover{
+        @apply book z-30 scale-100 w-[40%]
+    }
+
+    .book-container:hover .book-first:not(:hover){
+        @apply book z-20 w-[35%]
+    }
+
 }

@@ -3,9 +3,35 @@
     layout:decorate="~{layouts/layout}">
 
 <section layout:fragment="content">
-    <div class="container mx-auto">
-        <div class="mt-5 md:mt-10 cover w-full">
-            <img th:src="@{/images/cover.png}"/>
+    <div class="w-full">
+        <div class="bg-gradient-main2 m-5 shadow-lg rounded-lg overflow-hidden">
+            <div class="grid grid-col-1 gap-5 md:grid-cols-5 mx-5 md:mx-10 lg:mx-24 py-3">
+                <div class="col-span-full md:col-span-3 text-gray-800">
+                    <div class="pt-10 flex flex-col gap-5">
+                        <h1 class="text-4xl xl:text-6xl text-white">TẠP CHÍ KHOA HỌC</h1>
+                        <h1 class="font-bold text-white text-xl lg:text-3xl">Đại học Mở Thành phố Hồ Chí Minh</h1>
+                    </div>
+
+                </div>
+                <div class="col-span-full md:col-span-2">
+                    <div class="w-full h-full relative book-container">
+                        <div class="opacity-0 w-[45%]">
+                            <img th:src="@{/images/book1.png}" />
+                        </div>
+                        <svg class="absolute top-full md:top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 scale-[150%]" width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="50" class="fill-white"/>
+                        </svg>                                            
+                        <div class="book-first">
+                            <img th:src="@{/images/book1.png}" />
+                        </div>
+                        <div class="book-secondary">
+                            <img th:src="@{/images/book3.png}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <img class="w-full" th:src="@{/images/cover.png}"/> -->
         </div>
     </div>
 </section>

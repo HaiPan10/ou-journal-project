@@ -4,7 +4,7 @@
 
 
 <section layout:fragment="content">
-    <div class="flex justify-center">
+    <div class="my-5 flex justify-center">
         <form th:action="@{/register/account(token=${token})}" th:object="${account}" method="post">
             <div class="container bg-white shadow-lg drop-shadow-2xl rounded-lg px-6 py-8 flex flex-col gap-y-6 max-w-xl">
                 <div>

@@ -28,16 +28,6 @@ public class ArticleController {
     @Autowired
     private ManuscriptService manuscriptService;
 
-    @ModelAttribute("articleStatusEnum")
-    public com.ou.journal.enums.ArticleStatus[] getArticleStatus() {
-        return EnumUtils.getArticleStatus();
-    }
-
-    @ModelAttribute("authorTypesEnum")
-    public com.ou.journal.enums.AuthorType[] getTypes() {
-        return EnumUtils.getAuthorTypes();
-    }
-
     @GetMapping("/admin/articles")
     public String list(Model model,
             @RequestParam(name = "status", required = false, defaultValue = "PENDING") String status) {
