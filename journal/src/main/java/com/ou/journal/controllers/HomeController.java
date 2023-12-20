@@ -1,5 +1,6 @@
 package com.ou.journal.controllers;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ou.journal.enums.RoleName;
 import com.ou.journal.pojo.Account;
+import com.ou.journal.pojo.ArticleCategory;
 import com.ou.journal.pojo.UserRole;
 import com.ou.journal.service.interfaces.AccountService;
+import com.ou.journal.service.interfaces.ArticleCategoryService;
 
 @Controller
 public class HomeController {
@@ -23,6 +26,9 @@ public class HomeController {
     // public String getWebName() {
     // return "test";S
     // }
+
+    @Autowired
+    private ArticleCategoryService articleCategoryService;
 
     @GetMapping("/login")
     public String userLoginPage() {
@@ -73,7 +79,9 @@ public class HomeController {
     }
 
     @GetMapping({ "/homepage", "/" })
-    public String clientHomepage() {
+    public String clientHomepage(Model model) {
+        List<ArticleCategory> cates = articleCategoryService.findAll();
+        model.addAttribute("cates", cates);
         return "client/homepage";
     }
     // @GetMapping({"/submit", "/submit-step1"})

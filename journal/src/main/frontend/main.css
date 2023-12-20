@@ -450,4 +450,12 @@
         @apply book z-20 w-[35%]
     }
 
+    .category-active {
+        @apply scale-105
+    }
+
+    .category-name-active {
+        @apply font-bold text-main-action
+    }
+
 }
