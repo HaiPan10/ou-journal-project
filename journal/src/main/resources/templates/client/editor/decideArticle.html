@@ -322,16 +322,14 @@
                                                 <span class="badge-danger">Từ chối <span class="dateElement"
                                                         th:text="${reviewArticle.updatedAt}"></span></span>
                                             </div>
-                                            <div
-                                                th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
+                                            <div th:if="${reviewArticle.status eq 'ACCEPT_PUBLISH'}">
                                                 <span class="badge-success">Đã phản biện:
                                                     <span>
                                                         Đồng ý
                                                     </span>
                                                 </span>
                                             </div>
-                                            <div
-                                                th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
+                                            <div th:if="${reviewArticle.status eq 'REJECT_PUBLISH'}">
                                                 <span class="badge-danger">Đã phản biện:
                                                     <span>
                                                         Từ chối
@@ -383,10 +381,11 @@
                 <div class="p-12">
                     <h1 class="text-2xl font-semibold my-2">Gửi quyết định của biên tập viên</h1>
                     <p class="mb-5 text-gray-500">*Vui lòng gửi file quyết định và kèm nhận xét nếu có</p>
-                    <form id="decide-form" enctype="multipart/form-data" method="post">
+                    <form name="decide-form" id="decide-form" enctype="multipart/form-data" method="post">
                         <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
-                        <input id="decide-files" class="sr-only" accept=".pdf,.docx,.tex" type="file" multiple name="decideFiles">
+                        <input id="decide-files" class="sr-only" accept=".pdf,.docx,.tex" type="file" multiple
+                            name="decideFiles">
                         <div id="editor-file-display" class="hidden my-5">
 
                         </div>
@@ -408,14 +407,15 @@
             </div>
         </div>
     </div>
+    <th:block layout:fragment="extra-js">
+        <script th:inline="javascript">
+            const articleId = /*[[${article.id}]]*/ "";
+        </script>
+        <script src="/js/editor/decideArticle.js"></script>
+
+    </th:block>
 </section>
 
-<th:block layout:fragment="extra-js">
-    <script th:inline="javascript">
-        const articleId = /*[[${article.id}]]*/ "";
-    </script>
-    <script src="/js/editor/decideArticle.js"></script>
 
-</th:block>
 
 </html>
