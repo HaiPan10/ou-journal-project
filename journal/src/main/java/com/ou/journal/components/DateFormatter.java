@@ -17,14 +17,11 @@ public class DateFormatter implements Formatter<Date>{
 
     @Override
     public String print(Date object, Locale locale) {
-        // System.out.println("[DEBUG] - Calling print method");
-        // System.out.println("[DEBUG] - Date: " + simpleDateFormat.format(object));
         return simpleDateFormat.format(object);
     }
 
     @Override
     public Date parse(String text, Locale locale) throws ParseException {
-        // System.out.println("[DEBUG] - Calling parse method");
         return simpleDateFormat.parse(text);
     }
     

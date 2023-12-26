@@ -12,7 +12,6 @@ import com.ou.journal.enums.ReviewArticleStatus;
 import com.ou.journal.pojo.AuthenticationUser;
 import com.ou.journal.pojo.ReviewArticle;
 import com.ou.journal.service.interfaces.ReviewArticleService;
-import com.ou.journal.utils.EnumUtils;
 
 @Controller
 public class ReviewerController {

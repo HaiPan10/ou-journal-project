@@ -132,7 +132,7 @@
                 body: JSON.stringify(requestBody)
             }).then(res => {
                 if (res.ok) {
-                    window.location.href = `/admin/articles?result=success`
+                    window.location.href = `/secretary/articles`
                 } else {
                     throw new Error(res.error)
                 }
