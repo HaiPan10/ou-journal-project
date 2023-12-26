@@ -103,7 +103,7 @@ public class ArticleController {
                     if (manuscriptOptional.isPresent()) {
                         renderManuscript = manuscriptOptional.get();
                     } else {
-                        return "redirect:/admin/articles/{articleId}";
+                        return "redirect:/main-menu";
                     }
                 }
                 model.addAttribute("renderManuscript", renderManuscript);
