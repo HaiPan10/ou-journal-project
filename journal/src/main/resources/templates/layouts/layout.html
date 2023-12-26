@@ -22,8 +22,9 @@
     <link th:href="@{/css/main.css}" rel="stylesheet" /> 
     <link rel="shortcut icon" type="image/" th:href="@{/images/logoPrimary.png}"/>
     <script defer th:src="@{/js/flowbite.min.js}"></script>
-
-
+    <th:block layout:fragment="extra-js">
+    </th:block>
+    
 </head>
 
 <body class="bg-gray-100 flex flex-col" style="min-height: 100vh;">
