@@ -98,7 +98,7 @@
                             </th:block>
                             <td class="px-6 py-4">
                                 <div class="flex flex-col gap-y-3">
-                                    <a th:href="@{/editor/review/{id}(id=${article.id}, back='assign-list')}" class="table-action ml-0 text-start">Xem chi tiết</a>
+                                    <!-- <a th:href="@{/editor/review/{id}(id=${article.id}, back='assign-list')}" class="table-action ml-0 text-start">Xem chi tiết</a> -->
                                     <button th:onclick="|assignEditor('${article.id}')|" id="btnAssignSelf"
                                         class="table-action ml-0 text-start">Tự gán cho bản thân</button>
                                     <th:block th:if="${#authorization.expression('hasRole(''ROLE_CHIEF_EDITOR'')')}">
