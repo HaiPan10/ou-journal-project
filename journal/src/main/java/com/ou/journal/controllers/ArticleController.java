@@ -9,7 +9,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,7 +17,6 @@ import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.Manuscript;
 import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ManuscriptService;
-import com.ou.journal.utils.EnumUtils;
 
 @Controller
 public class ArticleController {
@@ -28,6 +26,7 @@ public class ArticleController {
     @Autowired
     private ManuscriptService manuscriptService;
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin/articles")
     public String list(Model model,
             @RequestParam(name = "status", required = false, defaultValue = "PENDING") String status) {
