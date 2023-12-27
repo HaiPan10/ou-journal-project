@@ -84,7 +84,7 @@
                         </td>
                         <td class="px-6 py-4">
                             <div th:if="${article.status eq 'PENDING'}">
-                                <a class="table-action" th:href="@{/admin/articles/{id}(id=${article.id})}">Duyệt bài</a>
+                                <a class="table-action" th:href="@{/api/articles/{id}(id=${article.id})}">Duyệt bài</a>
                             </div>
                             <div th:if="${article.status eq 'INVITING_REVIEWER'}">
                                 <a class="table-action" th:href="@{/admin/review-articles/{id}(id=${article.id})}">Mời review</a>

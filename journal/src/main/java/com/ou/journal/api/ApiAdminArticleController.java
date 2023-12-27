@@ -1,47 +1,11 @@
 package com.ou.journal.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.ou.journal.enums.ArticleStatus;
-import com.ou.journal.pojo.Article;
-import com.ou.journal.service.interfaces.ArticleService;
 
 @RestController
 @RequestMapping("admin/articles")
 public class ApiAdminArticleController {
-    @Autowired
-    private ArticleService articleService;
-
-   
-
-    @PutMapping("/verify/accept/{articleId}")
-    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
-        try {
-            article.setStatus(ArticleStatus.ASSIGN_EDITOR.toString());
-            articleService.secretaryDecide(articleId, article);
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PutMapping("/verify/reject/{articleId}")
-    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
-        try {
-            article.setStatus(ArticleStatus.SECRETARY_REJECT.toString());
-            articleService.secretaryDecide(articleId, article);
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
      // @Autowired
     // private RenderPDFService renderPDFService;
 

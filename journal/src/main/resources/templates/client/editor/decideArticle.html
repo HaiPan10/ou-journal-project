@@ -198,7 +198,7 @@
     layout:decorate="~{layouts/article/layoutDetail}">
 
 <section layout:fragment="breadcrumb">
-    <nav class="flex mb-5" aria-label="Breadcrumb">
+    <nav class="flex my-5" aria-label="Breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a th:href="@{/main-menu}" class="breadcrumb-item-link">
@@ -381,7 +381,7 @@
                 <div class="p-12">
                     <h1 class="text-2xl font-semibold my-2">Gửi quyết định của biên tập viên</h1>
                     <p class="mb-5 text-gray-500">*Vui lòng gửi file quyết định và kèm nhận xét nếu có</p>
-                    <form id="decide-form" enctype="multipart/form-data" method="post">
+                    <form name="decide-form" id="decide-form" enctype="multipart/form-data" method="post">
                         <label for="decide-files" class="btn-dark w-fit cursor-pointer">Gửi file quyết định<i
                                 class="bi bi-file-earmark-arrow-up-fill text-lg"></i></label>
                         <input id="decide-files" class="sr-only" accept=".pdf,.docx,.tex" type="file" multiple

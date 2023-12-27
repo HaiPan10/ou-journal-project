@@ -107,10 +107,6 @@
             }
         }
 
-        function handleChange(src) {
-            window.location.replace(`/admin/articles?status=${src.value}`);
-        }
-
         function assignEditor() {
             btn.disabled = true;
             var email = document.querySelector('input[name="editorEmail"]:checked').value;

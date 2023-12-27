@@ -3,7 +3,6 @@ package com.ou.journal.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ou.journal.configs.JwtService;
+import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthenticationUser;
@@ -39,11 +38,11 @@ public class ApiArticleController {
     // @Autowired
     // private UserRoleService userRoleService;
 
-    @Autowired
-    private JwtService jwtService;
+    // @Autowired
+    // private JwtService jwtService;
 
-    @Autowired
-    private Environment environment;
+    // @Autowired
+    // private Environment environment;
 
     @Autowired
     private ManuscriptService manuscriptService;
@@ -175,6 +174,30 @@ public class ApiArticleController {
         try {
             return ResponseEntity.ok()
                     .body(manuscriptService.updateAnonymousFile(anonymousFile, articleId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Secured({"ROLE_EDITOR", "ROLE_SECRETARY", "ROLE_ADMIN"})
+    @PutMapping("/verify/accept/{articleId}")
+    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
+        try {
+            article.setStatus(ArticleStatus.ASSIGN_EDITOR.toString());
+            articleService.secretaryDecide(articleId, article);
+            return ResponseEntity.ok().body("Cập nhật thành công");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @Secured({"ROLE_EDITOR", "ROLE_SECRETARY", "ROLE_ADMIN"})
+    @PutMapping("/verify/reject/{articleId}")
+    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
+        try {
+            article.setStatus(ArticleStatus.SECRETARY_REJECT.toString());
+            articleService.secretaryDecide(articleId, article);
+            return ResponseEntity.ok().body("Cập nhật thành công");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
