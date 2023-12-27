@@ -304,7 +304,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article retrieve(Long articleId, Long userId) throws Exception {
         Article article = retrieve(articleId);
-        if (!article.getEditorUser().getId().equals(userId)) {
+        if (article.getEditorUser() != null && !article.getEditorUser().getId().equals(userId)) {
             throw new Exception("Bạn không có quyền để xem bài báo này!");
         } else {
             article.setReviewedReviewer(reviewArticleRepositoryJPA.countReviewedArticle(
