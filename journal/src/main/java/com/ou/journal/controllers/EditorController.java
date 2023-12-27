@@ -30,7 +30,6 @@ import com.ou.journal.service.interfaces.ArticleService;
 import com.ou.journal.service.interfaces.ManuscriptService;
 import com.ou.journal.service.interfaces.ReviewArticleService;
 import com.ou.journal.service.interfaces.UserService;
-import com.ou.journal.utils.EnumUtils;
 import com.ou.journal.validator.WebAppValidator;
 
 @Controller
@@ -173,7 +172,7 @@ public class EditorController {
 
     @Secured("ROLE_CHIEF_EDITOR")
     @GetMapping(path = "/editor/assign-list/{articleId}")
-    public String getMethodName(@PathVariable Long articleId, Model model) {
+    public String assignEditorList(@PathVariable Long articleId, Model model) {
         String status = articleService.getArticleStatusById(articleId);
         if (status == null || !status.equals(ArticleStatus.ASSIGN_EDITOR.toString())) {
             return "redirect:/main-menu";
@@ -181,6 +180,55 @@ public class EditorController {
         model.addAttribute("editors", userService.findByRoleName(RoleName.ROLE_EDITOR.toString()));
         model.addAttribute("articleId", articleId);
         return "client/editor/assignEditorList";
+    }
+
+    @GetMapping("/editor/assign-list/detail/{articleId}")
+    public String getArticleDetail(@PathVariable Long articleId, @RequestParam(required = false) String version,
+            Model model, @RequestParam(name = "back", required = false) String back) {
+        try {
+            Article article = articleService.retrieve(articleId);
+            model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(), version));
+            model.addAttribute("anonymousUrl",
+                    String.format("/api/articles/view-anonymous/%s?version=%s", article.getId(), version));
+            model.addAttribute("appendixUrl",
+                    String.format("/api/articles/view-appendix/%s?version=%s", article.getId(), version));
+
+            model.addAttribute("article", article);
+
+            model.addAttribute("manuscripts", manuscriptService.findByArticle(article));
+
+            Manuscript renderManuscript;
+            if (version == null) {
+                renderManuscript = manuscriptService.getLastestManuscript(articleId);
+            } else {
+                Optional<Manuscript> manuscriptOptional = manuscriptService.findByArticleAndVersion(articleId, version);
+                if (manuscriptOptional.isPresent()) {
+                    renderManuscript = manuscriptOptional.get();
+                } else {
+                    return "redirect:/main-menu";
+                }
+            }
+            model.addAttribute("renderManuscript", renderManuscript);
+
+            // trả về nơi truy cập trước đó
+            if (back != null) {
+                try {
+                    String[] values = EditorURL.BACK_MAP.get(back);
+                    if (values != null) {
+                        model.addAttribute("urlBack", values[0]);
+                        model.addAttribute("backTitle", values[1]);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            return "client/editor/articleDetail";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/main-menu";
+        }
     }
 
     @GetMapping("/editor/in-review-articles")
@@ -235,9 +283,11 @@ public class EditorController {
 
             }
             // preview file
-            model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(),version));
-            model.addAttribute("anonymousUrl", String.format("/api/articles/view-anonymous/%s?version=%s", article.getId(),version));
-            model.addAttribute("appendixUrl", String.format("/api/articles/view-appendix/%s?version=%s", article.getId(),version));
+            model.addAttribute("viewUrl", String.format("/api/articles/view/%s?version=%s", article.getId(), version));
+            model.addAttribute("anonymousUrl",
+                    String.format("/api/articles/view-anonymous/%s?version=%s", article.getId(), version));
+            model.addAttribute("appendixUrl",
+                    String.format("/api/articles/view-appendix/%s?version=%s", article.getId(), version));
 
             model.addAttribute("article", article);
 

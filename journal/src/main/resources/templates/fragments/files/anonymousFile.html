@@ -118,12 +118,12 @@
                 if (res.ok) {
                     window.location.reload()
                 } else {
-                    throw new Error(res.error)
+                    return res.text()
                 }
-            }).catch(err => {
-                alert(err);
-                console.log(err);
-            });
+            }).then(msg => {
+                // raise error message
+                alert(msg)
+            })
         })
     </script>
 </th:block>

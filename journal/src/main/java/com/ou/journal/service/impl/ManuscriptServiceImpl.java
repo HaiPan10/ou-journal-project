@@ -96,8 +96,13 @@ public class ManuscriptServiceImpl implements ManuscriptService {
     }
 
     @Override
-    public Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException {
+    public Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException, Exception {
         Manuscript manuscript = getLastestManuscript(articleId);
+        if(manuscript.getArticle().getEditorUser() == null){
+            String msg = "This article don't have editor";
+            System.out.println("[DEBUG] - "  + msg);
+            throw new Exception(msg);
+        }
         manuscript.setContentAnonymous(anonymousFile.getBytes());
         manuscript.setTypeAnonymous(anonymousFile.getContentType());
         return manuscriptRepositoryJPA.save(manuscript);

@@ -22,5 +22,5 @@ public interface ManuscriptService {
 
     Optional<Manuscript> findByArticleAndVersion(Long articleId, String version);
 
-    Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException;
+    Manuscript updateAnonymousFile(MultipartFile anonymousFile, Long articleId) throws IOException, Exception;
 }

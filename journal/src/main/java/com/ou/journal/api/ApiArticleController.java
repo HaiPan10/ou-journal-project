@@ -1,12 +1,9 @@
 package com.ou.journal.api;
 
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.journal.configs.JwtService;
-import com.ou.journal.enums.SecrectType;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleNote;
 import com.ou.journal.pojo.AuthenticationUser;
