@@ -207,7 +207,7 @@ public class SpringSecurityConfig {
                         .deleteCookies("JSESSIONID", "ROLE")
                         .invalidateHttpSession(true))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SECRETARY")
+                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest()
                         .authenticated())
                 // .exceptionHandling(handling ->
@@ -256,7 +256,9 @@ public class SpringSecurityConfig {
                                 "/api/articles/author/article/withdraw",
                                 "/api/accounts/create",
                                 "/error-page",
-                                "/api/accounts/login")
+                                "/api/accounts/login",
+                                "/homepage",
+                                "/")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

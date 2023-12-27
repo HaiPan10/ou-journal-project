@@ -113,9 +113,9 @@
                     <th scope="col" class="px-6 py-3">
                         Tên
                     </th>
-                    <th scope="col" class="px-6 py-3">
+                    <!-- <th scope="col" class="px-6 py-3">
                         Tình trạng
-                    </th>
+                    </th> -->
                     <th scope="col" class="px-6 py-3">
                     </th>
                 </tr>
@@ -135,7 +135,7 @@
                         </td>
                         <td class="px-6 py-4" th:text="${account.user.firstName}">
                         </td>
-                        <td class="px-6 py-4">
+                        <!-- <td class="px-6 py-4">
                             <div th:if="${account.status eq 'PENDING'}">
                                 <span class="badge-warning">Chờ duyệt</span>
                             </div>
@@ -148,7 +148,7 @@
                             <div th:if="${account.status eq 'EMAIL_VERIFICATION'}">
                                 <span class="badge-danger">Chờ xác thực mail</span>
                             </div>
-                        </td>
+                        </td> -->
                         <td class="px-6 py-4">
                             <a href="#" class="table-action">Xem chi tiết</a>
                         </td>
