@@ -4,11 +4,12 @@ const menuIcon = document.querySelector('#menu-icon');
 
 // Định nghĩa hàm xử lý sự kiện
 function handleChange(event) {
-  if (event.target.checked) {
-    menuIcon.classList.add("rotate-90")
-  } else {
-    menuIcon.classList.remove("rotate-90")
-  }
+  if(menuIcon)
+    if (event.target.checked) {
+      menuIcon.classList.add("rotate-90")
+    } else {
+      menuIcon.classList.remove("rotate-90")
+    }
 }
 
 function callChangeRoleApi(obj) {
@@ -57,4 +58,5 @@ switch (tabName[1]) {
 // console.log("Active item is: " + activeItem);
 
 // Gắn hàm xử lý vào sự kiện 'change'
-menuToogle.addEventListener('change', handleChange);
+if (menuToogle)
+  menuToogle.addEventListener('change', handleChange);

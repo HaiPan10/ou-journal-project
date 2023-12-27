@@ -132,10 +132,6 @@
             }
         }
 
-        function handleChange(src) {
-            window.location.replace(`/admin/articles?status=${src.value}`);
-        }
-
         function assignEditor(articleId) {
             if (confirm("Xác nhận làm biên tập viên?") === true) {
                 fetch(`/api/articles/editor/assign/${articleId}`, {

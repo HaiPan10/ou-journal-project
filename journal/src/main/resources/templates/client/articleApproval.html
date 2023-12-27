@@ -106,12 +106,12 @@
             // } else {
             //     alert ("Vui lòng nhập tổng số reviewer");
             // }
-            callUpdateApi('/admin/articles/verify/accept')
+            callUpdateApi('/api/articles/verify/accept')
         })
 
         rejectBtn.addEventListener('click', (e) => {
             if (confirm("Xác nhận từ chối bài đăng")) {
-                callUpdateApi('/admin/articles/verify/reject')
+                callUpdateApi('/api/articles/verify/reject')
             }
         })
 

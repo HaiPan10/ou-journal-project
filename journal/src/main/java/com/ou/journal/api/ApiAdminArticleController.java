@@ -15,33 +15,6 @@ import com.ou.journal.service.interfaces.ArticleService;
 @RestController
 @RequestMapping("admin/articles")
 public class ApiAdminArticleController {
-    @Autowired
-    private ArticleService articleService;
-
-   
-
-    @PutMapping("/verify/accept/{articleId}")
-    public ResponseEntity<?> acceptArticle(@PathVariable Long articleId, @RequestBody Article article){
-        try {
-            article.setStatus(ArticleStatus.ASSIGN_EDITOR.toString());
-            articleService.secretaryDecide(articleId, article);
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PutMapping("/verify/reject/{articleId}")
-    public ResponseEntity<?> rejectArticle(@PathVariable Long articleId, @RequestBody Article article){
-        try {
-            article.setStatus(ArticleStatus.SECRETARY_REJECT.toString());
-            articleService.secretaryDecide(articleId, article);
-            return ResponseEntity.ok().body("Cập nhật thành công");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
      // @Autowired
     // private RenderPDFService renderPDFService;
 
