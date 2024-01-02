@@ -39,6 +39,9 @@ public class AuthorArticle implements Serializable {
     @ManyToOne
     private Article article;
 
+    @Column(name = "author_order")
+    private Integer authorOrder;
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "authorArticle")
     private List<AuthorRole> authorRoles;
 

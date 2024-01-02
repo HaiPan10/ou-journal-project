@@ -92,6 +92,15 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<AuthorArticle> authorArticles;
 
+    @Column(name = "country", length = 120)
+    private String country;
+
+    @Column(name = "work_agency", length = 120)
+    private String workAgency;
+
+    @Column(name = "position", length = 120)
+    private String position;
+
     @Override
     public String toString() {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + ", email="
