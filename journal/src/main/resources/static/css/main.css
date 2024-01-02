@@ -3155,6 +3155,11 @@ input:checked + .toggle-bg {
   --tw-ring-color: rgb(251 113 133 / 0.3);
 }
 
+.noti {
+  --tw-text-opacity: 1;
+  color: rgb(4 120 87 / var(--tw-text-opacity));
+}
+
 .note {
   min-height: 100px;
   width: 100%;
@@ -3878,6 +3883,10 @@ input:checked + .toggle-bg {
   margin-left: 0.25rem;
 }
 
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -4182,6 +4191,10 @@ input:checked + .toggle-bg {
 
 .w-9 {
   width: 2.25rem;
+}
+
+.w-\[1px\] {
+  width: 1px;
 }
 
 .w-\[35\%\] {
@@ -5231,6 +5244,11 @@ input:checked + .toggle-bg {
   padding-bottom: 2.5rem;
 }
 
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -5310,6 +5328,10 @@ input:checked + .toggle-bg {
 
 .pl-5 {
   padding-left: 1.25rem;
+}
+
+.pr-12 {
+  padding-right: 3rem;
 }
 
 .pr-2 {
