@@ -396,4 +396,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Long countProcessingArticleByAuthorId(Long authorId) {
         return articleRepositoryJPA.countProcessingArticleByAuthorId(authorId);
     }
+
+    @Override
+    public Long countArticleByStatus(String status) {
+        return articleRepositoryJPA.countArticleByStatus(status);
+    }
 }

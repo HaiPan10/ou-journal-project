@@ -31,4 +31,6 @@ public interface ArticleRepositoryJPA extends JpaRepository<Article, Long> {
         "WHERE aa.user.id = ?1 "
     )
     Long countProcessingArticleByAuthorId(Long authorId);
+    @Query("SELECT COUNT(*) FROM Article a WHERE a.status = ?1")
+    Long countArticleByStatus(String status);
 }

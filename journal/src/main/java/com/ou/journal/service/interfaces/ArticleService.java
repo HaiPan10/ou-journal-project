@@ -31,4 +31,5 @@ public interface ArticleService {
     String getArticleStatusById(Long articleId);
     List<Article> findByEditorUserId(Long editorId);
     Long countProcessingArticleByAuthorId(Long authorId);
+    Long countArticleByStatus(String status);
 }
