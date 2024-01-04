@@ -462,4 +462,40 @@
         @apply font-bold text-main-action
     }
 
+    .drag-sort-active {
+        @apply translate-x-5
+    }
+
+    .drag-sort-active .dragger {
+        @apply bg-main
+    }
+
+    .dragger {
+        @apply transition-all w-[15px] bg-main/25 flex flex-col justify-center gap-2 px-[3px] cursor-pointer
+    }
+
+    .required-file {
+        @apply flex gap-2 text-rose-600 text-sm font-semibold
+    }
+
+    .required-file .success{
+        @apply hidden
+    }
+
+    .required-file .fail{
+        @apply block
+    }
+
+    .required-file.success{
+        @apply text-emerald-600
+    }
+
+    .required-file.success .success{
+        @apply block
+    }
+
+    .required-file.success .fail{
+        @apply hidden
+    }
+
 }
