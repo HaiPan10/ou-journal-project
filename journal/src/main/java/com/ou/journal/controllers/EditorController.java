@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.ou.journal.components.CountryProperties;
 import com.ou.journal.constants.EditorURL;
 import com.ou.journal.enums.ArticleStatus;
 import com.ou.journal.enums.RoleName;
@@ -45,6 +47,15 @@ public class EditorController {
     private UserService userService;
     @Autowired
     private WebAppValidator webAppValidator;
+
+    @Autowired
+    private CountryProperties countryProperties;
+
+    @ModelAttribute("countries")
+    public Map<String, String> getCountries() {
+        return countryProperties.getCountries();
+    }
+
 
     @GetMapping("/editor/invite-reviewer-articles")
     public String getArticleWaitingForInviteReviewer(Model model,

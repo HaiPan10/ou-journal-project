@@ -40,8 +40,11 @@
         }
     </style>
 </head>
-
+<!-- <th:block layout:fragment="extra-js">
+    <script th:src="@{/js/html2canvas.min.js}"></script>
+</th:block> -->
 <section class="mt-6 mb-3" layout:fragment="content">
+
     <div class="min-h-[800px] px-6 md:p-0">
         <div th:replace="~{fragments/stepper :: stepper (step=4)}"></div>
         <section name="main">
@@ -51,19 +54,19 @@
                     <div>
                         <div class="flex justify-between pl-3">
                             <h2 class="col-span-1 text-lg font-semibold">Danh sách tác giả</h2>
-                            <button type="button" data-modal-target="add-author-modal" data-modal-toggle="add-author-modal"
+                            <button type="button" data-modal-target="add-author-modal"
+                                data-modal-toggle="add-author-modal"
                                 class="w-fit rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Thêm
                                 tác giả</button>
                         </div>
-                        <div class="mt-3 authors">
+                        <div class="mt-3 authors grid">
                             <div>
-                                <hr />
-    
+
                             </div>
-                            <hr id="last-hr" />
+                            <hr id="last-hr" class="hidden" />
                         </div>
                     </div>
-    
+
                     <div class="mt-6 flex items-center justify-end gap-x-6">
                         <button type="button" onclick="goBackStep()"
                             class="text-sm font-semibold leading-6 text-gray-900">Trở
@@ -73,8 +76,8 @@
                             tục</button>
                     </div>
                 </div>
-    
-    
+
+
         </section>
         <div id="add-author-modal" tabindex="-1"
             class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -90,8 +93,8 @@
                             data-modal-hide="add-author-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
@@ -107,10 +110,10 @@
                                         required
                                         class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 w-full" />
                                 </div>
-    
+
                             </div>
-    
-    
+
+
                             <input id="new-id" type="hidden" name="new-id">
                             <div class="col-span-full">
                                 <label id="notAvailable" class="text-yellow-400 text-sm font-medium"
@@ -118,18 +121,43 @@
                                     chưa có trên hệ thống! Vui lòng điền đầy đủ thông tin bên dưới</label>
                             </div>
                             <div class="col-span-1">
-                                <label for="new-last-name" class="block text-sm font-medium leading-6 text-gray-900">Họ và
+                                <label for="new-last-name" class="block text-sm font-medium leading-6 text-gray-900">Họ
+                                    và
                                     tên đệm</label>
                                 <input id="new-last-name" type="text" name="last-name" required
                                     title="Vui lòng nhập họ và tên đệm"
                                     class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
-    
+
                             <div class="col-span-1">
                                 <label for="new-first-name"
                                     class="block text-sm font-medium leading-6 text-gray-900">Tên</label>
-                                <input id="new-first-name" type="text" name="first-name" required title="Vui lòng nhập tên"
+                                <input id="new-first-name" type="text" name="first-name" required
+                                    title="Vui lòng nhập tên"
                                     class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                            </div>
+                            <div class="col-span-2">
+                                <label for="new-work-agency"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Tổ chức</label>
+                                <input id="new-work-agency" type="text" name="work-agency" required
+                                    title="Vui lòng nhập tổ chức làm việc"
+                                    class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                            </div>
+                            <div class="col-span-1">
+                                <label for="new-position" class="block text-sm font-medium leading-6 text-gray-900">Chức
+                                    vụ</label>
+                                <input id="new-position" type="text" name="position" required
+                                    title="Vui lòng nhập chức vụ"
+                                    class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
+                            </div>
+                            <div class="col-span-1">
+                                <label for="new-country" class="block text-sm font-medium leading-6 text-gray-900">Quốc
+                                    gia</label>
+                                <select name="country" id="country" class="input px-3 py-1.5 mt-1 mb-5 w-full">
+                                    <option value="">Chọn quốc gia</option>
+                                    <option th:each="country : ${countries}" th:value="${country.key}"
+                                        th:text="${country.value}"></option>
+                                </select>
                             </div>
                         </div>
                         <div
@@ -144,19 +172,86 @@
             </div>
         </div>
     </div>
-    
 
-
-    <!-- <div>
-        <hr/>
-        <div class="p-3 author" data-user-id="${authorEl.user.id}">
-            <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
-            <p class="text-gray-500 author-email">${authorEl.user.email}</p>
-            <div id="authorRolesContainer${authorEl.user.email}">
-            </div>
-        </div>
-    </div> -->
     <script th:inline="javascript">
+        var dragGhost = document.createElement('div');
+        dragGhost.style.display = 'none';
+        document.body.appendChild(dragGhost);
+
+        function enterDragger(obj) {
+            const draggerId = obj.getAttribute('data-dragger')
+            const dragger = document.getElementById(`${draggerId}`)
+            if (dragger != null) {
+                dragger.setAttribute("draggable", true);
+            }
+        }
+
+
+        function leaveDragger(obj) {
+            const draggerId = obj.getAttribute('data-dragger')
+            const dragger = document.getElementById(`${draggerId}`)
+            if (dragger != null && dragger.getAttribute("data-dragging") == 'false') {
+                dragger.setAttribute("draggable", false);
+            }
+        }
+        function handleDragStart(event) {
+            const selectedItem = event.target;
+            event.dataTransfer.setData('text/plain', '');
+            event.dataTransfer.setDragImage(dragGhost, 0, 0);
+
+            selectedItem.setAttribute("data-dragging", true);
+        }
+        function handleDrag(event) {
+            const selectedItem = event.target;
+
+            list = selectedItem.parentNode,
+                x = event.clientX,
+                y = event.clientY;
+            console.log(x, y);
+            selectedItem.classList.add('drag-sort-active');
+            let swapItem = document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y);
+            if (swapItem != selectedItem && !selectedItem.contains(swapItem)) {
+                if (list === swapItem.parentNode) {
+                    swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
+                    list.insertBefore(selectedItem, swapItem);
+                } else if (list.contains(swapItem)) {
+                    let count = 0
+                    while (list != swapItem.parentNode && swapItem != null) {
+                        swapItem = swapItem.parentNode
+                        count++
+                    }
+                    if (swapItem != null && list === swapItem.parentNode) {
+                        swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
+
+                        list.insertBefore(selectedItem, swapItem);
+                    }
+                }
+            }
+
+        }
+
+        function handleDrop(event) {
+            event.target.classList.remove('drag-sort-active');
+            event.target.setAttribute("data-dragging", false);
+            event.target.setAttribute("draggable", false);
+            const list = event.target.parentNode;
+            changeFirstAuthor(list.children[1]);
+            let domElements = Array.from(list.children);
+            authorArticles.sort((a, b) => {
+                let aIndex = domElements.findIndex(el => el.getAttribute("data-user-email") === a.user.email);
+                let bIndex = domElements.findIndex(el => el.getAttribute("data-user-email") === b.user.email);
+                return aIndex - bIndex;
+            });
+            let order = 1;
+            authorArticles.forEach(authorArticle => {
+                authorArticle.authorOrder = order;
+                order++;
+            });
+            console.log(authorArticles)
+        }
+
+        // (() => { enableDragSort('drag-sort-enable') })();
+
         let authorArticles = /*[[${ article.authorArticles }]]*/ "";
         const users = /*[[${ users }]]*/ "";
         //var isFirstAuthorChosen = true;
@@ -194,7 +289,7 @@
             addRole(author);
         });
 
-        function isHasFirstAuthor () {
+        function isHasFirstAuthor() {
             const firstAuthor = authorArticles.filter(author => {
                 let flag = false;
                 author.authorRoles.forEach(role => {
@@ -235,15 +330,7 @@
                     roleElement.classList.add('badge-FIRST_AUTHOR', "h-fit", "flex", "gap-x-3", "items-center");
                     const textlRole = document.createElement('span');
                     textlRole.textContent = 'Tác giả chính';
-                    //const btnDel = document.createElement('button');
-                    //btnDel.classList.add('focus:ring-0', 'p-1', 'inline-flex', 'items-center', 'justify-center', 'h-3', 'w-3');
-                    //const iconDel = document.createElement('span');
-                    //iconDel.classList.add('material-symbols-rounded', 'text-sm');
-                    //iconDel.textContent = 'close';
-                    //btnDel.appendChild(iconDel);
-                    //btnDel.setAttribute("onclick", "changeFristAuthorToAuthor(this)");
                     roleElement.appendChild(textlRole);
-                    //roleElement.appendChild(btnDel);
                 } else if (role.authorType.id === 2) {
                     roleElement.classList.add('badge-CORRESPONDING_AUTHOR', "h-fit");
                     roleElement.textContent = 'Tác giả liên hệ';
@@ -256,27 +343,30 @@
         }
 
         function addAuthorEl(authorEl) {
+            const uniqueId = authorEl.user.email.replace('@', "-");
             const html = `
-                <div>
-                    <hr/>
+                    <div draggable="false" data-dragging="false" ondragstart="handleDragStart(event)" ondrag="handleDrag(event)" ondragend="handleDrop(event)" id="dragger-${uniqueId}" class="transition-all border-t-2 border-gray-200 flex gap-1 flex-col md:flex-row justify-between items-stretch" data-user-id="${authorEl.user.id}" data-user-email="${authorEl.user.email}">
+                        <div onmouseenter="enterDragger(this)" onmouseleave="leaveDragger(this)" data-dragger="dragger-${uniqueId}" class="dragger">
+                            <div class="bg-white h-[2px] w-full"></div>
+                            <div class="bg-white h-[2px] w-full"></div>
+                            <div class="bg-white h-[2px] w-full"></div>
 
-                    <div class="p-3 author flex gap-4 flex-col md:flex-row justify-between items-center" data-user-id="${authorEl.user.id}">
-                        <div class="w-full md:w-fit flex flex-col md:flex-row grow gap-4">
+                        </div>
+                        <div class="w-full md:w-fit flex flex-col md:flex-row grow gap-4 p-2 py-3">
                             <div class="w-full md:w-fit">
                                 <h3 class="font-medium author-name">${authorEl.user.lastName + " " + authorEl.user.firstName}</h3>
                                 <p class="text-gray-500 author-email">${authorEl.user.email}</p>
                             </div>
                        
-                            <div class="flex gap-2 w-full md:w-fit" id="authorRolesContainer${authorEl.user.email}">
+                            <div class="flex gap-2 w-full md:w-fit p-2" id="authorRolesContainer${authorEl.user.email}">
                             </div>
                         </div>  
-                        <div class="flex flex-wrap gap-3 w-full md:w-fit">
+                        <div class="flex flex-wrap gap-3 w-full md:w-fit p-2 py-3">
                             <a role="button" onclick="chooseFirstAuthor(this)" class="block underline-none text-main hover:underline">Chọn làm tác giả chính</a>
                             <a role="button" onclick="delAuthor(this)" class="block underline-none text-main hover:underline">Xóa</a>
                         </div>
                     </div>
-                </div>
-                    `
+                `
 
             lastHr.insertAdjacentHTML('beforebegin', html);
         }
@@ -284,16 +374,12 @@
         function delAuthor(obj) {
             if (confirm("Bạn có chắc chắn muốn xóa tác giả này")) {
                 const container = obj.parentNode.parentNode;
-                const userId = container.getAttribute("data-user-id");
-                let delUser;
-                if (userId) {
-                    delUser = authorArticles.filter(au => au.user.id == userId)[0];
-                }
-                else {
-                    const userEmail = container.querySelector(".author-email").innerText;
-                    delUser = authorArticles.filter(au => au.user.email == userEmail)[0];
-                }
-                if (authorArticles.indexOf(delUser) == 0) {
+                const userEmail = container.getAttribute("data-user-email");
+
+                delUser = authorArticles.filter(au => au.user.email == userEmail)[0];
+
+                const isCoAuthor = delUser.authorRoles.map(authorRole => authorRole.authorType.id).indexOf(2);
+                if (isCoAuthor > -1) {
                     alert("Không thể xóa tác giả liên hệ");
                     return;
                 }
@@ -304,12 +390,11 @@
                     return;
                 }
                 authorArticles.splice(authorArticles.indexOf(delUser), 1);
-                container.parentNode.remove();
+                container.remove();
             }
         }
 
-        function chooseFirstAuthor(obj) {
-            const container = obj.parentNode.parentNode;
+        function changeFirstAuthor(container) {
             const userEmail = container.querySelector(".author-email").innerText;
             const oldFirstAuthor = authorArticles.filter(author => {
                 let flag = false;
@@ -321,12 +406,13 @@
             })
 
             if (oldFirstAuthor.length > 0) {
-                const oldEmail = oldFirstAuthor[0].user.email 
+                const oldEmail = oldFirstAuthor[0].user.email
                 if (userEmail == oldEmail) {
                     return;
                 } else {
                     const firstTypeIndex = oldFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(1);
-                    if (authorArticles.indexOf(oldFirstAuthor[0]) == 0) {
+                    const isCoAuthor = oldFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(2);
+                    if (isCoAuthor > -1) {
                         oldFirstAuthor[0].authorRoles.splice(firstTypeIndex, 1);
                     } else {
                         oldFirstAuthor[0].authorRoles[firstTypeIndex].authorType.id = 3;
@@ -336,7 +422,7 @@
                 }
             }
             const newFirstAuthor = authorArticles.filter(author => author.user.email == userEmail);
-            const normalTypeIndex =newFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(3);
+            const normalTypeIndex = newFirstAuthor[0].authorRoles.map(authorRole => authorRole.authorType.id).indexOf(3);
             if (normalTypeIndex !== -1) {
                 newFirstAuthor[0].authorRoles[normalTypeIndex].authorType.id = 1;
             } else {
@@ -349,6 +435,11 @@
             }
             document.getElementById(`authorRolesContainer${userEmail}`).innerHTML = "";
             addRole(newFirstAuthor[0]);
+        }
+
+        function chooseFirstAuthor(obj) {
+            const container = obj.parentNode.parentNode;
+            changeFirstAuthor(container);
         }
 
         function goNextStep() {
@@ -401,12 +492,19 @@
                 const lastnval = formData.get("last-name")
                 const emailval = formData.get("email")
                 const idval = formData.get("new-id");
+                const workAgencyval = formData.get("work-agency");
+                const positionval = formData.get("position");
+                const countryval = formData.get("country");
                 const authorEl = {
+                    "authorOrder": authorArticles.length + 1,
                     "user": {
                         "id": parseInt(idval),
                         "firstName": firstnval,
                         "lastName": lastnval,
-                        "email": emailval
+                        "email": emailval,
+                        "workAgency": workAgencyval,
+                        "position": positionval,
+                        "country": countryval,
                     },
                     "authorRoles": [
                         {
@@ -425,40 +523,10 @@
                     formNewAuthor.reset();
                     addAuthorEl(authorEl);
                     addRole(authorEl);
+                    // console.log(authorArticles);
                 } else {
                     alert("Thông tin người dùng đã được thêm!")
-                    //let isRoleExists = authorArticles[isUserExists].authorRoles
-                    //    .map(authorRole => authorRole.authorType.id).indexOf(parseInt(typeval));
-                    //if (isRoleExists === -1) {
-                    //    
-                    //        if (changeRoleIndex === -1) {
-                    //            const newAuthorType = {
-                    //                "authorType": {
-                    //                    "id": parseInt(typeval)
-                    //                }
-                    //            }
-                    //            authorArticles[isUserExists].authorRoles.push(newAuthorType)
-                    //            btnClose.click();
-                    //            addRole(authorEl);
-                    //        } else {
-                    //            authorArticles[isUserExists].authorRoles[changeRoleIndex].authorType.id = parseInt(typeval);
-                    //            if (changeRole == 1) isFirstAuthorChosen = false;
-                    //            btnClose.click();
-                    //            document.getElementById(`authorRolesContainer${authorArticles[isUserExists].user.email}`).innerHTML = "";
-                    //            addRole(authorArticles[isUserExists]);
-//
-                    //        }
-                    //    
-//
-                    //}
-
-
                 }
-
-                // authorArticles.push(authorEl)
-                // btnClose.click();
-                // addAuthorEl(authorEl);
-                // btnClose.click();
             } else {
                 const inputs = formNewAuthor.querySelectorAll("input");
                 for (var i = 0; i < inputs.length; i++) {

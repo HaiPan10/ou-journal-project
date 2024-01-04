@@ -2,6 +2,7 @@ package com.ou.journal.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ou.journal.pojo.AuthorType;
 import com.ou.journal.pojo.Manuscript;
+import com.ou.journal.components.CountryProperties;
 import com.ou.journal.pojo.Account;
 import com.ou.journal.pojo.Article;
 import com.ou.journal.pojo.ArticleCategory;
@@ -47,11 +49,19 @@ public class SubmitController {
     private ArticleCategoryService articleCategoryService;
 
     @Autowired
+    private CountryProperties countryProperties;
+
+    @Autowired
     private UserService userService;
 
     @ModelAttribute("authorTypes")
     public com.ou.journal.enums.AuthorType[] getTypes() {
         return com.ou.journal.enums.AuthorType.values();
+    }
+
+    @ModelAttribute("countries")
+    public Map<String, String> getCountries() {
+        return countryProperties.getCountries();
     }
 
     @ModelAttribute("termsAccepted")
@@ -92,7 +102,7 @@ public class SubmitController {
                 user.setEmail(account.getUser().getEmail());
 
                 authorArticle.setUser(user);
-
+                authorArticle.setAuthorOrder(1);
                 authorArticles.add(authorArticle);
                 Article article = new Article();
                 article.setAuthorArticles(authorArticles);
