@@ -94,7 +94,7 @@
                     Sơ duyệt bài đăng</h1>
                 <ul class="ml-10 mt-3">
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a th:href="@{/editor/articles}">Danh sách bài báo chờ duyệt <span class="noti">(0)</a>
+                        <a th:href="@{/editor/articles}">Danh sách bài báo chờ duyệt <span th:text="'(' + ${pendingArticleCount} + ')'" class="noti">(0)</a>
                     </li>
                 </ul>
             </div>
@@ -119,16 +119,16 @@
                     Quản lý phản biện bài gửi</h1>
                 <ul class="ml-10 mt-3">
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a>Bài gửi chưa mời phản biện viên <span th:text="'(' + ${articleWaitingForInviteReviewCount} + ')'" class="noti">(0)</a>
+                        <a th:href="@{/editor/invite-reviewer-articles}">Bài gửi chưa mời phản biện viên <span th:text="'(' + ${articleWaitingForInviteReviewCount} + ')'" class="noti">(0)</a>
                     </li>
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a>Bài báo đã mời nhưng chưa có phản biện viên <span th:text="'(' + ${articleWaitingForAcceptFromReviewerCount} + ')'" class="noti">(0)</a>
+                        <a th:href="@{/editor/waiting-accept-reviewer-articles}">Bài báo đã mời nhưng chưa có phản biện viên <span th:text="'(' + ${articleWaitingForAcceptFromReviewerCount} + ')'" class="noti">(0)</a>
                     </li>
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a>Bài báo đang được phản biện <span th:text="'(' + ${articleInReviewingCount} + ')'" class="noti">(0)</a>
+                        <a th:href="@{/editor/in-review-articles}">Bài báo đang được phản biện <span th:text="'(' + ${articleInReviewingCount} + ')'" class="noti">(0)</a>
                     </li>
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a>Bài báo đã ghi nhận phản biện <span th:text="'(' + ${articleReviewedCount} + ')'" class="noti">(0)</a>
+                        <a th:href="@{/editor/reviewed-articles}">Bài báo đã ghi nhận phản biện <span th:text="'(' + ${articleReviewedCount} + ')'" class="noti">(0)</a>
                     </li>
                 </ul>
             </div>
@@ -168,7 +168,7 @@
                     Sơ duyệt bài đăng</h1>
                 <ul class="ml-10 mt-3">
                     <li class="py-1 mb-1 cursor-pointer w-full font-medium">
-                        <a th:href="@{/secretary/articles}">Danh sách bài báo chờ duyệt <span class="noti">(0)</a>
+                        <a th:href="@{/secretary/articles}">Danh sách bài báo chờ duyệt <span th:text="'(' + ${pendingArticleCount} + ')'" class="noti">(0)</a>
                     </li>
                 </ul>
             </div>
