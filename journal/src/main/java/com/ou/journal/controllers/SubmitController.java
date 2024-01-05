@@ -43,9 +43,6 @@ public class SubmitController {
     private AccountService accountService;
 
     @Autowired
-    private ArticleService articleService;
-
-    @Autowired
     private ArticleCategoryService articleCategoryService;
 
     @Autowired
@@ -53,6 +50,9 @@ public class SubmitController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @ModelAttribute("authorTypes")
     public com.ou.journal.enums.AuthorType[] getTypes() {
@@ -265,11 +265,13 @@ public class SubmitController {
             @ModelAttribute("article") Article article,
             @RequestPart("file") MultipartFile file,
             @RequestPart("anonymousFile") MultipartFile anonymousFile,
-            @RequestPart("appendixFile") MultipartFile appendixFile,
+            @RequestPart(name = "appendixFile", required = false) MultipartFile appendixFile,
             RedirectAttributes redirectAttrs,
             SessionStatus sessionStatus) {
-        if (file != null && file.getSize() > 0 && anonymousFile != null && anonymousFile.getSize() > 0
-                && appendixFile != null) {
+        if (back != null) {
+            return "redirect:/submit/step5";
+        }
+        if (file != null && file.getSize() > 0 && anonymousFile != null && anonymousFile.getSize() > 0) {
             try {
                 Article persistArticle = articleService.create(article, file, anonymousFile, appendixFile);
                 redirectAttrs.addFlashAttribute("successMsg", "Gửi bài thành công");
@@ -282,10 +284,8 @@ public class SubmitController {
                 e.printStackTrace();
             }
         }
-        if (back != null) {
-            return "redirect:/submit/step5";
-        }
 
         return "redirect:/submit/step6";
     }
+
 }

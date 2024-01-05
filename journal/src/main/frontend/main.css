@@ -379,7 +379,7 @@
     }
 
     .link {
-        @apply text-main hover:underline
+        @apply text-main hover:underline cursor-pointer
     }
 
     .checkbox-input {
@@ -481,6 +481,15 @@
     .required-file .success{
         @apply hidden
     }
+
+    .required-file.option {
+        @apply hidden
+    }
+
+    .required-file.option.success {
+        @apply flex
+    }
+
 
     .required-file .fail{
         @apply block
