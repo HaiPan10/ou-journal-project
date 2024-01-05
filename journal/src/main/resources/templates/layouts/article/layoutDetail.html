@@ -45,8 +45,9 @@
 
                     <div class="my-3">
                         <span class="font-medium">Từ khóa:</span>
-                        <div class="flex flex-wrap gap-3 ml-0 mt-2 px-2" id="keywords-box">
-                        </div>
+                        <!-- <div class="flex flex-wrap gap-3 ml-0 mt-2 px-2" id="keywords-box">
+                        </div> -->
+                        <div class="mt-1 px-2" th:text="${article.keywords}"></div>
                     </div>
 
 
@@ -238,10 +239,10 @@
     </div>
 
     <script src="/js/utils.js"></script>
-    <script th:inline="javascript">
+    <!-- <script th:inline="javascript">
         const keywords = /*[[${#strings.replace(#strings.trim(article.keywords), ' ', ', ') }]]*/ "";
     </script>
-    <script th:src="@{/js/article/keyword.js}"></script>
+    <script th:src="@{/js/article/keyword.js}"></script> -->
     <script th:src="@{/js/article/note.js}"></script>
     <th:block layout:fragment="extra-js">
 

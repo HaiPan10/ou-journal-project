@@ -20,7 +20,8 @@
                             </div>
 
                             <div class="col-span-full">
-                                <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Tóm tắt <span class="text-main">*</span></label>
+                                <label for="description" class="block text-sm font-medium leading-6 text-gray-900">Tóm
+                                    tắt <span class="text-main">*</span></label>
                                 <textarea required id="description" name="description" rows="6" th:field="*{abstracts}"
                                     class="input px-4 py-2 mt-1 mb-5 w-full"></textarea>
                             </div>
@@ -33,7 +34,7 @@
                             </div>
 
                             <div class="col-span-full">
-                                <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
+                                <!-- <label for="keyword-input" class="block text-sm font-medium leading-6 text-gray-900">Từ
                                     khóa</label>
                                 <div
                                     class="overflow-x-auto flex bg-white items-center border border-gray-300 hover:border-main/50 hover:ring-4 hover:ring-main/10 rounded-md mt-1 mb-5 w-full">
@@ -44,7 +45,16 @@
                                         class="grow border-0 focus:border-transparent focus:ring-0 focus:outline-none rounded-r-md px-3 py-2 w-full" />
                                 </div>
 
-                                <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" />
+                                <input id="keyword" name="keyword" type="text" class="hidden" th:field="*{keywords}" /> -->
+
+                                <label for="keyword" class="block text-sm font-medium leading-6 text-gray-900">Từ khóa (cách nhau bởi dấu <span class="text-main font-semibold">,</span>)</label>
+                                <input onchange="changeKw()" onblur="blurKw()" id="keyword" name="keyword" type="text"
+                                    th:field="*{keywords}" class="input px-3 py-2 mt-1 mb-2 w-full" />
+                                <div class="w-full flex justify-end mb-5 text-main text-sm font-semibold">
+                                    <p>
+                                        Số lượng từ khóa: <span id="kw-count">0</span>
+                                    </p>
+                                </div>
                             </div>
 
 
@@ -52,7 +62,8 @@
                     </div>
 
                     <div class="mt-6 flex items-center justify-end gap-x-6">
-                        <button type="button" class="text-sm font-semibold leading-6 text-gray-900" onclick="goBackStep()">Trở về</button>
+                        <button type="button" class="text-sm font-semibold leading-6 text-gray-900"
+                            onclick="goBackStep()">Trở về</button>
                         <button type="button" id="btnSubmit" onClick="submitForm()"
                             class="rounded-md bg-main px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-main/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-main/25">Tiếp
                             tục</button>
@@ -64,117 +75,151 @@
     </div>
 
     <script>
-        const kwInput = document.querySelector("#keyword-input")
+        // const kwInput = document.querySelector("#keyword-input")
         const kw = document.querySelector("#keyword")
-        const kwBox = document.querySelector("#keywords-box")
+        const kwCount = document.querySelector("#kw-count")
+        // const kwBox = document.querySelector("#keywords-box")
         const form = document.querySelector("form");
         function goBackStep() {
             form.action = '/submit/step3?back=2'
             form.submit();
         }
 
+        function formatKeywordString(str) {
+            str = str.toLowerCase()
+                .trim()
+                .replace(/\s+/g, ' ')
+                .split(',')
+                .map(s => s.trim())
+                .filter(Boolean);
+
+            let uniqueStr = [...new Set(str)].join(', ');
+
+            return uniqueStr;
+        }
+
+
+        function countKeywords(str) {
+            return str.split(',')
+                .filter(keyword => keyword.trim() !== '')
+                .length;
+        }
+
+
+
         function submitForm() {
             form.submit();
         }
 
-        function removeKeyword(obj) {
-            let rmElement = document.querySelector(`${obj.getAttribute("data-dismiss-target")}`)
-            let kwInner = rmElement.querySelector(".kw");
-            const value = kwInner.innerHTML.trim();
-            let kws = kw.value.split(" ");
-            kws = kws.filter(word => word !== value);
-            kw.value = kws.join(' ');
-            rmElement.remove();
+        function changeKw() {
+            kwCount.innerText = countKeywords(kw.value);
         }
 
-        function insertKeywordBox(elementHTML) {
-            kwBox.insertAdjacentHTML('beforeend', elementHTML);
+        function blurKw() {
+            kw.value = formatKeywordString(kw.value);
+            kwCount.innerText = countKeywords(kw.value);
         }
 
-        function isExisted(value) {
-            if (!kw.value) return false
-            const currentKeywords = kw.value.split(" ");
-            for (let i = 0; i < currentKeywords.length; i++)
-                if (value == currentKeywords[i])
-                    return true;
-            return false;
-        }
+        // function removeKeyword(obj) {
+        //     let rmElement = document.querySelector(`${obj.getAttribute("data-dismiss-target")}`)
+        //     let kwInner = rmElement.querySelector(".kw");
+        //     const value = kwInner.innerHTML.trim();
+        //     let kws = kw.value.split(" ");
+        //     kws = kws.filter(word => word !== value);
+        //     kw.value = kws.join(' ');
+        //     rmElement.remove();
+        // }
 
-        function handleKeyUp(event) {
-            if (event.key == ' ' || event.code === "Space" || event.key === 'Enter') {
-                let value = event.target.value.toLowerCase().trim();
-                event.target.value = ""
-                if (value && isExisted(value) == false) {
-                    let newKwHTML = ` <div id="kw-${value}" class="kw-box" role="alert">
-                        <div class="kw text-sm font-medium whitespace-nowrap">
-                            ${value}
-                        </div>
-                          <button id="btn-remove-kw-${value}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${value}" aria-label="Close">
-                            <i class="bi bi-x">
-                            </i>
-                        </button>
-                      </div>`
-                    insertKeywordBox(newKwHTML);
-                    kw.value += " " + value;
-                }
-            } else if (!event.target.value && event.key === 'Backspace') {
-                const keywords = document.querySelectorAll(".kw");
-                const lastKw = keywords[keywords.length - 1]
-                const value = lastKw.innerHTML.trim();
-                const del = document.querySelector(`#btn-remove-kw-${value}`)
-                removeKeyword(del);
-                event.target.value = value.slice(0, value.length);
-            }
-        }
+        // function insertKeywordBox(elementHTML) {
+        //     kwBox.insertAdjacentHTML('beforeend', elementHTML);
+        // }
 
-        kwInput.addEventListener("keyup", handleKeyUp)
+        // function isExisted(value) {
+        //     if (!kw.value) return false
+        //     const currentKeywords = kw.value.split(" ");
+        //     for (let i = 0; i < currentKeywords.length; i++)
+        //         if (value == currentKeywords[i])
+        //             return true;
+        //     return false;
+        // }
 
-        kwInput.addEventListener("drop", function(event) {
-            event.preventDefault();
-        });
-          
+        // function handleKeyUp(event) {
+        //     if (event.key == ' ' || event.code === "Space" || event.key === 'Enter') {
+        //         let value = event.target.value.toLowerCase().trim();
+        //         event.target.value = ""
+        //         if (value && isExisted(value) == false) {
+        //             let newKwHTML = ` <div id="kw-${value}" class="kw-box" role="alert">
+        //                 <div class="kw text-sm font-medium whitespace-nowrap">
+        //                     ${value}
+        //                 </div>
+        //                   <button id="btn-remove-kw-${value}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${value}" aria-label="Close">
+        //                     <i class="bi bi-x">
+        //                     </i>
+        //                 </button>
+        //               </div>`
+        //             insertKeywordBox(newKwHTML);
+        //             kw.value += " " + value;
+        //         }
+        //     } else if (!event.target.value && event.key === 'Backspace') {
+        //         const keywords = document.querySelectorAll(".kw");
+        //         const lastKw = keywords[keywords.length - 1]
+        //         const value = lastKw.innerHTML.trim();
+        //         const del = document.querySelector(`#btn-remove-kw-${value}`)
+        //         removeKeyword(del);
+        //         event.target.value = value.slice(0, value.length);
+        //     }
+        // }
 
-        kwInput.addEventListener('blur', function () {
-           const kwVal = kwInput.value;
-           kwInput.value = "";
-           if (kwVal.trim()) {
-            let kws = kwVal.split(" ");
-            kws.forEach(word => {
-                if (word && isExisted(word) == false) {
-                    let newKwHTML = ` <div id="kw-${word}" class="kw-box" role="alert">
-                        <div class="kw text-sm font-medium whitespace-nowrap">
-                            ${word}
-                        </div>
-                          <button id="btn-remove-kw-${word}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${kwVal}" aria-label="Close">
-                            <i class="bi bi-x">
-                            </i>
-                        </button>
-                      </div>`
-                    insertKeywordBox(newKwHTML);
-                    kw.value += " " + word;
-                }
-            })
-           }
-        });
+        // kwInput.addEventListener("keyup", handleKeyUp)
+
+        // kwInput.addEventListener("drop", function(event) {
+        //     event.preventDefault();
+        // });
+
+
+        // kwInput.addEventListener('blur', function () {
+        //    const kwVal = kwInput.value;
+        //    kwInput.value = "";
+        //    if (kwVal.trim()) {
+        //     let kws = kwVal.split(" ");
+        //     kws.forEach(word => {
+        //         if (word && isExisted(word) == false) {
+        //             let newKwHTML = ` <div id="kw-${word}" class="kw-box" role="alert">
+        //                 <div class="kw text-sm font-medium whitespace-nowrap">
+        //                     ${word}
+        //                 </div>
+        //                   <button id="btn-remove-kw-${word}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${kwVal}" aria-label="Close">
+        //                     <i class="bi bi-x">
+        //                     </i>
+        //                 </button>
+        //               </div>`
+        //             insertKeywordBox(newKwHTML);
+        //             kw.value += " " + word;
+        //         }
+        //     })
+        //    }
+        // });
 
         document.addEventListener('DOMContentLoaded', function () {
             if (kw.value) {
-                let kws = kw.value.split(" ");
-                kws.forEach(k => {
-                    if (k.trim()) {
-                        let newKwHTML = ` <div id="kw-${k}" class="kw-box" role="alert">
-                            <div class="kw text-sm font-medium whitespace-nowrap">
-                                ${k}
-                            </div>
-                              <button id="btn-remove-kw-${k}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${k}" aria-label="Close">
-                                <i class="bi bi-x">
-                                </i>
-                            </button>
-                          </div>`
-                        insertKeywordBox(newKwHTML);
-                    }
+                kw.value = formatKeywordString(kw.value);
+                kwCount.innerText = countKeywords(kw.value);
+                // let kws = kw.value.split(" ");
+                // kws.forEach(k => {
+                //     if (k.trim()) {
+                //         let newKwHTML = ` <div id="kw-${k}" class="kw-box" role="alert">
+                //             <div class="kw text-sm font-medium whitespace-nowrap">
+                //                 ${k}
+                //             </div>
+                //               <button id="btn-remove-kw-${k}" onClick="removeKeyword(this)" type="button" class="text-main focus:ring-0 p-1 inline-flex items-center justify-center h-3 w-3" data-dismiss-target="#kw-${k}" aria-label="Close">
+                //                 <i class="bi bi-x">
+                //                 </i>
+                //             </button>
+                //           </div>`
+                //         insertKeywordBox(newKwHTML);
+                //     }
 
-                });
+                // });
             }
         });
     </script>
