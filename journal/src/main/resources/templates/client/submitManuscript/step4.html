@@ -151,7 +151,7 @@
                                     class="border border-gray-300 focus:border-main/50 focus:ring-4 focus:ring-main/10 focus:outline-none rounded-md px-3 py-2 mt-1 mb-5 w-full" />
                             </div>
                             <div class="col-span-1">
-                                <label for="new-country" class="block text-sm font-medium leading-6 text-gray-900">Quốc
+                                <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Quốc
                                     gia</label>
                                 <select name="country" id="country" class="input px-3 py-1.5 mt-1 mb-5 w-full">
                                     <option value="">Chọn quốc gia</option>
@@ -270,7 +270,7 @@
             countries.push(user[4]);
             workAgencies.push(user[5]);
             positions.push(user[6]);
-            
+
         });
         // var emailArticles = [];
         // authorArticles.forEach(author => { 
@@ -612,28 +612,54 @@
         });
 
         function checkAvailabe() {
+            let idInput = document.getElementById("new-id");
+            let firstNameInput = document.getElementById("new-first-name");
+            let lastNameInput = document.getElementById("new-last-name");
+            let workAgencyInput = document.getElementById("new-work-agency");
+            let positionInput = document.getElementById("new-position");
+            let countryInput = document.getElementById("country");
             if (input.value.length !== 0) {
                 var isAvailableUser = emails.includes(input.value);
-                document.getElementById("new-first-name").readOnly = false;
-                document.getElementById("new-last-name").readOnly = false;
+                firstNameInput.readOnly = false;
+                lastNameInput.readOnly = false;
+                workAgencyInput.readOnly = false;
+                positionInput.readOnly = false;
+                countryInput.readOnly = false;
                 if (isAvailableUser) {
                     document.getElementById("notAvailable").style.display = "none";
-                    document.getElementById("new-last-name").value = lastNames[emails.indexOf(input.value)];
-                    document.getElementById("new-first-name").value = firstNames[emails.indexOf(input.value)];
-                    document.getElementById("new-id").value = ids[emails.indexOf(input.value)];
-                    document.getElementById("new-last-name").readOnly = true;
-                    document.getElementById("new-first-name").readOnly = true;
+                    lastNameInput.value = lastNames[emails.indexOf(input.value)];
+                    firstNameInput.value = firstNames[emails.indexOf(input.value)];
+                    idInput.value = ids[emails.indexOf(input.value)];
+                    workAgencyInput.value = workAgencies[emails.indexOf(input.value)];
+                    positionInput.value = positions[emails.indexOf(input.value)];
+                    countryInput.value = countries[emails.indexOf(input.value)];
+
+
+                    firstNameInput.readOnly = true;
+                    lastNameInput.readOnly = true;
+                    workAgencyInput.readOnly = true;
+                    positionInput.readOnly = true;
+                    countryInput.readOnly = true;
                 } else {
                     document.getElementById("notAvailable").style.display = "block";
-                    document.getElementById("new-last-name").readOnly = false;
-                    document.getElementById("new-first-name").readOnly = false;
-                    document.getElementById("new-last-name").value = "";
-                    document.getElementById("new-first-name").value = "";
-                    document.getElementById("new-id").value = null;
+                    firstNameInput.readOnly = false;
+                    lastNameInput.readOnly = false;
+                    workAgencyInput.readOnly = false;
+                    positionInput.readOnly = false;
+                    countryInput.readOnly = false;
+                    firstNameInput.value = "";
+                    lastNameInput.value = "";
+                    workAgencyInput.value = "";
+                    positionInput.value = "";
+                    countryInput.value = "";
+                    idInput.value = null;
                 }
             } else {
-                document.getElementById("new-first-name").readOnly = true;
-                document.getElementById("new-last-name").readOnly = true;
+                firstNameInput.readOnly = true;
+                lastNameInput.readOnly = true;
+                workAgencyInput.readOnly = true;
+                positionInput.readOnly = true;
+                countryInput.readOnly = true;
                 document.getElementById("notAvailable").style.display = "none";
             }
         }
