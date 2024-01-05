@@ -42,7 +42,8 @@
                         <label for="country" class="label-floating">Quốc gia</label>
                         <select name="country" id="user-country" class="input-floating peer">
                             <option value="">Chọn quốc gia</option>
-                            <option th:each="country : ${countries}" th:label="${country.value}" th:value="${country.key}" th:text="${country.value}"></option>
+                            <option th:each="country : ${countries}" th:label="${country.value}"
+                                th:value="${country.key}" th:text="${country.value}"></option>
                         </select>
                     </div>
                     <div class="col-span-1 relative">
@@ -61,13 +62,15 @@
                     Mời reviewer</button>
             </div>
         </form>
-        <div th:if="${renderManuscript}"  data-accordion="collapse" class="move-up-anim transition-all rounded-lg bg-white px-5 py-3 my-1"
+        <div th:if="${renderManuscript}" data-accordion="collapse"
+            class="move-up-anim transition-all rounded-lg bg-white px-5 py-3 my-1"
             data-active-classes="bg-white text-main font-medium">
             <h2 data-accordion-target="#temp-hide" aria-expanded="true" aria-controls="temp-hide">
 
             </h2>
             <h2 id="dropdown-heading">
-                <button data-accordion-target="#file-anonymous-view" aria-expanded="true" aria-controls="file-anonymous-view"
+                <button data-accordion-target="#file-anonymous-view" aria-expanded="true"
+                    aria-controls="file-anonymous-view"
                     class="transition-all w-full flex gap-x-2 items-center py-1 text-main hover:text-main hover:font-medium"
                     type="button">File ẩn danh của bài viêt<i data-accordion-icon
                         class="bi bi-chevron-down rolate-180 transition-all flex justify-center shrink-0"></i>
@@ -306,7 +309,7 @@
             countries.push(user[4]);
             workAgencies.push(user[5]);
             positions.push(user[6]);
-            
+
         });
 
         autocomplete(document.getElementById("myInput"), emails);
@@ -330,8 +333,8 @@
                     document.getElementById("user-id").value = ids[index];
                     var dropDown = document.getElementById("user-country")
                     dropDown.selectedIndex = 0;
-                    for(var i, j = 0; i = dropDown.options[j]; j++){
-                        if(i.value === countries[index]){
+                    for (var i, j = 0; i = dropDown.options[j]; j++) {
+                        if (i.value === countries[index]) {
                             dropDown.selectedIndex = j;
                             break;
                         }

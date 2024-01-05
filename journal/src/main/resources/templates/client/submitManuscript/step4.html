@@ -253,26 +253,25 @@
         // (() => { enableDragSort('drag-sort-enable') })();
 
         let authorArticles = /*[[${ article.authorArticles }]]*/ "";
-        const users = /*[[${ users }]]*/ "";
-        //var isFirstAuthorChosen = true;
-
-        var emails = [];
-        users.forEach(user => {
-            emails.push(user[1]);
-        });
-        var lastNames = [];
-        users.forEach(user => {
-            lastNames.push(user[2]);
-        });
-        var firstNames = [];
-        users.forEach(user => {
-            firstNames.push(user[3]);
-        });
+        var users = /*[[${ users }]]*/ "";
         var ids = [];
+        var emails = [];
+        var lastNames = [];
+        var firstNames = [];
+        var countries = [];
+        var workAgencies = [];
+        var positions = [];
+
         users.forEach(user => {
             ids.push(user[0]);
+            emails.push(user[1]);
+            lastNames.push(user[2]);
+            firstNames.push(user[3]);
+            countries.push(user[4]);
+            workAgencies.push(user[5]);
+            positions.push(user[6]);
+            
         });
-
         // var emailArticles = [];
         // authorArticles.forEach(author => { 
         //     emailArticles.push(author.user.email);
@@ -536,7 +535,6 @@
 
         }
 
-        // auto complete
         function autocomplete(inp, arr) {
             var currentFocus;
             inp.addEventListener("input", function (e) {
